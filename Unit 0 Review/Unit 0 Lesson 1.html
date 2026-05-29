@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 0 Lesson 1</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .solution-item {
+            display: none;
+        }
+
+        .solution-item h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 14px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .student-answer-input {
+            flex: 1;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.15s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .math-key:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        sup {
+            font-size: 0.8em;
+            vertical-align: super;
+            line-height: 0;
+            position: relative;
+            bottom: 0.15em;
+            padding-left: 1px;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .math-rule {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 0;
+            display: block;
+            border-left: 4px solid #eab308;
+        }
+
+        .like-terms-list {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .like-terms-list li {
+            margin-bottom: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: block;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 0 Lesson 1</h1>
+        <p>Simplifying Polynomials & Finding Products Expansion Interface</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+    <label>Student Profile Setup:</label>
+    <div class="profile-grid">
+        <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+        <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+    </div>
+</div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Question:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <optgroup label="Lesson 1: Simplifying Polynomial Expressions">
+                    <option value="l1q1">Question 1: (8 - x² - x³) + (4x² - 6x³ + 5)</option>
+                    <option value="l1q2">Question 2: (2x² - 4x³ + 3x) + (4x² - x + 6x³)</option>
+                    <option value="l1q3">Question 3: (k² - 7k³ + 6) + (7k³ + 8 - 2k²)</option>
+                    <option value="l1q4">Question 4: (5 + 3b² + 3b) + (5 + b² + b)</option>
+                    <option value="l1q5">Question 5: (6n² + 6n - 4n³) - (7n² + 7n³ - 3n)</option>
+                    <option value="l1q6">Question 6: (a² + a³ - 3a) - (5a³ - 7a² + a)</option>
+                    <option value="l1q7">Question 7: (5v - 6v² + 3) - (7v - 4 + 7v²)</option>
+                    <option value="l1q8">Question 8: (8b² - 5b + 2b³) - (6b + 4b³ + 7b²)</option>
+                </optgroup>
+                <optgroup label="Lesson 1: Finding Products (Expansion)">
+                    <option value="l1q9">Question 9: (4n - 1)(n - 2)</option>
+                    <option value="l1q10">Question 10: (2r + 5)(4r + 7)</option>
+                    <option value="l1q11">Question 11: (6x + 2)(6x - 2)</option>
+                    <option value="l1q12">Question 12: (7x - 5)(x - 7)</option>
+                    <option value="l1q13">Question 13: 3y(y + 1) - 2(y² + 3) + 6(2y - 1)</option>
+                    <option value="l1q14">Question 14: 2x²(x + 2) - 1(x² - 3x) + 5x³</option>
+                    <option value="l1q15">Question 15: p(2p + 3) - p² + 5(p² - p)</option>
+                    <option value="l1q16">Question 16: 8m(m² + 3m) - 5(m³ + 2m²) - 1(m² + 7)</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question from the list above to initialize the testing module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+    <label for="student-text-input">Input Your Simplified Answer Matrix:</label>
+    <div class="input-group">
+        <input type="text" id="student-text-input" class="student-answer-input" autocomplete="off" placeholder="Enter in standard form, e.g., -7x³+3x²+13">
+    </div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressMathKey('(')">(</button>
+                    <button class="math-key" onclick="pressMathKey(')')">)</button>
+                    <button class="math-key" onclick="pressMathKey('²')">²</button>
+                    <button class="math-key" onclick="pressMathKey('³')">³</button>
+                    <button class="math-key" onclick="pressMathKey('+')">+</button>
+                    <button class="math-key" onclick="pressMathKey('-')">-</button>
+                    <button class="math-key" id="vkey-x" onclick="pressMathKey('x')">x</button>
+                    <button class="math-key" id="vkey-y" onclick="pressMathKey('y')">y</button>
+                    <button class="math-key" id="vkey-n" onclick="pressMathKey('n')">n</button>
+                    <button class="math-key" id="vkey-r" onclick="pressMathKey('r')">r</button>
+                    <button class="math-key" id="vkey-k" onclick="pressMathKey('k')">k</button>
+                    <button class="math-key" id="vkey-b" onclick="pressMathKey('b')">b</button>
+                    <button class="math-key" id="vkey-v" onclick="pressMathKey('v')">v</button>
+                    <button class="math-key" id="vkey-a" onclick="pressMathKey('a')">a</button>
+                    <button class="math-key" id="vkey-p" onclick="pressMathKey('p')">p</button>
+                    <button class="math-key" id="vkey-m" onclick="pressMathKey('m')">m</button>
+                </div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // INSERT YOUR GOOGLE APPS SCRIPT WEB APP EXECUTABLE LINK HERE
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        // Global Normalized String Matrix Validation Array
+        const answerRegistry = {
+            l1q1: ["-7x3+3x2+13", "-7x³+3x²+13"],
+            l1q2: ["2x3+6x2+2x", "2x³+6x²+2x"],
+            l1q3: ["-k2+14", "-k²+14"],
+            l1q4: ["4b2+4b+10", "4b²+4b+10"],
+            l1q5: ["-11n3-n2+9n", "-11n³-n²+9n"],
+            l1q6: ["-4a3+8a2-4a", "-4a³+8a²-4a"],
+            l1q7: ["-13v2-2v+7", "-13v²-2v+7"],
+            l1q8: ["-2b3+b2-11b", "-2b³+b²-11b"],
+            l1q9: ["4n2-9n+2", "4n²-9n+2"],
+            l1q10: ["8r2+34r+35", "8r²+34r+35"],
+            l1q11: ["36x2-4", "36x²-4"],
+            l1q12: ["7x2-54x+35", "7x²-54x+35"],
+            l1q13: ["y2+15y-12", "y²+15y-12"],
+            l1q14: ["7x3+3x2+3x", "7x³+3x²+3x"],
+            l1q15: ["6p2-2p", "6p²-2p"],
+            l1q16: ["3m3+13m2-7", "3m³+13m²-7"]
+        };
+
+        // Complete Structured Data Repository Mapping Pack
+        const problemDataPack = {
+            l1q1: {
+                title: "Question 1: (8 - x² - x³) + (4x² - 6x³ + 5)", vars: ["x"],
+                steps: [
+                    { title: "Step 1: Drop the Parentheses", math: "8 - 1x<sup>2</sup> - 1x<sup>3</sup> + 4x<sup>2</sup> - 6x<sup>3</sup> + 5", explanation: "When adding polynomials, brackets are dropped without changing signs. Unnumbered bases carry an invisible coefficient of 1 (<code>-x² = -1x²</code>)." },
+                    { title: "Step 2: Collect Like Terms", math: "(-1x<sup>3</sup> - 6x<sup>3</sup>) + (-1x<sup>2</sup> + 4x<sup>2</sup>) + (8 + 5)", explanation: "Group parameters based on identical variables and powers: degree-3 terms, degree-2 terms, and constant terms." },
+                    { title: "Step 3: Combine Coefficients", math: "(-1 - 6)x<sup>3</sup> + (-1 + 4)x<sup>2</sup> + (8 + 5)", explanation: "Combine numerical parameters. Exponents remain unchanged during addition." }
+                ], ans_box: "-7x<sup>3</sup> + 3x<sup>2</sup> + 13"
+            },
+            l1q2: {
+                title: "Question 2: (2x² - 4x³ + 3x) + (4x² - x + 6x³)", vars: ["x"],
+                steps: [
+                    { title: "Step 1: Drop Parentheses and Expose Coefficients", math: "2x<sup>2</sup> - 4x<sup>3</sup> + 3x<sup>1</sup> + 4x<sup>2</sup> - 1x<sup>1</sup> + 6x<sup>3</sup>", explanation: "Drop grouping elements. Note that plain linear variables are implicitly raised to the power of 1 (<code>-x = -1x¹</code>)." },
+                    { title: "Step 2: Group Terms into Families", math: "(-4x<sup>3</sup> + 6x<sup>3</sup>) + (2x<sup>2</sup> + 4x<sup>2</sup>) + (3x<sup>1</sup> - 1x<sup>1</sup>)", explanation: "Reorder parameters from highest degree down to lowest linear family order." },
+                    { title: "Step 3: Combine Coefficients", math: "(-4 + 6)x<sup>3</sup> + (2 + 4)x<sup>2</sup> + (3 - 1)x<sup>1</sup>", explanation: "Calculate values: <code>-4+6=2x³</code>, <code>2+4=6x²</code>, and <code>3-1=2x</code>." }
+                ], ans_box: "2x<sup>3</sup> + 6x<sup>2</sup> + 2x"
+            },
+            l1q3: {
+                title: "Question 3: (k² - 7k³ + 6) + (7k³ + 8 - 2k²)", vars: ["k"],
+                steps: [
+                    { title: "Step 1: Drop Grouping Brackets", math: "1k<sup>2</sup> - 7k<sup>3</sup> + 6 + 7k<sup>3</sup> + 8 - 2k<sup>2</sup>", explanation: "Remove outer parenthetical layers without changing operation signs." },
+                    { title: "Step 2: Collect Like Terms", math: "(-7k<sup>3</sup> + 7k<sup>3</sup>) + (1k<sup>2</sup> - 2k<sup>2</sup>) + (6 + 8)", explanation: "Group matching configurations. Notice that <code>-7k³ + 7k³ = 0</code>, meaning the cubic term cancels out completely." }
+                ], ans_box: "-k<sup>2</sup> + 14"
+            },
+            l1q4: {
+                title: "Question 4: (5 + 3b² + 3b) + (5 + b² + b)", vars: ["b"],
+                steps: [
+                    { title: "Step 1: Identify Matchings and Regroup", math: "(3b<sup>2</sup> + 1b<sup>2</sup>) + (3b<sup>1</sup> + 1b<sup>1</sup>) + (5 + 5)", explanation: "Collect like elements: degree-2 quadratic variables, degree-1 linear variables, and real number constants." },
+                    { title: "Step 2: Combine Coefficients", math: "(3 + 1)b<sup>2</sup> + (3 + 1)b<sup>1</sup> + (5 + 5)", explanation: "Perform calculations across the collected terms to simplify the polynomial." }
+                ], ans_box: "4b<sup>2</sup> + 4b + 10"
+            },
+            l1q5: {
+                title: "Question 5: (6n² + 6n - 4n³) - (7n² + 7n³ - 3n)", vars: ["n"],
+                steps: [
+                    { title: "Step 1: Distribute the Subtraction Sign (-1)", math: "6n<sup>2</sup> + 6n - 4n<sup>3</sup> - 7n<sup>2</sup> - 7n<sup>3</sup> + 3n", explanation: "<span class='math-rule'>Subtraction Rule: Distributing a negative sign flips every operation sign inside the second bracket.</span><code>-1 &times; 7n² = -7n²</code>, <code>-1 &times; 7n³ = -7n³</code>, and <code>-1 &times; -3n = +3n</code>." },
+                    { title: "Step 2: Collect Like Terms", math: "(-4n<sup>3</sup> - 7n<sup>3</sup>) + (6n<sup>2</sup> - 7n<sup>2</sup>) + (6n + 3n)", explanation: "Group properties into matching degree blocks. Exponents remain unchanged during grouping steps." }
+                ], ans_box: "-11n<sup>3</sup> - n<sup>2</sup> + 9n"
+            },
+            l1q6: {
+                title: "Question 6: (a² + a³ - 3a) - (5a³ - 7a² + a)", vars: ["a"],
+                steps: [
+                    { title: "Step 1: Distribute the Negative Sign across the Second Bracket", math: "1a<sup>2</sup> + 1a<sup>3</sup> - 3a - 5a<sup>3</sup> + 7a<sup>2</sup> - 1a", explanation: "Multiplying by <code>-1</code> changes internal terms to <code>-5a³</code>, <code>+7a²</code>, and <code>-1a</code> respectively." },
+                    { title: "Step 2: Reorder and Group Like Terms", math: "(1a<sup>3</sup> - 5a<sup>3</sup>) + (1a<sup>2</sup> + 7a<sup>2</sup>) + (-3a - 1a)", explanation: "Align matching exponential factors vertically or horizontally into neat descending configurations." }
+                ], ans_box: "-4a<sup>3</sup> + 8a<sup>2</sup> - 4a"
+            },
+            l1q7: {
+                title: "Question 7: (5v - 6v² + 3) - (7v - 4 + 7v²)", vars: ["v"],
+                steps: [
+                    { title: "Step 1: Apply Negative Sign Distribution", math: "5v - 6v<sup>2</sup> + 3 - 7v + 4 - 7v<sup>2</sup>", explanation: "Distribute <code>-1</code> across the second bracket, transforming components into <code>-7v</code>, <code>+4</code>, and <code>-7v²</code>." },
+                    { title: "Step 2: Group Like Terms", math: "(-6v<sup>2</sup> - 7v<sup>2</sup>) + (5v - 7v) + (3 + 4)", explanation: "Align quadratic, linear, and constant terms respectively." }
+                ], ans_box: "-13v<sup>2</sup> - 2v + 7"
+            },
+            l1q8: {
+                title: "Question 8: (8b² - 5b + 2b³) - (6b + 4b³ + 7b²)", vars: ["b"],
+                steps: [
+                    { title: "Step 1: Distribute the Negative Sign", math: "8b<sup>2</sup> - 5b + 2b<sup>3</sup> - 6b - 4b<sup>3</sup> - 7b<sup>2</sup>", explanation: "Flipping signs across the second bracket yields <code>-6b</code>, <code>-4b³</code>, and <code>-7b²</code>." },
+                    { title: "Step 2: Group Terms by Exponent Power", math: "(2b<sup>3</sup> - 4b<sup>3</sup>) + (8b<sup>2</sup> - 7b<sup>2</sup>) + (-5b - 6b)", explanation: "Reorder parameters from highest degree down to lowest order." }
+                ], ans_box: "-2b<sup>3</sup> + b<sup>2</sup> - 11b"
+            },
+            l1q9: {
+                title: "Question 9: (4n - 1)(n - 2)", vars: ["n"],
+                steps: [
+                    { title: "Step 1: Set Up FOIL Distribution", math: "(4n &times; n) + (4n &times; -2) + (-1 &times; n) + (-1 &times; -2)", explanation: "Multiply each individual element inside the first bracket by each element in the second bracket." },
+                    { title: "Step 2: Apply Exponent Rules for Multiplication", math: "4n<sup>2</sup> - 8n - 1n + 2", explanation: "<span class='math-rule'>Exponent Product Rule: a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup></span>Plain linear variables possess an implicit power of 1 (<code>n = n¹</code>), evaluating to: <code>4n¹ &times; 1n¹ = 4n²</code>." },
+                    { title: "Step 3: Combine Middle Like Terms", math: "4n<sup>2</sup> + (-8n - 1n) + 2", explanation: "Combine matching middle linear degree-1 terms: <code>-8n - 1n = -9n</code>." }
+                ], ans_box: "4n<sup>2</sup> - 9n + 2"
+            },
+            l1q10: {
+                title: "Question 10: (2r + 5)(4r + 7)", vars: ["r"],
+                steps: [
+                    { title: "Step 1: Expand Terms via Distribution", math: "(2r &times; 4r) + (2r &times; 7) + (5 &times; 4r) + (5 &times; 7)", explanation: "Distribute individual factors across each other systematically." },
+                    { title: "Step 2: Calculate Individual Products", math: "8r<sup>2</sup> + 14r + 20r + 35", explanation: "Multiply coefficients and add matching variable exponents: <code>2r &times; 4r = 8r²</code>." },
+                    { title: "Step 3: Combine Middle Like Terms", math: "8r<sup>2</sup> + (14r + 20r) + 35", explanation: "Add linear variables sharing identical configurations: <code>14r + 20r = 34r</code>." }
+                ], ans_box: "8r<sup>2</sup> + 34r + 35"
+            },
+            l1q11: {
+                title: "Question 11: (6x + 2)(6x - 2)", vars: ["x"],
+                steps: [
+                    { title: "Step 1: Set Up Distribution", math: "(6x &times; 6x) + (6x &times; -2) + (2 &times; 6x) + (2 &times; -2)", explanation: "Expand brackets using the FOIL method." },
+                    { title: "Step 2: Simplify Products", math: "36x<sup>2</sup> - 12x + 12x - 4", explanation: "Perform individual multiplications: <code>6x &times; 6x = 36x²</code> and <code>2 &times; -2 = -4</code>." },
+                    { title: "Step 3: Combine Middle Like Terms", math: "36x<sup>2</sup> + (-12x + 12x) - 4", explanation: "Combining middle linear terms yields zero (<code>-12x + 12x = 0</code>). This cancellation pattern is a <strong>Difference of Squares</strong>." }
+                ], ans_box: "36x<sup>2</sup> - 4"
+            },
+            l1q12: {
+                title: "Question 12: (7x - 5)(x - 7)", vars: ["x"],
+                steps: [
+                    { title: "Step 1: Distribute and Expand Brackets", math: "(7x &times; x) + (7x &times; -7) + (-5 &times; x) + (-5 &times; -7)", explanation: "Systematically multiply all individual terms across brackets." },
+                    { title: "Step 2: Calculate Products", math: "7x<sup>2</sup> - 49x - 5x + 35", explanation: "Note that multiplying two negative constants resolves to a positive value: <code>-5 &times; -7 = +35</code>." },
+                    { title: "Step 3: Combine Middle Linear Terms", math: "7x<sup>2</sup> + (-49x - 5x) + 35", explanation: "Combine middle coefficients to simplify: <code>-49 - 5 = -54x</code>." }
+                ], ans_box: "7x<sup>2</sup> - 54x + 35"
+            },
+            l1q13: {
+                title: "Question 13: 3y(y + 1) - 2(y² + 3) + 6(2y - 1)", vars: ["y"],
+                steps: [
+                    { title: "Step 1: Distribute Multipliers into Each Bracket Separately", math: "3y(y + 1) - 2(y<sup>2</sup> + 3) + 6(2y - 1)", explanation: "Distribute across all three components: <code>3y(y+1) = 3y²+3y</code>, <code>-2(y²+3) = -2y²-6</code>, and <code>6(2y-1) = 12y-6</code>." },
+                    { title: "Step 2: Write Out the Full Expanded Expression", math: "3y<sup>2</sup> + 3y - 2y<sup>2</sup> - 6 + 12y - 6", explanation: "Combine all individual expansions into a single polynomial expression." },
+                    { title: "Step 3: Collect and Group Like Terms", math: "(3y<sup>2</sup> - 2y<sup>2</sup>) + (3y + 12y) + (-6 - 6)", explanation: "Group matching exponential families: quadratic terms, linear terms, and numerical constants." }
+                ], ans_box: "y<sup>2</sup> + 15y - 12"
+            },
+            l1q14: {
+                title: "Question 14: 2x²(x + 2) - 1(x² - 3x) + 5x³", vars: ["x"],
+                steps: [
+                    { title: "Step 1: Distribute Monomial Multipliers", math: "2x<sup>3</sup> + 4x<sup>2</sup> - 1x<sup>2</sup> + 3x + 5x<sup>3</sup>", explanation: "Distribute terms carefully: <code>2x² &times; x¹ = 2x³</code>, and <code>-1 &times; -3x = +3x</code>. The final term <code>+5x³</code> remains unchanged." },
+                    { title: "Step 2: Reorder and Group Like Terms", math: "(2x<sup>3</sup> + 5x<sup>3</sup>) + (4x<sup>2</sup> - 1x<sup>2</sup>) + 3x", explanation: "Collect matching exponential configurations in descending order." }
+                ], ans_box: "7x<sup>3</sup> + 3x<sup>2</sup> + 3x"
+            },
+            l1q15: {
+                title: "Question 15: p(2p + 3) - p² + 5(p² - p)", vars: ["p"],
+                steps: [
+                    { title: "Step 1: Expand Terms via Distribution", math: "2p<sup>2</sup> + 3p - 1p<sup>2</sup> + 5p<sup>2</sup> - 5p", explanation: "Distribute individual multipliers: <code>p &times; 2p = 2p²</code>, and <code>5 &times; -p = -5p</code>." },
+                    { title: "Step 2: Collect and Combine Like Terms", math: "(2p<sup>2</sup> - 1p<sup>2</sup> + 5p<sup>2</sup>) + (3p - 5p)", explanation: "Group matching operational families: quadratic elements sum to <code>6p²</code>, and linear elements combine to <code>-2p</code>." }
+                ], ans_box: "6p<sup>2</sup> - 2p"
+            },
+            l1q16: {
+                title: "Question 16: 8m(m² + 3m) - 5(m³ + 2m²) - 1(m² + 7)", vars: ["m"],
+                steps: [
+                    { title: "Step 1: Distribute Multipliers Across Brackets", math: "8m<sup>3</sup> + 24m<sup>2</sup> - 5m<sup>3</sup> - 10m<sup>2</sup> - 1m<sup>2</sup> - 7", explanation: "Distribute each multiplier carefully: <code>8m &times; m² = 8m³</code>, <code>-5 &times; 2m² = -10m²</code>, and <code>-1 &times; 7 = -7</code>." },
+                    { title: "Step 2: Group Terms by Exponent Power", math: "(8m<sup>3</sup> - 5m<sup>3</sup>) + (24m<sup>2</sup> - 10m<sup>2</sup> - 1m<sup>2</sup>) - 7", explanation: "Group like terms into cubic families, quadratic families, and isolated real constants." }
+                ], ans_box: "3m<sup>3</sup> + 13m<sup>2</sup> - 7"
+            }
+        };
+
+        // Persistent Session Application State Metrics Tracker
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, inputVal: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const txtInput = document.getElementById("student-text-input");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            setupVirtualKeyboard(activeProblem);
+
+            const state = questionStates[activeQuestionId];
+            txtInput.value = state.inputVal;
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+        }
+
+        function setupVirtualKeyboard(problem) {
+            const keys = ["vkey-x", "vkey-y", "vkey-n", "vkey-r", "vkey-k", "vkey-b", "vkey-v", "vkey-a", "vkey-p", "vkey-m"];
+            keys.forEach(k => document.getElementById(k).style.display = "none");
+            problem.vars.forEach(v => {
+                const target = "vkey-" + v;
+                if (document.getElementById(target)) document.getElementById(target).style.display = "inline-block";
+            });
+        }
+
+        function pressMathKey(symbol) {
+            const txtInput = document.getElementById("student-text-input");
+            if (txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const nameInput = document.getElementById("student-name").value.trim();
+            const idInput = document.getElementById("student-id").value.trim();
+
+            if (nameInput === "" || idInput === "") {
+                alert("Identity verification required. Please enter your Profile Name and Student ID.");
+                return;
+            }
+
+            const txtInput = document.getElementById("student-text-input");
+            let rawInput = txtInput.value;
+            let normalizedInput = rawInput.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2').replace(/³/g, '3');
+            
+            let matchingCorrect = answerRegistry[activeQuestionId].includes(normalizedInput);
+
+            questionStates[activeQuestionId].answered = true;
+            questionStates[activeQuestionId].inputVal = rawInput;
+            questionStates[activeQuestionId].isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_0",
+                lessonId: "Lesson_1",
+                studentName: nameInput,
+                studentId: idInput,
+                questionId: activeQuestionId,
+                userAnswer: rawInput,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: problemDataPack[activeQuestionId].type === "simplification" ? "Simplification" : "Polynomial Expansion",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            if (TEACHER_SPREADSHEET_SCRIPT_URL === "YOUR_GOOGLE_WEB_APP_URL_HERE") {
+                console.warn("Tracking request skipped: Script URL placeholder active.");
+                return;
+            }
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database communication error:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.getElementById("student-text-input").disabled = true;
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Answer verified and logged securely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect simplified matching values. Unlock steps below to evaluate.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.getElementById("student-text-input").disabled = false;
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Completely Simplified Form</span>
+                <span class="final-answer-math">${data.ans_box}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 0 Lesson 4</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --matrix-bg: #f8fafc;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .method-toggle-container {
+            display: none;
+            background-color: #e2e8f0;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .method-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .solution-item {
+            display: none;
+        }
+
+        .solution-item h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 14px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .student-answer-input {
+            flex: 1;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.15s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .math-key:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        sup {
+            font-size: 0.8em;
+            vertical-align: super;
+            line-height: 0;
+            position: relative;
+            bottom: 0.15em;
+            padding-left: 1px;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .math-rule {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 0;
+            display: block;
+            border-left: 4px solid #eab308;
+        }
+
+        .criss-cross-box {
+            display: block;
+            background-color: var(--matrix-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+            margin: 12px 0;
+            max-width: 500px;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr 40px 1.2fr;
+            align-items: center;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            row-gap: 10px;
+        }
+
+        .svg-intersection-container {
+            grid-row: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            width: 80px;
+            user-select: none;
+        }
+
+        .grid-arrow-label {
+            font-size: 1.3rem;
+            color: var(--disabled-color);
+        }
+
+        .matrix-total-line {
+            grid-column: 1 / -1;
+            border-top: 2px solid var(--border-color);
+            margin-top: 12px;
+            padding-top: 12px;
+            text-align: left;
+            font-size: 1.15rem;
+            color: var(--primary-color);
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: block;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 0 Lesson 4</h1>
+        <p>Special Products Factoring Studio (Difference of Squares & Perfect Squares)</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+    <label>Student Profile Setup:</label>
+    <div class="profile-grid">
+        <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+        <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+    </div>
+</div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Question:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <optgroup label="Binomial Difference of Squares Pattern">
+                    <option value="l4q1">Question 1: 4p² - 4</option>
+                    <option value="l4q4">Question 4: a² - 1</option>
+                    <option value="l4q5">Question 5: 4n² - 49</option>
+                    <option value="l4q6">Question 6: 2x² - 18</option>
+                    <option value="l4q7">Question 7: 20a² - 45</option>
+                    <option value="l4q8">Question 8: 27n² - 75</option>
+                </optgroup>
+                <optgroup label="Trinomial Perfect Square Pattern">
+                    <option value="l4q2">Question 2: n² + 4n + 4</option>
+                    <option value="l4q3">Question 3: 2x² + 40x + 200</option>
+                    <option value="l4q9">Question 9: 16b² - 40b + 25</option>
+                    <option value="l4q10">Question 10: 4x² + 4x + 1</option>
+                    <option value="l4q11">Question 11: 4c² - 12c + 9</option>
+                    <option value="l4q12">Question 12: 49e² + 28e + 4</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question from the list above to initialize the test dashboard.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <label for="student-text-input">Input Your Completely Factored Answer:</label>
+                <div class="input-group">
+                    <input type="text" id="student-text-input" class="student-answer-input" autocomplete="off" placeholder="Enter in standard form, e.g., 4(p+1)(p-1)">
+                </div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressMathKey('(')">(</button>
+                    <button class="math-key" onclick="pressMathKey(')')">)</button>
+                    <button class="math-key" onclick="pressMathKey('²')">²</button>
+                    <button class="math-key" onclick="pressMathKey('+')">+</button>
+                    <button class="math-key" onclick="pressMathKey('-')">-</button>
+                    <button class="math-key" id="vkey-p" onclick="pressMathKey('p')">p</button>
+                    <button class="math-key" id="vkey-n" onclick="pressMathKey('n')">n</button>
+                    <button class="math-key" id="vkey-x" onclick="pressMathKey('x')">x</button>
+                    <button class="math-key" id="vkey-a" onclick="pressMathKey('a')">a</button>
+                    <button class="math-key" id="vkey-b" onclick="pressMathKey('b')">b</button>
+                    <button class="math-key" id="vkey-c" onclick="pressMathKey('c')">c</button>
+                    <button class="math-key" id="vkey-e" onclick="pressMathKey('e')">e</button>
+                </div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="method-toggle-container" id="method-toggle-bar">
+                <button class="method-btn active" id="mode-pattern" onclick="changeMethod('pattern')">Special Pattern Shortcut</button>
+                <button class="method-btn" id="mode-ps" onclick="changeMethod('ps')">Product & Sum Fallback</button>
+                <button class="method-btn" id="mode-cc" onclick="changeMethod('cc')">Criss-Cross Matrix Fallback</button>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // HARDCODED CENTRAL TEACHER SHEET DATABASE SCRIPT URL LINK
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            l4q1: ["4(p+1)(p-1)", "4(p-1)(p+1)", "4(1p+1)(1p-1)", "4(1p-1)(1p+1)"],
+            l4q2: ["(n+2)2", "(n+2)²", "(n+2)(n+2)", "(1n+2)2", "(1n+2)²", "(1n+2)(1n+2)"],
+            l4q3: ["2(x+10)2", "2(x+10)²", "2(x+10)(x+10)", "2(1x+10)2", "2(1x+10)²", "2(1x+10)(1x+10)"],
+            l4q4: ["(a-1)(a+1)", "(a+1)(a-1)", "(1a-1)(1a+1)", "(1a+1)(1a-1)"],
+            l4q5: ["(2n-7)(2n+7)", "(2n+7)(2n-7)"],
+            l4q6: ["2(x-3)(x+3)", "2(x+3)(x-3)", "2(1x-3)(1x+3)", "2(1x+3)(1x-3)"],
+            l4q7: ["5(2a-3)(2a+3)", "5(2a+3)(2a-3)"],
+            l4q8: ["3(3n-5)(3n+5)", "3(3n+5)(3n-5)"],
+            l4q9: ["(4b-5)2", "(4b-5)²", "(4b-5)(4b-5)"],
+            l4q10: ["(2x+1)2", "(2x+1)²", "(2x+1)(2x+1)"],
+            l4q11: ["(2c-3)2", "(2c-3)²", "(2c-3)(2c-3)"],
+            l4q12: ["(7e+2)2", "(7e+2)²", "(7e+2)(7e+2)"]
+        };
+
+        const problemDataPack = {
+            l4q1: {
+                title: "Question 1: 4p² - 4", type: "binomial", var: "p", ans_box: "4(p + 1)(p - 1)",
+                steps: [
+                    { title: "Step 1: Extract Greatest Common Factor (GCF)", math: "4(p<sup>2</sup> - 1)", explanation: "Both terms share a common divisor of 4. Factoring 4 out via standard division simplifies the remaining parameters." },
+                    { title: "Step 2: Identify the Difference of Squares Structure", math: "4( (p)<sup>2</sup> - (1)<sup>2</sup> )", explanation: "The inside bracket represents a binary profile separated by subtraction where corner components are squares: <code>&radic;p² = p</code> and <code>&radic;1 = 1</code>." },
+                    { title: "Step 3: Factor Into Conjugate Binomial Brackets", math: "4(p + 1)(p - 1)", explanation: "<span class='math-rule'>Difference of Squares Identity Pattern:<br>A<sup>2</sup> - B<sup>2</sup> = (A + B)(A - B)</span>Mapping coordinates using our values (<code>A = p</code> and <code>B = 1</code>) yields the complete solution matrix." }
+                ]
+            },
+            l4q4: {
+                title: "Question 4: a² - 1", type: "binomial", var: "a", ans_box: "(a - 1)(a + 1)",
+                steps: [
+                    { title: "Step 1: Verify Perfect Square Roots", math: "(a)<sup>2</sup> - (1)<sup>2</sup>", explanation: "Take corner square roots: <code>&radic;a² = a</code> and <code>&radic;1 = 1</code>. This perfectly fits binomial difference guidelines." },
+                    { title: "Step 2: Expand Into Conjugate Dimensions", math: "(a - 1)(a + 1)", explanation: "Apply pattern identity constraints to map factors straight into alternate sign blocks." }
+                ]
+            },
+            l4q5: {
+                title: "Question 5: 4n² - 49", type: "binomial", var: "n", ans_box: "(2n - 7)(2n + 7)",
+                steps: [
+                    { title: "Step 1: Extract Square Roots of Coefficients and Variables", math: "(2n)<sup>2</sup> - (7)<sup>2</sup>", explanation: "Isolate perfect root parameters: <code>&radic;4n² = 2n</code> and <code>&radic;49 = 7</code>." },
+                    { title: "Step 2: Apply Difference of Squares Layout Rule", math: "(2n - 7)(2n + 7)", explanation: "Write values as alternating negative and positive companion binomial blocks." }
+                ]
+            },
+            l4q6: {
+                title: "Question 6: 2x² - 18", type: "binomial", var: "x", ans_box: "2(x - 3)(x + 3)",
+                steps: [
+                    { title: "Step 1: Extract GCF Numerical Factor", math: "2(x<sup>2</sup> - 9)", explanation: "Divide elements by common number 2 to reveal a clean difference of squares framework inside." },
+                    { title: "Step 2: Isolate Internal Perfect Squares", math: "2( (x)<sup>2</sup> - (3)<sup>2</sup> )", explanation: "Take interior square roots: <code>&radic;x² = x</code> and <code>&radic;9 = 3</code>." },
+                    { title: "Step 3: Group Into Final Conjugate Brackets", math: "2(x - 3)(x + 3)", explanation: "Assemble conjugate pairs matching your parameters, tracking the GCF factor outside." }
+                ]
+            },
+            l4q7: {
+                title: "Question 7: 20a² - 45", type: "binomial", var: "a", ans_box: "5(2a - 3)(2a + 3)",
+                steps: [
+                    { title: "Step 1: Extract Common Numerical Factor", math: "5(4a<sup>2</sup> - 9)", explanation: "Pull out the common numerical GCF divisor 5 from both terms." },
+                    { title: "Step 2: Determine Inner Factor Roots", math: "5( (2a)<sup>2</sup> - (3)<sup>2</sup> )", explanation: "Calculate perfect square foundations: <code>&radic;4a² = 2a</code> and <code>&radic;9 = 3</code>." },
+                    { title: "Step 3: Route Into Alternating Conjugate Form", math: "5(2a - 3)(2a + 3)", explanation: "Group properties completely into final alternating binomial configurations." }
+                ]
+            },
+            l4q8: {
+                title: "Question 8: 27n² - 75", type: "binomial", var: "n", ans_box: "3(3n - 5)(3n + 5)",
+                steps: [
+                    { title: "Step 1: Extract Common Divisor", math: "3(9n<sup>2</sup> - 25)", explanation: "Factor out common factor 3 to expose inner perfect square components." },
+                    { title: "Step 2: Take Inner Roots", math: "3( (3n)<sup>2</sup> - (5)<sup>2</sup> )", explanation: "Evaluate coordinates: <code>&radic;9n² = 3n</code> and <code>&radic;25 = 5</code>." },
+                    { title: "Step 3: Assemble Conjugate Framework Factors", math: "3(3n - 5)(3n + 5)", explanation: "Combine parameters neatly within structural conjugate layers." }
+                ]
+            },
+            l4q2: {
+                title: "Question 2: n² + 4n + 4", type: "trinomial", var: "n", ans_box: "(n + 2)<sup>2</sup>", expr: "1n<sup>2</sup> + 4n + 4",
+                pattern_steps: [
+                    { title: "Step 1: Verify Perfect Square Structural Boundaries", math: "(n)<sup>2</sup> + 4n + (2)<sup>2</sup>", explanation: "Corner boundaries represent positive perfect squares: <code>&radic;n² = n</code> and <code>&radic;4 = 2</code>." },
+                    { title: "Step 2: Check Middle Linear Term Parameter", math: "2 &times; (n) &times; (2) = 4n", explanation: "Verify if middle term matches <code>2ab</code> exactly. Since <code>2(n)(2) = 4n</code>, it matches perfectly." },
+                    { title: "Step 3: Map Directly to Factored Square Layout", math: "(n + 2)<sup>2</sup>", explanation: "<span class='math-rule'>Perfect Square Trinomial Shortcut Rule:<br>a<sup>2</sup> + 2ab + b<sup>2</sup> = (a + b)<sup>2</sup></span>Compile parameters into standard form layout." }
+                ],
+                ps_steps: [
+                    { title: "Step 2: Find Target Factors Parameters", math: "Product = +4, Sum = +4", explanation: "Find two integers that multiply to constant c=4 and sum to middle b=4. Those numbers are <strong>+2</strong> and <strong>+2</strong>." },
+                    { title: "Step 3: Split Middle Term and Factor by Grouping", math: "n<sup>2</sup> + 2n + 2n + 4 &rarr; n(n + 2) + 2(n + 2)", explanation: "Decompose 4n into 2n + 2n. Grouping in pairs yields identical binomial blocks." },
+                    { title: "Step 4: Consolidate Binomial Factors", math: "(n + 2)(n + 2) = (n + 2)<sup>2</sup>", explanation: "Condense identical parameters into final squared form." }
+                ],
+                cc_steps: [{ title: "Step 2: Group Horizontally", math: "(n + 2)(n + 2) = (n + 2)<sup>2</sup>", explanation: "Read across horizontal layers to group matrix coordinates into final linear blocks." }],
+                cc_lt: "n", cc_lb: "n", cc_rt: "+2", cc_rb: "+2", cc_pt: "+2n", cc_pb: "+2n", cc_sum: "+4n", row1_f: "n + 2", row2_f: "n + 2"
+            },
+            l4q3: {
+                title: "Question 3: 2x² + 40x + 200", type: "trinomial", var: "x", ans_box: "2(x + 10)<sup>2</sup>", expr: "2(x<sup>2</sup> + 20x + 100)",
+                pattern_steps: [
+                    { title: "Step 1: Extract Greatest Common Factor", math: "2(x<sup>2</sup> + 20x + 100)", explanation: "Factor out numerical multiplier 2 to isolate standard perfect square terms inside." },
+                    { title: "Step 2: Verify Perfect Square Roots", math: "2( (x)<sup>2</sup> + 20x + (10)<sup>2</sup> )", explanation: "Evaluate boundary properties: <code>&radic;x² = x</code> and <code>&radic;100 = 10</code>." },
+                    { title: "Step 3: Verify Middle Term and Map", math: "2 &times; (x) &times; (10) = 20x", explanation: "Middle term perfectly tracking matches <code>2ab</code>. Compress into standard form: <code>2(x + 10)²</code>." }
+                ],
+                ps_steps: [
+                    { title: "Step 2: Find Target Factors for Inside Trinomial", math: "Product = +100, Sum = +20", explanation: "Inside brackets, find two numbers multiplying to 100 and summing to 20. Target values are +10 and +10." },
+                    { title: "Step 3: Split Middle Term and Group", math: "2(x<sup>2</sup> + 10x + 10x + 100) &rarr; 2[x(x + 10) + 10(x + 10)]", explanation: "Decompose 20x into 10x + 10x. Extract common dimensions from both binary pairs." },
+                    { title: "Step 4: Consolidate Factors Template", math: "2(x + 10)(x + 10) = 2(x + 10)<sup>2</sup>", explanation: "Combine identical elements together tracking outside initial GCF multiplier." }
+                ],
+                cc_steps: [{ title: "Step 2: Group Across Layers", math: "2(x + 10)(x + 10) = 2(x + 10)<sup>2</sup>", explanation: "Collect horizontal layers straight across and reattach the initial GCF multiplier 2." }],
+                cc_lt: "x", cc_lb: "x", cc_rt: "+10", cc_rb: "+10", cc_pt: "+10x", cc_pb: "+10x", cc_sum: "+20x", row1_f: "x + 10", row2_f: "x + 10"
+            },
+            l4q9: {
+                title: "Question 9: 16b² - 40b + 25", type: "trinomial", var: "b", ans_box: "(4b - 5)<sup>2</sup>", expr: "16b<sup>2</sup> - 40b + 25",
+                pattern_steps: [
+                    { title: "Step 1: Check Boundary Square Roots", math: "(4b)<sup>2</sup> - 40b + (5)<sup>2</sup>", explanation: "First and last terms are perfect squares: <code>&radic;16b² = 4b</code> and <code>&radic;25 = 5</code>." },
+                    { title: "Step 2: Check Middle Sign Parameter", math: "2 &times; (4b) &times; (-5) = -40b", explanation: "Twice product equals middle coefficient with subtraction sign. Confirms <code>(a - b)²</code> structure." },
+                    { title: "Step 3: Map Directly to Square Form", math: "(4b - 5)<sup>2</sup>", explanation: "<span class='math-rule'>Identity Rule Checklist:<br>a<sup>2</sup> - 2ab + b<sup>2</sup> = (a - b)<sup>2</sup></span>Map variables into compressed solution brackets." }
+                ],
+                ps_steps: [
+                    { title: "Step 2: Find Target Decomposition Integers", math: "Product = 400, Sum = -40", explanation: "Find numbers multiplying to <code>a &times; c = 400</code> and summing to -40. Target values are -20 and -20." },
+                    { title: "Step 3: Split and Factor by Grouping", math: "16b<sup>2</sup> - 20b - 20b + 25 &rarr; 4b(4b - 5) - 5(4b - 5)", explanation: "Decompose middle term and extract matching linear dimensions from pairs." },
+                    { title: "Step 4: Combine Elements", math: "(4b - 5)(4b - 5) = (4b - 5)<sup>2</sup>", explanation: "Express duplicate linear binomial blocks as a single unified squared factor." }
+                ],
+                cc_steps: [{ title: "Step 2: Read Matrix Layout Horizontally", math: "(4b - 5)(4b - 5) = (4b - 5)<sup>2</sup>", explanation: "Read horizontal coordinates across grid profiles and consolidate dimensions." }],
+                cc_lt: "4b", cc_lb: "4b", cc_rt: "-5", cc_rb: "-5", cc_pt: "-20b", cc_pb: "-20b", cc_sum: "-40b", row1_f: "4b - 5", row2_f: "4b - 5"
+            },
+            l4q10: {
+                title: "Question 10: 4x² + 4x + 1", type: "trinomial", var: "x", ans_box: "(2x + 1)<sup>2</sup>", expr: "4x<sup>2</sup> + 4x + 1",
+                pattern_steps: [
+                    { title: "Step 1: Isolate Perfect Roots", math: "(2x)<sup>2</sup> + 4x + (1)<sup>2</sup>", explanation: "Determine roots: <code>&radic;4x² = 2x</code> and <code>&radic;1 = 1</code>." },
+                    { title: "Step 2: Verify Middle Coefficient Integration", math: "2 &times; (2x) &times; (1) = +4x", explanation: "Twice product of square foundations equals middle linear term exactly." },
+                    { title: "Step 3: Map into Compressed Format", math: "(2x + 1)<sup>2</sup>", explanation: "Compile configurations straight into standard form parameters." }
+                ],
+                ps_steps: [
+                    { title: "Step 2: Find Product and Sum Coefficients", math: "Product = 4, Sum = 4", explanation: "Look for parameters multiplying to 4 and adding up to 4. Those integers are +2 and +2." },
+                    { title: "Step 3: Split and Factor by Pair Grouping", math: "4x<sup>2</sup> + 2x + 2x + 1 &rarr; 2x(2x + 1) + 1(2x + 1)", explanation: "Split middle linear term. Grouping binary boundaries extracts common factor subsets." },
+                    { title: "Step 4: Consolidate Factors Layers", math: "(2x + 1)(2x + 1) = (2x + 1)<sup>2</sup>", explanation: "Condense matching twin factor brackets into proper exponential squared form." }
+                ],
+                cc_steps: [{ title: "Step 2: Collect Horizontal Array Dimensions", math: "(2x + 1)(2x + 1) = (2x + 1)<sup>2</sup>", explanation: "Group matrix structures straight across vertical layers to lock matching brackets." }],
+                cc_lt: "2x", cc_lb: "2x", cc_rt: "+1", cc_rb: "+1", cc_pt: "+2x", cc_pb: "+2x", cc_sum: "+4x", row1_f: "2x + 1", row2_f: "2x + 1"
+            },
+            l4q11: {
+                title: "Question 11: 4c² - 12c + 9", type: "trinomial", var: "c", ans_box: "(2c - 3)<sup>2</sup>", expr: "4c<sup>2</sup> - 12c + 9",
+                pattern_steps: [
+                    { title: "Step 1: Determine Perfect Boundary Square Roots", math: "(2c)<sup>2</sup> - 12c + (3)<sup>2</sup>", explanation: "Extract foundations: <code>&radic;4c² = 2c</code> and <code>&radic;9 = 3</code>." },
+                    { title: "Step 2: Verify Middle Tracking Value", math: "2 &times; (2c) &times; (-3) = -12c", explanation: "Twice corner products matches middle linear value perfectly." },
+                    { title: "Step 3: Map Into Quadratic Shortcut Identity", math: "(2c - 3)<sup>2</sup>", explanation: "Write variables smoothly inside standard compressed structural blocks." }
+                ],
+                ps_steps: [
+                    { title: "Step 2: Find Core Splitting Dimensions", math: "Product = 36, Sum = -12", explanation: "Find factors multiplying to 36 and summing to -12. Those values are -6 and -6." },
+                    { title: "Step 3: Execute Pair Grouping Extraction Steps", math: "4c<sup>2</sup> - 6c - 6c + 9 &rarr; 2c(2c - 3) - 3(2c - 3)", explanation: "Decompose middle term and extract common factors from matching pairs." },
+                    { title: "Step 4: Consolidate Factor Blocks", math: "(2c - 3)(2c - 3) = (2c - 3)<sup>2</sup>", explanation: "Assemble your duplicate linear terms cleanly into squared form." }
+                ],
+                cc_steps: [{ title: "Step 2: Collect Horizontal Row Elements", math: "(2c - 3)(2c - 3) = (2c - 3)<sup>2</sup>", explanation: "Read linear rows horizontally to group factors into consolidated square parameters." }],
+                cc_lt: "2c", cc_lb: "2c", cc_rt: "-3", cc_rb: "-3", cc_pt: "-6c", cc_pb: "-6c", cc_sum: "-12c", row1_f: "2c - 3", row2_f: "2c - 3"
+            },
+            l4q12: {
+                title: "Question 12: 49e² + 28e + 4", type: "trinomial", var: "e", ans_box: "(7e + 2)<sup>2</sup>", expr: "49e<sup>2</sup> + 28e + 4",
+                pattern_steps: [
+                    { title: "Step 1: Isolate Boundary Perfect Square Multipliers", math: "(7e)<sup>2</sup> + 28e + (2)<sup>2</sup>", explanation: "Calculate roots: <code>&radic;49e² = 7e</code> and <code>&radic;4 = 2</code>." },
+                    { title: "Step 2: Cross Reference Middle Linear Coefficient", math: "2 &times; (7e) &times; (2) = +28e", explanation: "Twice product matches middle coefficient exactly, confirming perfect square status." },
+                    { title: "Step 3: Consolidate Factor Target Forms", math: "(7e + 2)<sup>2</sup>", explanation: "Collect matching corner values directly into unified squared form." }
+                ],
+                ps_steps: [
+                    { title: "Step 2: Calculate Product and Sum Target Parameters", math: "Product = 196, Sum = 28", explanation: "Find numbers multiplying to <code>49 &times; 4 = 196</code> and adding to 28. Those values are +14 and +14." },
+                    { title: "Step 3: Split Middle Term and Group Pairs", math: "49e<sup>2</sup> + 14e + 14e + 4 &rarr; 7e(7e + 2) + 2(7e + 2)", explanation: "Decompose 28e linear components. Pull out matching factors from binary pairs." },
+                    { title: "Step 4: Collapse Linear Binomial Components", math: "(7e + 2)(7e + 2) = (7e + 2)<sup>2</sup>", explanation: "Condense matching twin factors into standard form notation." }
+                ],
+                cc_steps: [{ title: "Step 2: Pull Coordinates Straight Across Rows", math: "(7e + 2)(7e + 2) = (7e + 2)<sup>2</sup>", explanation: "Group straight across rows to write the expression as a unified square element." }],
+                cc_lt: "7e", cc_lb: "7e", cc_rt: "+2", cc_rb: "+2", cc_pt: "+14e", cc_pb: "+14e", cc_sum: "+28e", row1_f: "7e + 2", row2_f: "7e + 2"
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, inputVal: "", isCorrect: false, currentStep: 0, solRevealed: false, selectedMethod: 'pattern' };
+        });
+
+        let activeQuestionId = "";
+        let currentMethod = 'pattern';
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            document.getElementById("method-toggle-bar").style.display = "none";
+
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const txtInput = document.getElementById("student-text-input");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            // Execute automated virtual keyboard display switches
+            const activeProblem = problemDataPack[activeQuestionId];
+            setupVirtualKeyboard(activeProblem);
+
+            const state = questionStates[activeQuestionId];
+            txtInput.value = state.inputVal;
+            currentMethod = state.selectedMethod;
+            
+            updateToggleButtonsUI();
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+        }
+
+        function setupVirtualKeyboard(problem) {
+            const keys = ["vkey-p", "vkey-n", "vkey-x", "vkey-a", "vkey-b", "vkey-c", "vkey-e"];
+            keys.forEach(k => document.getElementById(k).style.display = "none");
+            const target = "vkey-" + problem.var;
+            if (document.getElementById(target)) document.getElementById(target).style.display = "inline-block";
+        }
+
+        function updateToggleButtonsUI() {
+            document.getElementById("mode-pattern").classList.toggle("active", currentMethod === 'pattern');
+            document.getElementById("mode-ps").classList.toggle("active", currentMethod === 'ps');
+            document.getElementById("mode-cc").classList.toggle("active", currentMethod === 'cc');
+        }
+
+        function pressMathKey(symbol) {
+            const txtInput = document.getElementById("student-text-input");
+            if (txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const nameInput = document.getElementById("student-name").value.trim();
+            const idInput = document.getElementById("student-id").value.trim();
+
+            if (nameInput === "" || idInput === "") {
+                alert("Identity verification required. Please enter your Profile Name and Student ID numbers.");
+                return;
+            }
+
+            const txtInput = document.getElementById("student-text-input");
+            let rawInput = txtInput.value;
+            let normalizedInput = rawInput.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2');
+            
+            let matchingCorrect = answerRegistry[activeQuestionId].includes(normalizedInput);
+
+            questionStates[activeQuestionId].answered = true;
+            questionStates[activeQuestionId].inputVal = rawInput;
+            questionStates[activeQuestionId].isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_0",
+                lessonId: "Lesson_4",
+                studentName: nameInput,
+                studentId: idInput,
+                questionId: activeQuestionId,
+                userAnswer: rawInput,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: problemDataPack[activeQuestionId].type === "binomial" ? "Difference of Squares" : (currentMethod === 'pattern' ? "Pattern Recognition" : (currentMethod === 'ps' ? "Product & Sum" : "Criss-Cross")),
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            if (TEACHER_SPREADSHEET_SCRIPT_URL === "YOUR_GOOGLE_WEB_APP_URL_HERE") {
+                console.warn("Tracking block aborted: Destination script endpoint placeholder active.");
+                return;
+            }
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database communication failure:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.getElementById("student-text-input").disabled = true;
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Answer verified and logged securely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect configuration parameters. Unlock step blocks below to evaluate.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.getElementById("student-text-input").disabled = false;
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const data = problemDataPack[activeQuestionId];
+            buildSolutionInjectedDOM(data);
+
+            document.getElementById("solution-reveal-layer").style.display = "block";
+            if (data.type === "trinomial") {
+                document.getElementById("method-toggle-bar").style.display = "flex";
+            } else {
+                document.getElementById("method-toggle-bar").style.display = "none";
+            }
+
+            renderStepBlocks();
+        }
+
+        function buildSolutionInjectedDOM(data) {
+            const targetDiv = document.getElementById("solution-workspace-injected");
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+
+            if (data.type === "binomial") {
+                data.steps.forEach(st => {
+                    html += `
+                    <div class="step-block">
+                        <span class="step-title">${st.title}</span>
+                        <div class="step-math">${st.math}</div>
+                        <span class="step-explanation">${st.explanation}</span>
+                    </div>`;
+                });
+            } else if (data.type === "trinomial") {
+                if (currentMethod === 'pattern') {
+                    data.pattern_steps.forEach(st => {
+                        html += `
+                        <div class="step-block">
+                            <span class="step-title">${st.title}</span>
+                            <div class="step-math">${st.math}</div>
+                            <span class="step-explanation">${st.explanation}</span>
+                        </div>`;
+                    });
+                } else if (currentMethod === 'ps') {
+                    html += `
+                    <div class="step-block common-step">
+                        <span class="step-title">Step 1: Classify the Polynomial</span>
+                        <div class="step-math">${data.expr}</div>
+                        <span class="step-explanation">We can evaluate it via universal decomposition parameters.</span>
+                    </div>`;
+                    data.ps_steps.forEach(st => {
+                        html += `
+                        <div class="step-block">
+                            <span class="step-title">${st.title}</span>
+                            <div class="step-math">${st.math}</div>
+                            <span class="step-explanation">${st.explanation}</span>
+                        </div>`;
+                    });
+                } else if (currentMethod === 'cc') {
+                    html += `
+                    <div class="step-block cc-only">
+                        <span class="step-title">Step 1: Set Up the Grid Vectors Layout</span>
+                        <div class="criss-cross-box">
+                            <div class="matrix-grid">
+                                <div>${data.cc_lt}</div>
+                                <div class="svg-intersection-container">
+                                    <svg width="70" height="70" viewBox="0 0 70 70" style="overflow: visible;">
+                                        <defs><marker id="arrowhead" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" /></marker></defs>
+                                        <line x1="5" y1="10" x2="65" y2="60" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrowhead)" />
+                                        <line x1="5" y1="60" x2="65" y2="10" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrowhead)" />
+                                    </svg>
+                                </div>
+                                <div>${data.cc_rt}</div> <div class="grid-arrow-label">&rarr;</div> <div>${data.cc_pt}</div>
+                                <div>${data.cc_lb}</div> <div>${data.cc_rb}</div> <div class="grid-arrow-label">&rarr;</div> <div>${data.cc_pb}</div>
+                                <div class="matrix-total-line"><strong>Sum Verification:</strong> (${data.cc_pt}) + (${data.cc_pb}) = <strong>${data.cc_sum}</strong> (Matches Middle Term!)</div>
+                            </div>
+                        </div>
+                    </div>`;
+                    data.cc_steps.forEach(st => {
+                        html += `
+                        <div class="step-block">
+                            <span class="step-title">${st.title}</span>
+                            <div class="step-math">${st.math}</div>
+                            <span class="step-explanation">${st.explanation}</span>
+                        </div>`;
+                    });
+                }
+            }
+
+            html += `
+            <div class="final-answer-box">
+                <span class="final-answer-label">Completely Factored Form</span>
+                <span class="final-answer-math">${data.ans_box}</span>
+            </div>`;
+
+            targetDiv.innerHTML = html;
+        }
+
+        function renderStepBlocks() {
+            const container = document.getElementById("solution-workspace-injected");
+            const allSteps = Array.from(container.querySelectorAll('.step-block, .final-answer-box'));
+            allSteps.forEach(st => st.style.display = 'none');
+
+            visibleStepElements = allSteps;
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+        }
+
+        function changeMethod(methodKey) {
+            if (currentMethod === methodKey) return;
+            currentMethod = methodKey;
+            questionStates[activeQuestionId].selectedMethod = methodKey;
+            questionStates[activeQuestionId].currentStep = 0;
+
+            updateToggleButtonsUI();
+            revealSolutionWorkspace();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderStepBlocks();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

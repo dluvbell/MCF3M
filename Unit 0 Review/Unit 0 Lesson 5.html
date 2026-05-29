@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 0 Lesson 5</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .fraction-input-wrapper {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            padding: 14px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .fraction-input-box {
+            width: 220px;
+            padding: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            outline: none;
+            color: var(--math-color);
+        }
+
+        .fraction-input-box:focus {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .fraction-input-bar {
+            width: 240px;
+            height: 3px;
+            background-color: var(--math-color);
+            border-radius: 2px;
+        }
+
+        .fraction-input-wrapper:has(.fraction-input-box:disabled) {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .fraction-input-box:disabled {
+            background-color: transparent;
+            border-color: transparent;
+        }
+
+        .student-answer-input {
+            flex: 1;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            background-color: white;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.15s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .math-key:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .math-key-active-mode {
+            background-color: var(--secondary-color) !important;
+            color: white !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            padding: 0 6px;
+        }
+
+        .numerator {
+            border-bottom: 2px solid var(--math-color);
+            padding-bottom: 2px;
+        }
+
+        .denominator {
+            padding-top: 2px;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 0 Lesson 5</h1>
+        <p>Solving Literal Equations (Isolating Variables via SAMDEB Balance)</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+       <div class="profile-box">
+    <label>Student Profile Setup:</label>
+    <div class="profile-grid">
+        <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+        <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+    </div>
+</div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Question:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <optgroup label="Literal Equations Evaluation Dataset">
+                    <option value="l5q1">Question 1: d = rt (for r)</option>
+                    <option value="l5q2">Question 2: P = 144p / y (for p)</option>
+                    <option value="l5q3">Question 3: R = CS / d (for C)</option>
+                    <option value="l5q4">Question 4: P = a + b + c (for b)</option>
+                    <option value="l5q5">Question 5: T = m - n (for n)</option>
+                    <option value="l5q6">Question 6: A = (a + b) / 2 (for b)</option>
+                    <option value="l5q7">Question 7: V = lwh (for w)</option>
+                    <option value="l5q8">Question 8: m = (y₂ - y₁) / (x₂ - x₁) (for y₂)</option>
+                    <option value="l5q9">Question 9: ax + by = c (for y)</option>
+                    <option value="l5q10">Question 10: A = (a + b + c + d) / 4 (for c)</option>
+                    <option value="l5q11">Question 11: S = 2(lw + lh + wh) (for w)</option>
+                    <option value="l5q12">Question 12: P = 2(l + w) (for l)</option>
+                    <option value="l5q13">Question 13: d = c / π (for π)</option>
+                    <option value="l5q14">Question 14: 1 / f = 1 / a + 1 / b (for f)</option>
+                    <option value="l5q15">Question 15: A = p(1 + rt) (for t)</option>
+                    <option value="l5q16">Question 16: I = prt (for r)</option>
+                    <option value="l5q17">Question 17: ax + b = c (for a)</option>
+                    <option value="l5q18">Question 18: S = 2πrh (for h)</option>
+                    <option value="l5q19">Question 19: A = 2πr² + 2\pi rh (for h)</option>
+                    <option value="l5q20">Question 20: y - y₁ = m(x - x₁) (for x)</option>
+                    <option value="l5q21">Question 21: R = (l + 3w) / 2 (for w)</option>
+                    <option value="l5q22">Question 22: ax + by + c = 0 (for y)</option>
+                    <option value="l5q23">Question 23: C = 5/9(F - 32) (for F)</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question from the list above to initialize the test dashboard.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="input-prompt-math-box" style="font-size:1.3rem; font-weight:700; color:var(--primary-color); margin-bottom:16px; display:flex; align-items:center; gap:8px;"></div>
+                
+                <div id="dynamic-input-mount-point" style="margin-bottom: 20px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" id="vkey-frac" onclick="handleFractionUiToggle()" style="background-color:#eff6ff; border-color:#94a3b8; color:var(--secondary-color);">Fraction Mode</button>
+                    <button class="math-key" onclick="pressMathKey('+')">+</button>
+                    <button class="math-key" onclick="pressMathKey('-')">-</button>
+                    <button class="math-key" onclick="pressMathKey('(')">(</button>
+                    <button class="math-key" onclick="pressMathKey(')')">)</button>
+                    
+                    <button class="math-key" id="vkey-d" onclick="pressMathKey('d')">d</button>
+                    <button class="math-key" id="vkey-r" onclick="pressMathKey('r')">r</button>
+                    <button class="math-key" id="vkey-t" onclick="pressMathKey('t')">t</button>
+                    <button class="math-key" id="vkey-P" onclick="pressMathKey('P')">P</button>
+                    <button class="math-key" id="vkey-p" onclick="pressMathKey('p')">p</button>
+                    <button class="math-key" id="vkey-y" onclick="pressMathKey('y')">y</button>
+                    <button class="math-key" id="vkey-R" onclick="pressMathKey('R')">R</button>
+                    <button class="math-key" id="vkey-C" onclick="pressMathKey('C')">C</button>
+                    <button class="math-key" id="vkey-S" onclick="pressMathKey('S')">S</button>
+                    <button class="math-key" id="vkey-a" onclick="pressMathKey('a')">a</button>
+                    <button class="math-key" id="vkey-b" onclick="pressMathKey('b')">b</button>
+                    <button class="math-key" id="vkey-c" onclick="pressMathKey('c')">c</button>
+                    <button class="math-key" id="vkey-m" onclick="pressMathKey('m')">m</button>
+                    <button class="math-key" id="vkey-n" onclick="pressMathKey('n')">n</button>
+                    <button class="math-key" id="vkey-T" onclick="pressMathKey('T')">T</button>
+                    <button class="math-key" id="vkey-A" onclick="pressMathKey('A')">A</button>
+                    <button class="math-key" id="vkey-V" onclick="pressMathKey('V')">V</button>
+                    <button class="math-key" id="vkey-l" onclick="pressMathKey('l')">l</button>
+                    <button class="math-key" id="vkey-w" onclick="pressMathKey('w')">w</button>
+                    <button class="math-key" id="vkey-h" onclick="pressMathKey('h')">h</button>
+                    <button class="math-key" id="vkey-x" onclick="pressMathKey('x')">x</button>
+                    <button class="math-key" id="vkey-y1" onclick="pressMathKey('y1')">y₁</button>
+                    <button class="math-key" id="vkey-y2" onclick="pressMathKey('y2')">y₂</button>
+                    <button class="math-key" id="vkey-x1" onclick="pressMathKey('x1')">x₁</button>
+                    <button class="math-key" id="vkey-x2" onclick="pressMathKey('x2')">x₂</button>
+                    <button class="math-key" id="vkey-pi" onclick="pressMathKey('π')">π</button>
+                    <button class="math-key" id="vkey-f" onclick="pressMathKey('f')">f</button>
+                    <button class="math-key" id="vkey-I" onclick="pressMathKey('I')">I</button>
+                    <button class="math-key" id="vkey-F" onclick="pressMathKey('F')">F</button>
+                    
+                    <button class="math-key" id="vkey-144" onclick="pressMathKey('144')">144</button>
+                    <button class="math-key" id="vkey-2" onclick="pressMathKey('2')">2</button>
+                    <button class="math-key" id="vkey-4" onclick="pressMathKey('4')">4</button>
+                    <button class="math-key" id="vkey-3" onclick="pressMathKey('3')">3</button>
+                    <button class="math-key" id="vkey-5" onclick="pressMathKey('5')">5</button>
+                    <button class="math-key" id="vkey-9" onclick="pressMathKey('9')">9</button>
+                    <button class="math-key" id="vkey-32" onclick="pressMathKey('32')">32</button>
+                </div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        // Structured evaluation arrays handle expected layouts and layout permutations
+        const answerRegistry = {
+            l5q1: { layout: "fraction", num: ["d"], den: ["t"] },
+            l5q2: { layout: "fraction", num: ["py", "yp"], den: ["144"] },
+            l3q3: { layout: "fraction", num: ["rd", "dr"], den: ["s"] }, // mapping l5q3 mapping registry lookup handler
+            l5q3: { layout: "fraction", num: ["rd", "dr"], den: ["s"] },
+            l5q4: { layout: "linear", ans: ["p-a-c", "p-c-a", "-a-c+p", "-c-a+p"] },
+            l5q5: { layout: "linear", ans: ["m-t", "-t+m"] },
+            l5q6: { layout: "linear", ans: ["2a-a", "2*a-a", "-a+2a"] },
+            l5q7: { layout: "fraction", num: ["v"], den: ["lh", "hl"] },
+            l5q8: { layout: "linear", ans: ["m(x2-x1)+y1", "m*(x2-x1)+y1", "y1+m(x2-x1)"] },
+            l5q9: { layout: "fraction", num: ["c-ax", "-ax+c"], den: ["b"] },
+            l5q10: { layout: "linear", ans: ["4a-a-b-d", "4*a-a-b-d"] },
+            l5q11: { layout: "fraction", num: ["s-2lh", "s-2hl", "-2lh+s"], den: ["2l+2h", "2h+2l"] },
+            l4q12: { layout: "fraction", num: ["p-2w", "-2w+p"], den: ["2"] }, // backup duplicate key reference
+            l5q12: { layout: "fraction", num: ["p-2w", "-2w+p"], den: ["2"] },
+            l5q13: { layout: "fraction", num: ["c"], den: ["d"] },
+            l5q14: { layout: "fraction", num: ["ab", "ba"], den: ["a+b", "b+a"] },
+            l5q15: { layout: "fraction", num: ["a-p", "-p+a"], den: ["pr", "rp"] },
+            l5q16: { layout: "fraction", num: ["i"], den: ["pt", "tp"] },
+            l5q17: { layout: "fraction", num: ["c-b", "-b+c"], den: ["x"] },
+            l5q18: { layout: "fraction", num: ["s"], den: ["2πr", "2π*r", "2*π*r"] },
+            l5q19: { layout: "fraction", num: ["a-2πr2", "a-2πr²"], den: ["2πr", "2π*r"] },
+            l5q20: { layout: "fraction", num: ["y-y1+mx1", "y-y1+m*x1"], den: ["m"] },
+            l5q21: { layout: "fraction", num: ["2r-l", "-l+2r"], den: ["3"] },
+            l5q22: { layout: "fraction", num: ["-ax-c", "-c-ax"], den: ["b"] },
+            l5q23: { layout: "linear", ans: ["9c/5+32", "9*c/5+32", "1.8c+32", "1.8*c+32"] }
+        };
+
+        const problemDataPack = {
+            l5q1: {
+                title: "Question 1: d = rt (for r)", target: "r", vars: ["d", "r", "t"],
+                prompt: "Solve for r: &nbsp;&nbsp; d = rt &nbsp;&nbsp;&rarr;&nbsp;&nbsp; r =",
+                steps: [
+                    { title: "Step 1: Check SAMDEB Operations", math: "d = rt", explanation: "Target variable <code>r</code> is within the right term group. There are no outer Subtraction or Addition blocks to balance first. The target is directly bound to <code>t</code> via multiplication." },
+                    { title: "Step 2: Apply Multiplication Inverse to Both Sides (Division)", math: "<div class='fraction'><div class='numerator'>d</div><div class='denominator'>t</div></div> = <div class='fraction'><div class='numerator'>rt</div><div class='denominator'>t</div></div> &rarr; <div class='fraction'><div class='numerator'>d</div><div class='denominator'>t</div></div> = r", explanation: "Counter the multiplication of <code>t</code> by dividing both sides of the expression by <code>t</code>. This isolates <code>r</code> cleanly on the right layer." }
+                ], ans: "<div class='fraction'><div class='numerator'>d</div><div class='denominator'>t</div></div>"
+            },
+            l5q2: {
+                title: "Question 2: P = 144p / y (for p)", target: "p", vars: ["P", "p", "y", "144"],
+                prompt: "Solve for p: &nbsp;&nbsp; P = <div class='fraction'><div class='numerator'>144p</div><div class='denominator'>y</div></div> &nbsp;&nbsp;&rarr;&nbsp;&nbsp; p =",
+                steps: [
+                    { title: "Step 1: Cancel the Exterior Division Layer (Multiplication Balance)", math: "P &times; y = [ <div class='fraction'><div class='numerator'>144p</div><div class='denominator'>y</div></div> ] &times; y &rarr; Py = 144p", explanation: "The denominator <code>y</code> bounds our target. Counter this global division operation by multiplying both sides by <code>y</code>." },
+                    { title: "Step 2: Cancel Multiplication via Division", math: "<div class='fraction'><div class='numerator'>Py</div><div class='denominator'>144</div></div> = <div class='fraction'><div class='numerator'>144p</div><div class='denominator'>144</div></div> &rarr; <div class='fraction'><div class='numerator'>Py</div><div class='denominator'>144</div></div> = p", explanation: "Divide both sides by the constant multiplier <code>144</code> to fully isolate our target variable." }
+                ], ans: "<div class='fraction'><div class='numerator'>Py</div><div class='denominator'>144</div></div>"
+            },
+            l5q3: {
+                title: "Question 3: R = CS / d (for C)", target: "C", vars: ["R", "C", "S", "d"],
+                prompt: "Solve for C: &nbsp;&nbsp; R = <div class='fraction'><div class='numerator'>CS</div><div class='denominator'>d</div></div> &nbsp;&nbsp;&rarr;&nbsp;&nbsp; C =",
+                steps: [
+                    { title: "Step 1: Multiply to Cancel Division", math: "R &times; d = [ <div class='fraction'><div class='numerator'>CS</div><div class='denominator'>d</div></div> ] &times; d &rarr; Rd = CS", explanation: "Multiply both sides by <code>d</code> to counter and cancel out the fractional denominator layer." },
+                    { title: "Step 2: Divide to Balance Multiplication", math: "<div class='fraction'><div class='numerator'>Rd</div><div class='denominator'>S</div></div> = C", explanation: "Divide both sides by the multiplier variable <code>S</code> to isolate <code>C</code>." }
+                ], ans: "<div class='fraction'><div class='numerator'>Rd</div><div class='denominator'>S</div></div>"
+            },
+            l5q4: {
+                title: "Question 4: P = a + b + c (for b)", target: "b", vars: ["P", "a", "b", "c"],
+                prompt: "Solve for b: &nbsp;&nbsp; P = a + b + c &nbsp;&nbsp;&rarr;&nbsp;&nbsp; b =",
+                steps: [
+                    { title: "Step 1: Apply Subtraction to Balance Addition Blocks", math: "P - a - c = b", explanation: "The target <code>b</code> is bound to positive parameters <code>+a</code> and <code>+c</code> by addition. Subtract <code>a</code> and subtract <code>c</code> from both sides to clear them." }
+                ], ans: "P - a - c"
+            },
+            l5q5: {
+                title: "Question 5: T = m - n (for n)", target: "n", vars: ["T", "m", "n"],
+                prompt: "Solve for n: &nbsp;&nbsp; T = m - n &nbsp;&nbsp;&rarr;&nbsp;&nbsp; n =",
+                steps: [
+                    { title: "Step 1: Balance the Positive Block Term", math: "T - m = -n", explanation: "Subtract <code>m</code> from both sides to balance the positive <code>+m</code> term on the right." },
+                    { title: "Step 2: Cancel Negative Sign parameters", math: "-1 &times; (T - m) = -1 &times; (-n) &rarr; m - T = n", explanation: "Multiply or divide all terms by <code>-1</code> to resolve <code>-n</code> into a positive target <code>n</code>." }
+                ], ans: "m - T"
+            },
+            l5q6: {
+                title: "Question 6: A = (a + b) / 2 (for b)", target: "b", vars: ["A", "a", "b", "2"],
+                prompt: "Solve for b: &nbsp;&nbsp; A = <div class='fraction'><div class='numerator'>a + b</div><div class='denominator'>2</div></div> &nbsp;&nbsp;&rarr;&nbsp;&nbsp; b =",
+                steps: [
+                    { title: "Step 1: Multiply to Clear the Global Denominator", math: "2A = a + b", explanation: "Multiply both sides by 2 to clear the global division layer before moving inside the bracket grouping block." },
+                    { title: "Step 2: Subtract to Isolate", math: "2A - a = b", explanation: "Subtract <code>a</code> from both sides to counter the addition block binding the target variable." }
+                ], ans: "2A - a"
+            },
+            l5q7: {
+                title: "Question 7: V = lwh (for w)", target: "w", vars: ["V", "l", "w", "h"],
+                prompt: "Solve for w: &nbsp;&nbsp; V = lwh &nbsp;&nbsp;&rarr;&nbsp;&nbsp; w =",
+                steps: [
+                    { title: "Step 1: Apply Division to Bound Multipliers", math: "<div class='fraction'><div class='numerator'>V</div><div class='denominator'>lh</div></div> = w", explanation: "The target <code>w</code> is multiplied by the composite group <code>lh</code>. Divide both sides by <code>lh</code> to isolate it." }
+                ], ans: "<div class='fraction'><div class='numerator'>V</div><div class='denominator'>lh</div></div>"
+            },
+            l5q8: {
+                title: "Question 8: m = (y₂ - y₁) / (x₂ - x₁) (for y₂)", target: "y2", vars: ["m", "y1", "y2", "x1", "x2"],
+                prompt: "Solve for y₂: &nbsp;&nbsp; m = <div class='fraction'><div class='numerator'>y₂ - y₁</div><div class='denominator'>x₂ - x₁</div></div> &nbsp;&nbsp;&rarr;&nbsp;&nbsp; y₂ =",
+                steps: [
+                    { title: "Step 1: Multiply by the Entire Denominator Group", math: "m(x₂ - x₁) = y₂ - y₁", explanation: "Multiply both sides by the composite denominator grouping layer <code>(x₂ - x₁)</code> to counter the baseline division." },
+                    { title: "Step 2: Add to Cancel Subtraction block", math: "m(x₂ - x₁) + y₁ = y₂", explanation: "Counter the subtraction of <code>-y₁</code> by adding <code>y₁</code> to both sides of the equation." }
+                ], ans: "m(x₂ - x₁) + y₁"
+            },
+            l5q9: {
+                title: "Question 9: ax + by = c (for y)", target: "y", vars: ["a", "x", "b", "y", "c"],
+                prompt: "Solve for y: &nbsp;&nbsp; ax + by = c &nbsp;&nbsp;&rarr;&nbsp;&nbsp; y =",
+                steps: [
+                    { title: "Step 1: Isolate the Variable Term Group via Subtraction", math: "by = c - ax", explanation: "Subtract the complete term block <code>ax</code> from both sides to isolate the <code>by</code> term layer." },
+                    { title: "Step 2: Divide to Cancel Multiplier", math: "y = <div class='fraction'><div class='numerator'>c - ax</div><div class='denominator'>b</div></div>", explanation: "Divide both sides by the coefficient variable <code>b</code> to complete the isolation task." }
+                ], ans: "<div class='fraction'><div class='numerator'>c - ax</div><div class='denominator'>b</div></div>"
+            },
+            l5q10: {
+                title: "Question 10: A = (a + b + c + d) / 4 (for c)", target: "c", vars: ["A", "a", "b", "c", "d", "4"],
+                prompt: "Solve for c: &nbsp;&nbsp; A = <div class='fraction'><div class='numerator'>a + b + c + d</div><div class='denominator'>4</div></div> &nbsp;&nbsp;&rarr;&nbsp;&nbsp; c =",
+                steps: [
+                    { title: "Step 1: Clear Fraction Layer by Multiplication", math: "4A = a + b + c + d", explanation: "Multiply both sides by 4 to cancel out the denominator block." },
+                    { title: "Step 2: Subtract Remaining Companion Variables", math: "4A - a - b - d = c", explanation: "Subtract variables <code>a</code>, <code>b</code>, and <code>d</code> from both sides to completely isolate <code>c</code>." }
+                ], ans: "4A - a - b - d"
+            },
+            l5q11: {
+                title: "Question 11: S = 2(lw + lh + wh) (for w)", target: "w", vars: ["S", "l", "w", "h", "2"],
+                prompt: "Solve for w: &nbsp;&nbsp; S = 2(lw + lh + wh) &nbsp;&nbsp;&rarr;&nbsp;&nbsp; w =",
+                steps: [
+                    { title: "Step 1: Clear Exterior Scalar Bracket Layer", math: "<div class='fraction'><div class='numerator'>S</div><div class='denominator'>2</div></div> = lw + lh + wh", explanation: "Divide both sides by 2 to remove the outer multiplier layer." },
+                    { title: "Step 2: Subtract Terms Lacking the Target Variable", math: "<div class='fraction'><div class='numerator'>S</div><div class='denominator'>2</div></div> - lh = lw + wh", explanation: "Subtract the <code>lh</code> block since it does not contain our target variable <code>w</code>." },
+                    { title: "Step 3: Factor Out Common Target Variable", math: "<div class='fraction'><div class='numerator'>S - 2lh</div><div class='denominator'>2</div></div> = w(l + h)", explanation: "Find a common denominator on the left and group the right side terms by factoring out <code>w</code>." },
+                    { title: "Step 4: Divide by the Factored Binomial Group", math: "<div class='fraction'><div class='numerator'>S - 2lh</div><div class='denominator'>2(l + h)</div></div> = w", explanation: "Divide both sides by the binomial expression <code>(l + h)</code> to complete the isolation process." }
+                ], ans: "<div class='fraction'><div class='numerator'>S - 2lh</div><div class='denominator'>2l + 2h</div></div>"
+            },
+            l5q12: {
+                title: "Question 12: P = 2(l + w) (for l)", target: "l", vars: ["P", "l", "w", "2"],
+                prompt: "Solve for l: &nbsp;&nbsp; P = 2(l + w) &nbsp;&nbsp;&rarr;&nbsp;&nbsp; l =",
+                steps: [
+                    { title: "Step 1: Distribute or Divide Outside Value", math: "<div class='fraction'><div class='numerator'>P</div><div class='denominator'>2</div></div> = l + w", explanation: "Divide both sides by 2 to clear the outer scalar layer before opening the grouping bracket." },
+                    { title: "Step 2: Subtract to Isolate", math: "<div class='fraction'><div class='numerator'>P</div><div class='denominator'>2</div></div> - w = l &rarr; <div class='fraction'><div class='numerator'>P - 2w</div><div class='denominator'>2</div></div> = l", explanation: "Subtract <code>w</code> from both sides to fully isolate <code>l</code>." }
+                ], ans: "<div class='fraction'><div class='numerator'>P - 2w</div><div class='denominator'>2</div></div>"
+            },
+            l5q13: {
+                title: "Question 13: d = c / π (for π)", target: "pi", vars: ["d", "c", "pi"],
+                prompt: "Solve for π: &nbsp;&nbsp; d = <div class='fraction'><div class='numerator'>c</div><div class='denominator'>π</div></div> &nbsp;&nbsp;&rarr;&nbsp;&nbsp; π =",
+                steps: [
+                    { title: "Step 1: Multiply to Clear Target from Denominator Layer", math: "d&pi; = c", explanation: "The target variable is currently in the denominator. Multiply both sides by <code>&pi;</code> to move it to the numerator layer." },
+                    { title: "Step 2: Divide by Companion Variable", math: "&pi; = <div class='fraction'><div class='numerator'>c</div><div class='denominator'>d</div></div>", explanation: "Divide both sides by <code>d</code> to finish isolating <code>&pi;</code>." }
+                ], ans: "<div class='fraction'><div class='numerator'>c</div><div class='denominator'>d</div></div>"
+            },
+            l5q14: {
+                title: "Question 14: 1 / f = 1 / a + 1 / b (for f)", target: "f", vars: ["f", "a", "b"],
+                prompt: "Solve for f: &nbsp;&nbsp; <div class='fraction'><div class='numerator'>1</div><div class='denominator'>f</div></div> = <div class='fraction'><div class='numerator'>1</div><div class='denominator'>a</div></div> + <div class='fraction'><div class='numerator'>1</div><div class='denominator'>b</div></div> &nbsp;&nbsp;&rarr;&nbsp;&nbsp; f =",
+                steps: [
+                    { title: "Step 1: Combine Rational Terms Using a Common Denominator", math: "<div class='fraction'><div class='numerator'>1</div><div class='denominator'>f</div></div> = <div class='fraction'><div class='numerator'>b + a</div><div class='denominator'>ab</div></div>", explanation: "Find a common denominator <code>ab</code> on the right side to merge the two fractions into one unified block." },
+                    { title: "Step 2: Invert Both Sides (Reciprocal Property)", math: "f = <div class='fraction'><div class='numerator'>ab</div><div class='denominator'>b + a</div></div>", explanation: "Invert both sides of the equation to isolate <code>f</code> in the numerator." }
+                ], ans: "<div class='fraction'><div class='numerator'>ab</div><div class='denominator'>a + b</div></div>"
+            },
+            l5q15: {
+                title: "Question 15: A = p(1 + rt) (for t)", target: "t", vars: ["A", "p", "r", "t"],
+                prompt: "Solve for t: &nbsp;&nbsp; A = p(1 + rt) &nbsp;&nbsp;&rarr;&nbsp;&nbsp; t =",
+                steps: [
+                    { title: "Step 1: Distribute Variable Factor to Open Brackets", math: "A = p + prt", explanation: "Distribute the variable <code>p</code> to expand the terms inside the brackets." },
+                    { title: "Step 2: Subtract Independent Non-Target Terms", math: "A - p = prt", explanation: "Subtract <code>p</code> from both sides to isolate the term containing our target variable." },
+                    { title: "Step 3: Divide by Composite Multipliers", math: "<div class='fraction'><div class='numerator'>A - p</div><div class='denominator'>pr</div></div> = t", explanation: "Divide both sides by the product <code>pr</code> to finish isolating <code>t</code>." }
+                ], ans: "<div class='fraction'><div class='numerator'>A - p</div><div class='denominator'>pr</div></div>"
+            },
+            l5q16: {
+                title: "Question 16: I = prt (for r)", target: "r", vars: ["I", "p", "r", "t"],
+                prompt: "Solve for r: &nbsp;&nbsp; I = prt &nbsp;&nbsp;&rarr;&nbsp;&nbsp; r =",
+                steps: [
+                    { title: "Step 1: Apply Division to Composite Factor Clusters", math: "<div class='fraction'><div class='numerator'>I</div><div class='denominator'>pt</div></div> = r", explanation: "The target <code>r</code> is multiplied by the combined variables <code>pt</code>. Divide both sides by <code>pt</code> to isolate it." }
+                ], ans: "<div class='fraction'><div class='numerator'>I</div><div class='denominator'>pt</div></div>"
+            },
+            l5q17: {
+                title: "Question 17: ax + b = c (for a)", target: "a", vars: ["a", "x", "b", "c"],
+                prompt: "Solve for a: &nbsp;&nbsp; ax + b = c &nbsp;&nbsp;&rarr;&nbsp;&nbsp; a =",
+                steps: [
+                    { title: "Step 1: Counter Addition using Subtraction Balance", math: "ax = c - b", explanation: "Subtract <code>b</code> from both sides to clear it away from the variable term group." },
+                    { title: "Step 2: Divide by the Companion Coefficient Variable", math: "a = <div class='fraction'><div class='numerator'>c - b</div><div class='denominator'>x</div></div>", explanation: "Divide both sides by <code>x</code> to complete the isolation process." }
+                ], ans: "<div class='fraction'><div class='numerator'>c - b</div><div class='denominator'>x</div></div>"
+            },
+            l5q18: {
+                title: "Question 18: S = 2πrh (for h)", target: "h", vars: ["S", "pi", "r", "h", "2"],
+                prompt: "Solve for h: &nbsp;&nbsp; S = 2πrh &nbsp;&nbsp;&rarr;&nbsp;&nbsp; h =",
+                steps: [
+                    { title: "Step 1: Divide by Combined Coefficent Variables", math: "<div class='fraction'><div class='numerator'>S</div><div class='denominator'>2&pi;r</div></div> = h", explanation: "The target variable <code>h</code> is multiplied by the product <code>2&pi;r</code>. Divide both sides by <code>2&pi;r</code> to isolate it." }
+                ], ans: "<div class='fraction'><div class='numerator'>S</div><div class='denominator'>2&pi;r</div></div>"
+            },
+            l5q19: {
+                title: "Question 19: A = 2πr² + 2πrh (for h)", target: "h", vars: ["A", "pi", "r", "h", "2"],
+                prompt: "Solve for h: &nbsp;&nbsp; A = 2πr² + 2πrh &nbsp;&nbsp;&rarr;&nbsp;&nbsp; h =",
+                steps: [
+                    { title: "Step 1: Subtract Independent Polynomial Blocks", math: "A - 2&pi;r<sup>2</sup> = 2&pi;rh", explanation: "Subtract the independent term <code>2&pi;r²</code> from both sides to isolate the term containing our target variable." },
+                    { title: "Step 2: Divide by Remaining Coefficient Group", math: "<div class='fraction'><div class='numerator'>A - 2&pi;r<sup>2</sup></div><div class='denominator'>2&pi;r</div></div> = h", explanation: "Divide both sides by the multiplying group <code>2&pi;r</code> to isolate <code>h</code>." }
+                ], ans: "<div class='fraction'><div class='numerator'>A - 2&pi;r<sup>2</sup></div><div class='denominator'>2&pi;r</div></div>"
+            },
+            l5q20: {
+                title: "Question 20: y - y₁ = m(x - x₁) (for x)", target: "x", vars: ["y", "y1", "m", "x", "x1"],
+                prompt: "Solve for x: &nbsp;&nbsp; y - y₁ = m(x - x₁) &nbsp;&nbsp;&rarr;&nbsp;&nbsp; x =",
+                steps: [
+                    { title: "Step 1: Clear Outer Multiplier via Division", math: "<div class='fraction'><div class='numerator'>y - y₁</div><div class='denominator'>m</div></div> = x - x₁", explanation: "Divide both sides by <code>m</code> to remove the outer multiplier before unpacking the brackets." },
+                    { title: "Step 2: Apply Addition to Cancel Subtraction Parameters", math: "<div class='fraction'><div class='numerator'>y - y₁</div><div class='denominator'>m</div></div> + x₁ = x", explanation: "Add <code>x₁</code> to both sides to cancel out the subtraction and fully isolate <code>x</code>." }
+                ], ans: "<div class='fraction'><div class='numerator'>y - y₁ + mx₁</div><div class='denominator'>m</div></div>"
+            },
+            l5q21: {
+                title: "Question 21: R = (l + 3w) / 2 (for w)", target: "w", vars: ["R", "l", "w", "2", "3"],
+                prompt: "Solve for w: &nbsp;&nbsp; R = <div class='fraction'><div class='numerator'>l + 3w</div><div class='denominator'>2</div></div> &nbsp;&nbsp;&rarr;&nbsp;&nbsp; w =",
+                steps: [
+                    { title: "Step 1: Multiply to Clear Denominator Properties", math: "2R = l + 3w", explanation: "Multiply both sides by 2 to cancel out the denominator fraction layer." },
+                    { title: "Step 2: Subtract Companion Polynomial Variables", math: "2R - l = 3w", explanation: "Subtract <code>l</code> from both sides to isolate the <code>3w</code> term." },
+                    { title: "Step 3: Divide by Coefficient to Isolate Variable", math: "<div class='fraction'><div class='numerator'>2R - l</div><div class='denominator'>3</div></div> = w", explanation: "Divide both sides by 3 to finish isolating <code>w</code>." }
+                ], ans: "<div class='fraction'><div class='numerator'>2R - l</div><div class='denominator'>3</div></div>"
+            },
+            l5q22: {
+                title: "Question 22: ax + by + c = 0 (for y)", target: "y", vars: ["a", "x", "b", "y", "c"],
+                prompt: "Solve for y: &nbsp;&nbsp; ax + by + c = 0 &nbsp;&nbsp;&rarr;&nbsp;&nbsp; y =",
+                steps: [
+                    { title: "Step 1: Balance Expression terms via Subtraction", math: "by = -ax - c", explanation: "Subtract <code>ax</code> and subtract <code>c</code> from both sides to isolate the <code>by</code> term group." },
+                    { title: "Step 2: Divide by the Target variable's Coefficient", math: "y = <div class='fraction'><div class='numerator'>-ax - c</div><div class='denominator'>b</div></div>", explanation: "Divide both sides by <code>b</code> to complete the isolation process." }
+                ], ans: "<div class='fraction'><div class='numerator'>-ax - c</div><div class='denominator'>b</div></div>"
+            },
+            l5q23: {
+                title: "Question 23: C = 5/9(F - 32) (for F)", target: "F", vars: ["C", "F", "5", "9", "32"],
+                prompt: "Solve for F: &nbsp;&nbsp; C = <div class='fraction'><div class='numerator'>5</div><div class='denominator'>9</div></div>(F - 32) &nbsp;&nbsp;&rarr;&nbsp;&nbsp; F =",
+                steps: [
+                    { title: "Step 1: Multiply by the Fractional Denominator", math: "9C = 5(F - 32)", explanation: "Multiply both sides by 9 to cancel out the fractional denominator layer." },
+                    { title: "Step 2: Clear Outer Scalar Grouping Block via Division", math: "<div class='fraction'><div class='numerator'>9C</div><div class='denominator'>5</div></div> = F - 32", explanation: "Divide both sides by 5 to unpack the terms inside the brackets." },
+                    { title: "Step 3: Apply Addition Inverse to Complete Task", math: "<div class='fraction'><div class='numerator'>9C</div><div class='denominator'>5</div></div> + 32 = F", explanation: "Add <code>32</code> to both sides to cancel out the subtraction and fully isolate <code>F</code>." }
+                ], ans: "<div class='fraction'><div class='numerator'>9C</div><div class='denominator'>5</div></div> + 32"
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, activeLayout: "linear", textData: "", numData: "", denData: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+        let activeFocusedInputNode = null;
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            document.getElementById("input-prompt-math-box").innerHTML = activeProblem.prompt_html || activeProblem.prompt;
+            setupVirtualKeyboard(activeProblem);
+
+            const state = questionStates[activeQuestionId];
+            renderInjectedInputLayout(state.activeLayout);
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+                activeFocusedInputNode.focus();
+            }
+        }
+
+        function renderInjectedInputLayout(layoutMode) {
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const state = questionStates[activeQuestionId];
+            const fracButton = document.getElementById("vkey-frac");
+
+            if (layoutMode === "fraction") {
+                fracButton.classList.add("math-key-active-mode");
+                mountPoint.innerHTML = `
+                    <div class="fraction-input-wrapper">
+                        <input type="text" id="fraction-num-input" class="fraction-input-box" placeholder="Numerator" autocomplete="off">
+                        <div class="fraction-input-bar"></div>
+                        <input type="text" id="fraction-den-input" class="fraction-input-box" placeholder="Denominator" autocomplete="off">
+                    </div>`;
+                
+                const numNode = document.getElementById("fraction-num-input");
+                const denNode = document.getElementById("fraction-den-input");
+                
+                numNode.value = state.numData;
+                denNode.value = state.denData;
+
+                numNode.addEventListener("focus", () => activeFocusedInputNode = numNode);
+                denNode.addEventListener("focus", () => activeFocusedInputNode = denNode);
+                
+                numNode.addEventListener("input", () => state.numData = numNode.value);
+                denNode.addEventListener("input", () => state.denData = denNode.value);
+
+                activeFocusedInputNode = numNode;
+            } else {
+                fracButton.classList.remove("math-key-active-mode");
+                mountPoint.innerHTML = `
+                    <input type="text" id="linear-text-input" class="student-answer-input" placeholder="e.g., (c-ax)/b or m-T" autocomplete="off" style="width:100%; box-sizing:border-box;">`;
+                
+                const linNode = document.getElementById("linear-text-input");
+                linNode.value = state.textData;
+                
+                linNode.addEventListener("focus", () => activeFocusedInputNode = linNode);
+                linNode.addEventListener("input", () => state.textData = linNode.value);
+                
+                activeFocusedInputNode = linNode;
+            }
+        }
+
+        function handleFractionUiToggle() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+            
+            const state = questionStates[activeQuestionId];
+            state.activeLayout = (state.activeLayout === "linear") ? "fraction" : "linear";
+            
+            renderInjectedInputLayout(state.activeLayout);
+            activeFocusedInputNode.focus();
+        }
+
+        function setupVirtualKeyboard(problem) {
+            const allKeys = ["vkey-d", "vkey-r", "vkey-t", "vkey-P", "vkey-p", "vkey-y", "vkey-R", "vkey-C", "vkey-S", "vkey-a", "vkey-b", "vkey-c", "vkey-m", "vkey-n", "vkey-T", "vkey-A", "vkey-V", "vkey-l", "vkey-w", "vkey-h", "vkey-x", "vkey-y1", "vkey-y2", "vkey-x1", "vkey-x2", "vkey-pi", "vkey-f", "vkey-I", "vkey-F", "vkey-144", "vkey-2", "vkey-4", "vkey-3", "vkey-5", "vkey-9", "vkey-32"];
+            allKeys.forEach(k => document.getElementById(k).style.display = "none");
+            
+            problem.vars.forEach(v => {
+                const target = "vkey-" + v;
+                if (document.getElementById(target)) document.getElementById(target).style.display = "inline-block";
+            });
+        }
+
+        function pressMathKey(symbol) {
+            if (!activeFocusedInputNode || activeFocusedInputNode.disabled) return;
+            
+            const txtInput = activeFocusedInputNode;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            const state = questionStates[activeQuestionId];
+            if (state.activeLayout === "fraction") {
+                state.numData = document.getElementById("fraction-num-input").value;
+                state.denData = document.getElementById("fraction-den-input").value;
+            } else {
+                state.textData = document.getElementById("linear-text-input").value;
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const nameInput = document.getElementById("student-name").value.trim();
+            const idInput = document.getElementById("student-id").value.trim();
+
+            if (nameInput === "" || idInput === "") {
+                alert("Identity verification required. Please enter your Profile Name and Student ID numbers.");
+                return;
+            }
+
+            const registryEntry = answerRegistry[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let logString = "";
+
+            if (state.activeLayout === "fraction") {
+                const sNum = state.numData.replace(/\s+/g, '').toLowerCase();
+                const sDen = state.denData.replace(/\s+/g, '').toLowerCase();
+                logString = sNum + " / " + sDen;
+                
+                if (registryEntry.layout === "fraction") {
+                    if (registryEntry.num.includes(sNum) && registryEntry.den.includes(sDen)) {
+                        matchingCorrect = true;
+                    }
+                }
+            } else {
+                const sAns = state.textData.replace(/\s+/g, '').toLowerCase();
+                logString = sAns;
+                
+                if (registryEntry.layout === "linear") {
+                    if (registryEntry.ans.includes(sAns)) {
+                        matchingCorrect = true;
+                    }
+                } else if (registryEntry.layout === "fraction") {
+                    // Check if flat text matches expected fractional parameters via slash parsing
+                    const flatExpected = registryEntry.num[0] + "/" + registryEntry.den[0];
+                    if (sAns === flatExpected || sAns === "(" + registryEntry.num[0] + ")/" + registryEntry.den[0]) {
+                        matchingCorrect = true;
+                    }
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_0",
+                lessonId: "Lesson_5",
+                studentName: nameInput,
+                studentId: idInput,
+                questionId: activeQuestionId,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "SAMDEB Variable Isolation",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            if (TEACHER_SPREADSHEET_SCRIPT_URL === "YOUR_GOOGLE_WEB_APP_URL_HERE") return;
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Tracking database synchronizer crashed:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            const state = questionStates[activeQuestionId];
+            if (state.activeLayout === "fraction") {
+                document.getElementById("fraction-num-input").disabled = true;
+                document.getElementById("fraction-den-input").disabled = true;
+            } else {
+                document.getElementById("linear-text-input").disabled = true;
+            }
+            
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Isolation properties verified and logged successfully.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect configuration bounds. Open the SAMDEB steps below to review.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            const state = questionStates[activeQuestionId];
+            if (state.activeLayout === "fraction") {
+                document.getElementById("fraction-num-input").disabled = false;
+                document.getElementById("fraction-den-input").disabled = false;
+            } else {
+                document.getElementById("linear-text-input").disabled = false;
+            }
+            
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(st => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${st.title}</span>
+                    <div class="step-math">${st.math}</div>
+                    <span class="step-explanation">${st.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Isolated Target Variable Solution</span>
+                <span class="final-answer-math">${data.ans}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

@@ -483,12 +483,12 @@
 
     <div class="container">
         <div class="profile-box">
-    <label>Student Profile Setup:</label>
-    <div class="profile-grid">
-        <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
-        <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
-    </div>
-</div>
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
 
         <div class="selector-box">
             <label for="question-select">Homework Question:</label>
@@ -527,10 +527,10 @@
             </div>
 
             <div id="quiz-station" class="quiz-interface-box" style="display: none;">
-    <label for="student-text-input">Input Your Factored Answer Matrix:</label>
-    <div class="input-group">
-        <input type="text" id="student-text-input" class="student-answer-input" autocomplete="off" placeholder="Enter in standard form, e.g., (x+1)(x+2)">
-    </div>
+                <label for="student-text-input">Input Your Factored Answer Matrix:</label>
+                <div class="input-group">
+                    <input type="text" id="student-text-input" class="student-answer-input" autocomplete="off" placeholder="Enter in standard form, e.g., (x+1)(x+2)">
+                </div>
 
                 <div class="math-keyboard-toolbar" id="math-keyboard">
                     <button class="math-key" onclick="pressMathKey('(')">(</button>
@@ -563,23 +563,19 @@
             </div>
 
             <div class="solution-reveal-window" id="solution-reveal-layer">
-
                 <div id="solution-workspace-injected"></div>
-
+                
                 <div class="control-panel" id="controls-panel">
                     <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
                     <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
-        // INSERT YOUR GOOGLE APPS SCRIPT WEB APP EXECUTABLE API LINK HERE
         const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
 
-        // Global Structural Validation Answer Registry Permutations Matrix
         const answerRegistry = {
             l2q1: ["(n+2)(n+10)", "(n+10)(n+2)"],
             l2q2: ["(x+4)(x+6)", "(x+6)(x+4)"],
@@ -603,7 +599,6 @@
             l2q20: ["7x²y(3xy-2+4y)", "7x2y(3xy-2+4y)", "7x²y(3xy+4y-2)", "7x2y(3xy+4y-2)"]
         };
 
-        // Static Problem Static Explanations Content Pack Object Array
         const problemDataPack = {
             l2q1: {
                 title: "Question 1: n² + 12n + 20", type: "trinomial", expression: "1n<sup>2</sup> + 12n + 20", var: "n",
@@ -750,12 +745,10 @@
             }
         };
 
-        // Running Session Tracking States
         let globalScore = 0;
         let globalAttempts = 0;
         
         let questionStates = {};
-        // Initialize state tracking dynamically for all questions
         Object.keys(problemDataPack).forEach(key => {
             questionStates[key] = { answered: false, inputVal: "", isCorrect: false, currentStep: 0, solRevealed: false, selectedMethod: 'ps' };
         });
@@ -785,7 +778,6 @@
             placeholder.style.display = "none";
             quizStation.style.display = "block";
             
-            // Adjust variable contextual visibility keys
             const activeProblem = problemDataPack[activeQuestionId];
             setupVirtualKeyboard(activeProblem);
 
@@ -814,7 +806,6 @@
                 const targetKey = "vkey-" + problem.var;
                 if (document.getElementById(targetKey)) document.getElementById(targetKey).style.display = "inline-block";
             } else if (problem.type === "gcf") {
-                // Scan solutions to show required variables dynamically
                 ["x", "y", "a", "b", "c"].forEach(v => {
                     if (problem.ans_box.includes(v)) {
                         document.getElementById("vkey-" + v).style.display = "inline-block";
@@ -840,11 +831,11 @@
         function evaluateStudentAnswer() {
             if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
 
-            const nameInput = document.getElementById("student-name").value.trim();
-            const idInput = document.getElementById("student-id").value.trim();
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
 
-            if (nameInput === "" || idInput === "") {
-                alert("Identity verification required. Please enter your Profile Name and Student ID in the spaces provided at the top of the interface before submitting answers.");
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
                 return;
             }
 
@@ -865,18 +856,18 @@
 
             lockQuizInterface(matchingCorrect);
 
-           let payload = {
-    unitId: "Unit_0",      // Identifies the targeted Unit sheet tab name
-    lessonId: "Lesson_2",  // Identifies the specific lesson inside that unit
-    studentName: nameInput,
-    studentId: idInput,
-    questionId: activeQuestionId,
-    userAnswer: rawInput,
-    isCorrect: matchingCorrect,
-    attempts: 1,
-    methodUsed: problemDataPack[activeQuestionId].type === "gcf" ? "GCF Extraction" : (currentMethod === 'ps' ? "Product & Sum" : "Criss-Cross"),
-    totalScore: globalScore
-};
+            let payload = {
+                unitId: "Unit_0",      
+                lessonId: "Lesson_2",  
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawInput,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: problemDataPack[activeQuestionId].type === "gcf" ? "GCF Extraction" : (currentMethod === 'ps' ? "Product & Sum" : "Criss-Cross"),
+                totalScore: globalScore
+            };
 
             transmitDataToTeacherSpreadsheet(payload);
         }

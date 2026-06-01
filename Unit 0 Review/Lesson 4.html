@@ -452,12 +452,12 @@
 
     <div class="container">
         <div class="profile-box">
-    <label>Student Profile Setup:</label>
-    <div class="profile-grid">
-        <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
-        <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
-    </div>
-</div>
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
 
         <div class="selector-box">
             <label for="question-select">Homework Question:</label>
@@ -534,7 +534,6 @@
     </div>
 
     <script>
-        // HARDCODED CENTRAL TEACHER SHEET DATABASE SCRIPT URL LINK
         const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
 
         const answerRegistry = {
@@ -671,7 +670,7 @@
                     { title: "Step 3: Execute Pair Grouping Extraction Steps", math: "4c<sup>2</sup> - 6c - 6c + 9 &rarr; 2c(2c - 3) - 3(2c - 3)", explanation: "Decompose middle term and extract common factors from matching pairs." },
                     { title: "Step 4: Consolidate Factor Blocks", math: "(2c - 3)(2c - 3) = (2c - 3)<sup>2</sup>", explanation: "Assemble your duplicate linear terms cleanly into squared form." }
                 ],
-                cc_steps: [{ title: "Step 2: Collect Horizontal Row Elements", math: "(2c - 3)(2c - 3) = (2c - 3)<sup>2</sup>", explanation: "Read linear rows horizontally to group factors into consolidated square parameters." }],
+                cc_steps: [{ title: "Step 2: Read Matrix Layout Horizontally", math: "(2c - 3)(2c - 3) = (2c - 3)<sup>2</sup>", explanation: "Group matrix structures straight across vertical layers to lock matching brackets." }],
                 cc_lt: "2c", cc_lb: "2c", cc_rt: "-3", cc_rb: "-3", cc_pt: "-6c", cc_pb: "-6c", cc_sum: "-12c", row1_f: "2c - 3", row2_f: "2c - 3"
             },
             l4q12: {
@@ -724,7 +723,6 @@
             placeholder.style.display = "none";
             quizStation.style.display = "block";
             
-            // Execute automated virtual keyboard display switches
             const activeProblem = problemDataPack[activeQuestionId];
             setupVirtualKeyboard(activeProblem);
 
@@ -771,11 +769,11 @@
         function evaluateStudentAnswer() {
             if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
 
-            const nameInput = document.getElementById("student-name").value.trim();
-            const idInput = document.getElementById("student-id").value.trim();
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
 
-            if (nameInput === "" || idInput === "") {
-                alert("Identity verification required. Please enter your Profile Name and Student ID numbers.");
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
                 return;
             }
 
@@ -797,8 +795,8 @@
             let payload = {
                 unitId: "Unit_0",
                 lessonId: "Lesson_4",
-                studentName: nameInput,
-                studentId: idInput,
+                firstName: firstNameInput,
+                lastName: lastNameInput,
                 questionId: activeQuestionId,
                 userAnswer: rawInput,
                 isCorrect: matchingCorrect,
@@ -811,10 +809,6 @@
         }
 
         function transmitDataToTeacherSpreadsheet(payload) {
-            if (TEACHER_SPREADSHEET_SCRIPT_URL === "YOUR_GOOGLE_WEB_APP_URL_HERE") {
-                console.warn("Tracking block aborted: Destination script endpoint placeholder active.");
-                return;
-            }
             fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",
@@ -950,9 +944,13 @@
             const allSteps = Array.from(container.querySelectorAll('.step-block, .final-answer-box'));
             allSteps.forEach(st => st.style.display = 'none');
 
-            visibleStepElements = allSteps;
+            visibleStepElements = allSteps.filter(step => {
+                if (currentMethod === 'ps' && step.classList.contains('cc-only')) return false;
+                if (currentMethod === 'cc' && step.classList.contains('ps-only')) return false;
+                return true;
+            });
+
             currentStepIndex = questionStates[activeQuestionId].currentStep;
-            
             for (let i = 0; i <= currentStepIndex; i++) {
                 if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
             }

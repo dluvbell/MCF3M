@@ -408,12 +408,12 @@
 
     <div class="container">
        <div class="profile-box">
-    <label>Student Profile Setup:</label>
-    <div class="profile-grid">
-        <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
-        <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
-    </div>
-</div>
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
 
         <div class="selector-box">
             <label for="question-select">Homework Question:</label>
@@ -525,11 +525,10 @@
     <script>
         const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
 
-        // Structured evaluation arrays handle expected layouts and layout permutations
         const answerRegistry = {
             l5q1: { layout: "fraction", num: ["d"], den: ["t"] },
             l5q2: { layout: "fraction", num: ["py", "yp"], den: ["144"] },
-            l3q3: { layout: "fraction", num: ["rd", "dr"], den: ["s"] }, // mapping l5q3 mapping registry lookup handler
+            l3q3: { layout: "fraction", num: ["rd", "dr"], den: ["s"] }, 
             l5q3: { layout: "fraction", num: ["rd", "dr"], den: ["s"] },
             l5q4: { layout: "linear", ans: ["p-a-c", "p-c-a", "-a-c+p", "-c-a+p"] },
             l5q5: { layout: "linear", ans: ["m-t", "-t+m"] },
@@ -539,7 +538,7 @@
             l5q9: { layout: "fraction", num: ["c-ax", "-ax+c"], den: ["b"] },
             l5q10: { layout: "linear", ans: ["4a-a-b-d", "4*a-a-b-d"] },
             l5q11: { layout: "fraction", num: ["s-2lh", "s-2hl", "-2lh+s"], den: ["2l+2h", "2h+2l"] },
-            l4q12: { layout: "fraction", num: ["p-2w", "-2w+p"], den: ["2"] }, // backup duplicate key reference
+            l4q12: { layout: "fraction", num: ["p-2w", "-2w+p"], den: ["2"] }, 
             l5q12: { layout: "fraction", num: ["p-2w", "-2w+p"], den: ["2"] },
             l5q13: { layout: "fraction", num: ["c"], den: ["d"] },
             l5q14: { layout: "fraction", num: ["ab", "ba"], den: ["a+b", "b+a"] },
@@ -622,7 +621,7 @@
                 prompt: "Solve for y: &nbsp;&nbsp; ax + by = c &nbsp;&nbsp;&rarr;&nbsp;&nbsp; y =",
                 steps: [
                     { title: "Step 1: Isolate the Variable Term Group via Subtraction", math: "by = c - ax", explanation: "Subtract the complete term block <code>ax</code> from both sides to isolate the <code>by</code> term layer." },
-                    { title: "Step 2: Divide to Cancel Multiplier", math: "y = <div class='fraction'><div class='numerator'>c - ax</div><div class='denominator'>b</div></div>", explanation: "Divide both sides by the coefficient variable <code>b</code> to complete the isolation task." }
+                    { title: "Step 2: Divide to Cancel Multiplier", math: "y = <div class='fraction'><div class='numerator'>c - ax</div><div class='denominator'>b</div></div>", explanation: "Divide both sides by the coefficient variable <code>b</code> to complete the isolation process." }
                 ], ans: "<div class='fraction'><div class='numerator'>c - ax</div><div class='denominator'>b</div></div>"
             },
             l5q10: {
@@ -688,7 +687,7 @@
                 prompt: "Solve for a: &nbsp;&nbsp; ax + b = c &nbsp;&nbsp;&rarr;&nbsp;&nbsp; a =",
                 steps: [
                     { title: "Step 1: Counter Addition using Subtraction Balance", math: "ax = c - b", explanation: "Subtract <code>b</code> from both sides to clear it away from the variable term group." },
-                    { title: "Step 2: Divide by the Companion Coefficient Variable", math: "a = <div class='fraction'><div class='numerator'>c - b</div><div class='denominator'>x</div></div>", explanation: "Divide both sides by <code>x</code> to complete the isolation process." }
+                    { title: "Step 2: Divide by the Right Side Variable's Coefficient", math: "a = <div class='fraction'><div class='numerator'>c - b</div><div class='denominator'>x</div></div>", explanation: "Divide both sides by <code>x</code> to complete the isolation process." }
                 ], ans: "<div class='fraction'><div class='numerator'>c - b</div><div class='denominator'>x</div></div>"
             },
             l5q18: {
@@ -875,11 +874,11 @@
         function evaluateStudentAnswer() {
             if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
 
-            const nameInput = document.getElementById("student-name").value.trim();
-            const idInput = document.getElementById("student-id").value.trim();
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
 
-            if (nameInput === "" || idInput === "") {
-                alert("Identity verification required. Please enter your Profile Name and Student ID numbers.");
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
                 return;
             }
 
@@ -907,7 +906,6 @@
                         matchingCorrect = true;
                     }
                 } else if (registryEntry.layout === "fraction") {
-                    // Check if flat text matches expected fractional parameters via slash parsing
                     const flatExpected = registryEntry.num[0] + "/" + registryEntry.den[0];
                     if (sAns === flatExpected || sAns === "(" + registryEntry.num[0] + ")/" + registryEntry.den[0]) {
                         matchingCorrect = true;
@@ -926,8 +924,8 @@
             let payload = {
                 unitId: "Unit_0",
                 lessonId: "Lesson_5",
-                studentName: nameInput,
-                studentId: idInput,
+                firstName: firstNameInput,
+                lastName: lastNameInput,
                 questionId: activeQuestionId,
                 userAnswer: logString,
                 isCorrect: matchingCorrect,
@@ -940,7 +938,6 @@
         }
 
         function transmitDataToTeacherSpreadsheet(payload) {
-            if (TEACHER_SPREADSHEET_SCRIPT_URL === "YOUR_GOOGLE_WEB_APP_URL_HERE") return;
             fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",

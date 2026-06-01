@@ -387,12 +387,12 @@
 
     <div class="container">
         <div class="profile-box">
-    <label>Student Profile Setup:</label>
-    <div class="profile-grid">
-        <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
-        <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
-    </div>
-</div>
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
 
         <div class="selector-box">
             <label for="question-select">Homework Question:</label>
@@ -427,10 +427,10 @@
             </div>
 
             <div id="quiz-station" class="quiz-interface-box" style="display: none;">
-    <label for="student-text-input">Input Your Simplified Answer Matrix:</label>
-    <div class="input-group">
-        <input type="text" id="student-text-input" class="student-answer-input" autocomplete="off" placeholder="Enter in standard form, e.g., -7x³+3x²+13">
-    </div>
+                <label for="student-text-input">Input Your Simplified Answer Matrix:</label>
+                <div class="input-group">
+                    <input type="text" id="student-text-input" class="student-answer-input" autocomplete="off" placeholder="Enter in standard form, e.g., -7x³+3x²+13">
+                </div>
 
                 <div class="math-keyboard-toolbar" id="math-keyboard">
                     <button class="math-key" onclick="pressMathKey('(')">(</button>
@@ -471,10 +471,8 @@
     </div>
 
     <script>
-        // INSERT YOUR GOOGLE APPS SCRIPT WEB APP EXECUTABLE LINK HERE
         const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
 
-        // Global Normalized String Matrix Validation Array
         const answerRegistry = {
             l1q1: ["-7x3+3x2+13", "-7x³+3x²+13"],
             l1q2: ["2x3+6x2+2x", "2x³+6x²+2x"],
@@ -494,7 +492,6 @@
             l1q16: ["3m3+13m2-7", "3m³+13m²-7"]
         };
 
-        // Complete Structured Data Repository Mapping Pack
         const problemDataPack = {
             l1q1: {
                 title: "Question 1: (8 - x² - x³) + (4x² - 6x³ + 5)", vars: ["x"],
@@ -617,7 +614,6 @@
             }
         };
 
-        // Persistent Session Application State Metrics Tracker
         let globalScore = 0;
         let globalAttempts = 0;
         let questionStates = {};
@@ -687,11 +683,11 @@
         function evaluateStudentAnswer() {
             if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
 
-            const nameInput = document.getElementById("student-name").value.trim();
-            const idInput = document.getElementById("student-id").value.trim();
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
 
-            if (nameInput === "" || idInput === "") {
-                alert("Identity verification required. Please enter your Profile Name and Student ID.");
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
                 return;
             }
 
@@ -713,13 +709,13 @@
             let payload = {
                 unitId: "Unit_0",
                 lessonId: "Lesson_1",
-                studentName: nameInput,
-                studentId: idInput,
+                firstName: firstNameInput,
+                lastName: lastNameInput,
                 questionId: activeQuestionId,
                 userAnswer: rawInput,
                 isCorrect: matchingCorrect,
                 attempts: 1,
-                methodUsed: problemDataPack[activeQuestionId].type === "simplification" ? "Simplification" : "Polynomial Expansion",
+                methodUsed: "Simplification or Expansion Matrix",
                 totalScore: globalScore
             };
 
@@ -727,10 +723,6 @@
         }
 
         function transmitDataToTeacherSpreadsheet(payload) {
-            if (TEACHER_SPREADSHEET_SCRIPT_URL === "YOUR_GOOGLE_WEB_APP_URL_HERE") {
-                console.warn("Tracking request skipped: Script URL placeholder active.");
-                return;
-            }
             fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",

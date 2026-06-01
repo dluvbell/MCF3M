@@ -452,12 +452,12 @@
 
     <div class="container">
         <div class="profile-box">
-    <label>Student Profile Setup:</label>
-    <div class="profile-grid">
-        <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
-        <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
-    </div>
-</div>
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
 
         <div class="selector-box">
             <label for="question-select">Homework Question:</label>
@@ -537,10 +537,8 @@
     </div>
 
     <script>
-        // REPLACE WITH THE DEPLOYED GOOGLE APPS SCRIPT WEB APP URL EXECUTABLE KEY
         const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
 
-        // Global Normalization Permutations Database Matrix Lookup Table
         const answerRegistry = {
             l3q1: ["(3x2-8)(3x-8)", "(3x²-8)(3x-8)", "(3x-8)(3x2-8)", "(3x-8)(3x²-8)"],
             l3q2: ["(5k2+2)(3k+2)", "(5k²+2)(3k+2)", "(3k+2)(5k2+2)", "(3k+2)(5k²+2)"],
@@ -560,7 +558,6 @@
             l3q16: ["(2x-1)(2x-5)", "(2x-5)(2x-1)"]
         };
 
-        // Comprehensive Modular Structural Explanations Repository Data Pack
         const problemDataPack = {
             l3q1: {
                 title: "Question 1: 9x³ - 24x² - 24x + 64", type: "grouping", var: "x",
@@ -746,11 +743,11 @@
         function evaluateStudentAnswer() {
             if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
 
-            const nameInput = document.getElementById("student-name").value.trim();
-            const idInput = document.getElementById("student-id").value.trim();
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
 
-            if (nameInput === "" || idInput === "") {
-                alert("Identity verification required. Please enter your Profile Name and Student ID numbers.");
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
                 return;
             }
 
@@ -772,8 +769,8 @@
             let payload = {
                 unitId: "Unit_0",
                 lessonId: "Lesson_3",
-                studentName: nameInput,
-                studentId: idInput,
+                firstName: firstNameInput,
+                lastName: lastNameInput,
                 questionId: activeQuestionId,
                 userAnswer: rawInput,
                 isCorrect: matchingCorrect,
@@ -922,6 +919,7 @@
             document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
         }
 
+        // Action controls mappings
         function showNextStep() {
             if (currentStepIndex < visibleStepElements.length - 1) {
                 currentStepIndex++;
@@ -944,7 +942,7 @@
             document.getElementById("mode-ps").classList.toggle("active", methodKey === 'ps');
             document.getElementById("mode-cc").classList.toggle("active", methodKey === 'cc');
 
-            renderStepBlocks();
+            revealSolutionWorkspace();
         }
 
         function restartSolution() {

@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 1 Lesson 2</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            padding: 0 4px;
+            line-height: 1;
+        }
+
+        .numerator {
+            border-bottom: 2px solid var(--math-color);
+            padding-bottom: 2px;
+            font-size: 1.1rem;
+        }
+
+        .denominator {
+            padding-top: 2px;
+            font-size: 1.1rem;
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.15s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .math-key:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 1 Lesson 2</h1>
+        <p>Function Notation &amp; Evaluation Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <optgroup label="Part 1: Basic Evaluation Assignments">
+                    <option value="u1l2q8a">Question 8a: Evaluate f(4) given f(x) = 6x - 9</option>
+                    <option value="u1l2q8b">Question 8b: Evaluate f(-5) given f(x) = 6x - 9</option>
+                    <option value="u1l2q8c">Question 8c: Evaluate f(1/2) given f(x) = 6x - 9</option>
+                    <option value="u1l2q9a">Question 9a: Evaluate g(-2) given g(x) = x² + 3x + 2</option>
+                    <option value="u1l2q9b">Question 9b: Evaluate g(0) given g(x) = x² + 3x + 2</option>
+                    <option value="u1l2q9c">Question 9c: Evaluate g(3.14) given g(x) = x² + 3x + 2</option>
+                    <option value="u1l2q10b">Question 10b: Initial height of ball h(t) = -4.9t² + 9.8t + 1</option>
+                </optgroup>
+                <optgroup label="Part 2: Graphical Analysis &amp; Extensions">
+                    <option value="u1l2q11a">Question 11a: Read f(-1) from the provided curve graph</option>
+                    <option value="u1l2q11b">Question 11b: Read f(0) from the provided curve graph</option>
+                    <option value="u1l2q11c">Question 11c: Read f(2) from the provided curve graph</option>
+                    <option value="u1l2q16a">Question 16a: Composite evaluation g(f(2)) given g(x)=2x-3, f(x)=x²</option>
+                    <option value="u1l2q16b">Question 16b: Composite evaluation f(f(3)) given g(x)=2x-3, f(x)=x²</option>
+                    <option value="u1l2q16c">Question 16c: Composite evaluation g(g(4)) given g(x)=2x-3, f(x)=x²</option>
+                    <option value="u1l2q16d">Question 16d: Composite evaluation f(g(5)) given g(x)=2x-3, f(x)=x²</option>
+                    <option value="u1l2q17">Question 17: Linear system equation calculation for g(x)</option>
+                    <option value="u1l2q18a">Question 18a: Calculate quadratic coefficient factor 'a' for g(x) = ax²</option>
+                    <option value="u1l2q18b">Question 18b: Evaluate function output value g(5) for g(x) = ax²</option>
+                    <option value="u1l2q18c">Question 18c: Evaluate double nested composite path g(g(2))</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard" style="display: none;">
+                    <button class="math-key" onclick="pressMathKey('-')">-</button>
+                    <button class="math-key" onclick="pressMathKey('.')">.</button>
+                </div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            u1l2q8a: "15", u1l2q8b: "-39", u1l2q8c: "-6",
+            u1l2q9a: "0", u1l2q9b: "2", u1l2q9c: "21.2796",
+            u1l2q10b: "1",
+            u1l2q11a: "0", u1l2q11b: "0", u1l2q11c: "3",
+            u1l2q16a: "5", u1l2q16b: "81", u1l2q16c: "7", u1l2q16d: "49",
+            u1l2q17: "A",
+            u1l2q18a: "2", u1l2q18b: "50", u1l2q18c: "128"
+        };
+
+        const problemDataPack = {
+            u1l2q8a: {
+                title: "Question 8a", type: "numeric",
+                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> f(x) = 6x - 9<br><strong>Evaluate:</strong> f(4)",
+                steps: [
+                    { title: "Step 1: Substitute Input Variable Nodes", math: "f(4) = 6(4) - 9", explanation: "Replace the independent variable x placeholder inside the equation with the given numerical parameter 4." },
+                    { title: "Step 2: Perform Arithmetic Operations via BEDMAS", math: "f(4) = 24 - 9", explanation: "Execute multiplication steps first: 6 &times; 4 = 24, then perform subtraction to find the final value." }
+                ], ans_box: "15"
+            },
+            u1l2q8b: {
+                title: "Question 8b", type: "numeric",
+                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> f(x) = 6x - 9<br><strong>Evaluate:</strong> f(-5)",
+                steps: [
+                    { title: "Step 1: Substitute the Negative Parameter", math: "f(-5) = 6(-5) - 9", explanation: "Substitute -5 as the input value into the linear function structure." },
+                    { title: "Step 2: Evaluate Integer Operations Carefully", math: "f(-5) = -30 - 9", explanation: "Multiplying a positive integer by a negative integer results in a negative product: 6 &times; (-5) = -30. Subtracting 9 completes the execution." }
+                ], ans_box: "-39"
+            },
+            u1l2q8c: {
+                title: "Question 8c", type: "numeric",
+                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> f(x) = 6x - 9",
+                prompt_html: "Evaluate given f(x) = 6x - 9:<br><br><strong>Find:</strong> f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) =",
+                steps: [
+                    { title: "Step 1: Substitute the Fractional Input", math: "f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) = 6(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) - 9", explanation: "Substitute 1/2 as the variable input value inside the expression." },
+                    { title: "Step 2: Compute Multiplications and Constants", math: "f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) = 3 - 9", explanation: "Compute fractional products: half of 6 is 3. Performing the final subtraction yields the resulting negative integer." }
+                ], ans_box: "-6"
+            },
+            u1l2q9a: {
+                title: "Question 9a", type: "numeric",
+                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> g(x) = x² + 3x + 2<br><strong>Evaluate:</strong> g(-2)",
+                steps: [
+                    { title: "Step 1: Substitute Into the Quadratic Polynomial", math: "g(-2) = (-2)<sup>2</sup> + 3(-2) + 2", explanation: "Replace all instances of x with -2, ensuring negative bases are grouped inside brackets before squaring." },
+                    { title: "Step 2: Apply Exponent Laws and Simplify Constants", math: "g(-2) = 4 - 6 + 2", explanation: "Squaring a negative number yields a positive base value: (-2)² = 4. The linear multiplication term simplifies to: 3 &times; (-2) = -6." }
+                ], ans_box: "0"
+            },
+            u1l2q9b: {
+                title: "Question 9b", type: "numeric",
+                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> g(x) = x² + 3x + 2<br><strong>Evaluate:</strong> g(0)",
+                steps: [
+                    { title: "Step 1: Substitute Zero Into the Function", math: "g(0) = (0)<sup>2</sup> + 3(0) + 2", explanation: "Substitute 0 into all variable positions across the polynomial expression." },
+                    { title: "Step 2: Evaluate Remaining Constant Parameters", math: "g(0) = 0 + 0 + 2", explanation: "Both the quadratic and linear terms evaluate to zero, leaving the constant term as the final value." }
+                ], ans_box: "2"
+            },
+            u1l2q9c: {
+                title: "Question 9c", type: "numeric",
+                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> g(x) = x² + 3x + 2<br><strong>Evaluate:</strong> g(3.14)",
+                steps: [
+                    { title: "Step 1: Substitute Decimal Coordinates Parameters", math: "g(3.14) = (3.14)<sup>2</sup> + 3(3.14) + 2", explanation: "Substitute the decimal value 3.14 into the equation variables." },
+                    { title: "Step 2: Compute Squares and Combine Terms", math: "g(3.14) = 9.8596 + 9.42 + 2", explanation: "Evaluate the math steps sequentially: 3.14² = 9.8596 and 3 &times; 3.14 = 9.42. Add the results together to find the final value." }
+                ], ans_box: "21.2796"
+            },
+            u1l2q10b: {
+                title: "Question 10b", type: "numeric",
+                fullStatement: "Question 10: The height h, in metres, of a ball t seconds after being thrown is modelled by the function equation shown below. A graph of Height versus Time maps out the full mathematical flight path.<br><br><strong>Model:</strong> h(t) = -4.9t² + 9.8t + 1<br><strong>Question Part b:</strong> What is the height of the ball at the instant it is thrown?",
+                steps: [
+                    { title: "Step 1: Identify Time Parameters at Launch Instant", math: "t = 0", explanation: "The 'instant a ball is thrown' represents the initial starting boundary position, which corresponds to exactly t = 0 seconds." },
+                    { title: "Step 2: Compute h(0) Value", math: "h(0) = -4.9(0)<sup>2</sup> + 9.8(0) + 1", explanation: "Substituting zero eliminates all time-dependent elements, isolating the constant vertical intercept value as the launch height." }
+                ], ans_box: "1"
+            },
+            u1l2q11a: {
+                title: "Question 11a", type: "numeric", assetType: "notice",
+                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation f(x). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> f(-1)",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Locate Target Value along Horizontal Axis Domain", math: "x = -1", explanation: "Find the position -1 on the horizontal x-axis line tracking grid metrics." },
+                    { title: "Step 2: Intersect Path Vertically to Isolate the Coordinate", math: "(-1, 0)", explanation: "The function path crosses directly through the x-axis at this mark, meaning the corresponding vertical value component is 0." }
+                ], ans_box: "0"
+            },
+            u1l2q11b: {
+                title: "Question 11b", type: "numeric", assetType: "notice",
+                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation f(x). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> f(0)",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Identify the Y-Intercept Location Constraint", math: "x = 0", explanation: "An input argument parameter of 0 specifies tracking directly along the main vertical y-axis line segment." },
+                    { title: "Step 2: Extract Height Inversion Values", math: "(0, 0)", explanation: "The curve tracks directly through the intersection origin node. Therefore, the function output height metrics map to exactly 0." }
+                ], ans_box: "0"
+            },
+            u1l2q11c: {
+                title: "Question 11c", type: "numeric", assetType: "notice",
+                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation f(x). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> f(2)",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Seek Domain Coordinate Marker", math: "x = 2", explanation: "Trace 2 units to the right of the central intersection origin point." },
+                    { title: "Step 2: Measure Vertical Tracking Distance", math: "(2, 3)", explanation: "Move straight up until intersecting the plotted curve. The graph line sits exactly at vertical step line height 3." }
+                ], ans_box: "3"
+            },
+            u1l2q16a: {
+                title: "Question 16a", type: "numeric",
+                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> g(x) = 2x - 3 &nbsp;&nbsp;|&nbsp;&nbsp; f(x) = x²<br><strong>Evaluate Composite Order:</strong> g(f(2))",
+                steps: [
+                    { title: "Step 1: Evaluate the Nested Inner Core Function first", math: "f(2) = (2)<sup>2</sup>", explanation: "Given f(x) = x², substitute the value 2 into the core expression grid layer to calculate its product: 2² = 4." },
+                    { title: "Step 2: Route the Inner Value Result into the Exterior Machine", math: "g(4) = 2(4) - 3", explanation: "Substitute your result 4 into the secondary expression layout rule g(x) = 2x - 3: 2(4) - 3 = 8 - 3 = 5." }
+                ], ans_box: "5"
+            },
+            u1l2q16b: {
+                title: "Question 16b", type: "numeric",
+                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> g(x) = 2x - 3 &nbsp;&nbsp;|&nbsp;&nbsp; f(x) = x²<br><strong>Evaluate Composite Order:</strong> f(f(3))",
+                steps: [
+                    { title: "Step 1: Resolve the Primary Internal Element Expression", math: "f(3) = (3)<sup>2</sup>", explanation: "Calculate the base value profile: 3 squared evaluates out directly onto numerical marker value 9." },
+                    { title: "Step 2: Repeat Function Evaluation Layer Loop", math: "f(9) = (9)<sup>2</sup>", explanation: "Feed back the value 9 straight through the exponential mapping system rules once more: 9² = 81." }
+                ], ans_box: "81"
+            },
+            u1l2q16c: {
+                title: "Question 16c", type: "numeric",
+                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> g(x) = 2x - 3 &nbsp;&nbsp;|&nbsp;&nbsp; f(x) = x²<br><strong>Evaluate Composite Order:</strong> g(g(4))",
+                steps: [
+                    { title: "Step 1: Process Initial Linear Machine Terms", math: "g(4) = 2(4) - 3", explanation: "Compute the inner linear function transformation value parameters: 2(4) - 3 = 8 - 3 = 5." },
+                    { title: "Step 2: Execute Secondary Transformation Processing Pipeline", math: "g(5) = 2(5) - 3", explanation: "Process the intermediary factor 5 through the outer linear matrix rules layer: 2(5) - 3 = 10 - 3 = 7." }
+                ], ans_box: "7"
+            },
+            u1l2q16d: {
+                title: "Question 16d", type: "numeric",
+                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> g(x) = 2x - 3 &nbsp;&nbsp;|&nbsp;&nbsp; f(x) = x²<br><strong>Evaluate Composite Order:</strong> f(g(5))",
+                steps: [
+                    { title: "Step 1: Process Inner Linear Conversion Framework", math: "g(5) = 2(5) - 3", explanation: "First calculate the linear transformation component layer: 2(5) - 3 = 10 - 3 = 7." },
+                    { title: "Step 2: Process the Intermediary Constant via Exponential Scaling Rules", math: "f(7) = (7)<sup>2</sup>", explanation: "Complete the nested instruction sequence by squaring the calculation matrix result: 7² = 49." }
+                ], ans_box: "49"
+            },
+            u1l2q17: {
+                title: "Question 17", type: "mc",
+                fullStatement: "Question 17: If g(x) represents a linear function, and you are provided two separate static parameter coordinate definitions, resolve the master algebraic straight line equation system expression.<br><br><strong>Given Constraints:</strong> g(0) = 3 &nbsp;&nbsp;and&nbsp;&nbsp; g(1) = 5",
+                prompt: "Find an expression for the linear function g(x):",
+                options: ["A) g(x) = 2x + 3", "B) g(x) = 3x + 2", "C) g(x) = 5x + 3"],
+                steps: [
+                    { title: "Step 1: Determine the Y-Intercept Parameter value", math: "b = g(0) = 3", explanation: "The value of a function at x = 0 represents its vertical y-intercept coordinate point constant value (b)." },
+                    { title: "Step 2: Calculate Slope Rates of Change Delta Metrics", math: "m = [g(1) - g(0)] / [1 - 0] = 5 - 3 = 2", explanation: "Determine the linear step slope value (m) using rise-over-run calculations: (5 - 3) / (1 - 0) = 2." },
+                    { title: "Step 3: Synthesize Slope-Intercept Expressions", math: "g(x) = 2x + 3", explanation: "Combine coordinates constants into the standard linear definition template structure: y = mx + b." }
+                ], ans: "A"
+            },
+            u1l2q18a: {
+                title: "Question 18a", type: "numeric", assetType: "notice",
+                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule g(x) = ax². Isolate the numerical parameters component value based on coordinate observations.<br><br><strong>Question Part a:</strong> Find the value of 'a'.",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Identify Reference Coordinates from the Curve Path", math: "Point = (2, 8)", explanation: "Look closely at the provided parabola curve graphic. The path travels cleanly through the coordinate crossing point grid intersection location (2, 8)." },
+                    { title: "Step 2: Substitute and Solve for the Unknown Modifier a", math: "8 = a(2)<sup>2</sup> &rarr; 8 = 4a &rarr; a = 2", explanation: "Plug in your x and y points to calculate the scaling coefficient: 8 = a(2)² simplifies to 8 = 4a. Dividing both sides isolates the integer." }
+                ], ans_box: "2"
+            },
+            u1l2q18b: {
+                title: "Question 18b", type: "numeric", assetType: "notice",
+                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule g(x) = ax².<br><br><strong>Question Part b:</strong> Find the value of g(5).",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Assemble Complete Equation Formula Models", math: "g(x) = 2x<sup>2</sup>", explanation: "Using the scaling factor found in part a, write out the complete quadratic tracking expression rule." },
+                    { title: "Step 2: Substitute Target Coordinate value Argument parameters", math: "g(5) = 2(5)<sup>2</sup> &rarr; 2(25)", explanation: "Evaluate the quadratic expression using BEDMAS principles: square the input first (5² = 25), then multiply by the scale factor." }
+                ], ans_box: "50"
+            },
+            u1l2q18c: {
+                title: "Question 18c", type: "numeric", assetType: "notice",
+                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule g(x) = ax².<br><br><strong>Question Part c:</strong> Find the value of g(g(2)).",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Extract Core Nested Variable Coordinate values", math: "g(2) = 8", explanation: "Evaluating the function at 2 yields the initial target tracking height of 8, which can be read directly from the graph." },
+                    { title: "Step 2: Process Outer Layer Quadratic Computations", math: "g(8) = 2(8)<sup>2</sup> &rarr; 2(64)", explanation: "Plug that value back into the function: square the 8 to get 64, then double it to find the final total." }
+                ], ans_box: "128"
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, selectedMcOption: "", textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const kbdToolbar = document.getElementById("math-keyboard");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                assetMount.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            // Injects full prompt into statement container card card block dynamically
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+
+            if (activeProblem.assetType && activeProblem.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = activeProblem.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            if (activeProblem.type === "mc") {
+                kbdToolbar.style.display = "none";
+                document.getElementById("input-prompt-label").innerText = activeProblem.prompt;
+                
+                let html = `<div class="mc-options-list">`;
+                activeProblem.options.forEach(opt => {
+                    const letter = opt.charAt(0);
+                    const isSelected = state.selectedMcOption === letter ? "selected" : "";
+                    const isDisabled = state.answered ? "disabled" : "";
+                    html += `
+                        <div class="mc-option-card ${isSelected} ${isDisabled}" onclick="selectMcOptionCard('${letter}')">
+                            <span class="mc-badge">${letter}</span>
+                            <span>${opt.substring(3)}</span>
+                        </div>`;
+                });
+                html += `</div>`;
+                mountPoint.innerHTML = html;
+            } else {
+                kbdToolbar.style.display = "flex";
+                if (activeProblem.prompt_html) {
+                    document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt_html;
+                } else {
+                    document.getElementById("input-prompt-label").innerText = "Type the numeric calculated value:";
+                }
+                mountPoint.innerHTML = `
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 15, -39, 128" autocomplete="off">`;
+                
+                const numInput = document.getElementById("numeric-student-input");
+                numInput.value = state.textInputVal;
+                
+                numInput.addEventListener("input", () => {
+                    state.textInputVal = numInput.value;
+                });
+
+                if (state.answered) {
+                    numInput.disabled = true;
+                }
+            }
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+        }
+
+        function selectMcOptionCard(letter) {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+            
+            questionStates[activeQuestionId].selectedMcOption = letter;
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            
+            let html = `<div class="mc-options-list">`;
+            activeProblem.options.forEach(opt => {
+                const currentLetter = opt.charAt(0);
+                const isSelected = currentLetter === letter ? "selected" : "";
+                html += `
+                    <div class="mc-option-card ${isSelected}" onclick="selectMcOptionCard('${currentLetter}')">
+                        <span class="mc-badge">${currentLetter}</span>
+                        <span>${opt.substring(3)}</span>
+                    </div>`;
+            });
+            html += `</div>`;
+            mountPoint.innerHTML = html;
+        }
+
+        function pressMathKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let logString = "";
+
+            if (activeProblem.type === "mc") {
+                if (state.selectedMcOption === "") {
+                    alert("Please select an option card before verifying your submission.");
+                    return;
+                }
+                logString = "Option " + state.selectedMcOption;
+                if (state.selectedMcOption === answerRegistry[activeQuestionId]) {
+                    matchingCorrect = true;
+                }
+            } else {
+                const rawVal = state.textInputVal;
+                let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+                logString = rawVal;
+                
+                if (normalizedInput === answerRegistry[activeQuestionId]) {
+                    matchingCorrect = true;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_1",
+                lessonId: "Lesson_2",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: activeProblem.type === "mc" ? "Multiple Choice Rows Selection" : "Direct Keyboard Value Input",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            const activeProblem = problemDataPack[activeQuestionId];
+            if (activeProblem.type === "mc") {
+                document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
+            } else {
+                const numInput = document.getElementById("numeric-student-input");
+                if (numInput) numInput.disabled = true;
+            }
+            
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Substitution metrics successfully recorded.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect entry parameters. Review equation solution steps below.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Textbook Solution Reference</span>
+                <span class="final-answer-math">${data.ans || data.ans_box}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

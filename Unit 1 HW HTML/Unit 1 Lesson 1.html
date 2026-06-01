@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 1 Lesson 1</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .math-tov {
+            border-collapse: collapse;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 220px;
+            text-align: center;
+        }
+
+        .math-tov th, .math-tov td {
+            border: 2px solid var(--primary-color);
+            padding: 10px 20px;
+        }
+
+        .math-tov th {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        /* TRUE VERTICAL FRACTION LAYOUT CONFIGURATION */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            padding: 0 4px;
+            line-height: 1;
+        }
+
+        .numerator {
+            border-bottom: 2px solid var(--math-color);
+            padding-bottom: 2px;
+            font-size: 1.1rem;
+        }
+
+        .denominator {
+            padding-top: 2px;
+            font-size: 1.1rem;
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.15s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .math-key:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .math-rule {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 0;
+            display: block;
+            border-left: 4px solid #eab308;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 1 Lesson 1</h1>
+        <p>Identifying Functions & Function Evaluation Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <optgroup label="Part 1: Function Classifications (Tables, Graphs, Sets)">
+                    <option value="u1l1q1a">Question 1a: Table a (Circumference)</option>
+                    <option value="u1l1q1b">Question 1b: Table b (Perimeter vs Area)</option>
+                    <option value="u1l1q1c">Question 1c: Table c (Radius vs Circumference)</option>
+                    <option value="u1l1q1d">Question 1d: Table d (Square Root Variations)</option>
+                    <option value="u1l1q2">Question 2: Classification Explanations for Question 1</option>
+                    <option value="u1l1q3a">Question 3a: Cubic Polynomial Curve Graph</option>
+                    <option value="u1l1q3b">Question 3b: Sideways S-Curve Graph</option>
+                    <option value="u1l1q3c">Question 3c: Discrete Points Alignments Graph</option>
+                    <option value="u1l1q4">Question 4: Geometric Explanations for Question 3</option>
+                    <option value="u1l1q5a">Question 5a: Ordered Pairs Set A</option>
+                    <option value="u1l1q5b">Question 5b: Ordered Pairs Set B</option>
+                    <option value="u1l1q5c">Question 5c: Ordered Pairs Set C</option>
+                    <option value="u1l1q6a">Question 6a: Coordinate Plotting for Set 5c</option>
+                    <option value="u1l1q6b">Question 6b: Practical Mapping Analysis for Plotting</option>
+                    <option value="u1l1q7">Question 7: Linear Relation 3x + 4y = 12</option>
+                </optgroup>
+                <optgroup label="Part 2: Algebraic & Real-World Evaluation">
+                    <option value="u1l1q8a">Question 8a: Evaluate f(4) for f(x) = 6x - 9</option>
+                    <option value="u1l1q8b">Question 8b: Evaluate f(-5) for f(x) = 6x - 9</option>
+                    <option value="u1l1q8c">Question 8c: Evaluate f(1/2) for f(x) = 6x - 9</option>
+                    <option value="u1l1q9a">Question 9a: Evaluate g(-2) for g(x) = x² + 3x + 2</option>
+                    <option value="u1l1q9b">Question 9b: Evaluate g(0) for g(x) = x² + 3x + 2</option>
+                    <option value="u1l1q9c">Question 9c: Evaluate g(3.14) for g(x) = x² + 3x + 2</option>
+                    <option value="u1l1q10a">Question 10a: Contextual Evaluation Meaning of h(2)</option>
+                    <option value="u1l1q10b">Question 10b: Quadratic Kinematics Initial Launch Height</option>
+                    <option value="u1l1q10c">Question 10c: Kinematics Flight Estimation Methods</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard" style="display: none;">
+                    <button class="math-key" onclick="pressMathKey('-')">-</button>
+                    <button class="math-key" onclick="pressMathKey('.')">.</button>
+                </div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            u1l1q1a: "A", u1l1q1b: "B", u1l1q1c: "A", u1l1q1d: "B",
+            u1l1q2: "A",
+            u1l1q3a: "A", u1l1q3b: "B", u1l1q3c: "B",
+            u1l1q4: "A",
+            u1l1q5a: "A", u1l1q5b: "B", u1l1q5c: "A",
+            u1l1q6a: "A", u1l1q6b: "B",
+            u1l1q7: "A",
+            u1l1q8a: "15", u1l1q8b: "-39", u1l1q8c: "-6",
+            u1l1q9a: "0", u1l1q9b: "2", u1l1q9c: "21.2796",
+            u1l1q10a: "A", u1l1q10b: "1", u1l1q10c: "A"
+        };
+
+        const problemDataPack = {
+            u1l1q1a: {
+                title: "Question 1a: Table a", type: "mc", assetType: "tov",
+                assetHtml: `<table class="math-tov"><tr><th>x</th><th>y</th></tr><tr><td>-2</td><td>0</td></tr><tr><td>-1</td><td>1</td></tr><tr><td>0</td><td>2</td></tr><tr><td>1</td><td>3</td></tr><tr><td>2</td><td>4</td></tr></table>`,
+                prompt: "Determine if Table a defines a function relationship:",
+                options: ["A) Function - Every unique domain element maps onto exactly one unique range output value.", "B) Not a Function - Independent inputs contain repeating instances pointing to different variables."],
+                steps: [
+                    { title: "Step 1: Check Input Value Multiplicities", math: "Domain = {-2, -1, 0, 1, 2}", explanation: "Examine the independent input (x) column. Every single value listed occurs exactly once with no repetitions." },
+                    { title: "Step 2: Match to Mapping Constraints Rules", math: "Passes Function Criteria", explanation: "Since each unique input maps onto precisely one single output value, this relation is a function." }
+                ], ans: "A) Function"
+            },
+            u1l1q1b: {
+                title: "Question 1b: Table b", type: "mc", assetType: "tov",
+                assetHtml: `<table class="math-tov"><tr><th>Perimeter</th><th>Area</th></tr><tr><td>5</td><td>2</td></tr><tr><td>10</td><td>3</td></tr><tr><td>15</td><td>9</td></tr><tr><td>10</td><td>6</td></tr><tr><td>5</td><td>4</td></tr></table>`,
+                prompt: "Determine if Table b defines a function relationship:",
+                options: ["A) Function - Tabular matches align within single coordinate blocks.", "B) Not a Function - Specific inputs map onto multiple variant outputs."],
+                steps: [
+                    { title: "Step 1: Identify Repeating Domain Input Values", math: "Repeated Inputs = {5, 10}", explanation: "Review the Perimeter column. Notice that the input values 5 and 10 repeat inside separate rows." },
+                    { title: "Step 2: Track Multi-Mapping Conflicts", math: "5 &rarr; {2, 4} &nbsp;&nbsp;|&nbsp;&nbsp; 10 &rarr; {3, 6}", explanation: "The input element 5 maps concurrently onto two separate area outcomes (2 and 4). Because a single domain item points to more than one output, it is not a function." }
+                ], ans: "B) Not a Function"
+            },
+            u1l1q1c: {
+                title: "Question 1c: Table c", type: "mc", assetType: "tov",
+                assetHtml: `<table class="math-tov"><tr><th>r</th><th>C</th></tr><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>6.28</td></tr><tr><td>2</td><td>12.56</td></tr><tr><td>3</td><td>18.84</td></tr><tr><td>4</td><td>25.12</td></tr></table>`,
+                prompt: "Determine if Table c defines a function relationship:",
+                options: ["A) Function - Every element maps directly to exactly one unique output value.", "B) Not a Function - Relational tracking implies variations."],
+                steps: [
+                    { title: "Step 1: Analyze Independent Parameters Group", math: "Domain = {0, 1, 2, 3, 4}", explanation: "Scan the input column values. Every numerical entry is distinct and appears exactly once." },
+                    { title: "Step 2: Confirm Mapping Uniqueness", math: "Unified Path Allocation", explanation: "Since each discrete input value holds exactly one single corresponding output variable value, it represents a valid function." }
+                ], ans: "A) Function"
+            },
+            u1l1q1d: {
+                title: "Question 1d: Table d", type: "mc", assetType: "tov",
+                assetHtml: `<table class="math-tov"><tr><th>x</th><th>y</th></tr><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>2 or -2</td></tr><tr><td>4</td><td>4 or -4</td></tr><tr><td>9</td><td>6 or -6</td></tr><tr><td>16</td><td>8 or -8</td></tr></table>`,
+                prompt: "Determine if Table d defines a function relationship:",
+                options: ["A) Function - Math parameters stay locked inside real numbers.", "B) Not a Function - Single inputs map onto an alternating set of positive and negative variations."],
+                steps: [
+                    { title: "Step 1: Check Multi-Value Allocation Markers", math: "y = \\pm k", explanation: "Examine the output fields. For the domain element 1, the relation assigns two separate range values (2 and -2) simultaneously." },
+                    { title: "Step 2: Evaluate Function Definition Constraints", math: "Fails Single-Value Restriction", explanation: "Because an individual independent variable maps onto multiple concurrent output assignments, it is classified as a relation, not a function." }
+                ], ans: "B) Not a Function"
+            },
+            u1l1q2: {
+                title: "Question 2", type: "mc", assetType: "none",
+                prompt: "For those relations in question 1 that are not functions, explain why:",
+                options: ["A) In 1b, inputs 5 and 10 link to multiple areas. In 1d, inputs map to both positive and negative solutions.", "B) Because the table rows are out of chronological order.", "C) Because the variables contain zero parameters."],
+                steps: [
+                    { title: "Step 1: Apply Function Multiplicity Tests", math: "x &rarr; single y", explanation: "A relation is disqualified as a function if any single input maps onto more than one output value." }
+                ], ans: "A"
+            },
+            u1l1q3a: {
+                title: "Question 3a: Graph a", type: "mc", assetType: "notice",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Determine if Graph a represents a function:",
+                options: ["A) Function - It passes the vertical line test parameters perfectly.", "B) Not a Function - Intersecting geometry traces multi-intercept loop profiles."],
+                steps: [
+                    { title: "Step 1: Apply Vertical Line Test Principles", math: "Vertical Line Test Alignment", explanation: "A graphical pattern represents a function if and only if no single vertical line can cross its structural path at more than one point simultaneously." },
+                    { title: "Step 2: Trace Across Coordinate Domains", math: "Intersection Count = 1", explanation: "An imaginary vertical line passing across this smooth cubic graph cuts the curve exactly once at every position domain point, confirming it is a function." }
+                ], ans: "A) Function"
+            },
+            u1l1q3b: {
+                title: "Question 3b: Graph b", type: "mc", assetType: "notice",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Determine if Graph b defines a function relationship:",
+                options: ["A) Function - Line tracks continuity properties.", "B) Not a Function - A single vertical line intersects the path at multiple points simultaneously."],
+                steps: [
+                    { title: "Step 1: Test Vector Intersections", math: "Intersections > 1", explanation: "Place an imaginary vertical line straight down through the middle domain segments of the graph." },
+                    { title: "Step 2: Evaluate Outcome Set Multiplicities", math: "Fails Geometric Function Test", explanation: "The line crosses through the sideways graph curve at multiple separate points simultaneously, meaning it is not a function." }
+                ], ans: "B) Not a Function"
+            },
+            u1l1q3c: {
+                title: "Question 3c: Graph c", type: "mc", assetType: "notice",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Determine if Graph c represents a function:",
+                options: ["A) Function - Separate coordinate nodes populate independent paths.", "B) Not a Function - Specific points are vertically aligned on the exact same grid coordinate line."],
+                steps: [
+                    { title: "Step 1: Scan Grid Alignment Column Blocks", math: "Evaluate Position x = 1", explanation: "Look closely at the coordinates of the plotted points. At the position <code>x = 1</code> (one unit right of origin), there are two distinct points stacked vertically on top of each other." },
+                    { title: "Step 2: Analyze Point Intersection Overlaps", math: "1 &rarr; -1 &nbsp;&nbsp;and&nbsp;&nbsp; 1 &rarr; 2", explanation: "Because a single vertical line crosses through two points simultaneously at <code>x = 1</code>, it fails the vertical line test and is not a function." }
+                ], ans: "B) Not a Function"
+            },
+            u1l1q4: {
+                title: "Question 4", type: "mc", assetType: "none",
+                prompt: "For those graphs in question 3 that are not functions, explain why:",
+                options: ["A) 3b loops back over itself, and 3c contains two vertically stacked points at x = 1, violating the vertical line test.", "B) Because neither relation features a constant linear rate of change.", "C) Because the graphics intersect the grid origin point."],
+                steps: [
+                    { title: "Step 1: Identify the Shared Geometric Error Rule", math: "Vertical Line Intersection Thresholds", explanation: "For a graph to represent a function, any vertical line drawn through the coordinate grid must touch the path at a maximum of one single point." },
+                    { title: "Step 2: Point Out the Violations from the Sheets", math: "3b: Side loops | 3c: Multi-dots at x = 1", explanation: "Graph 3b curves backward over itself, and graph 3c plots two points simultaneously on the line <code>x = 1</code>. Both fail the vertical line test." }
+                ], ans: "A"
+            },
+            u1l1q5a: {
+                title: "Question 5a", type: "mc", assetType: "none",
+                prompt: "Determine if the set {(1,1), (2,4), (3,9), (4,16)} is a function:",
+                options: ["A) Function - Every independent domain x-coordinate value is distinct and occurs exactly once.", "B) Not a Function - Output numbers scale upward quadratically."],
+                steps: [
+                    { title: "Step 1: Collect First Elements of the Coordinates Set", math: "Domain = {1, 2, 3, 4}", explanation: "Extract the first number from each ordered pair within the coordinate set array." },
+                    { title: "Step 2: Verify Input Element Repetitions", math: "No Repeating Inputs Found", explanation: "Each input occurs exactly once, pointing to a single range value. This relation satisfies the function definition." }
+                ], ans: "A) Function"
+            },
+            u1l1q5b: {
+                title: "Question 5b", type: "mc", assetType: "none",
+                prompt: "Determine if the set {(-2,0), (0,2), (0,-2), (2,0)} is a function:",
+                options: ["A) Function - Point elements remain bounded across geometric axis loops.", "B) Not a Function - The input element 0 is linked onto multiple separate range outputs."],
+                steps: [
+                    { title: "Step 1: Check First Number Profiles inside Coordinates", math: "Domain Inputs = {-2, 0, 0, 2}", explanation: "Isolate the independent x-values from each ordered pair inside the brackets." },
+                    { title: "Step 2: Identify Duplicate Coordinate Mappings", math: "0 &rarr; 2 &nbsp;&nbsp;and&nbsp;&nbsp; 0 &rarr; -2", explanation: "The domain value 0 appears twice, pointing to two separate outputs (2 and -2). This multi-mapping behavior means the relation is not a function." }
+                ], ans: "B) Not a Function"
+            },
+            u1l1q5c: {
+                title: "Question 5c", type: "mc", assetType: "none",
+                prompt: "Determine if the set {(1,1), (2,1), (3,1), (4,1), (5,1), (6,1)} is a function:",
+                options: ["A) Function - Every independent input value is distinct and points to exactly one output.", "B) Not a Function - The output value 1 repeats across all coordinates."],
+                steps: [
+                    { title: "Step 1: Isolate Domain Inputs for Repetitions", math: "Domain Inputs = {1, 2, 3, 4, 5, 6}", explanation: "Isolate the first numbers of the coordinate set. Every domain value is completely unique." },
+                    { title: "Step 2: Understand Constant Function Mapping Criteria", math: "Many-to-One Pass State", explanation: "While every input maps onto the exact same constant value (<code>y = 1</code>), this behavior is fully valid. Since no single independent input maps onto more than one output value, the set represents a function." }
+                ], ans: "A) Function"
+            },
+            u1l1q6a: {
+                title: "Question 6a", type: "mc", assetType: "none",
+                prompt: "Which description best details the graph of the coordinate points from question 5c?",
+                options: ["A) A flat horizontal row of points aligned straight along the grid line height y = 1.", "B) A vertical column of stacked points tracking straight up the y-axis line.", "C) A diagonal line path climbing upward at a constant forty-five degree angle."],
+                steps: [
+                    { title: "Step 1: Trace Coordinates onto Grid Planes", math: "(x, 1) \\rightarrow \\text{Horizontal Matrix}", explanation: "Each point shares an identical height component: <code>y = 1</code>. Plotting these coordinates generates a flat, horizontal row of separate points." }
+                ], ans: "A"
+            },
+            u1l1q6b: {
+                title: "Question 6b", type: "mc", assetType: "none",
+                prompt: "How does plotting the points from 5c on a coordinate grid help determine if it is a function?",
+                options: ["A) It creates a vertical line that instantly confirms it is a function.", "B) It forms a horizontal line where a vertical line (like a ruler edge) only touches one point at a time, passing the vertical line test.", "C) It lets us calculate a changing parabolic quadratic curve path."],
+                steps: [
+                    { title: "Step 1: Apply the Ruler Test Interaction", math: "One Contact Point per Vertical Line", explanation: "Passing the straight vertical edge of a ruler across these points demonstrates that it only touches one single dot at any given position, passing the vertical line test." }
+                ], ans: "B"
+            },
+            u1l1q7: {
+                title: "Question 7", type: "mc", assetType: "none",
+                prompt: "Determine if the linear relation 3x + 4y = 12 constitutes a function:",
+                options: ["A) Function - It can be rearranged into a non-vertical straight line equation.", "B) Not a Function - Both variables occupy the same initial side of the equation."],
+                steps: [
+                    { title: "Step 1: Isolate the Dependent Variable Structure via Algebraic Balance", math: "4y = -3x + 12 &rarr; y = -0.75x + 3", explanation: "Rearrange the equation to isolate y. This reveals a standard linear function with a slope of -0.75 and a y-intercept of 3." },
+                    { title: "Step 2: Match with Geometric Function Behavior", math: "Non-Vertical Linear Path", explanation: "The graph of any non-vertical straight line passes the vertical line test perfectly, meaning each input x-value maps to exactly one output y-value." }
+                ], ans: "A) Function"
+            },
+            u1l1q8a: {
+                title: "Question 8a", type: "numeric",
+                steps: [
+                    { title: "Step 1: Substitute Input Variable Nodes", math: "f(4) = 6(4) - 9", explanation: "Replace the independent variable x placeholder inside the equation with the given numerical parameter 4." },
+                    { title: "Step 2: Perform Arithmetic Operations via BEDMAS", math: "f(4) = 24 - 9", explanation: "Execute multiplication steps first: <code>6 &times; 4 = 24</code>, then perform subtraction to find the final value." }
+                ], ans_box: "15"
+            },
+            u1l1q8b: {
+                title: "Question 8b", type: "numeric",
+                steps: [
+                    { title: "Step 1: Substitute the Negative Parameter", math: "f(-5) = 6(-5) - 9", explanation: "Substitute -5 as the input value into the linear function structure." },
+                    { title: "Step 2: Evaluate Integer Operations Carefully", math: "f(-5) = -30 - 9", explanation: "Multiplying a positive integer by a negative integer results in a negative product: <code>6 &times; (-5) = -30</code>. Subtracting 9 completes the execution." }
+                ], ans_box: "-39"
+            },
+            u1l1q8c: {
+                title: "Question 8c", type: "numeric",
+                prompt_html: "Evaluate given f(x) = 6x - 9:<br><br>f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) =",
+                steps: [
+                    { title: "Step 1: Substitute the Fractional Input", math: "f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) = 6(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) - 9", explanation: "Substitute 1/2 as the variable input value inside the expression." },
+                    { title: "Step 2: Compute Multiplications and Constants", math: "f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) = 3 - 9", explanation: "Compute fractional products: half of 6 is 3. Performing the final subtraction yields the resulting negative integer." }
+                ], ans_box: "-6"
+            },
+            u1l1q9a: {
+                title: "Question 9a", type: "numeric",
+                steps: [
+                    { title: "Step 1: Substitute Into the Quadratic Polynomial", math: "g(-2) = (-2)<sup>2</sup> + 3(-2) + 2", explanation: "Replace all instances of x with -2, ensuring negative bases are grouped inside brackets before squaring." },
+                    { title: "Step 2: Apply Exponent Laws and Simplify Constants", math: "g(-2) = 4 - 6 + 2", explanation: "Squaring a negative number yields a positive base value: <code>(-2)² = 4</code>. The linear multiplication term simplifies to: <code>3 &times; (-2) = -6</code>." }
+                ], ans_box: "0"
+            },
+            u1l1q9b: {
+                title: "Question 9b: Evaluate g(0) for g(x) = x² + 3x + 2", type: "numeric",
+                steps: [
+                    { title: "Step 1: Substitute Zero Into the Function", math: "g(0) = (0)<sup>2</sup> + 3(0) + 2", explanation: "Substitute 0 into all variable positions across the polynomial expression." },
+                    { title: "Step 2: Evaluate Remaining Constant Parameters", math: "g(0) = 0 + 0 + 2", explanation: "Both the quadratic and linear terms evaluate to zero, leaving the constant term as the final value." }
+                ], ans_box: "2"
+            },
+            u1l1q9c: {
+                title: "Question 9c", type: "numeric",
+                steps: [
+                    { title: "Step 1: Substitute Decimal Coordinates Parameters", math: "g(3.14) = (3.14)<sup>2</sup> + 3(3.14) + 2", explanation: "Substitute the decimal value 3.14 into the equation variables." },
+                    { title: "Step 2: Compute Squares and Combine Terms", math: "g(3.14) = 9.8596 + 9.42 + 2", explanation: "Evaluate the math steps sequentially: <code>3.14² = 9.8596</code> and <code>3 &times; 3.14 = 9.42</code>. Add the results together to find the final value." }
+                ], ans_box: "21.2796"
+            },
+            u1l1q10a: {
+                title: "Question 10a", type: "mc", assetType: "none",
+                prompt: "In this real-world context, what is the meaning of the function statement h(2)?",
+                options: ["A) h(2) represents the vertical height of the ball, in meters, exactly 2 seconds after it has been thrown.", "B) h(2) calculates the total time it takes for the ball to fly exactly 2 meters horizontally.", "C) h(2) represents the initial speed of the thrown ball after covering 2 meters."],
+                steps: [
+                    { title: "Step 1: Define Function Variable Contexts", math: "Inputs (t) = time (seconds) | Outputs (h) = height (meters)", explanation: "The independent input variable t tracks elapsed flight time in seconds, while the dependent output function h(t) measures height in meters." },
+                    { title: "Step 2: Translate the Specific Coordinates State", math: "t = 2 &rarr; Output Height", explanation: "Evaluating the function at 2 substitutes time with 2 seconds, meaning h(2) calculates the vertical position of the ball exactly 2 seconds into its flight." }
+                ], ans: "A"
+            },
+            u1l1q10b: {
+                title: "Question 10b", type: "numeric",
+                steps: [
+                    { title: "Step 1: Identify Time Parameters at Launch Instant", math: "t = 0", explanation: "The 'instant a ball is thrown' represents the initial starting boundary position, which corresponds to exactly t = 0 seconds." },
+                    { title: "Step 2: Compute h(0) Value", math: "h(0) = -4.9(0)<sup>2</sup> + 9.8(0) + 1", explanation: "Substituting zero eliminates all time-dependent elements, isolating the constant vertical intercept value as the launch height." }
+                ], ans_box: "1"
+            },
+            u1l1q10c: {
+                title: "Question 10c", type: "mc", assetType: "none",
+                prompt: "How can you estimate when the ball will hit the ground?",
+                options: ["A) Set h(t) = 0 and locate the positive t-intercept on a graph, or use systematic trial and error until h(t) approximately equals 0.", "B) Calculate h(0) to determine the maximum height vertex point.", "C) Multiply the initial constant intercept value by the gravity constant coefficient."],
+                steps: [
+                    { title: "Step 1: Model the Ground Strike Physical Boundary Constraint", math: "h(t) = 0", explanation: "When the ball hits the ground, its vertical height is exactly 0 meters. To find the time this happens, set the height equation equal to zero: <code>0 = -4.9t² + 9.8t + 1</code>." },
+                    { title: "Step 2: Evaluate Solutions Framework Paths", math: "Graphical Intercept or Numerical Estimation", explanation: "You can find this time by graphing the equation and looking for the positive x-intercept, or by using guess-and-check (systematic trial) until the terms balance out to zero." }
+                ], ans: "A"
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, selectedMcOption: "", textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const kbdToolbar = document.getElementById("math-keyboard");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                assetMount.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            if (activeProblem.assetType && activeProblem.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = activeProblem.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            if (activeProblem.type === "mc") {
+                kbdToolbar.style.display = "none";
+                document.getElementById("input-prompt-label").innerText = activeProblem.prompt;
+                
+                let html = `<div class="mc-options-list">`;
+                activeProblem.options.forEach(opt => {
+                    const letter = opt.charAt(0);
+                    const isSelected = state.selectedMcOption === letter ? "selected" : "";
+                    const isDisabled = state.answered ? "disabled" : "";
+                    html += `
+                        <div class="mc-option-card ${isSelected} ${isDisabled}" onclick="selectMcOptionCard('${letter}')">
+                            <span class="mc-badge">${letter}</span>
+                            <span>${opt.substring(3)}</span>
+                        </div>`;
+                });
+                html += `</div>`;
+                mountPoint.innerHTML = html;
+            } else {
+                kbdToolbar.style.display = "flex";
+                if (activeProblem.prompt_html) {
+                    document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt_html;
+                } else {
+                    document.getElementById("input-prompt-label").innerText = "Type the numeric calculated value:";
+                }
+                mountPoint.innerHTML = `
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 15, -39, 21.2796" autocomplete="off">`;
+                
+                const numInput = document.getElementById("numeric-student-input");
+                numInput.value = state.textInputVal;
+                
+                numInput.addEventListener("input", () => {
+                    state.textInputVal = numInput.value;
+                });
+
+                if (state.answered) {
+                    numInput.disabled = true;
+                }
+            }
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+        }
+
+        function selectMcOptionCard(letter) {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+            
+            questionStates[activeQuestionId].selectedMcOption = letter;
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            
+            let html = `<div class="mc-options-list">`;
+            activeProblem.options.forEach(opt => {
+                const currentLetter = opt.charAt(0);
+                const isSelected = currentLetter === letter ? "selected" : "";
+                html += `
+                    <div class="mc-option-card ${isSelected}" onclick="selectMcOptionCard('${currentLetter}')">
+                        <span class="mc-badge">${currentLetter}</span>
+                        <span>${opt.substring(3)}</span>
+                    </div>`;
+            });
+            html += `</div>`;
+            mountPoint.innerHTML = html;
+        }
+
+        function pressMathKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let logString = "";
+
+            if (activeProblem.type === "mc") {
+                if (state.selectedMcOption === "") {
+                    alert("Please select an option card before verifying your submission.");
+                    return;
+                }
+                logString = "Option " + state.selectedMcOption;
+                if (state.selectedMcOption === answerRegistry[activeQuestionId]) {
+                    matchingCorrect = true;
+                }
+            } else {
+                const rawVal = state.textInputVal;
+                let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+                logString = rawVal;
+                
+                if (normalizedInput === answerRegistry[activeQuestionId]) {
+                    matchingCorrect = true;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_1",
+                lessonId: "Lesson_1",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: activeProblem.type === "mc" ? "Multiple Choice Rows Selection" : "Direct Keyboard Value Input",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            const activeProblem = problemDataPack[activeQuestionId];
+            if (activeProblem.type === "mc") {
+                document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
+            } else {
+                const numInput = document.getElementById("numeric-student-input");
+                if (numInput) numInput.disabled = true;
+            }
+            
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Classification parameters safely logged.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect configuration values. Review step modules below.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Textbook Solution Reference</span>
+                <span class="final-answer-math">${data.ans || data.ans_box}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

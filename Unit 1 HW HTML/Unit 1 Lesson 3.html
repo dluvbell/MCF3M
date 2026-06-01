@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 1 Lesson 3</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .char-slots-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 15px 0 20px 0;
+        }
+
+        .char-slot {
+            width: 32px;
+            height: 42px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--math-color);
+            user-select: none;
+            transition: all 0.1s ease;
+        }
+
+        .char-slot.occupied {
+            border-color: var(--primary-color);
+            background-color: #f8fafc;
+        }
+
+        .char-slot.active-cursor {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px #dbeafe;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .math-tov {
+            border-collapse: collapse;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 220px;
+            text-align: center;
+        }
+
+        .math-tov th, .math-tov td {
+            border: 2px solid var(--primary-color);
+            padding: 10px 20px;
+        }
+
+        .math-tov th {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+        .math-key.btn-danger-action:hover:not(:disabled) {
+            background-color: #fecaca;
+        }
+
+        .math-key:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 1 Lesson 3</h1>
+        <p>Domain &amp; Range Evaluation Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <optgroup label="Question 1: Domains of Relations">
+                    <option value="u1l3q1a">Question 1a: Domain of Ordered Pairs Set</option>
+                    <option value="u1l3q1b">Question 1b: Domain of f(x) = x²</option>
+                    <option value="u1l3q1c">Question 1c: Domain of x + y = 10</option>
+                    <option value="u1l3q1d">Question 1d: Domain of Radical Relation Graph</option>
+                </optgroup>
+                <optgroup label="Question 2: Ranges of Relations">
+                    <option value="u1l3q2a">Question 2a: Range of Ordered Pairs Set</option>
+                    <option value="u1l3q2b">Question 2b: Range of f(x) = x²</option>
+                    <option value="u1l3q2c">Question 2c: Range of x + y = 10</option>
+                    <option value="u1l3q2d">Question 2d: Range of Radical Relation Graph</option>
+                </optgroup>
+                <optgroup label="Question 5: Projectile Motion Kinematics">
+                    <option value="u1l3q5b">Question 5b: Maximum Height Evaluation</option>
+                    <option value="u1l3q5c">Question 5c: Total Flight Time Determination</option>
+                    <option value="u1l3q5d_dom">Question 5d (Domain): Continuous Flight Time Boundary</option>
+                    <option value="u1l3q5d_ran">Question 5d (Range): Continuous Vertical Height Limits</option>
+                </optgroup>
+                <optgroup label="Question 6: Taxi Fare Step Function Graph">
+                    <option value="u1l3q6a">Question 6a: Evaluate Cost of a 4.3-km Ride</option>
+                    <option value="u1l3q6e_dom">Question 6e (Domain): Distance Limits Boundaries</option>
+                    <option value="u1l3q6e_ran">Question 6e (Range): Integer Ticket Step Cost Values</option>
+                </optgroup>
+                <optgroup label="Question 8: Concert Revenue Matrix Optimization">
+                    <option value="u1l3q8c">Question 8c: Evaluate Revenue Function Value R(10)</option>
+                    <option value="u1l3q8d">Question 8d: Domain Integers Set of Revenue Function</option>
+                </optgroup>
+                <optgroup label="Question 10: Carpet Purchase Quadratic Form Curve">
+                    <option value="u1l3q10a_dom">Question 10a (Domain): Side Length Boundary Criteria</option>
+                    <option value="u1l3q10a_ran">Question 10a (Range): Carpet Purchase Cost Range</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard"></div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            u1l3q1a: ["{0,1,2,3,4,5}"],
+            u1l3q1b: ["{x∈r}"],
+            u1l3q1c: ["{x∈r}"],
+            u1l3q1d: ["{x∈r|x≥2}", "{x∈r|2≤x}"],
+            u1l3q2a: ["{0,1}"],
+            u1l3q2b: ["{f(x)∈r|f(x)≥0}", "{y∈r|y≥0}", "{y∈r|0≤y}", "{f(x)∈r|0≤f(x)}"],
+            u1l3q2c: ["{y∈r}", "{y}"],
+            u1l3q2d: ["{y∈r|y≥-3}", "{y∈r|-3≤y}"],
+            u1l3q5b: ["19.6"],
+            u1l3q5c: ["4"],
+            u1l3q5d_dom: ["{t∈r|0≤t≤4}", "{t∈r|4≥t≥0}"],
+            u1l3q5d_ran: ["{h∈r|0≤h≤19.6}", "{h∈r|19.6≥h≥0}"],
+            u1l3q6a: ["6"],
+            u1l3q6e_dom: ["{x∈r|x≥0}", "{x∈r|0≤x}"],
+            u1l3q6e_ran: ["{y∈i|y≥2}", "{y∈i|2≤y}"],
+            u1l3q8c: ["0"],
+            u1l3q8d: ["{x∈i|-19≤x≤9}", "{x∈i|9≥x≥-19}"],
+            u1l3q10a_dom: ["{x∈r|x≥2}", "{x∈r|2≤x}"],
+            u1l3q10a_ran: ["{y∈r|y≥10}", "{y∈r|10≤y}"]
+        };
+
+        const problemDataPack = {
+            u1l3q1a: {
+                title: "Question 1a", type: "notation", maxSlots: 17,
+                fullStatement: "Question 1a: Write the domain for the relation expressed as a set of ordered pairs.<br><br><strong>Relation Set:</strong> {(0,0), (1,0), (2,0), (3,1), (4,1), (5,1)}",
+                steps: [
+                    { title: "Step 1: Extract First Components from Coordinate Pairs", math: "x = {0, 1, 2, 3, 4, 5}", explanation: "The domain consists strictly of the independent input parameters. Isolate the first number from every coordinate pair." }
+                ], ans_box: "{0, 1, 2, 3, 4, 5}"
+            },
+            u1l3q1b: {
+                title: "Question 1b", type: "notation", maxSlots: 17,
+                fullStatement: "Question 1b: Write the domain for the given base quadratic parent function expression.<br><br><strong>Equation:</strong> f(x) = x²",
+                steps: [
+                    { title: "Step 1: Evaluate Real Number Arithmetic Constraints", math: "x ∈ ℝ", explanation: "You can square any positive number, negative number, or zero without creating an undefined operation." }
+                ], ans_box: "{x ∈ R}"
+            },
+            u1l3q1c: {
+                title: "Question 1c", type: "notation", maxSlots: 17,
+                fullStatement: "Question 1c: Write the domain for the given linear equation expression.<br><br><strong>Equation:</strong> x + y = 10",
+                steps: [
+                    { title: "Step 1: Assess Equation Form Variables", math: "y = -x + 10", explanation: "This equation forms a non-vertical straight line, which accepts any real number input parameter across the entire continuous horizontal line axis." }
+                ], ans_box: "{x ∈ R}"
+            },
+            u1l3q1d: {
+                title: "Question 1d", type: "notation", maxSlots: 22, assetType: "notice",
+                fullStatement: "Question 1d: Write the domain for the radical relation path profile graph from your assignment sheet.",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to graph d) on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Identify Leftmost Graph Boundary Coordinates", math: "x ≥ 2", explanation: "The curve initializes cleanly at coordinate position vertex x = 2 and tracks continuously toward the right, indicating a lower bound." }
+                ], ans_box: "{x ∈ R | x ≥ 2}"
+            },
+            u1l3q2a: {
+                title: "Question 2a", type: "notation", maxSlots: 17,
+                fullStatement: "Question 2a: Write the range for the discrete relation set defined in question 1a.<br><br><strong>Relation Set:</strong> {(0,0), (1,0), (2,0), (3,1), (4,1), (5,1)}",
+                steps: [
+                    { title: "Step 1: Isolate Second Components from Coordinate Pair Nodes", math: "y = {0, 1}", explanation: "Extract the output parameters. Consolidating duplicate values leaves precisely 0 and 1." }
+                ], ans_box: "{0, 1}"
+            },
+            u1l3q2b: {
+                title: "Question 2b", type: "notation", maxSlots: 22,
+                fullStatement: "Question 2b: Write the range for the quadratic parent function relation tracking profile from question 1b.<br><br><strong>Equation:</strong> f(x) = x²",
+                steps: [
+                    { title: "Step 1: Evaluate Parabola Exponent Power Outversion Boundaries", math: "x² ≥ 0", explanation: "Squaring any real number yields a non-negative value. The vertex rests on the horizontal axis at height zero and opens upward." }
+                ], ans_box: "{f(x) ∈ R | f(x) ≥ 0}"
+            },
+            u1l3q2c: {
+                title: "Question 2c", type: "notation", maxSlots: 17,
+                fullStatement: "Question 2c: Write the range for the linear system mapping relation template profile equation from question 1c.<br><br><strong>Equation:</strong> x + y = 10",
+                steps: [
+                    { title: "Step 1: Analyze Diagonal Geometric Height Extensions", math: "y ∈ ℝ", explanation: "A non-horizontal, non-vertical straight line maps continuously across all vertical coordinates without restrictions." }
+                ], ans_box: "{y ∈ R}"
+            },
+            u1l3q2d: {
+                title: "Question 2d", type: "notation", maxSlots: 22, assetType: "notice",
+                fullStatement: "Question 2d: Write the range for the continuous radical function equation shape path profile graph from question 1d.",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to graph d) on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Isolate the Lowest Vertical Elevation Level Point", math: "y ≥ -3", explanation: "The absolute base of the curve path aligns horizontally with grid mark y = -3, climbing upward toward positive infinity." }
+                ], ans_box: "{y ∈ R | y ≥ -3}"
+            },
+            u1l3q5b: {
+                title: "Question 5b", type: "numeric", assetType: "tov",
+                fullStatement: "Question 5b: A ball is launched upward. Its height h, in metres, t seconds after launching is modelled by the function h = 19.6t - 4.9t². Find the maximum height from the calculated values table.",
+                assetHtml: `<table class="math-tov"><tr><th>t (s)</th><th>h (m)</th></tr><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>14.7</td></tr><tr><td>2</td><td>19.6</td></tr><tr><td>3</td><td>14.7</td></tr><tr><td>4</td><td>0</td></tr></table>`,
+                steps: [
+                    { title: "Step 1: Identify Apex Extremum Parameters", math: "h = 19.6 m", explanation: "Scanning the output column locates the highest vertical apex position entry at 19.6 meters." }
+                ], ans_box: "19.6"
+            },
+            u1l3q5c: {
+                title: "Question 5c", type: "numeric", assetType: "tov",
+                fullStatement: "Question 5c: A ball is launched upward. Its height h, in metres, t seconds after launching is modelled by the function h = 19.6t - 4.9t². Determine how long the ball is in the air from the table.",
+                assetHtml: `<table class="math-tov"><tr><th>t (s)</th><th>h (m)</th></tr><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>14.7</td></tr><tr><td>2</td><td>19.6</td></tr><tr><td>3</td><td>14.7</td></tr><tr><td>4</td><td>0</td></tr></table>`,
+                steps: [
+                    { title: "Step 1: Track Terminal Flight Ground Impact Time Parameters", math: "t = 4 s", explanation: "The flight ends when the vertical position falls back to a height of 0. The table maps this event to exactly 4 seconds." }
+                ], ans_box: "4"
+            },
+            u1l3q5d_dom: {
+                title: "Question 5d (Domain)", type: "notation", maxSlots: 22,
+                fullStatement: "Question 5d (Domain): Write the domain of the ball launch projectile system function h = 19.6t - 4.9t².",
+                steps: [
+                    { title: "Step 1: Establish Real-World Real-Time Duration Intervals", math: "0 ≤ t ≤ 4", explanation: "The ball takes flight at 0 seconds and strikes the ground at 4 seconds. Time tracks continuously across all intermediate intervals." }
+                ], ans_box: "{t ∈ R | 0 ≤ t ≤ 4}"
+            },
+            u1l3q5d_ran: {
+                title: "Question 5d (Range)", type: "notation", maxSlots: 26,
+                fullStatement: "Question 5d (Range): Write the range of the ball launch projectile system function h = 19.6t - 4.9t².",
+                steps: [
+                    { title: "Step 1: Establish Vertical Plane Spatial Allocations", math: "0 ≤ h ≤ 19.6", explanation: "The height varies continuously from the ground floor level (0 meters) up to the calculated trajectory apex (19.6 meters)." }
+                ], ans_box: "{h ∈ R | 0 ≤ h ≤ 19.6}"
+            },
+            u1l3q6a: {
+                title: "Question 6a", type: "numeric", assetType: "notice",
+                fullStatement: "Question 6a: The step function graph tracks taxi ride costs based on distance. What is the cost of a 4.3-km taxi ride?",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Taxi Cost step function graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Intersect Distance Arguments on Step Function Levels", math: "Cost = $6.00", explanation: "Locating 4.3 km on the horizontal axis maps it onto the flat step line segment at height level 6, which represents a cost of $6.00." }
+                ], ans_box: "6"
+            },
+            u1l3q6e_dom: {
+                title: "Question 6e (Domain)", type: "notation", maxSlots: 22, assetType: "notice",
+                fullStatement: "Question 6e (Domain): Write the domain of the taxi ride cost step function graph.",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Taxi Cost step function graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Identify Continuous Variable Restrictions", math: "x ≥ 0", explanation: "Distance is measured continuously and cannot be negative, starting at an initial threshold value of zero." }
+                ], ans_box: "{x ∈ R | x ≥ 0}"
+            },
+            u1l3q6e_ran: {
+                title: "Question 6e (Range)", type: "notation", maxSlots: 22, assetType: "notice",
+                fullStatement: "Question 6e (Range): Write the range of the taxi ride cost step function graph.",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Taxi Cost step function graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Classify Discrete Step Output Value Sets", math: "y ∈ I, y ≥ 2", explanation: "The costs jump between discrete whole numbers starting at $2.00, meaning outputs are restricted to integers greater than or equal to 2." }
+                ], ans_box: "{y ∈ I | y ≥ 2}"
+            },
+            u1l3q8c: {
+                title: "Question 8c", type: "numeric",
+                fullStatement: "Question 8c: Concert revenue is modeled by R(x) = (10000 - 1000x)(20 + x), where x represents a dollar change in ticket price. Evaluate R(10).",
+                steps: [
+                    { title: "Step 1: Substitute the Integer Constant inside Binomial Expression Blocks", math: "R(10) = 0", explanation: "Substituting 10 yields (10000 - 10000)(20 + 10) = 0 × 30 = 0. This indicates zero revenue due to zero attendance." }
+                ], ans_box: "0"
+            },
+            u1l3q8d: {
+                title: "Question 8d", type: "notation", maxSlots: 28,
+                fullStatement: "Question 8d: Write the domain of the concert revenue function R(x) = (10000 - 1000x)(20 + x) that maintains non-negative parameters.",
+                steps: [
+                    { title: "Step 1: Solve for Zero-Attendance and Zero-Price Roots Boundaries", math: "-19 ≤ x ≤ 9", explanation: "Price modifications must be applied in whole dollar steps (integers) within boundaries that prevent negative attendance or negative ticket pricing." }
+                ], ans_box: "{x ∈ I | -19 ≤ x ≤ 9}"
+            },
+            u1l3q10a_dom: {
+                title: "Question 10a (Domain)", type: "notation", maxSlots: 22, assetType: "notice",
+                fullStatement: "Question 10a (Domain): The graph tracks square carpet costs based on side length. Write the domain of the graph.",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Carpet Cost graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Isolate Leftmost Horizontal Graph Grid Intersection Lines", math: "x ≥ 2", explanation: "The continuous quadratic curve starts at a side length of exactly 2 meters and extends to the right." }
+                ], ans_box: "{x ∈ R | x ≥ 2}"
+            },
+            u1l3q10a_ran: {
+                title: "Question 10a (Range)", type: "notation", maxSlots: 22, assetType: "notice",
+                fullStatement: "Question 10a (Range): The graph tracks square carpet costs based on side length. Write the range of the graph.",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Carpet Cost graph on the HW PDF file for this lesson to answer this question.</div>`,
+                steps: [
+                    { title: "Step 1: Identify Base Vertical Vertex Value Components", math: "y ≥ 10", explanation: "The absolute baseline cost tracking height initialized on the curve starts at $10.00 and scales upward continuously." }
+                ], ans_box: "{y ∈ R | y ≥ 10}"
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, slotCharactersArray: [], textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let activeFocusedSlotIndex = 0;
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const kbdToolbar = document.getElementById("math-keyboard");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                assetMount.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+
+            if (activeProblem.assetType && activeProblem.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = activeProblem.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            if (activeProblem.type === "notation") {
+                document.getElementById("input-prompt-label").innerText = "Construct your solution notation using the math toolbar below:";
+                
+                let slotsHtml = `<div class="char-slots-container">`;
+                for (let i = 0; i < activeProblem.maxSlots; i++) {
+                    const char = state.slotCharactersArray[i] || "";
+                    const occupiedClass = char !== "" ? "occupied" : "";
+                    slotsHtml += `<div class="char-slot ${occupiedClass}" id="slot-node-${i}" onclick="setSlotFocusCursor(${i})">${char}</div>`;
+                }
+                slotsHtml += `</div>`;
+                mountPoint.innerHTML = slotsHtml;
+
+                kbdToolbar.style.display = "flex";
+                kbdToolbar.innerHTML = `
+                    <button class="math-key" onclick="pressSlotPaletteKey('{')">{</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('}')">}</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('|')">|</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('∈')">∈</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('R')">R</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('I')">I</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('≤')">≤</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('≥')">≥</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('<')">&lt;</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('>')">&gt;</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey(',')">,</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('x')">x</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('y')">y</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('t')">t</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('h')">h</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('f')">f</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('(')">(</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey(')')">)</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('-')">-</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('.')">.</button>
+                    ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressSlotPaletteKey('${n}')">${n}</button>`).join("")}
+                    <button class="math-key btn-danger-action" onclick="triggerSlotBackspace()">Backspace</button>
+                    <button class="math-key btn-danger-action" onclick="triggerSlotClearAll()">Clear All</button>
+                `;
+
+                if (!state.answered) {
+                    setSlotFocusCursor(state.slotCharactersArray.length);
+                } else {
+                    deactivateAllSlotCursors();
+                }
+
+            } else {
+                kbdToolbar.style.display = "flex";
+                document.getElementById("input-prompt-label").innerText = "Type the numeric calculated value:";
+                mountPoint.innerHTML = `
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 19.6, 4, 0" autocomplete="off">`;
+                
+                kbdToolbar.innerHTML = `
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressStandardNumericKey('${n}')">${n}</button>`).join("")}
+                `;
+
+                const numInput = document.getElementById("numeric-student-input");
+                numInput.value = state.textInputVal;
+                
+                numInput.addEventListener("input", () => {
+                    state.textInputVal = numInput.value;
+                });
+
+                if (state.answered) {
+                    numInput.disabled = true;
+                }
+            }
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+        }
+
+        function setSlotFocusCursor(index) {
+            if (questionStates[activeQuestionId].answered) return;
+            const max = problemDataPack[activeQuestionId].maxSlots;
+            if (index >= max) index = max - 1;
+            if (index < 0) index = 0;
+
+            deactivateAllSlotCursors();
+            activeFocusedSlotIndex = index;
+            
+            const node = document.getElementById(`slot-node-${index}`);
+            if (node) node.classList.add("active-cursor");
+        }
+
+        function deactivateAllSlotCursors() {
+            document.querySelectorAll(".char-slot").forEach(s => s.classList.remove("active-cursor"));
+        }
+
+        function pressSlotPaletteKey(character) {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            state.slotCharactersArray[activeFocusedSlotIndex] = character;
+            
+            const node = document.getElementById(`slot-node-${activeFocusedSlotIndex}`);
+            if (node) {
+                node.innerText = character;
+                node.classList.add("occupied");
+            }
+
+            setSlotFocusCursor(activeFocusedSlotIndex + 1);
+        }
+
+        function triggerSlotBackspace() {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            let target = activeFocusedSlotIndex;
+            if (!state.slotCharactersArray[target] && target > 0) {
+                target = target - 1;
+            }
+
+            state.slotCharactersArray[target] = "";
+            const node = document.getElementById(`slot-node-${target}`);
+            if (node) {
+                node.innerText = "";
+                node.classList.remove("occupied");
+            }
+            setSlotFocusCursor(target);
+        }
+
+        function triggerSlotClearAll() {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            state.slotCharactersArray = [];
+            document.querySelectorAll(".char-slot").forEach(s => {
+                s.innerText = "";
+                s.classList.remove("occupied");
+            });
+            setSlotFocusCursor(0);
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let logString = "";
+
+            if (activeProblem.type === "notation") {
+                let fullString = "";
+                for (let i = 0; i < activeProblem.maxSlots; i++) {
+                    fullString += state.slotCharactersArray[i] || " ";
+                }
+
+                let closingBraceIndex = fullString.indexOf("}");
+                if (closingBraceIndex !== -1) {
+                    logString = fullString.substring(0, closingBraceIndex + 1);
+                } else {
+                    logString = fullString.trim();
+                }
+
+                let normalizedInput = logString.replace(/\s+/g, '').toLowerCase();
+                const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+
+                if (possibleAnswers.includes(normalizedInput)) {
+                    matchingCorrect = true;
+                }
+            } else {
+                const rawVal = state.textInputVal;
+                let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+                logString = rawVal;
+                
+                if (answerRegistry[activeQuestionId].includes(normalizedInput)) {
+                    matchingCorrect = true;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_1",
+                lessonId: "Lesson_3",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: activeProblem.type === "notation" ? "Custom Toolbar Notation Input" : "Direct Keypad Input Validation",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database sync aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            deactivateAllSlotCursors();
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Boundary notation mapped and logged.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect configuration values. Review solution steps layout below.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Textbook Solution Reference</span>
+                <span class="final-answer-math">${data.ans || data.ans_box}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

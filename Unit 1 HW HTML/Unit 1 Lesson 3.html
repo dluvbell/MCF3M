@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCF3M Unit 1 Lesson 3</title>
+    
+    <!-- KaTeX CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
     <style>
         :root {
             --primary-color: #0f172a;
@@ -543,98 +549,98 @@
         const problemDataPack = {
             u1l3q1a: {
                 title: "Question 1a", type: "notation", maxSlots: 17,
-                fullStatement: "Question 1a: Write the domain for the relation expressed as a set of ordered pairs.<br><br><strong>Relation Set:</strong> {(0,0), (1,0), (2,0), (3,1), (4,1), (5,1)}",
+                fullStatement: "Question 1a: Write the domain for the relation expressed as a set of ordered pairs.<br><br><strong>Relation Set:</strong> \\( \\{(0,0), (1,0), (2,0), (3,1), (4,1), (5,1)\\} \\)",
                 steps: [
-                    { title: "Step 1: Extract First Components from Coordinate Pairs", math: "x = {0, 1, 2, 3, 4, 5}", explanation: "The domain consists strictly of the independent input parameters. Isolate the first number from every coordinate pair." }
-                ], ans_box: "{0, 1, 2, 3, 4, 5}"
+                    { title: "Step 1: Identify the Domain (x-values)", math: "\\( x \\in \\{0, 1, 2, 3, 4, 5\\} \\)", explanation: "The domain is simply the set of all possible input values, which are the first numbers (x-coordinates) in each ordered pair. List them without repeating any numbers." }
+                ], ans_box: "\\( \\{0, 1, 2, 3, 4, 5\\} \\)"
             },
             u1l3q1b: {
                 title: "Question 1b", type: "notation", maxSlots: 17,
-                fullStatement: "Question 1b: Write the domain for the given base quadratic parent function expression.<br><br><strong>Equation:</strong> f(x) = x²",
+                fullStatement: "Question 1b: Write the domain for the given base quadratic parent function expression.<br><br><strong>Equation:</strong> \\( f(x) = x^2 \\)",
                 steps: [
-                    { title: "Step 1: Evaluate Real Number Arithmetic Constraints", math: "x ∈ ℝ", explanation: "You can square any positive number, negative number, or zero without creating an undefined operation." }
-                ], ans_box: "{x ∈ R}"
+                    { title: "Step 1: Determine Allowable Inputs for a Squared Function", math: "\\( x \\in \\mathbb{R} \\)", explanation: "The domain asks: 'What numbers can I safely plug into x?' You can multiply any real number by itself (square it), whether it is positive, negative, or zero. There are no restrictions." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{R}\\} \\)"
             },
             u1l3q1c: {
                 title: "Question 1c", type: "notation", maxSlots: 17,
-                fullStatement: "Question 1c: Write the domain for the given linear equation expression.<br><br><strong>Equation:</strong> x + y = 10",
+                fullStatement: "Question 1c: Write the domain for the given linear equation expression.<br><br><strong>Equation:</strong> \\( x + y = 10 \\)",
                 steps: [
-                    { title: "Step 1: Assess Equation Form Variables", math: "y = -x + 10", explanation: "This equation forms a non-vertical straight line, which accepts any real number input parameter across the entire continuous horizontal line axis." }
-                ], ans_box: "{x ∈ R}"
+                    { title: "Step 1: Analyze the Inputs for a Linear Equation", math: "\\( y = -x + 10 \\)", explanation: "If you rearrange this to \\( y = -x + 10 \\), you can see it is a straight line. You can substitute any real number for x and calculate a valid y-value. Straight lines without endpoints go on forever left and right." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{R}\\} \\)"
             },
             u1l3q1d: {
                 title: "Question 1d", type: "notation", maxSlots: 22, assetType: "notice",
                 fullStatement: "Question 1d: Write the domain for the radical relation path profile graph from your assignment sheet.",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to graph d) on the HW PDF file for this lesson to answer this question.</div>`,
                 steps: [
-                    { title: "Step 1: Identify Leftmost Graph Boundary Coordinates", math: "x ≥ 2", explanation: "The curve initializes cleanly at coordinate position vertex x = 2 and tracks continuously toward the right, indicating a lower bound." }
-                ], ans_box: "{x ∈ R | x ≥ 2}"
+                    { title: "Step 1: Find the Left and Right Boundaries on the Graph", math: "\\( x \\ge 2 \\)", explanation: "To find the domain from a graph, scan the horizontal x-axis from left to right. The graph starts at x = 2 and continues infinitely to the right. Therefore, x must be greater than or equal to 2." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{R} \\mid x \\ge 2\\} \\)"
             },
             u1l3q2a: {
                 title: "Question 2a", type: "notation", maxSlots: 17,
-                fullStatement: "Question 2a: Write the range for the discrete relation set defined in question 1a.<br><br><strong>Relation Set:</strong> {(0,0), (1,0), (2,0), (3,1), (4,1), (5,1)}",
+                fullStatement: "Question 2a: Write the range for the discrete relation set defined in question 1a.<br><br><strong>Relation Set:</strong> \\( \\{(0,0), (1,0), (2,0), (3,1), (4,1), (5,1)\\} \\)",
                 steps: [
-                    { title: "Step 1: Isolate Second Components from Coordinate Pair Nodes", math: "y = {0, 1}", explanation: "Extract the output parameters. Consolidating duplicate values leaves precisely 0 and 1." }
-                ], ans_box: "{0, 1}"
+                    { title: "Step 1: Identify the Range (y-values)", math: "\\( y \\in \\{0, 1\\} \\)", explanation: "The range is the set of all possible output values, which are the second numbers (y-coordinates) in each ordered pair. List the unique values without repeating the 0s and 1s." }
+                ], ans_box: "\\( \\{0, 1\\} \\)"
             },
             u1l3q2b: {
                 title: "Question 2b", type: "notation", maxSlots: 22,
-                fullStatement: "Question 2b: Write the range for the quadratic parent function relation tracking profile from question 1b.<br><br><strong>Equation:</strong> f(x) = x²",
+                fullStatement: "Question 2b: Write the range for the quadratic parent function relation tracking profile from question 1b.<br><br><strong>Equation:</strong> \\( f(x) = x^2 \\)",
                 steps: [
-                    { title: "Step 1: Evaluate Parabola Exponent Power Outversion Boundaries", math: "x² ≥ 0", explanation: "Squaring any real number yields a non-negative value. The vertex rests on the horizontal axis at height zero and opens upward." }
-                ], ans_box: "{f(x) ∈ R | f(x) ≥ 0}"
+                    { title: "Step 1: Determine Possible Outputs for a Squared Function", math: "\\( x^2 \\ge 0 \\)", explanation: "The range asks: 'What y-values can this equation produce?' When you square any real number, the result is always 0 or a positive number. It can never be negative." }
+                ], ans_box: "\\( \\{f(x) \\in \\mathbb{R} \\mid f(x) \\ge 0\\} \\)"
             },
             u1l3q2c: {
                 title: "Question 2c", type: "notation", maxSlots: 17,
-                fullStatement: "Question 2c: Write the range for the linear system mapping relation template profile equation from question 1c.<br><br><strong>Equation:</strong> x + y = 10",
+                fullStatement: "Question 2c: Write the range for the linear system mapping relation template profile equation from question 1c.<br><br><strong>Equation:</strong> \\( x + y = 10 \\)",
                 steps: [
-                    { title: "Step 1: Analyze Diagonal Geometric Height Extensions", math: "y ∈ ℝ", explanation: "A non-horizontal, non-vertical straight line maps continuously across all vertical coordinates without restrictions." }
-                ], ans_box: "{y ∈ R}"
+                    { title: "Step 1: Analyze the Outputs for a Linear Equation", math: "\\( y \\in \\mathbb{R} \\)", explanation: "Because this is a straight diagonal line that continues forever in both directions, it will eventually reach every possible vertical y-value. There are no upper or lower limits." }
+                ], ans_box: "\\( \\{y \\in \\mathbb{R}\\} \\)"
             },
             u1l3q2d: {
                 title: "Question 2d", type: "notation", maxSlots: 22, assetType: "notice",
                 fullStatement: "Question 2d: Write the range for the continuous radical function equation shape path profile graph from question 1d.",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to graph d) on the HW PDF file for this lesson to answer this question.</div>`,
                 steps: [
-                    { title: "Step 1: Isolate the Lowest Vertical Elevation Level Point", math: "y ≥ -3", explanation: "The absolute base of the curve path aligns horizontally with grid mark y = -3, climbing upward toward positive infinity." }
-                ], ans_box: "{y ∈ R | y ≥ -3}"
+                    { title: "Step 1: Find the Bottom and Top Boundaries on the Graph", math: "\\( y \\ge -3 \\)", explanation: "To find the range from a graph, scan the vertical y-axis from bottom to top. The lowest point on the curve aligns with y = -3, and the arrow shows it goes up forever." }
+                ], ans_box: "\\( \\{y \\in \\mathbb{R} \\mid y \\ge -3\\} \\)"
             },
             u1l3q5b: {
                 title: "Question 5b", type: "numeric", assetType: "tov",
-                fullStatement: "Question 5b: A ball is launched upward. Its height h, in metres, t seconds after launching is modelled by the function h = 19.6t - 4.9t². Find the maximum height from the calculated values table.",
+                fullStatement: "Question 5b: A ball is launched upward. Its height h, in metres, t seconds after launching is modelled by the function \\( h = 19.6t - 4.9t^2 \\). Find the maximum height from the calculated values table.",
                 assetHtml: `<table class="math-tov"><tr><th>t (s)</th><th>h (m)</th></tr><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>14.7</td></tr><tr><td>2</td><td>19.6</td></tr><tr><td>3</td><td>14.7</td></tr><tr><td>4</td><td>0</td></tr></table>`,
                 steps: [
-                    { title: "Step 1: Identify Apex Extremum Parameters", math: "h = 19.6 m", explanation: "Scanning the output column locates the highest vertical apex position entry at 19.6 meters." }
+                    { title: "Step 1: Find the Highest Output Value", math: "\\( h = 19.6 \\text{ m} \\)", explanation: "Scan the 'h (m)' column in the table, which represents the height of the ball. Look for the largest number to find the maximum height reached during the flight." }
                 ], ans_box: "19.6"
             },
             u1l3q5c: {
                 title: "Question 5c", type: "numeric", assetType: "tov",
-                fullStatement: "Question 5c: A ball is launched upward. Its height h, in metres, t seconds after launching is modelled by the function h = 19.6t - 4.9t². Determine how long the ball is in the air from the table.",
+                fullStatement: "Question 5c: A ball is launched upward. Its height h, in metres, t seconds after launching is modelled by the function \\( h = 19.6t - 4.9t^2 \\). Determine how long the ball is in the air from the table.",
                 assetHtml: `<table class="math-tov"><tr><th>t (s)</th><th>h (m)</th></tr><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>14.7</td></tr><tr><td>2</td><td>19.6</td></tr><tr><td>3</td><td>14.7</td></tr><tr><td>4</td><td>0</td></tr></table>`,
                 steps: [
-                    { title: "Step 1: Track Terminal Flight Ground Impact Time Parameters", math: "t = 4 s", explanation: "The flight ends when the vertical position falls back to a height of 0. The table maps this event to exactly 4 seconds." }
+                    { title: "Step 1: Find the Time When Height is Zero", math: "\\( t = 4 \\text{ s} \\)", explanation: "The ball's flight ends when it hits the ground, which means its height returns to 0 meters. Look at the table to see at what time (t) the height (h) is 0 again." }
                 ], ans_box: "4"
             },
             u1l3q5d_dom: {
                 title: "Question 5d (Domain)", type: "notation", maxSlots: 22,
-                fullStatement: "Question 5d (Domain): Write the domain of the ball launch projectile system function h = 19.6t - 4.9t².",
+                fullStatement: "Question 5d (Domain): Write the domain of the ball launch projectile system function \\( h = 19.6t - 4.9t^2 \\).",
                 steps: [
-                    { title: "Step 1: Establish Real-World Real-Time Duration Intervals", math: "0 ≤ t ≤ 4", explanation: "The ball takes flight at 0 seconds and strikes the ground at 4 seconds. Time tracks continuously across all intermediate intervals." }
-                ], ans_box: "{t ∈ R | 0 ≤ t ≤ 4}"
+                    { title: "Step 1: Determine the Valid Time Frame", math: "\\( 0 \\le t \\le 4 \\)", explanation: "The domain represents the valid input values, which is time (t) in this real-world scenario. The clock starts at 0 seconds when launched and stops at 4 seconds when it hits the ground." }
+                ], ans_box: "\\( \\{t \\in \\mathbb{R} \\mid 0 \\le t \\le 4\\} \\)"
             },
             u1l3q5d_ran: {
                 title: "Question 5d (Range)", type: "notation", maxSlots: 26,
-                fullStatement: "Question 5d (Range): Write the range of the ball launch projectile system function h = 19.6t - 4.9t².",
+                fullStatement: "Question 5d (Range): Write the range of the ball launch projectile system function \\( h = 19.6t - 4.9t^2 \\).",
                 steps: [
-                    { title: "Step 1: Establish Vertical Plane Spatial Allocations", math: "0 ≤ h ≤ 19.6", explanation: "The height varies continuously from the ground floor level (0 meters) up to the calculated trajectory apex (19.6 meters)." }
-                ], ans_box: "{h ∈ R | 0 ≤ h ≤ 19.6}"
+                    { title: "Step 1: Determine the Valid Height Span", math: "\\( 0 \\le h \\le 19.6 \\)", explanation: "The range represents the valid output values, which is the height (h). The ball starts at the ground (0 m) and goes up to its maximum height (19.6 m) before falling back down." }
+                ], ans_box: "\\( \\{h \\in \\mathbb{R} \\mid 0 \\le h \\le 19.6\\} \\)"
             },
             u1l3q6a: {
                 title: "Question 6a", type: "numeric", assetType: "notice",
                 fullStatement: "Question 6a: The step function graph tracks taxi ride costs based on distance. What is the cost of a 4.3-km taxi ride?",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Taxi Cost step function graph on the HW PDF file for this lesson to answer this question.</div>`,
                 steps: [
-                    { title: "Step 1: Intersect Distance Arguments on Step Function Levels", math: "Cost = $6.00", explanation: "Locating 4.3 km on the horizontal axis maps it onto the flat step line segment at height level 6, which represents a cost of $6.00." }
+                    { title: "Step 1: Read the Graph for a Specific Input", math: "\\( \\text{Cost} = \\$6.00 \\)", explanation: "Find 4.3 km on the horizontal distance axis. Move straight up to see which flat step line you hit. That step aligns with $6.00 on the vertical cost axis." }
                 ], ans_box: "6"
             },
             u1l3q6e_dom: {
@@ -642,46 +648,46 @@
                 fullStatement: "Question 6e (Domain): Write the domain of the taxi ride cost step function graph.",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Taxi Cost step function graph on the HW PDF file for this lesson to answer this question.</div>`,
                 steps: [
-                    { title: "Step 1: Identify Continuous Variable Restrictions", math: "x ≥ 0", explanation: "Distance is measured continuously and cannot be negative, starting at an initial threshold value of zero." }
-                ], ans_box: "{x ∈ R | x ≥ 0}"
+                    { title: "Step 1: Determine Valid Distances", math: "\\( x \\ge 0 \\)", explanation: "The domain is the set of all possible distances you can travel. Distance is a continuous measurement and cannot be negative, so it must be any real number starting from zero." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{R} \\mid x \\ge 0\\} \\)"
             },
             u1l3q6e_ran: {
                 title: "Question 6e (Range)", type: "notation", maxSlots: 22, assetType: "notice",
                 fullStatement: "Question 6e (Range): Write the range of the taxi ride cost step function graph.",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Taxi Cost step function graph on the HW PDF file for this lesson to answer this question.</div>`,
                 steps: [
-                    { title: "Step 1: Classify Discrete Step Output Value Sets", math: "y ∈ I, y ≥ 2", explanation: "The costs jump between discrete whole numbers starting at $2.00, meaning outputs are restricted to integers greater than or equal to 2." }
-                ], ans_box: "{y ∈ I | y ≥ 2}"
+                    { title: "Step 1: Determine Valid Costs", math: "\\( y \\in \\mathbb{I}, y \\ge 2 \\)", explanation: "The range is the set of possible costs. Because the price jumps by whole dollar amounts rather than increasing smoothly, the outputs are restricted to specific whole numbers (integers) starting at $2.00." }
+                ], ans_box: "\\( \\{y \\in \\mathbb{I} \\mid y \\ge 2\\} \\)"
             },
             u1l3q8c: {
                 title: "Question 8c", type: "numeric",
-                fullStatement: "Question 8c: Concert revenue is modeled by R(x) = (10000 - 1000x)(20 + x), where x represents a dollar change in ticket price. Evaluate R(10).",
+                fullStatement: "Question 8c: Concert revenue is modeled by \\( R(x) = (10000 - 1000x)(20 + x) \\), where x represents a dollar change in ticket price. Evaluate R(10).",
                 steps: [
-                    { title: "Step 1: Substitute the Integer Constant inside Binomial Expression Blocks", math: "R(10) = 0", explanation: "Substituting 10 yields (10000 - 10000)(20 + 10) = 0 × 30 = 0. This indicates zero revenue due to zero attendance." }
+                    { title: "Step 1: Calculate Revenue for a Specific Price Change", math: "\\( R(10) = 0 \\)", explanation: "Substitute 10 for x in the equation. This means calculate the ticket price change. The first bracket becomes (10000 - 10000) which is 0. Zero attendance means zero revenue." }
                 ], ans_box: "0"
             },
             u1l3q8d: {
                 title: "Question 8d", type: "notation", maxSlots: 28,
-                fullStatement: "Question 8d: Write the domain of the concert revenue function R(x) = (10000 - 1000x)(20 + x) that maintains non-negative parameters.",
+                fullStatement: "Question 8d: Write the domain of the concert revenue function \\( R(x) = (10000 - 1000x)(20 + x) \\) that maintains non-negative parameters.",
                 steps: [
-                    { title: "Step 1: Solve for Zero-Attendance and Zero-Price Roots Boundaries", math: "-19 ≤ x ≤ 9", explanation: "Price modifications must be applied in whole dollar steps (integers) within boundaries that prevent negative attendance or negative ticket pricing." }
-                ], ans_box: "{x ∈ I | -19 ≤ x ≤ 9}"
+                    { title: "Step 1: Find Realistic Limits for Price Changes", math: "\\( -19 \\le x \\le 9 \\)", explanation: "To keep attendance and ticket prices from dropping below zero (which is impossible in reality), the price change (x) must be a whole dollar amount between -19 and 9." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{I} \\mid -19 \\le x \\le 9\\} \\)"
             },
             u1l3q10a_dom: {
                 title: "Question 10a (Domain)", type: "notation", maxSlots: 22, assetType: "notice",
                 fullStatement: "Question 10a (Domain): The graph tracks square carpet costs based on side length. Write the domain of the graph.",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Carpet Cost graph on the HW PDF file for this lesson to answer this question.</div>`,
                 steps: [
-                    { title: "Step 1: Isolate Leftmost Horizontal Graph Grid Intersection Lines", math: "x ≥ 2", explanation: "The continuous quadratic curve starts at a side length of exactly 2 meters and extends to the right." }
-                ], ans_box: "{x ∈ R | x ≥ 2}"
+                    { title: "Step 1: Determine Valid Carpet Sizes", math: "\\( x \\ge 2 \\)", explanation: "Look at the horizontal axis representing side length. The drawn curve starts exactly at 2 meters and continues to the right. Therefore, the length must be a real number 2 or greater." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{R} \\mid x \\ge 2\\} \\)"
             },
             u1l3q10a_ran: {
                 title: "Question 10a (Range)", type: "notation", maxSlots: 22, assetType: "notice",
                 fullStatement: "Question 10a (Range): The graph tracks square carpet costs based on side length. Write the range of the graph.",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the Carpet Cost graph on the HW PDF file for this lesson to answer this question.</div>`,
                 steps: [
-                    { title: "Step 1: Identify Base Vertical Vertex Value Components", math: "y ≥ 10", explanation: "The absolute baseline cost tracking height initialized on the curve starts at $10.00 and scales upward continuously." }
-                ], ans_box: "{y ∈ R | y ≥ 10}"
+                    { title: "Step 1: Determine Valid Carpet Costs", math: "\\( y \\ge 10 \\)", explanation: "Look at the vertical axis representing cost. The lowest point on the graph starts at exactly $10.00 and the curve moves continuously upward, so the cost is any real number 10 or greater." }
+                ], ans_box: "\\( \\{y \\in \\mathbb{R} \\mid y \\ge 10\\} \\)"
             }
         };
 
@@ -697,6 +703,20 @@
         let activeFocusedSlotIndex = 0;
         let currentStepIndex = 0;
         let visibleStepElements = [];
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
 
         function displaySolution() {
             const selectMenu = document.getElementById("question-select");
@@ -807,6 +827,8 @@
             } else {
                 unlockQuizInterface();
             }
+
+            renderMathElements();
         }
 
         function setSlotFocusCursor(index) {
@@ -1020,6 +1042,7 @@
             workspace.innerHTML = html;
             targetDiv.style.display = "block";
             renderMethodSteps();
+            renderMathElements();
         }
 
         function renderMethodSteps() {
@@ -1046,6 +1069,7 @@
             if (currentStepIndex === visibleStepElements.length - 1) {
                 document.getElementById("next-btn").disabled = true;
             }
+            renderMathElements();
         }
 
         function restartSolution() {

@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCF3M Unit 1 Lesson 4</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
     <style>
         :root {
             --primary-color: #0f172a;
@@ -234,27 +239,6 @@
             background-color: #f1f5f9;
             color: var(--primary-color);
             font-weight: 800;
-        }
-
-        /* TRUE VERTICAL FRACTION LAYOUT CONFIGURATION */
-        .fraction {
-            display: inline-flex;
-            flex-direction: column;
-            vertical-align: middle;
-            text-align: center;
-            padding: 0 4px;
-            line-height: 1;
-        }
-
-        .numerator {
-            border-bottom: 2px solid var(--math-color);
-            padding-bottom: 2px;
-            font-size: 1.1rem;
-        }
-
-        .denominator {
-            padding-top: 2px;
-            font-size: 1.1rem;
         }
 
         .math-keyboard-toolbar {
@@ -545,18 +529,18 @@
                 prompt: "Select the correct structural classification property:",
                 options: ["A) Function - Every domain value matches directly onto one distinct element.", "B) Not a Function - A single independent domain input maps onto multiple distinct output parameters."],
                 steps: [
-                    { title: "Step 1: Check Input Element Multiplicities", math: "x = 1 → y = 1 and y = 3", explanation: "Analyze the input coordinates column x. The domain elements 1 and 2 reappear in multiple separate row entries mapping to different vertical levels." },
-                    { title: "Step 2: Apply Function Constraint Checks", math: "Fails Single-Value Rule", explanation: "Because single domain inputs map to more than one distinct range element, this relation is not a function." }
+                    { title: "Step 1: Check the Input Values (x-values)", math: "\\( x = 1 \\rightarrow y = 1 \\text{ and } y = 3 \\)", explanation: "Look at the x-column. The numbers 1 and 2 appear more than once. When x is 1, y is 1, but later when x is 1, y is 3." },
+                    { title: "Step 2: Conclusion", math: "\\( \\text{Fails Single-Value Rule} \\)", explanation: "A function is like a reliable machine: one specific input must always give exactly one specific output. Since the input '1' gives two different answers, this is not a function." }
                 ], ans: "B) Not a Function"
             },
             u1l4q1b: {
                 title: "Question 1b", type: "mc",
-                fullStatement: "Question 1b: Determine if the relation is a function. Justify your answer.<br><br><strong>Relation:</strong> y = x² - 4",
+                fullStatement: "Question 1b: Determine if the relation is a function. Justify your answer.<br><br><strong>Relation:</strong> \\( y = x^2 - 4 \\)",
                 prompt: "Select the correct classification property:",
                 options: ["A) Function - Each independent x-value maps onto only one distinct y-value.", "B) Not a Function - Squaring components produces alternating variations."],
                 steps: [
-                    { title: "Step 1: Analyze Variable Operational Realities", math: "y = x<sup>2</sup> - 4", explanation: "For any real number assigned to x, squaring it and subtracting 4 yields exactly one unique vertical outcome value." },
-                    { title: "Step 2: Match with Geometric Function Behavior", math: "Upward Parabola Curve", explanation: "The graph forms an upwards-opening parabola that satisfies the vertical line test perfectly, certifying it as a function." }
+                    { title: "Step 1: Understand the Function Rule", math: "\\( y = x^2 - 4 \\)", explanation: "Think about plugging any number into x. If you square a number and then subtract 4, you will only ever get one final answer. You will never get two different numbers from one calculation." },
+                    { title: "Step 2: Visualize the Graph", math: "\\( \\text{Upward Parabola Curve} \\)", explanation: "This equation forms a U-shaped curve (a parabola) that opens upwards. If you draw a straight vertical line anywhere on it, it only crosses the line once. Therefore, it is a function." }
                 ], ans: "A) Function"
             },
             u1l4q1c: {
@@ -566,7 +550,7 @@
                 prompt: "Select the mapping diagram classification outcome:",
                 options: ["A) Function - Every element is mapped dynamically.", "B) Not a Function - There are two arrows starting from elements in the left domain set."],
                 steps: [
-                    { title: "Step 1: Verify Domain Output Multiplicities", math: "Ford → {Focus, Mustang}", explanation: "Examine the left independent set data components. Individual brand parameters route concurrently to multiple separate car model assignments." }
+                    { title: "Step 1: Look for Arrows from the Same Starting Point", math: "\\( \\text{Ford} \\rightarrow \\{\\text{Focus}, \\text{Mustang}\\} \\)", explanation: "In a mapping diagram, look at the items on the left side (the inputs). The brand 'Ford' has two separate arrows pointing to two different cars ('Focus' and 'Mustang'). Since one input splits into two outputs, it is not a function." }
                 ], ans: "B) Not a Function"
             },
             u1l4q1d: {
@@ -576,99 +560,109 @@
                 prompt: "Select the correct function notation classification:",
                 options: ["A) Function - Each independent domain element maps onto exactly one range value.", "B) Not a Function - Arrows target repeating components."],
                 steps: [
-                    { title: "Step 1: Track Vector Allocations Per Variable", math: "One arrow per input variable", explanation: "Review the map line distributions. Each separate entry listed in the input group triggers exactly one path line, satisfying the definition of a function." }
+                    { title: "Step 1: Check Each Starting Number", math: "\\( \\text{One arrow per input} \\)", explanation: "Look at the numbers on the left side. Every single number only has one arrow leaving it. It doesn't matter if multiple arrows point to the same answer on the right side; as long as no single input splits into two arrows, it is a perfectly valid function." }
                 ], ans: "A) Function"
             },
             u1l4q2a: {
                 title: "Question 2a", type: "numeric",
-                fullStatement: "Question 2a: Evaluate the polynomial function model for the target parameter.<br><br><strong>Function:</strong> f(x) = x² - 10x + 25<br><strong>Evaluate:</strong> f(3)",
+                fullStatement: "Question 2a: Evaluate the polynomial function model for the target parameter.<br><br><strong>Function:</strong> \\( f(x) = x^2 - 10x + 25 \\)<br><strong>Evaluate:</strong> \\( f(3) \\)",
+                prompt: "Evaluate \\( f(3) \\):",
                 steps: [
-                    { title: "Step 1: Substitute the Parameter into the Trinomial Expression", math: "f(3) = (3)<sup>2</sup> - 10(3) + 25", explanation: "Replace every independent instance of x inside the function statement with the value 3." },
-                    { title: "Step 2: Simplify Operations via BEDMAS", math: "f(3) = 9 - 30 + 25 = 4", explanation: "Square the base term: 3² = 9. Multiply the linear term: -10 × 3 = -30. Combine terms sequentially to find the final total." }
+                    { title: "Step 1: Substitute the Number into the Function", math: "\\( f(3) = (3)^2 - 10(3) + 25 \\)", explanation: "Replace every 'x' in the equation with the number 3." },
+                    { title: "Step 2: Calculate Following BEDMAS", math: "\\( f(3) = 9 - 30 + 25 = 4 \\)", explanation: "First, square the 3 to get 9. Next, multiply -10 by 3 to get -30. Read from left to right: 9 minus 30 is -21, and adding 25 gives a final answer of 4." }
                 ], ans_box: "4"
             },
             u1l4q2b: {
                 title: "Question 2b", type: "numeric",
-                fullStatement: "Question 2b: Evaluate the polynomial function model for the target parameter.<br><br><strong>Function:</strong> f(x) = x² - 10x + 25<br><strong>Evaluate:</strong> f(-5)",
+                fullStatement: "Question 2b: Evaluate the polynomial function model for the target parameter.<br><br><strong>Function:</strong> \\( f(x) = x^2 - 10x + 25 \\)<br><strong>Evaluate:</strong> \\( f(-5) \\)",
+                prompt: "Evaluate \\( f(-5) \\):",
                 steps: [
-                    { title: "Step 1: Substitute Negative Parameters into Brackets", math: "f(-5) = (-5)<sup>2</sup> - 10(-5) + 25", explanation: "Substitute -5 as the coordinate evaluation argument variable." },
-                    { title: "Step 2: Process Exponents and Signed Integer Products", math: "f(-5) = 25 + 50 + 25 = 100", explanation: "Squaring a negative base results in a positive value: (-5)² = 25. The product of two negative values becomes positive: -10 × (-5) = 50. Sum the constants to compute the final value." }
+                    { title: "Step 1: Substitute the Negative Number", math: "\\( f(-5) = (-5)^2 - 10(-5) + 25 \\)", explanation: "Replace every 'x' with -5. Always use brackets when plugging in a negative number so you don't mess up the signs." },
+                    { title: "Step 2: Calculate Carefully", math: "\\( f(-5) = 25 + 50 + 25 = 100 \\)", explanation: "When you square a negative number, it becomes positive: (-5) × (-5) = 25. Next, a negative times a negative is positive: -10 × -5 = +50. Add all the positive numbers together to get 100." }
                 ], ans_box: "100"
             },
             u1l4q2c: {
                 title: "Question 2c", type: "numeric",
-                fullStatement: "Question 2c: Evaluate the polynomial function model for the target parameter.<br><br><strong>Function:</strong> f(x) = x² - 10x + 25",
-                prompt_html: "Evaluate the function expression:<br><br><strong>Find:</strong> f(<span class='fraction'><span class='numerator'>1</span><span class='denominator'>2</span></span>) =",
+                fullStatement: "Question 2c: Evaluate the polynomial function model for the target parameter.<br><br><strong>Function:</strong> \\( f(x) = x^2 - 10x + 25 \\)",
+                prompt: "Evaluate the function expression:<br><br><strong>Find:</strong> \\( f\\left(\\frac{1}{2}\\right) = \\)",
                 steps: [
-                    { title: "Step 1: Substitute the Fractional Input", math: "f(<span class='fraction'><span class='numerator'>1</span><span class='denominator'>2</span></span>) = (<span class='fraction'><span class='numerator'>1</span><span class='denominator'>2</span></span>)<sup>2</sup> - 10(<span class='fraction'><span class='numerator'>1</span><span class='denominator'>2</span></span>) + 25", explanation: "Substitute 1/2 as the variable input value into the quadratic function statement." },
-                    { title: "Step 2: Simplify Terms and Find the Common Denominator", math: "f(<span class='fraction'><span class='numerator'>1</span><span class='denominator'>2</span></span>) = <span class='fraction'><span class='numerator'>1</span><span class='denominator'>4</span></span> - 5 + 25 = <span class='fraction'><span class='numerator'>1</span><span class='denominator'>4</span></span> + 20 = 20.25", explanation: "Square the fraction: (1/2)² = 1/4. Multiply the linear term: -10 × 1/2 = -5. Combine the integers (-5 + 25 = 20) and add 1/4 to obtain the final value of 20.25." }
+                    { title: "Step 1: Substitute the Fraction", math: "\\( f\\left(\\frac{1}{2}\\right) = \\left(\\frac{1}{2}\\right)^2 - 10\\left(\\frac{1}{2}\\right) + 25 \\)", explanation: "Don't let the fraction scare you. Just replace every 'x' with 1/2." },
+                    { title: "Step 2: Simplify and Combine", math: "\\( f\\left(\\frac{1}{2}\\right) = \\frac{1}{4} - 5 + 25 = \\frac{1}{4} + 20 = 20.25 \\)", explanation: "Square the top and bottom of the fraction: (1/2)² is 1/4 (or 0.25). Multiplying -10 by 1/2 is the same as cutting it in half, giving -5. Combine the whole numbers: -5 + 25 = 20. Add the 0.25 to get 20.25." }
                 ], ans_box: "20.25"
             },
             u1l4q3b: {
                 title: "Question 3b", type: "numeric",
-                fullStatement: "Question 3b: The height h(t), in metres, of a ball t seconds after being thrown is modelled by the quadratic function expression shown below.<br><br><strong>Model:</strong> h(t) = -4.9t² + 20t<br><strong>Evaluate Flight Height:</strong> What is the height of the ball 3 s after it is thrown?",
+                fullStatement: "Question 3b: The height h(t), in metres, of a ball t seconds after being thrown is modelled by the quadratic function expression shown below.<br><br><strong>Model:</strong> \\( h(t) = -4.9t^2 + 20t \\)<br><strong>Evaluate Flight Height:</strong> What is the height of the ball 3 s after it is thrown?",
+                prompt: "Evaluate \\( h(3) \\):",
                 steps: [
-                    { title: "Step 1: Substitute the Elapsed Time Parameter", math: "h(3) = -4.9(3)<sup>2</sup> + 20(3)", explanation: "Substitute 3 seconds for the time variable t inside the height tracking expression layout." },
-                    { title: "Step 2: Execute Multiplications and Combine Metric Height Values", math: "h(3) = -4.9(9) + 60 = -44.1 + 60 = 15.9", explanation: "Compute the exponential square first: 3² = 9. Perform evaluations sequentially: -4.9 × 9 = -44.1, and 20 × 3 = 60. Subtracting the tracking values leaves exactly 15.9 meters." }
+                    { title: "Step 1: Plug in the Time", math: "\\( h(3) = -4.9(3)^2 + 20(3) \\)", explanation: "The question asks for the height at 3 seconds, so replace the time variable 't' with 3." },
+                    { title: "Step 2: Calculate the Math", math: "\\( h(3) = -4.9(9) + 60 = -44.1 + 60 = 15.9 \\)", explanation: "Square the 3 first to get 9. Multiply -4.9 by 9 to get -44.1. Then multiply 20 by 3 to get 60. Add them together (which is like subtracting 44.1 from 60) to get 15.9 meters." }
                 ], ans_box: "15.9"
             },
             u1l4q5_dom: {
                 title: "Question 5 (Domain)", type: "notation", maxSlots: 19,
                 fullStatement: "Question 5 (Domain): A parabola opens down and its vertex is located at coordinate point (-5, 10). Write the domain of the relation function.",
+                prompt: "Construct your domain notation:",
                 steps: [
-                    { title: "Step 1: Evaluate Continuous Parabolic Domain Boundaries", math: "x ∈ ℝ", explanation: "A vertical parabola extends infinitely to the left and right along the horizontal axis, allowing it to accept any real number parameter input." }
-                ], ans_box: "{x ∈ R}"
+                    { title: "Step 1: Determine Valid Inputs for a Parabola", math: "\\( x \\in \\mathbb{R} \\)", explanation: "The domain asks 'What are the possible x-values?'. A standard parabola continues infinitely to the left and to the right without stopping. Therefore, the x-value can be absolutely any real number." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{R}\\} \\)"
             },
             u1l4q5_ran: {
                 title: "Question 5 (Range)", type: "notation", maxSlots: 24,
                 fullStatement: "Question 5 (Range): A parabola opens down and its vertex is located at coordinate point (-5, 10). Write the range of the relation function.",
+                prompt: "Construct your range notation:",
                 steps: [
-                    { title: "Step 1: Isolate Vertex Peak Maxima Threshold boundaries", math: "Maximum Height y = 10", explanation: "Because the parabola vertex sits at a vertical position of 10 and the curve opens downward, the output values are bounded above by 10." }
-                ], ans_box: "{y ∈ R | y ≤ 10}"
+                    { title: "Step 1: Find the Maximum Height", math: "\\( y \\le 10 \\)", explanation: "The range asks 'What are the possible y-values?'. The question states the vertex (the turning point) is at height 10, and it opens downward. This means 10 is the absolute highest point it reaches, and everything else is lower." }
+                ], ans_box: "\\( \\{y \\in \\mathbb{R} \\mid y \\le 10\\} \\)"
             },
             u1l4q6_dom: {
                 title: "Question 6 (Domain)", type: "notation", maxSlots: 24,
-                fullStatement: "Question 6 (Domain): A catering company charges a base rate of $50 plus $10 per person for a dinner, with a maximum capacity of 20 people. The cost function is C(x) = 10x + 50, where x represents the count of people.<br><br><strong>Task:</strong> Write the domain of this function.",
+                fullStatement: "Question 6 (Domain): A catering company charges a base rate of $50 plus $10 per person for a dinner, with a maximum capacity of 20 people. The cost function is \\( C(x) = 10x + 50 \\), where x represents the count of people.<br><br><strong>Task:</strong> Write the domain of this function.",
+                prompt: "Construct your domain notation:",
                 steps: [
-                    { title: "Step 1: Define Real-World Variable Quantization Parameters", math: "x ∈ I where 0 < x ≤ 20", explanation: "The number of people attending must be a whole counting number (integer). Since attendance can scale up to a maximum capacity of 20 people, the domain is bounded by these limits." }
-                ], ans_box: "{x ∈ I | 0 < x ≤ 20}"
+                    { title: "Step 1: Find Realistic Limits for People", math: "\\( x \\in \\mathbb{I} \\text{ where } 0 < x \\le 20 \\)", explanation: "The variable 'x' stands for the number of people. In the real world, you cannot have half a person, and you cannot have negative people. Therefore, x must be a whole counting number (an integer, I) from 1 up to the max capacity of 20." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{I} \\mid 0 < x \\le 20\\} \\)"
             },
             u1l4q7a_dom: {
                 title: "Question 7a (Domain)", type: "notation", maxSlots: 19,
-                fullStatement: "Question 7a (Domain): Write the domain of the given continuous relation expression.<br><br><strong>Relation:</strong> y = 2x - 1",
+                fullStatement: "Question 7a (Domain): Write the domain of the given continuous relation expression.<br><br><strong>Relation:</strong> \\( y = 2x - 1 \\)",
+                prompt: "Construct your domain notation:",
                 steps: [
-                    { title: "Step 1: Analyze the Polynomial Expression Framework Profile", math: "x ∈ ℝ", explanation: "This equation describes a non-vertical linear straight line relation. It contains no rational denominators or radical symbols, meaning the input variable x can accept any real number." }
-                ], ans_box: "{x ∈ R}"
+                    { title: "Step 1: Determine Valid Inputs for a Line", math: "\\( x \\in \\mathbb{R} \\)", explanation: "This equation creates a simple straight diagonal line. There are no fractions to divide by zero and no square roots to worry about negatives. You can plug literally any real number into x." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{R}\\} \\)"
             },
             u1l4q7a_ran: {
                 title: "Question 7a (Range)", type: "notation", maxSlots: 19,
-                fullStatement: "Question 7a (Range): Write the range of the given continuous relation expression.<br><br><strong>Relation:</strong> y = 2x - 1",
+                fullStatement: "Question 7a (Range): Write the range of the given continuous relation expression.<br><br><strong>Relation:</strong> \\( y = 2x - 1 \\)",
+                prompt: "Construct your range notation:",
                 steps: [
-                    { title: "Step 1: Evaluate Continuous Line Linear Axis Jumps", math: "y ∈ ℝ", explanation: "A diagonal straight line travels continuously from negative infinity to positive infinity along the vertical axis, covering all real numbers in its range." }
-                ], ans_box: "{y ∈ R}"
+                    { title: "Step 1: Determine Valid Outputs for a Line", math: "\\( y \\in \\mathbb{R} \\)", explanation: "Because a straight diagonal line continues going up and going down forever without ever stopping or bending, its height (y-value) will eventually cover every single real number." }
+                ], ans_box: "\\( \\{y \\in \\mathbb{R}\\} \\)"
             },
             u1l4q7b_dom: {
                 title: "Question 7b (Domain)", type: "notation", maxSlots: 19,
-                fullStatement: "Question 7b (Domain): Write the domain of the given quadratic relation equation expression.<br><br><strong>Relation:</strong> y = 2x² - 1",
+                fullStatement: "Question 7b (Domain): Write the domain of the given quadratic relation equation expression.<br><br><strong>Relation:</strong> \\( y = 2x^2 - 1 \\)",
+                prompt: "Construct your domain notation:",
                 steps: [
-                    { title: "Step 1: Check Arithmetic Continuity Restrictions Matrix", math: "x ∈ ℝ", explanation: "This is a standard quadratic polynomial function mapping. It can accept any positive or negative real number input variable without creating undefined operations." }
-                ], ans_box: "{x ∈ R}"
+                    { title: "Step 1: Determine Valid Inputs for a Parabola", math: "\\( x \\in \\mathbb{R} \\)", explanation: "This is a quadratic equation (a parabola). You can square any positive number, negative number, or zero. There are no restrictions on what you can plug into x." }
+                ], ans_box: "\\( \\{x \\in \\mathbb{R}\\} \\)"
             },
             u1l4q7b_ran: {
                 title: "Question 7b (Range)", type: "notation", maxSlots: 24,
-                fullStatement: "Question 7b (Range): Write the range of the given quadratic relation equation expression.<br><br><strong>Relation:</strong> y = 2x² - 1",
+                fullStatement: "Question 7b (Range): Write the range of the given quadratic relation equation expression.<br><br><strong>Relation:</strong> \\( y = 2x^2 - 1 \\)",
+                prompt: "Construct your range notation:",
                 steps: [
-                    { title: "Step 1: Locate the Parabola Turning Point Height Vertex Node", math: "Minimum Vertex height y = -1", explanation: "The base equation describes a parabola that opens upward. Its turning point vertex sits at its lowest vertical level, height y = -1." },
-                    { title: "Step 2: Model Vertical Inequality Range Mapping Limits", math: "y ≥ -1", explanation: "Because the parabola opens upward from its lowest point, the range values are bounded below by -1." }
-                ], ans_box: "{y ∈ R | y ≥ -1}"
+                    { title: "Step 1: Find the Lowest Point", math: "\\( y \\ge -1 \\)", explanation: "Because the x² part is positive, this parabola opens upwards. The lowest it will ever go is the constant number at the end, which is -1. So, all possible y-values are -1 or higher." }
+                ], ans_box: "\\( \\{y \\in \\mathbb{R} \\mid y \\ge -1\\} \\)"
             },
             u1l4q8b: {
                 title: "Question 8b", type: "numeric",
-                fullStatement: "Question 8b: The surface area S(r), in square centimetres, of a cylinder with a fixed height of 5 cm is modelled as a function of radius r by the equation shown below. Evaluate S(5) to the nearest whole integer value.<br><br><strong>Model:</strong> S(r) = 2πr² + 10πr",
+                fullStatement: "Question 8b: The surface area S(r), in square centimetres, of a cylinder with a fixed height of 5 cm is modelled as a function of radius r by the equation shown below. Evaluate S(5) to the nearest whole integer value.<br><br><strong>Model:</strong> \\( S(r) = 2\\pi r^2 + 10\\pi r \\)",
+                prompt: "Evaluate \\( S(5) \\):",
                 steps: [
-                    { title: "Step 1: Substitute the Cylinder Radius Parameter Value", math: "S(5) = 2π(5)<sup>2</sup> + 10π(5)", explanation: "Substitute 5 cm for the radius variable r inside both terms of the area function expression." },
-                    { title: "Step 2: Isolate Pi Factors via Algebraic Simplification", math: "S(5) = 2π(25) + 50π = 50π + 50π = 100π", explanation: "Evaluate calculations using standard ordering rules: square the radius first (5² = 25), then multiply to get 50π. Combine like terms to find the total sum of 100π." },
-                    { title: "Step 3: Convert to Decimal Value and Round to Nearest Whole Integer", math: "100 × 3.14159265... ≈ 314.159 → 314", explanation: "Multiply 100 by the constant pi value to compute the area measurement. Rounding to the nearest whole number gives approximately 314 cm²." }
+                    { title: "Step 1: Plug in the Radius", math: "\\( S(5) = 2\\pi(5)^2 + 10\\pi(5) \\)", explanation: "Replace the 'r' variable with the given radius, which is 5." },
+                    { title: "Step 2: Simplify the Terms", math: "\\( S(5) = 2\\pi(25) + 50\\pi = 50\\pi + 50\\pi = 100\\pi \\)", explanation: "Square the 5 first to get 25. Multiply that by 2 to get 50π. Multiply the second part (10 × 5) to also get 50π. Add them together to get 100π." },
+                    { title: "Step 3: Calculate the Final Number", math: "100 \\times 3.14159... \\approx 314.159 \\rightarrow 314", explanation: "Multiply 100 by the constant pi (π) value on your calculator. Rounding the result to the nearest whole number gives 314." }
                 ], ans_box: "314"
             },
             u1l4ptq1: {
@@ -677,7 +671,7 @@
                 prompt: "Select the non-function relation option letter:",
                 options: ["A) {(1, 2), (2, 3), (3, 3), (4, 2)}", "B) y = 2x - 9", "C) x² - 5 = y²", "D) y = 1"],
                 steps: [
-                    { title: "Step 1: Test Equation Variables for Multi-Value Outputs", math: "x<sup>2</sup> - 5 = y<sup>2</sup> → y = ±√(x<sup>2</sup> - 5)", explanation: "Isolate the dependent variable y in option C. Rearranging the terms introduces a plus-minus square root sign, meaning a single input x-value can yield two separate output y-values simultaneously." }
+                    { title: "Step 1: Solve for y", math: "\\( x^2 - 5 = y^2 \\rightarrow y = \\pm\\sqrt{x^2 - 5} \\)", explanation: "A function must have only one y-value for every x-value. If you try to get 'y' by itself in option C, you have to square root both sides. Taking a square root introduces a '±' (plus or minus) sign. This means one x-value gives two completely different y-values, so it is not a function." }
                 ], ans: "C"
             }
         };
@@ -694,6 +688,20 @@
         let activeFocusedSlotIndex = 0;
         let currentStepIndex = 0;
         let visibleStepElements = [];
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
 
         function displaySolution() {
             const selectMenu = document.getElementById("question-select");
@@ -730,7 +738,7 @@
             }
 
             if (activeProblem.type === "notation") {
-                document.getElementById("input-prompt-label").innerText = "Construct your solution notation using the math toolbar below:";
+                document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt || "Construct your solution notation using the math toolbar below:";
                 
                 let slotsHtml = `<div class="char-slots-container">`;
                 for (let i = 0; i < activeProblem.maxSlots; i++) {
@@ -750,7 +758,7 @@
                     <button class="math-key" onclick="pressSlotPaletteKey('R')">R</button>
                     <button class="math-key" onclick="pressSlotPaletteKey('I')">I</button>
                     <button class="math-key" onclick="pressSlotPaletteKey('≤')">≤</button>
-                    <button class="math-key" onclick="pressSlotPaletteKey('≥')">?</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('≥')">≥</button>
                     <button class="math-key" onclick="pressSlotPaletteKey('<')">&lt;</button>
                     <button class="math-key" onclick="pressSlotPaletteKey('>')">&gt;</button>
                     <button class="math-key" onclick="pressSlotPaletteKey(',')">,</button>
@@ -776,7 +784,7 @@
 
             } else if (activeProblem.type === "mc") {
                 kbdToolbar.style.display = "none";
-                document.getElementById("input-prompt-label").innerText = activeProblem.prompt;
+                document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt;
                 
                 let html = `<div class="mc-options-list">`;
                 activeProblem.options.forEach(opt => {
@@ -793,11 +801,7 @@
                 mountPoint.innerHTML = html;
             } else {
                 kbdToolbar.style.display = "flex";
-                if (activeProblem.prompt_html) {
-                    document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt_html;
-                } else {
-                    document.getElementById("input-prompt-label").innerText = "Type the numeric calculated value:";
-                }
+                document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt || "Type the numeric calculated value:";
                 mountPoint.innerHTML = `
                     <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 15, -39, 20.25" autocomplete="off">`;
                 
@@ -825,6 +829,8 @@
             } else {
                 unlockQuizInterface();
             }
+
+            renderMathElements();
         }
 
         function setSlotFocusCursor(index) {
@@ -909,6 +915,7 @@
             });
             html += `</div>`;
             mountPoint.innerHTML = html;
+            renderMathElements();
         }
 
         function pressStandardNumericKey(symbol) {
@@ -1072,6 +1079,7 @@
             workspace.innerHTML = html;
             targetDiv.style.display = "block";
             renderMethodSteps();
+            renderMathElements();
         }
 
         function renderMethodSteps() {
@@ -1098,6 +1106,7 @@
             if (currentStepIndex === visibleStepElements.length - 1) {
                 document.getElementById("next-btn").disabled = true;
             }
+            renderMathElements();
         }
 
         function restartSolution() {

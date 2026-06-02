@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCF3M Unit 1 Lesson 1</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
     <style>
         :root {
             --primary-color: #0f172a;
@@ -189,27 +194,6 @@
             background-color: #f1f5f9;
             color: var(--primary-color);
             font-weight: 800;
-        }
-
-        /* TRUE VERTICAL FRACTION LAYOUT CONFIGURATION */
-        .fraction {
-            display: inline-flex;
-            flex-direction: column;
-            vertical-align: middle;
-            text-align: center;
-            padding: 0 4px;
-            line-height: 1;
-        }
-
-        .numerator {
-            border-bottom: 2px solid var(--math-color);
-            padding-bottom: 2px;
-            font-size: 1.1rem;
-        }
-
-        .denominator {
-            padding-top: 2px;
-            font-size: 1.1rem;
         }
 
         .mc-options-list {
@@ -560,9 +544,10 @@
                 prompt: "Determine if Table a defines a function relationship:",
                 options: ["A) Function - Every unique domain element maps onto exactly one unique range output value.", "B) Not a Function - Independent inputs contain repeating instances pointing to different variables."],
                 steps: [
-                    { title: "Step 1: Check Input Value Multiplicities", math: "Domain = {-2, -1, 0, 1, 2}", explanation: "Examine the independent input (x) column. Every single value listed occurs exactly once with no repetitions." },
-                    { title: "Step 2: Match to Mapping Constraints Rules", math: "Passes Function Criteria", explanation: "Since each unique input maps onto precisely one single output value, this relation is a function." }
-                ], ans: "A) Function"
+                    { title: "Step 1: Understand What Makes a Function", math: "\\( x \\rightarrow \\text{exactly one } y \\)", explanation: "A relation is only a function if every single input (x-value) points to exactly one output (y-value). Think of it like a vending machine: one specific button should only ever give you one specific snack." },
+                    { title: "Step 2: Check the Input Values (x-column)", math: "\\( \\text{Inputs } x = \\{-2, -1, 0, 1, 2\\} \\)", explanation: "Look at the left column: -2, -1, 0, 1, and 2. Notice that none of these numbers repeat. Every input is completely unique." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{Unique Inputs = Valid Function} \\)", explanation: "Because every unique input has exactly one predictable output, this table represents a valid function." }
+                ], ans: "A"
             },
             u1l1q1b: {
                 title: "Question 1b: Table b", type: "mc", assetType: "tov",
@@ -570,9 +555,10 @@
                 prompt: "Determine if Table b defines a function relationship:",
                 options: ["A) Function - Tabular matches align within single coordinate blocks.", "B) Not a Function - Specific inputs map onto multiple variant outputs."],
                 steps: [
-                    { title: "Step 1: Identify Repeating Domain Input Values", math: "Repeated Inputs = {5, 10}", explanation: "Review the Perimeter column. Notice that the input values 5 and 10 repeat inside separate rows." },
-                    { title: "Step 2: Track Multi-Mapping Conflicts", math: "5 &rarr; {2, 4} &nbsp;&nbsp;|&nbsp;&nbsp; 10 &rarr; {3, 6}", explanation: "The input element 5 maps concurrently onto two separate area outcomes (2 and 4). Because a single domain item points to more than one output, it is not a function." }
-                ], ans: "B) Not a Function"
+                    { title: "Step 1: Look for Repeated Inputs", math: "\\( \\text{Inputs Sequence} = \\{5, 10, 15, 10, 5\\} \\)", explanation: "Check the left column (Perimeter). You can immediately see that the numbers 5 and 10 appear more than once." },
+                    { title: "Step 2: Trace the Outputs", math: "\\( 5 \\rightarrow \\{2, 4\\} \\text{ and } 10 \\rightarrow \\{3, 6\\} \\)", explanation: "Look at where those repeated inputs go. The input 5 points to an area of 2, but later it points to an area of 4. The input 10 points to both 3 and 6." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{One Input, Multiple Outputs} \\neq \\text{Function} \\)", explanation: "Because a single input gives multiple different outputs (like pressing a vending machine button and randomly getting two completely different items), this is not a function." }
+                ], ans: "B"
             },
             u1l1q1c: {
                 title: "Question 1c: Table c", type: "mc", assetType: "tov",
@@ -580,9 +566,10 @@
                 prompt: "Determine if Table c defines a function relationship:",
                 options: ["A) Function - Every element maps directly to exactly one unique output value.", "B) Not a Function - Relational tracking implies variations."],
                 steps: [
-                    { title: "Step 1: Analyze Independent Parameters Group", math: "Domain = {0, 1, 2, 3, 4}", explanation: "Scan the input column values. Every numerical entry is distinct and appears exactly once." },
-                    { title: "Step 2: Confirm Mapping Uniqueness", math: "Unified Path Allocation", explanation: "Since each discrete input value holds exactly one single corresponding output variable value, it represents a valid function." }
-                ], ans: "A) Function"
+                    { title: "Step 1: Check the Input Values (r-column)", math: "\\( \\text{Inputs } r = \\{0, 1, 2, 3, 4\\} \\)", explanation: "Look at the radius values in the first column: 0, 1, 2, 3, and 4. Every number is perfectly unique and nothing repeats." },
+                    { title: "Step 2: Verify the Outputs", math: "\\( \\text{Predictable Mapping} \\)", explanation: "Each unique radius calculates to exactly one specific circumference. There is no confusion or randomly split answers." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{Valid Function} \\)", explanation: "Since every single input matches with exactly one output, this table is a function." }
+                ], ans: "A"
             },
             u1l1q1d: {
                 title: "Question 1d: Table d", type: "mc", assetType: "tov",
@@ -590,16 +577,19 @@
                 prompt: "Determine if Table d defines a function relationship:",
                 options: ["A) Function - Math parameters stay locked inside real numbers.", "B) Not a Function - Single inputs map onto an alternating set of positive and negative variations."],
                 steps: [
-                    { title: "Step 1: Check Multi-Value Allocation Markers", math: "y = \\pm k", explanation: "Examine the output fields. For the domain element 1, the relation assigns two separate range values (2 and -2) simultaneously." },
-                    { title: "Step 2: Evaluate Function Definition Constraints", math: "Fails Single-Value Restriction", explanation: "Because an individual independent variable maps onto multiple concurrent output assignments, it is classified as a relation, not a function." }
-                ], ans: "B) Not a Function"
+                    { title: "Step 1: Look at the Output Column (y-values)", math: "\\( y = \\pm k \\)", explanation: "Notice how the y-column explicitly says 'or'. For example, if you input the number 1, the output could be 2 or it could be -2." },
+                    { title: "Step 2: Check the Function Rule", math: "\\( 1 \\rightarrow \\{2, -2\\} \\)", explanation: "A function must have a predictable, single answer for any given input. Having two completely different answers for the same input directly breaks this rule." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{Fails the Function Test} \\)", explanation: "Because one x-value maps to multiple y-values at the exact same time, this is not a function." }
+                ], ans: "B"
             },
-            u1l1q2: {
+            u1l2: {
                 title: "Question 2", type: "mc", assetType: "none",
                 prompt: "For those relations in question 1 that are not functions, explain why:",
                 options: ["A) In 1b, inputs 5 and 10 link to multiple areas. In 1d, inputs map to both positive and negative solutions.", "B) Because the table rows are out of chronological order.", "C) Because the variables contain zero parameters."],
                 steps: [
-                    { title: "Step 1: Apply Function Multiplicity Tests", math: "x &rarr; single y", explanation: "A relation is disqualified as a function if any single input maps onto more than one output value." }
+                    { title: "Step 1: Why Table 1b Fails", math: "\\( 5 \\rightarrow \\{2, 4\\} \\)", explanation: "In Table 1b, the inputs 5 and 10 repeat and give completely different answers each time." },
+                    { title: "Step 2: Why Table 1d Fails", math: "\\( x = 1 \\rightarrow y = 2 \\text{ or } -2 \\)", explanation: "In Table 1d, single inputs like 1, 4, and 9 literally offer two different answers (positive or negative) right there in the box." },
+                    { title: "Step 3: The Golden Rule of Functions", math: "\\( \\text{One Input} \\rightarrow \\text{One Output} \\)", explanation: "Both fail because they violate the one-to-one rule: you can never have one input branching out into multiple different outputs." }
                 ], ans: "A"
             },
             u1l1q3a: {
@@ -608,9 +598,10 @@
                 prompt: "Determine if Graph a represents a function:",
                 options: ["A) Function - It passes the vertical line test parameters perfectly.", "B) Not a Function - Intersecting geometry traces multi-intercept loop profiles."],
                 steps: [
-                    { title: "Step 1: Apply Vertical Line Test Principles", math: "Vertical Line Test Alignment", explanation: "A graphical pattern represents a function if and only if no single vertical line can cross its structural path at more than one point simultaneously." },
-                    { title: "Step 2: Trace Across Coordinate Domains", math: "Intersection Count = 1", explanation: "An imaginary vertical line passing across this smooth cubic graph cuts the curve exactly once at every position domain point, confirming it is a function." }
-                ], ans: "A) Function"
+                    { title: "Step 1: What is the Vertical Line Test?", math: "\\( \\text{Intersection Max} = 1 \\)", explanation: "If you can draw a straight vertical line anywhere on the graph and it touches the drawn shape more than once, it is not a function." },
+                    { title: "Step 2: Test the Curve", math: "\\( x = k \\rightarrow \\text{Exactly 1 Intersection} \\)", explanation: "Imagine sweeping a vertical line from left to right across this smooth curve. It never crosses the graph more than once at any single point." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{Passes the Test} \\)", explanation: "Because it passes the vertical line test perfectly, this graph represents a valid function." }
+                ], ans: "A"
             },
             u1l1q3b: {
                 title: "Question 3b: Graph b", type: "mc", assetType: "notice",
@@ -618,9 +609,10 @@
                 prompt: "Determine if Graph b defines a function relationship:",
                 options: ["A) Function - Line tracks continuity properties.", "B) Not a Function - A single vertical line intersects the path at multiple points simultaneously."],
                 steps: [
-                    { title: "Step 1: Test Vector Intersections", math: "Intersections > 1", explanation: "Place an imaginary vertical line straight down through the middle domain segments of the graph." },
-                    { title: "Step 2: Evaluate Outcome Set Multiplicities", math: "Fails Geometric Function Test", explanation: "The line crosses through the sideways graph curve at multiple separate points simultaneously, meaning it is not a function." }
-                ], ans: "B) Not a Function"
+                    { title: "Step 1: What is the Vertical Line Test?", math: "\\( \\text{Intersections} > 1 \\)", explanation: "If a straight vertical line touches the drawn shape more than once at the same time, the shape is not a function." },
+                    { title: "Step 2: Test the Curve", math: "\\( x = k \\rightarrow \\text{Multiple Touches} \\)", explanation: "If you draw a vertical line straight down through the middle of this sideways loop, it will touch the top curve, the middle curve, and the bottom curve all at once." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{Fails the Test} \\)", explanation: "Since one vertical slice hits multiple points on the graph, it fails the test and is not a function." }
+                ], ans: "B"
             },
             u1l1q3c: {
                 title: "Question 3c: Graph c", type: "mc", assetType: "notice",
@@ -628,17 +620,19 @@
                 prompt: "Determine if Graph c represents a function:",
                 options: ["A) Function - Separate coordinate nodes populate independent paths.", "B) Not a Function - Specific points are vertically aligned on the exact same grid coordinate line."],
                 steps: [
-                    { title: "Step 1: Scan Grid Alignment Column Blocks", math: "Evaluate Position x = 1", explanation: "Look closely at the coordinates of the plotted points. At the position <code>x = 1</code> (one unit right of origin), there are two distinct points stacked vertically on top of each other." },
-                    { title: "Step 2: Analyze Point Intersection Overlaps", math: "1 &rarr; -1 &nbsp;&nbsp;and&nbsp;&nbsp; 1 &rarr; 2", explanation: "Because a single vertical line crosses through two points simultaneously at <code>x = 1</code>, it fails the vertical line test and is not a function." }
-                ], ans: "B) Not a Function"
+                    { title: "Step 1: Checking Scattered Points", math: "\\( \\text{Look for Vertically Stacked Dots} \\)", explanation: "For scattered dots on a graph, you just need to make sure no two dots are perfectly stacked on top of each other vertically." },
+                    { title: "Step 2: Find the Stacked Dots", math: "\\( x = 1 \\rightarrow y = -1 \\text{ and } y = 2 \\)", explanation: "Look closely at the horizontal position x = 1. There is a dot sitting at y = -1 and another dot directly above it at y = 2." },
+                    { title: "Step 3: Conclusion", math: "\\( 1 \\rightarrow \\{-1, 2\\} \\Rightarrow \\text{Fails Test} \\)", explanation: "Because a vertical line drawn at x = 1 would hit both of those dots at the exact same time, this graph is not a function." }
+                ], ans: "B"
             },
             u1l1q4: {
                 title: "Question 4", type: "mc", assetType: "none",
                 prompt: "For those graphs in question 3 that are not functions, explain why:",
                 options: ["A) 3b loops back over itself, and 3c contains two vertically stacked points at x = 1, violating the vertical line test.", "B) Because neither relation features a constant linear rate of change.", "C) Because the graphics intersect the grid origin point."],
                 steps: [
-                    { title: "Step 1: Identify the Shared Geometric Error Rule", math: "Vertical Line Intersection Thresholds", explanation: "For a graph to represent a function, any vertical line drawn through the coordinate grid must touch the path at a maximum of one single point." },
-                    { title: "Step 2: Point Out the Violations from the Sheets", math: "3b: Side loops | 3c: Multi-dots at x = 1", explanation: "Graph 3b curves backward over itself, and graph 3c plots two points simultaneously on the line <code>x = 1</code>. Both fail the vertical line test." }
+                    { title: "Step 1: Why Graph 3b Fails", math: "\\( \\text{Loop Structure Hits Multiple Times} \\)", explanation: "The sideways curve loops backwards. Any vertical line drawn through the middle will hit the line multiple times." },
+                    { title: "Step 2: Why Graph 3c Fails", math: "\\( \\text{Points } (1, -1) \\text{ and } (1, 2) \\)", explanation: "It has two distinct dots stacked perfectly on top of each other at the x = 1 position." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{Fails Vertical Line Test} \\)", explanation: "Both fail the Vertical Line Test, which is the easiest visual way of checking if one input accidentally has more than one output." }
                 ], ans: "A"
             },
             u1l1q5a: {
@@ -646,34 +640,38 @@
                 prompt: "Determine if the set {(1,1), (2,4), (3,9), (4,16)} is a function:",
                 options: ["A) Function - Every independent domain x-coordinate value is distinct and occurs exactly once.", "B) Not a Function - Output numbers scale upward quadratically."],
                 steps: [
-                    { title: "Step 1: Collect First Elements of the Coordinates Set", math: "Domain = {1, 2, 3, 4}", explanation: "Extract the first number from each ordered pair within the coordinate set array." },
-                    { title: "Step 2: Verify Input Element Repetitions", math: "No Repeating Inputs Found", explanation: "Each input occurs exactly once, pointing to a single range value. This relation satisfies the function definition." }
-                ], ans: "A) Function"
+                    { title: "Step 1: Check the x-coordinates", math: "\\( \\text{Inputs } = \\{1, 2, 3, 4\\} \\)", explanation: "Look at the first number in every set of brackets (the inputs): 1, 2, 3, and 4." },
+                    { title: "Step 2: Look for Repeats", math: "\\( \\text{No Duplicates Found} \\)", explanation: "None of those starting numbers repeat. Every single input is completely different." },
+                    { title: "Step 3: Conclusion", math: "\\( 1 \\rightarrow 1, \\; 2 \\rightarrow 4, \\; 3 \\rightarrow 9, \\; 4 \\rightarrow 16 \\)", explanation: "Because every single input is unique, there is zero chance for one input to have multiple outputs. This is a function." }
+                ], ans: "A"
             },
             u1l1q5b: {
                 title: "Question 5b", type: "mc", assetType: "none",
                 prompt: "Determine if the set {(-2,0), (0,2), (0,-2), (2,0)} is a function:",
                 options: ["A) Function - Point elements remain bounded across geometric axis loops.", "B) Not a Function - The input element 0 is linked onto multiple separate range outputs."],
                 steps: [
-                    { title: "Step 1: Check First Number Profiles inside Coordinates", math: "Domain Inputs = {-2, 0, 0, 2}", explanation: "Isolate the independent x-values from each ordered pair inside the brackets." },
-                    { title: "Step 2: Identify Duplicate Coordinate Mappings", math: "0 &rarr; 2 &nbsp;&nbsp;and&nbsp;&nbsp; 0 &rarr; -2", explanation: "The domain value 0 appears twice, pointing to two separate outputs (2 and -2). This multi-mapping behavior means the relation is not a function." }
-                ], ans: "B) Not a Function"
+                    { title: "Step 1: Check the x-coordinates", math: "\\( \\text{Inputs } = \\{-2, 0, 0, 2\\} \\)", explanation: "Look at the first number in every set of brackets. The numbers are -2, 0, 0, and 2." },
+                    { title: "Step 2: Find the Repeated Input", math: "\\( 0 \\rightarrow 2 \\text{ and } 0 \\rightarrow -2 \\)", explanation: "Notice that the input 0 shows up twice. The first time, it pairs with a 2. The second time, it pairs with a -2." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{One Input, Two Outputs} \\neq \\text{Function} \\)", explanation: "Because the input 0 splits into two completely different answers (2 and -2), this relation is not a function." }
+                ], ans: "B"
             },
             u1l1q5c: {
                 title: "Question 5c", type: "mc", assetType: "none",
                 prompt: "Determine if the set {(1,1), (2,1), (3,1), (4,1), (5,1), (6,1)} is a function:",
                 options: ["A) Function - Every independent input value is distinct and points to exactly one output.", "B) Not a Function - The output value 1 repeats across all coordinates."],
                 steps: [
-                    { title: "Step 1: Isolate Domain Inputs for Repetitions", math: "Domain Inputs = {1, 2, 3, 4, 5, 6}", explanation: "Isolate the first numbers of the coordinate set. Every domain value is completely unique." },
-                    { title: "Step 2: Understand Constant Function Mapping Criteria", math: "Many-to-One Pass State", explanation: "While every input maps onto the exact same constant value (<code>y = 1</code>), this behavior is fully valid. Since no single independent input maps onto more than one output value, the set represents a function." }
-                ], ans: "A) Function"
+                    { title: "Step 1: Check the x-coordinates", math: "\\( \\text{Inputs } = \\{1, 2, 3, 4, 5, 6\\} \\)", explanation: "Look at the first numbers in the brackets: 1, 2, 3, 4, 5, 6. Every input is completely unique." },
+                    { title: "Step 2: What about the repeated y-values?", math: "\\( \\text{All Inputs} \\rightarrow 1 \\)", explanation: "Every input gives the exact same answer: 1. This is perfectly fine! Multiple different buttons on a vending machine can give you the same brand of water. As long as one button doesn't give you two different things, it's safe." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{Valid Function} \\)", explanation: "Since no single input splits into multiple outputs, this is a valid function." }
+                ], ans: "A"
             },
             u1l1q6a: {
                 title: "Question 6a", type: "mc", assetType: "none",
                 prompt: "Which description best details the graph of the coordinate points from question 5c?",
                 options: ["A) A flat horizontal row of points aligned straight along the grid line height y = 1.", "B) A vertical column of stacked points tracking straight up the y-axis line.", "C) A diagonal line path climbing upward at a constant forty-five degree angle."],
                 steps: [
-                    { title: "Step 1: Trace Coordinates onto Grid Planes", math: "(x, 1) \\rightarrow \\text{Horizontal Matrix}", explanation: "Each point shares an identical height component: <code>y = 1</code>. Plotting these coordinates generates a flat, horizontal row of separate points." }
+                    { title: "Step 1: Look at the y-coordinates", math: "\\( y = 1 \\)", explanation: "Every single dot in question 5c has the exact same height, which is y = 1." },
+                    { title: "Step 2: Visualize the Graph", math: "\\( (1,1), (2,1), (3,1), (4,1), (5,1), (6,1) \\)", explanation: "If you plot these points on a grid, you will be moving to the right for the x-values, but staying at the exact same height. This naturally forms a flat, horizontal row of dots." }
                 ], ans: "A"
             },
             u1l1q6b: {
@@ -681,7 +679,8 @@
                 prompt: "How does plotting the points from 5c on a coordinate grid help determine if it is a function?",
                 options: ["A) It creates a vertical line that instantly confirms it is a function.", "B) It forms a horizontal line where a vertical line (like a ruler edge) only touches one point at a time, passing the vertical line test.", "C) It lets us calculate a changing parabolic quadratic curve path."],
                 steps: [
-                    { title: "Step 1: Apply the Ruler Test Interaction", math: "One Contact Point per Vertical Line", explanation: "Passing the straight vertical edge of a ruler across these points demonstrates that it only touches one single dot at any given position, passing the vertical line test." }
+                    { title: "Step 1: Use the Vertical Line Test", math: "\\( \\text{Visual Checking Method} \\)", explanation: "Plotting the points gives you a visual way to check the rule. Imagine drawing a straight vertical line through the graph." },
+                    { title: "Step 2: Check the Intersections", math: "\\( \\text{Max Contact Count} = 1 \\)", explanation: "Because the dots form a flat horizontal row, a vertical line moving across the screen will only ever touch one dot at a time. It perfectly passes the vertical line test." }
                 ], ans: "B"
             },
             u1l1q7: {
@@ -689,51 +688,65 @@
                 prompt: "Determine if the linear relation 3x + 4y = 12 constitutes a function:",
                 options: ["A) Function - It can be rearranged into a non-vertical straight line equation.", "B) Not a Function - Both variables occupy the same initial side of the equation."],
                 steps: [
-                    { title: "Step 1: Isolate the Dependent Variable Structure via Algebraic Balance", math: "4y = -3x + 12 &rarr; y = -0.75x + 3", explanation: "Rearrange the equation to isolate y. This reveals a standard linear function with a slope of -0.75 and a y-intercept of 3." },
-                    { title: "Step 2: Match with Geometric Function Behavior", math: "Non-Vertical Linear Path", explanation: "The graph of any non-vertical straight line passes the vertical line test perfectly, meaning each input x-value maps to exactly one output y-value." }
-                ], ans: "A) Function"
+                    { title: "Step 1: Rearrange the Equation", math: "\\( 4y = -3x + 12 \\)", explanation: "To understand what this line looks like, try to get 'y' by itself. First, move the 3x to the other side by subtracting it." },
+                    { title: "Step 2: Solve for y", math: "\\( y = -\\frac{3}{4}x + 3 \\)", explanation: "Divide everything by 4. You end up with a standard straight line equation (y = mx + b). It has a slope and a starting point." },
+                    { title: "Step 3: Conclusion", math: "\\( \\text{Straight Line = Valid Function} \\)", explanation: "Any straight diagonal line will always pass the vertical line test. For every step left or right, it goes up or down a specific amount, meaning one x always gives exactly one y." }
+                ], ans: "A"
             },
             u1l1q8a: {
                 title: "Question 8a", type: "numeric",
+                prompt: "Evaluate \\( f(4) \\) for \\( f(x) = 6x - 9 \\):",
                 steps: [
-                    { title: "Step 1: Substitute Input Variable Nodes", math: "f(4) = 6(4) - 9", explanation: "Replace the independent variable x placeholder inside the equation with the given numerical parameter 4." },
-                    { title: "Step 2: Perform Arithmetic Operations via BEDMAS", math: "f(4) = 24 - 9", explanation: "Execute multiplication steps first: <code>6 &times; 4 = 24</code>, then perform subtraction to find the final value." }
+                    { title: "Step 1: Substitute the Number into the Function", math: "\\( f(4) = 6(4) - 9 \\)", explanation: "The math notation f(4) simply means 'replace every x in the equation with the number 4'." },
+                    { title: "Step 2: Multiply First", math: "\\( f(4) = 24 - 9 \\)", explanation: "Following the order of operations (BEDMAS), do the multiplication before subtraction: 6 times 4 is 24." },
+                    { title: "Step 3: Subtract to Finish", math: "\\( f(4) = 15 \\)", explanation: "Subtract 9 from your result (24) to get the final answer of 15." }
                 ], ans_box: "15"
             },
             u1l1q8b: {
                 title: "Question 8b", type: "numeric",
+                prompt: "Evaluate \\( f(-5) \\) for \\( f(x) = 6x - 9 \\):",
                 steps: [
-                    { title: "Step 1: Substitute the Negative Parameter", math: "f(-5) = 6(-5) - 9", explanation: "Substitute -5 as the input value into the linear function structure." },
-                    { title: "Step 2: Evaluate Integer Operations Carefully", math: "f(-5) = -30 - 9", explanation: "Multiplying a positive integer by a negative integer results in a negative product: <code>6 &times; (-5) = -30</code>. Subtracting 9 completes the execution." }
+                    { title: "Step 1: Substitute the Negative Number", math: "\\( f(-5) = 6(-5) - 9 \\)", explanation: "The notation f(-5) means replace every x in the equation with the number -5." },
+                    { title: "Step 2: Multiply the Numbers carefully", math: "\\( f(-5) = -30 - 9 \\)", explanation: "Multiplying a positive 6 by a negative 5 gives you a negative answer: -30." },
+                    { title: "Step 3: Combine the Negative Values", math: "\\( f(-5) = -39 \\)", explanation: "You are starting at -30 and subtracting 9 more, taking you further into the negatives. The final answer is -39." }
                 ], ans_box: "-39"
             },
             u1l1q8c: {
                 title: "Question 8c", type: "numeric",
-                prompt_html: "Evaluate given f(x) = 6x - 9:<br><br>f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) =",
+                prompt: "Evaluate given \\( f(x) = 6x - 9 \\):<br><br>\\( f\\left(\\frac{1}{2}\\right) = \\)",
                 steps: [
-                    { title: "Step 1: Substitute the Fractional Input", math: "f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) = 6(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) - 9", explanation: "Substitute 1/2 as the variable input value inside the expression." },
-                    { title: "Step 2: Compute Multiplications and Constants", math: "f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) = 3 - 9", explanation: "Compute fractional products: half of 6 is 3. Performing the final subtraction yields the resulting negative integer." }
+                    { title: "Step 1: Substitute the Fraction", math: "\\( f\\left(\\frac{1}{2}\\right) = 6\\left(\\frac{1}{2}\\right) - 9 \\)", explanation: "Don't let the fraction scare you. Just replace the x in the equation with 1/2." },
+                    { title: "Step 2: Multiply by a Half", math: "\\( f\\left(\\frac{1}{2}\\right) = 3 - 9 \\)", explanation: "Multiplying 6 by 1/2 is the exact same thing as dividing 6 in half. That gives you 3." },
+                    { title: "Step 3: Subtract to Finish", math: "\\( f\\left(\\frac{1}{2}\\right) = -6 \\)", explanation: "Take away 9 from 3. Since you are taking away more than you have, you drop into the negatives, landing at -6." }
                 ], ans_box: "-6"
             },
             u1l1q9a: {
                 title: "Question 9a", type: "numeric",
+                prompt: "Evaluate \\( g(-2) \\) for \\( g(x) = x^2 + 3x + 2 \\):",
                 steps: [
-                    { title: "Step 1: Substitute Into the Quadratic Polynomial", math: "g(-2) = (-2)<sup>2</sup> + 3(-2) + 2", explanation: "Replace all instances of x with -2, ensuring negative bases are grouped inside brackets before squaring." },
-                    { title: "Step 2: Apply Exponent Laws and Simplify Constants", math: "g(-2) = 4 - 6 + 2", explanation: "Squaring a negative number yields a positive base value: <code>(-2)² = 4</code>. The linear multiplication term simplifies to: <code>3 &times; (-2) = -6</code>." }
+                    { title: "Step 1: Plug in the Negative Number", math: "\\( g(-2) = (-2)^2 + 3(-2) + 2 \\)", explanation: "Replace every x in the equation with -2. Make sure to put the negative number inside brackets when squaring it!" },
+                    { title: "Step 2: Square the Negative Number", math: "\\( g(-2) = 4 + 3(-2) + 2 \\)", explanation: "A negative times a negative is a positive. So, (-2) times (-2) equals positive 4." },
+                    { title: "Step 3: Multiply and Simplify", math: "\\( g(-2) = 4 - 6 + 2 \\)", explanation: "Next, multiply the middle part: 3 times -2 is -6. Now your equation looks like: 4 - 6 + 2." },
+                    { title: "Step 4: Add and Subtract Left to Right", math: "\\( g(-2) = -2 + 2 = 0 \\)", explanation: "Start with 4 minus 6, which is -2. Then add the final 2, which brings you perfectly back to 0." }
                 ], ans_box: "0"
             },
             u1l1q9b: {
-                title: "Question 9b: Evaluate g(0) for g(x) = x² + 3x + 2", type: "numeric",
+                title: "Question 9b", type: "numeric",
+                prompt: "Evaluate \\( g(0) \\) for \\( g(x) = x^2 + 3x + 2 \\):",
                 steps: [
-                    { title: "Step 1: Substitute Zero Into the Function", math: "g(0) = (0)<sup>2</sup> + 3(0) + 2", explanation: "Substitute 0 into all variable positions across the polynomial expression." },
-                    { title: "Step 2: Evaluate Remaining Constant Parameters", math: "g(0) = 0 + 0 + 2", explanation: "Both the quadratic and linear terms evaluate to zero, leaving the constant term as the final value." }
+                    { title: "Step 1: Plug Zero into the Equation", math: "\\( g(0) = (0)^2 + 3(0) + 2 \\)", explanation: "Replace every x in the equation with 0. Zero is usually the easiest number to work with!" },
+                    { title: "Step 2: Cancel out the Zeros", math: "\\( g(0) = 0 + 0 + 2 \\)", explanation: "Zero squared is 0, and 3 times 0 is also 0. Both of those parts completely disappear." },
+                    { title: "Step 3: Find the Final Answer", math: "\\( g(0) = 2 \\)", explanation: "All that is left is the constant number at the very end of the equation, which is 2." }
                 ], ans_box: "2"
             },
             u1l1q9c: {
                 title: "Question 9c", type: "numeric",
+                prompt: "Evaluate \\( g(3.14) \\) for \\( g(x) = x^2 + 3x + 2 \\):",
                 steps: [
-                    { title: "Step 1: Substitute Decimal Coordinates Parameters", math: "g(3.14) = (3.14)<sup>2</sup> + 3(3.14) + 2", explanation: "Substitute the decimal value 3.14 into the equation variables." },
-                    { title: "Step 2: Compute Squares and Combine Terms", math: "g(3.14) = 9.8596 + 9.42 + 2", explanation: "Evaluate the math steps sequentially: <code>3.14² = 9.8596</code> and <code>3 &times; 3.14 = 9.42</code>. Add the results together to find the final value." }
+                    { title: "Step 1: Plug the Decimal into the Equation", math: "\\( g(3.14) = (3.14)^2 + 3(3.14) + 2 \\)", explanation: "Just like whole numbers, replace every x in the equation with the decimal 3.14." },
+                    { title: "Step 2: Calculate the Exponent", math: "\\( g(3.14) = 9.8596 + 3(3.14) + 2 \\)", explanation: "Multiply 3.14 by itself (square it). You can use a calculator for this: 3.14 times 3.14 equals 9.8596." },
+                    { title: "Step 3: Calculate the Multiplication", math: "\\( g(3.14) = 9.8596 + 9.42 + 2 \\)", explanation: "Multiply the middle part: 3 times 3.14 equals 9.42." },
+                    { title: "Step 4: Add Everything Together", math: "\\( g(3.14) = 21.2796 \\)", explanation: "Add all three parts up: 9.8596 plus 9.42 plus the final 2. The total is 21.2796." }
                 ], ans_box: "21.2796"
             },
             u1l1q10a: {
@@ -741,15 +754,18 @@
                 prompt: "In this real-world context, what is the meaning of the function statement h(2)?",
                 options: ["A) h(2) represents the vertical height of the ball, in meters, exactly 2 seconds after it has been thrown.", "B) h(2) calculates the total time it takes for the ball to fly exactly 2 meters horizontally.", "C) h(2) represents the initial speed of the thrown ball after covering 2 meters."],
                 steps: [
-                    { title: "Step 1: Define Function Variable Contexts", math: "Inputs (t) = time (seconds) | Outputs (h) = height (meters)", explanation: "The independent input variable t tracks elapsed flight time in seconds, while the dependent output function h(t) measures height in meters." },
-                    { title: "Step 2: Translate the Specific Coordinates State", math: "t = 2 &rarr; Output Height", explanation: "Evaluating the function at 2 substitutes time with 2 seconds, meaning h(2) calculates the vertical position of the ball exactly 2 seconds into its flight." }
+                    { title: "Step 1: Understand the Variables", math: "\\( t = \\text{time}, \\; h = \\text{height} \\)", explanation: "Read the word problem. The variable 't' stands for the time in seconds. The function 'h' tells you the height of the ball in meters." },
+                    { title: "Step 2: What does the 2 mean?", math: "\\( t = 2 \\)", explanation: "The number inside the brackets replaces the 't' (time). So, h(2) means we are looking at exactly 2 seconds after the ball was thrown." },
+                    { title: "Step 3: Put it all together", math: "\\( h(2) = \\text{Height at 2 seconds} \\)", explanation: "Therefore, h(2) asks the basic question: 'What is the vertical height of the ball exactly 2 seconds into its flight?'" }
                 ], ans: "A"
             },
             u1l1q10b: {
                 title: "Question 10b", type: "numeric",
+                prompt: "Calculate the initial launch height \\( h(0) \\):",
                 steps: [
-                    { title: "Step 1: Identify Time Parameters at Launch Instant", math: "t = 0", explanation: "The 'instant a ball is thrown' represents the initial starting boundary position, which corresponds to exactly t = 0 seconds." },
-                    { title: "Step 2: Compute h(0) Value", math: "h(0) = -4.9(0)<sup>2</sup> + 9.8(0) + 1", explanation: "Substituting zero eliminates all time-dependent elements, isolating the constant vertical intercept value as the launch height." }
+                    { title: "Step 1: What is 'the instant it is thrown'?", math: "\\( t = 0 \\)", explanation: "Right when the ball leaves the hand, no time has passed yet. In math, this starting point always means time (t) is exactly 0 seconds." },
+                    { title: "Step 2: Plug 0 into the Equation", math: "\\( h(0) = -4.9(0)^2 + 9.8(0) + 1 \\)", explanation: "Substitute 0 for every 't' in the height equation. Just like in question 9b, any part multiplied by 0 will instantly vanish." },
+                    { title: "Step 3: Find the Starting Height", math: "\\( h(0) = 0 + 0 + 1 = 1 \\)", explanation: "The squared term and the middle term both become 0. Only the final +1 is left. This means the ball was thrown from a starting height of 1 meter." }
                 ], ans_box: "1"
             },
             u1l1q10c: {
@@ -757,8 +773,8 @@
                 prompt: "How can you estimate when the ball will hit the ground?",
                 options: ["A) Set h(t) = 0 and locate the positive t-intercept on a graph, or use systematic trial and error until h(t) approximately equals 0.", "B) Calculate h(0) to determine the maximum height vertex point.", "C) Multiply the initial constant intercept value by the gravity constant coefficient."],
                 steps: [
-                    { title: "Step 1: Model the Ground Strike Physical Boundary Constraint", math: "h(t) = 0", explanation: "When the ball hits the ground, its vertical height is exactly 0 meters. To find the time this happens, set the height equation equal to zero: <code>0 = -4.9t² + 9.8t + 1</code>." },
-                    { title: "Step 2: Evaluate Solutions Framework Paths", math: "Graphical Intercept or Numerical Estimation", explanation: "You can find this time by graphing the equation and looking for the positive x-intercept, or by using guess-and-check (systematic trial) until the terms balance out to zero." }
+                    { title: "Step 1: What does 'hit the ground' mean in math?", math: "\\( h(t) = 0 \\)", explanation: "When a ball hits the ground, its height is 0 meters. So, to solve this, you set the entire height equation (h) equal to 0." },
+                    { title: "Step 2: How to solve it", math: "\\( 0 = -4.9t^2 + 9.8t + 1 \\)", explanation: "Because this is a squared (quadratic) equation, you can't just isolate 't' easily. You would need to use a graph to find where the line crosses the bottom axis (the x-intercept), or guess and check numbers until the answer comes out to 0." }
                 ], ans: "A"
             }
         };
@@ -775,6 +791,20 @@
         let currentStepIndex = 0;
         let visibleStepElements = [];
 
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
         function displaySolution() {
             const selectMenu = document.getElementById("question-select");
             activeQuestionId = selectMenu.value;
@@ -785,6 +815,7 @@
             const assetMount = document.getElementById("asset-viewport-mount-point");
             const mountPoint = document.getElementById("dynamic-input-mount-point");
             const kbdToolbar = document.getElementById("math-keyboard");
+            const promptLabel = document.getElementById("input-prompt-label");
 
             if (activeQuestionId === "") {
                 placeholder.style.display = "block";
@@ -807,8 +838,8 @@
             }
 
             if (activeProblem.type === "mc") {
-                kbdToolbar.style.display = "none";
-                document.getElementById("input-prompt-label").innerText = activeProblem.prompt;
+                if(kbdToolbar) kbdToolbar.style.display = "none";
+                promptLabel.innerHTML = activeProblem.prompt;
                 
                 let html = `<div class="mc-options-list">`;
                 activeProblem.options.forEach(opt => {
@@ -824,12 +855,8 @@
                 html += `</div>`;
                 mountPoint.innerHTML = html;
             } else {
-                kbdToolbar.style.display = "flex";
-                if (activeProblem.prompt_html) {
-                    document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt_html;
-                } else {
-                    document.getElementById("input-prompt-label").innerText = "Type the numeric calculated value:";
-                }
+                if(kbdToolbar) kbdToolbar.style.display = "flex";
+                promptLabel.innerHTML = activeProblem.prompt || "Type the numeric calculated value:";
                 mountPoint.innerHTML = `
                     <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 15, -39, 21.2796" autocomplete="off">`;
                 
@@ -851,6 +878,8 @@
             } else {
                 unlockQuizInterface();
             }
+
+            renderMathElements();
         }
 
         function selectMcOptionCard(letter) {
@@ -1017,6 +1046,7 @@
             workspace.innerHTML = html;
             targetDiv.style.display = "block";
             renderMethodSteps();
+            renderMathElements();
         }
 
         function renderMethodSteps() {
@@ -1043,6 +1073,7 @@
             if (currentStepIndex === visibleStepElements.length - 1) {
                 document.getElementById("next-btn").disabled = true;
             }
+            renderMathElements();
         }
 
         function restartSolution() {

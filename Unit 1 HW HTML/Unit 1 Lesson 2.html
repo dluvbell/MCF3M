@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCF3M Unit 1 Lesson 2</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
     <style>
         :root {
             --primary-color: #0f172a;
@@ -181,26 +186,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        .fraction {
-            display: inline-flex;
-            flex-direction: column;
-            vertical-align: middle;
-            text-align: center;
-            padding: 0 4px;
-            line-height: 1;
-        }
-
-        .numerator {
-            border-bottom: 2px solid var(--math-color);
-            padding-bottom: 2px;
-            font-size: 1.1rem;
-        }
-
-        .denominator {
-            padding-top: 2px;
-            font-size: 1.1rem;
         }
 
         .mc-options-list {
@@ -528,156 +513,172 @@
         const problemDataPack = {
             u1l2q8a: {
                 title: "Question 8a", type: "numeric",
-                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> f(x) = 6x - 9<br><strong>Evaluate:</strong> f(4)",
+                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> \\( f(x) = 6x - 9 \\)<br><strong>Evaluate:</strong> \\( f(4) \\)",
+                prompt: "Evaluate \\( f(4) \\):",
                 steps: [
-                    { title: "Step 1: Substitute Input Variable Nodes", math: "f(4) = 6(4) - 9", explanation: "Replace the independent variable x placeholder inside the equation with the given numerical parameter 4." },
-                    { title: "Step 2: Perform Arithmetic Operations via BEDMAS", math: "f(4) = 24 - 9", explanation: "Execute multiplication steps first: 6 &times; 4 = 24, then perform subtraction to find the final value." }
+                    { title: "Step 1: Substitute the Number into the Function", math: "\\( f(4) = 6(4) - 9 \\)", explanation: "The notation f(4) simply tells you to replace the letter x with the number 4 inside the equation." },
+                    { title: "Step 2: Multiply First, Then Subtract", math: "\\( f(4) = 24 - 9 \\)", explanation: "Following the order of operations (BEDMAS), do the multiplication first: 6 times 4 is 24. Then subtract 9 to get your final answer." }
                 ], ans_box: "15"
             },
             u1l2q8b: {
                 title: "Question 8b", type: "numeric",
-                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> f(x) = 6x - 9<br><strong>Evaluate:</strong> f(-5)",
+                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> \\( f(x) = 6x - 9 \\)<br><strong>Evaluate:</strong> \\( f(-5) \\)",
+                prompt: "Evaluate \\( f(-5) \\):",
                 steps: [
-                    { title: "Step 1: Substitute the Negative Parameter", math: "f(-5) = 6(-5) - 9", explanation: "Substitute -5 as the input value into the linear function structure." },
-                    { title: "Step 2: Evaluate Integer Operations Carefully", math: "f(-5) = -30 - 9", explanation: "Multiplying a positive integer by a negative integer results in a negative product: 6 &times; (-5) = -30. Subtracting 9 completes the execution." }
+                    { title: "Step 1: Substitute the Negative Number", math: "\\( f(-5) = 6(-5) - 9 \\)", explanation: "Replace the x in the equation with -5. It helps to put negative numbers in brackets so you don't confuse them with subtraction." },
+                    { title: "Step 2: Multiply and Combine", math: "\\( f(-5) = -30 - 9 \\)", explanation: "A positive 6 multiplied by a negative 5 gives you a negative -30. Subtracting 9 takes you further into the negatives." }
                 ], ans_box: "-39"
             },
             u1l2q8c: {
                 title: "Question 8c", type: "numeric",
-                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> f(x) = 6x - 9",
-                prompt_html: "Evaluate given f(x) = 6x - 9:<br><br><strong>Find:</strong> f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) =",
+                fullStatement: "Question 8: Evaluate the given linear function relation expression for the target component value entry.<br><br><strong>Given:</strong> \\( f(x) = 6x - 9 \\)",
+                prompt: "Evaluate given \\( f(x) = 6x - 9 \\):<br><br><strong>Find:</strong> \\( f\\left(\\frac{1}{2}\\right) = \\)",
                 steps: [
-                    { title: "Step 1: Substitute the Fractional Input", math: "f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) = 6(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) - 9", explanation: "Substitute 1/2 as the variable input value inside the expression." },
-                    { title: "Step 2: Compute Multiplications and Constants", math: "f(<div class='fraction'><div class='numerator'>1</div><div class='denominator'>2</div></div>) = 3 - 9", explanation: "Compute fractional products: half of 6 is 3. Performing the final subtraction yields the resulting negative integer." }
+                    { title: "Step 1: Substitute the Fraction", math: "\\( f\\left(\\frac{1}{2}\\right) = 6\\left(\\frac{1}{2}\\right) - 9 \\)", explanation: "Fractions work the exact same way. Just replace the x with 1/2." },
+                    { title: "Step 2: Multiply by a Half", math: "\\( f\\left(\\frac{1}{2}\\right) = 3 - 9 \\)", explanation: "Multiplying any number by 1/2 is the same as dividing it by 2. Half of 6 is 3. Finish by subtracting 9 from 3." }
                 ], ans_box: "-6"
             },
             u1l2q9a: {
                 title: "Question 9a", type: "numeric",
-                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> g(x) = x² + 3x + 2<br><strong>Evaluate:</strong> g(-2)",
+                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> \\( g(x) = x^2 + 3x + 2 \\)<br><strong>Evaluate:</strong> \\( g(-2) \\)",
+                prompt: "Evaluate \\( g(-2) \\):",
                 steps: [
-                    { title: "Step 1: Substitute Into the Quadratic Polynomial", math: "g(-2) = (-2)<sup>2</sup> + 3(-2) + 2", explanation: "Replace all instances of x with -2, ensuring negative bases are grouped inside brackets before squaring." },
-                    { title: "Step 2: Apply Exponent Laws and Simplify Constants", math: "g(-2) = 4 - 6 + 2", explanation: "Squaring a negative number yields a positive base value: (-2)² = 4. The linear multiplication term simplifies to: 3 &times; (-2) = -6." }
+                    { title: "Step 1: Plug in the Negative Number", math: "\\( g(-2) = (-2)^2 + 3(-2) + 2 \\)", explanation: "Replace every x you see in the equation with -2. Make sure to square the whole negative number by putting it in brackets." },
+                    { title: "Step 2: Calculate the Math Parts", math: "\\( g(-2) = 4 - 6 + 2 \\)", explanation: "(-2) squared is positive 4. Then, 3 times (-2) is -6. Add them all together from left to right: 4 minus 6 is -2, plus 2 is exactly 0." }
                 ], ans_box: "0"
             },
             u1l2q9b: {
                 title: "Question 9b", type: "numeric",
-                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> g(x) = x² + 3x + 2<br><strong>Evaluate:</strong> g(0)",
+                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> \\( g(x) = x^2 + 3x + 2 \\)<br><strong>Evaluate:</strong> \\( g(0) \\)",
+                prompt: "Evaluate \\( g(0) \\):",
                 steps: [
-                    { title: "Step 1: Substitute Zero Into the Function", math: "g(0) = (0)<sup>2</sup> + 3(0) + 2", explanation: "Substitute 0 into all variable positions across the polynomial expression." },
-                    { title: "Step 2: Evaluate Remaining Constant Parameters", math: "g(0) = 0 + 0 + 2", explanation: "Both the quadratic and linear terms evaluate to zero, leaving the constant term as the final value." }
+                    { title: "Step 1: Plug Zero into the Equation", math: "\\( g(0) = (0)^2 + 3(0) + 2 \\)", explanation: "Replace every x with 0. Zero is great because it makes multiplication disappear." },
+                    { title: "Step 2: Cancel out the Zeros", math: "\\( g(0) = 0 + 0 + 2 \\)", explanation: "0 squared is 0, and 3 times 0 is 0. All the terms with x's vanish, leaving only the constant number at the end." }
                 ], ans_box: "2"
             },
             u1l2q9c: {
                 title: "Question 9c", type: "numeric",
-                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> g(x) = x² + 3x + 2<br><strong>Evaluate:</strong> g(3.14)",
+                fullStatement: "Question 9: Evaluate the given quadratic polynomial function relation expression systematically.<br><br><strong>Given:</strong> \\( g(x) = x^2 + 3x + 2 \\)<br><strong>Evaluate:</strong> \\( g(3.14) \\)",
+                prompt: "Evaluate \\( g(3.14) \\):",
                 steps: [
-                    { title: "Step 1: Substitute Decimal Coordinates Parameters", math: "g(3.14) = (3.14)<sup>2</sup> + 3(3.14) + 2", explanation: "Substitute the decimal value 3.14 into the equation variables." },
-                    { title: "Step 2: Compute Squares and Combine Terms", math: "g(3.14) = 9.8596 + 9.42 + 2", explanation: "Evaluate the math steps sequentially: 3.14² = 9.8596 and 3 &times; 3.14 = 9.42. Add the results together to find the final value." }
+                    { title: "Step 1: Plug the Decimal into the Equation", math: "\\( g(3.14) = (3.14)^2 + 3(3.14) + 2 \\)", explanation: "Decimals are handled the same way as whole numbers. Replace every x with 3.14." },
+                    { title: "Step 2: Calculate Carefully", math: "\\( g(3.14) = 9.8596 + 9.42 + 2 \\)", explanation: "Use a calculator to square 3.14 to get 9.8596. Multiply 3 by 3.14 to get 9.42. Add all three numbers together for the final sum." }
                 ], ans_box: "21.2796"
             },
             u1l2q10b: {
                 title: "Question 10b", type: "numeric",
-                fullStatement: "Question 10: The height h, in metres, of a ball t seconds after being thrown is modelled by the function equation shown below. A graph of Height versus Time maps out the full mathematical flight path.<br><br><strong>Model:</strong> h(t) = -4.9t² + 9.8t + 1<br><strong>Question Part b:</strong> What is the height of the ball at the instant it is thrown?",
+                fullStatement: "Question 10: The height h, in metres, of a ball t seconds after being thrown is modelled by the function equation shown below. A graph of Height versus Time maps out the full mathematical flight path.<br><br><strong>Model:</strong> \\( h(t) = -4.9t^2 + 9.8t + 1 \\)<br><strong>Question Part b:</strong> What is the height of the ball at the instant it is thrown?",
+                prompt: "Calculate the initial launch height \\( h(0) \\):",
                 steps: [
-                    { title: "Step 1: Identify Time Parameters at Launch Instant", math: "t = 0", explanation: "The 'instant a ball is thrown' represents the initial starting boundary position, which corresponds to exactly t = 0 seconds." },
-                    { title: "Step 2: Compute h(0) Value", math: "h(0) = -4.9(0)<sup>2</sup> + 9.8(0) + 1", explanation: "Substituting zero eliminates all time-dependent elements, isolating the constant vertical intercept value as the launch height." }
+                    { title: "Step 1: What is 'the instant it is thrown'?", math: "\\( t = 0 \\)", explanation: "When a physics problem asks for the starting point or launch time, the time (t) is always exactly 0 seconds because the clock hasn't started ticking yet." },
+                    { title: "Step 2: Plug 0 into the Equation", math: "\\( h(0) = -4.9(0)^2 + 9.8(0) + 1 \\)", explanation: "Substitute 0 for every 't' in the equation. Anything multiplied by zero becomes zero, so the first two parts of the equation disappear, leaving just the 1." }
                 ], ans_box: "1"
             },
             u1l2q11a: {
                 title: "Question 11a", type: "numeric", assetType: "notice",
-                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation f(x). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> f(-1)",
+                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation \\( f(x) \\). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> \\( f(-1) \\)",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Evaluate \\( f(-1) \\):",
                 steps: [
-                    { title: "Step 1: Locate Target Value along Horizontal Axis Domain", math: "x = -1", explanation: "Find the position -1 on the horizontal x-axis line tracking grid metrics." },
-                    { title: "Step 2: Intersect Path Vertically to Isolate the Coordinate", math: "(-1, 0)", explanation: "The function path crosses directly through the x-axis at this mark, meaning the corresponding vertical value component is 0." }
+                    { title: "Step 1: Find the x-value on the Graph", math: "\\( x = -1 \\)", explanation: "The number inside the brackets, f(-1), is the x-value. Start at the origin (0,0) and move left along the horizontal axis to -1." },
+                    { title: "Step 2: Read the Height (y-value)", math: "\\( (-1, 0) \\)", explanation: "At x = -1, look where the drawn line is. The line crosses perfectly at the axis, meaning it has zero height. So, the output is 0." }
                 ], ans_box: "0"
             },
             u1l2q11b: {
                 title: "Question 11b", type: "numeric", assetType: "notice",
-                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation f(x). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> f(0)",
+                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation \\( f(x) \\). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> \\( f(0) \\)",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Evaluate \\( f(0) \\):",
                 steps: [
-                    { title: "Step 1: Identify the Y-Intercept Location Constraint", math: "x = 0", explanation: "An input argument parameter of 0 specifies tracking directly along the main vertical y-axis line segment." },
-                    { title: "Step 2: Extract Height Inversion Values", math: "(0, 0)", explanation: "The curve tracks directly through the intersection origin node. Therefore, the function output height metrics map to exactly 0." }
+                    { title: "Step 1: Find the x-value on the Graph", math: "\\( x = 0 \\)", explanation: "The number 0 is the x-value. Stay right at the horizontal center (the y-axis line)." },
+                    { title: "Step 2: Read the Height (y-value)", math: "\\( (0, 0) \\)", explanation: "Look up or down to find the drawn curve. The curve passes right through the very center of the grid, so its height is 0." }
                 ], ans_box: "0"
             },
             u1l2q11c: {
                 title: "Question 11c", type: "numeric", assetType: "notice",
-                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation f(x). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> f(2)",
+                fullStatement: "Question 11: The graph on your assignment sheet prints the continuous path trace mapping of a function relation \\( f(x) \\). Evaluate the target output coordinate based entirely on that graphical axis distribution grid map.<br><br><strong>Evaluate:</strong> \\( f(2) \\)",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Evaluate \\( f(2) \\):",
                 steps: [
-                    { title: "Step 1: Seek Domain Coordinate Marker", math: "x = 2", explanation: "Trace 2 units to the right of the central intersection origin point." },
-                    { title: "Step 2: Measure Vertical Tracking Distance", math: "(2, 3)", explanation: "Move straight up until intersecting the plotted curve. The graph line sits exactly at vertical step line height 3." }
+                    { title: "Step 1: Find the x-value on the Graph", math: "\\( x = 2 \\)", explanation: "Start at the center and move 2 units to the right along the horizontal axis." },
+                    { title: "Step 2: Read the Height (y-value)", math: "\\( (2, 3) \\)", explanation: "Now move straight up until you touch the drawn curve. Follow that point over to the vertical axis to see how high it is. It aligns with the number 3." }
                 ], ans_box: "3"
             },
             u1l2q16a: {
                 title: "Question 16a", type: "numeric",
-                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> g(x) = 2x - 3 &nbsp;&nbsp;|&nbsp;&nbsp; f(x) = x²<br><strong>Evaluate Composite Order:</strong> g(f(2))",
+                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> \\( g(x) = 2x - 3 \\) &nbsp;&nbsp;|&nbsp;&nbsp; \\( f(x) = x^2 \\)<br><strong>Evaluate Composite Order:</strong> \\( g(f(2)) \\)",
+                prompt: "Evaluate \\( g(f(2)) \\):",
                 steps: [
-                    { title: "Step 1: Evaluate the Nested Inner Core Function first", math: "f(2) = (2)<sup>2</sup>", explanation: "Given f(x) = x², substitute the value 2 into the core expression grid layer to calculate its product: 2² = 4." },
-                    { title: "Step 2: Route the Inner Value Result into the Exterior Machine", math: "g(4) = 2(4) - 3", explanation: "Substitute your result 4 into the secondary expression layout rule g(x) = 2x - 3: 2(4) - 3 = 8 - 3 = 5." }
+                    { title: "Step 1: Solve the Inside Function First", math: "\\( f(2) = (2)^2 \\)", explanation: "When you have functions inside functions, always start with the innermost brackets. First, find f(2) by plugging 2 into the f(x) equation: 2 squared is 4." },
+                    { title: "Step 2: Use the Result as the New Input", math: "\\( g(4) = 2(4) - 3 \\)", explanation: "Now take that answer (4) and drop it into the outside function, g(x). Replace x with 4 in the g(x) equation: 2 times 4 is 8, minus 3 is 5." }
                 ], ans_box: "5"
             },
             u1l2q16b: {
                 title: "Question 16b", type: "numeric",
-                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> g(x) = 2x - 3 &nbsp;&nbsp;|&nbsp;&nbsp; f(x) = x²<br><strong>Evaluate Composite Order:</strong> f(f(3))",
+                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> \\( g(x) = 2x - 3 \\) &nbsp;&nbsp;|&nbsp;&nbsp; \\( f(x) = x^2 \\)<br><strong>Evaluate Composite Order:</strong> \\( f(f(3)) \\)",
+                prompt: "Evaluate \\( f(f(3)) \\):",
                 steps: [
-                    { title: "Step 1: Resolve the Primary Internal Element Expression", math: "f(3) = (3)<sup>2</sup>", explanation: "Calculate the base value profile: 3 squared evaluates out directly onto numerical marker value 9." },
-                    { title: "Step 2: Repeat Function Evaluation Layer Loop", math: "f(9) = (9)<sup>2</sup>", explanation: "Feed back the value 9 straight through the exponential mapping system rules once more: 9² = 81." }
+                    { title: "Step 1: Solve the Inside Function First", math: "\\( f(3) = (3)^2 \\)", explanation: "Start with the inner brackets. Plug 3 into the f(x) equation. 3 squared gives you 9." },
+                    { title: "Step 2: Use the Result as the New Input", math: "\\( f(9) = (9)^2 \\)", explanation: "Even though it's the same function, you just feed the answer back in. Plug 9 back into the f(x) equation. 9 squared gives you 81." }
                 ], ans_box: "81"
             },
             u1l2q16c: {
                 title: "Question 16c", type: "numeric",
-                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> g(x) = 2x - 3 &nbsp;&nbsp;|&nbsp;&nbsp; f(x) = x²<br><strong>Evaluate Composite Order:</strong> g(g(4))",
+                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> \\( g(x) = 2x - 3 \\) &nbsp;&nbsp;|&nbsp;&nbsp; \\( f(x) = x^2 \\)<br><strong>Evaluate Composite Order:</strong> \\( g(g(4)) \\)",
+                prompt: "Evaluate \\( g(g(4)) \\):",
                 steps: [
-                    { title: "Step 1: Process Initial Linear Machine Terms", math: "g(4) = 2(4) - 3", explanation: "Compute the inner linear function transformation value parameters: 2(4) - 3 = 8 - 3 = 5." },
-                    { title: "Step 2: Execute Secondary Transformation Processing Pipeline", math: "g(5) = 2(5) - 3", explanation: "Process the intermediary factor 5 through the outer linear matrix rules layer: 2(5) - 3 = 10 - 3 = 7." }
+                    { title: "Step 1: Solve the Inside Function First", math: "\\( g(4) = 2(4) - 3 \\)", explanation: "Start with the inner brackets. Plug 4 into the g(x) equation. 2 times 4 is 8, minus 3 gives you 5." },
+                    { title: "Step 2: Use the Result as the New Input", math: "\\( g(5) = 2(5) - 3 \\)", explanation: "Take that answer (5) and feed it right back into the outside g(x) function. 2 times 5 is 10, minus 3 gives you 7." }
                 ], ans_box: "7"
             },
             u1l2q16d: {
                 title: "Question 16d", type: "numeric",
-                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> g(x) = 2x - 3 &nbsp;&nbsp;|&nbsp;&nbsp; f(x) = x²<br><strong>Evaluate Composite Order:</strong> f(g(5))",
+                fullStatement: "Question 16: Think of a function as an automated numeric processor machine that executes structural operations sequential ordering logic constraints on whatever inputs it encounters.<br><br><strong>Given:</strong> \\( g(x) = 2x - 3 \\) &nbsp;&nbsp;|&nbsp;&nbsp; \\( f(x) = x^2 \\)<br><strong>Evaluate Composite Order:</strong> \\( f(g(5)) \\)",
+                prompt: "Evaluate \\( f(g(5)) \\):",
                 steps: [
-                    { title: "Step 1: Process Inner Linear Conversion Framework", math: "g(5) = 2(5) - 3", explanation: "First calculate the linear transformation component layer: 2(5) - 3 = 10 - 3 = 7." },
-                    { title: "Step 2: Process the Intermediary Constant via Exponential Scaling Rules", math: "f(7) = (7)<sup>2</sup>", explanation: "Complete the nested instruction sequence by squaring the calculation matrix result: 7² = 49." }
+                    { title: "Step 1: Solve the Inside Function First", math: "\\( g(5) = 2(5) - 3 \\)", explanation: "Start with the inner brackets. Plug 5 into the g(x) equation. 2 times 5 is 10, minus 3 gives you 7." },
+                    { title: "Step 2: Use the Result as the New Input", math: "\\( f(7) = (7)^2 \\)", explanation: "Take that answer (7) and drop it into the outside function, f(x). Replace x with 7 in the f(x) equation: 7 squared is 49." }
                 ], ans_box: "49"
             },
             u1l2q17: {
                 title: "Question 17", type: "mc",
-                fullStatement: "Question 17: If g(x) represents a linear function, and you are provided two separate static parameter coordinate definitions, resolve the master algebraic straight line equation system expression.<br><br><strong>Given Constraints:</strong> g(0) = 3 &nbsp;&nbsp;and&nbsp;&nbsp; g(1) = 5",
-                prompt: "Find an expression for the linear function g(x):",
-                options: ["A) g(x) = 2x + 3", "B) g(x) = 3x + 2", "C) g(x) = 5x + 3"],
+                fullStatement: "Question 17: If \\( g(x) \\) represents a linear function, and you are provided two separate static parameter coordinate definitions, resolve the master algebraic straight line equation system expression.<br><br><strong>Given Constraints:</strong> \\( g(0) = 3 \\) &nbsp;&nbsp;and&nbsp;&nbsp; \\( g(1) = 5 \\)",
+                prompt: "Find an expression for the linear function \\( g(x) \\):",
+                options: ["A) \\( g(x) = 2x + 3 \\)", "B) \\( g(x) = 3x + 2 \\)", "C) \\( g(x) = 5x + 3 \\)"],
                 steps: [
-                    { title: "Step 1: Determine the Y-Intercept Parameter value", math: "b = g(0) = 3", explanation: "The value of a function at x = 0 represents its vertical y-intercept coordinate point constant value (b)." },
-                    { title: "Step 2: Calculate Slope Rates of Change Delta Metrics", math: "m = [g(1) - g(0)] / [1 - 0] = 5 - 3 = 2", explanation: "Determine the linear step slope value (m) using rise-over-run calculations: (5 - 3) / (1 - 0) = 2." },
-                    { title: "Step 3: Synthesize Slope-Intercept Expressions", math: "g(x) = 2x + 3", explanation: "Combine coordinates constants into the standard linear definition template structure: y = mx + b." }
+                    { title: "Step 1: Find the Starting Value (y-intercept)", math: "\\( b = 3 \\)", explanation: "The statement g(0) = 3 tells you what happens when x is 0. In a linear equation (y = mx + b), the value when x = 0 is always your starting point, or the 'b' value." },
+                    { title: "Step 2: Find the Rate of Change (Slope)", math: "\\( m = \\frac{5 - 3}{1 - 0} = 2 \\)", explanation: "The slope is how much the y-value changes for every step x takes. When x goes from 0 to 1 (one step), y goes from 3 to 5 (two steps up). So the slope 'm' is 2." },
+                    { title: "Step 3: Put the Equation Together", math: "\\( g(x) = 2x + 3 \\)", explanation: "Plug your slope (2) and your starting point (3) into the standard linear equation form: y = 2x + 3." }
                 ], ans: "A"
             },
             u1l2q18a: {
                 title: "Question 18a", type: "numeric", assetType: "notice",
-                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule g(x) = ax². Isolate the numerical parameters component value based on coordinate observations.<br><br><strong>Question Part a:</strong> Find the value of 'a'.",
+                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule \\( g(x) = ax^2 \\). Isolate the numerical parameters component value based on coordinate observations.<br><br><strong>Question Part a:</strong> Find the value of \\( a \\).",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Find the value of \\( a \\):",
                 steps: [
-                    { title: "Step 1: Identify Reference Coordinates from the Curve Path", math: "Point = (2, 8)", explanation: "Look closely at the provided parabola curve graphic. The path travels cleanly through the coordinate crossing point grid intersection location (2, 8)." },
-                    { title: "Step 2: Substitute and Solve for the Unknown Modifier a", math: "8 = a(2)<sup>2</sup> &rarr; 8 = 4a &rarr; a = 2", explanation: "Plug in your x and y points to calculate the scaling coefficient: 8 = a(2)² simplifies to 8 = 4a. Dividing both sides isolates the integer." }
+                    { title: "Step 1: Find a Clear Point on the Graph", math: "\\( \\text{Point} = (2, 8) \\)", explanation: "Look at the parabola graph and find a spot where the curve perfectly crosses the grid lines so you can read it easily. It crosses cleanly at x = 2 and y = 8." },
+                    { title: "Step 2: Plug the Point into the Equation", math: "\\( 8 = a(2)^2 \\implies 8 = 4a \\implies a = 2 \\)", explanation: "Put 2 in for x and 8 in for y in the equation y = ax². 2 squared is 4. So, 8 = 4a. Divide both sides by 4 to see that 'a' must be 2." }
                 ], ans_box: "2"
             },
             u1l2q18b: {
                 title: "Question 18b", type: "numeric", assetType: "notice",
-                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule g(x) = ax².<br><br><strong>Question Part b:</strong> Find the value of g(5).",
+                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule \\( g(x) = ax^2 \\).<br><br><strong>Question Part b:</strong> Find the value of \\( g(5) \\).",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Find the value of \\( g(5) \\):",
                 steps: [
-                    { title: "Step 1: Assemble Complete Equation Formula Models", math: "g(x) = 2x<sup>2</sup>", explanation: "Using the scaling factor found in part a, write out the complete quadratic tracking expression rule." },
-                    { title: "Step 2: Substitute Target Coordinate value Argument parameters", math: "g(5) = 2(5)<sup>2</sup> &rarr; 2(25)", explanation: "Evaluate the quadratic expression using BEDMAS principles: square the input first (5² = 25), then multiply by the scale factor." }
+                    { title: "Step 1: Write the Full Equation", math: "\\( g(x) = 2x^2 \\)", explanation: "Now that you found out 'a' is 2 in the previous part, you can write the full rule for this specific graph." },
+                    { title: "Step 2: Plug in the Number 5", math: "\\( g(5) = 2(5)^2 \\implies 2(25) \\)", explanation: "To find g(5), replace x with 5. Remember BEDMAS: square the 5 first to get 25, then multiply by 2 to get 50." }
                 ], ans_box: "50"
             },
             u1l2q18c: {
                 title: "Question 18c", type: "numeric", assetType: "notice",
-                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule g(x) = ax².<br><br><strong>Question Part c:</strong> Find the value of g(g(2)).",
+                fullStatement: "Question 18: The parabola curve layout drawn on your sheet charts the basic quadratic function structure tracking rule \\( g(x) = ax^2 \\).<br><br><strong>Question Part c:</strong> Find the value of \\( g(g(2)) \\).",
                 assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width: 100%; text-align: center; border-radius: 4px; box-sizing: border-box;">Refer to the graph on the HW PDF file for this lesson to answer this question.</div>`,
+                prompt: "Find the value of \\( g(g(2)) \\):",
                 steps: [
-                    { title: "Step 1: Extract Core Nested Variable Coordinate values", math: "g(2) = 8", explanation: "Evaluating the function at 2 yields the initial target tracking height of 8, which can be read directly from the graph." },
-                    { title: "Step 2: Process Outer Layer Quadratic Computations", math: "g(8) = 2(8)<sup>2</sup> &rarr; 2(64)", explanation: "Plug that value back into the function: square the 8 to get 64, then double it to find the final total." }
+                    { title: "Step 1: Solve the Inside Function First", math: "\\( g(2) = 8 \\)", explanation: "Start with the inner brackets: g(2). We already found out from reading the graph in part 'a' that when x is 2, the height is 8." },
+                    { title: "Step 2: Use the Result as the New Input", math: "\\( g(8) = 2(8)^2 \\implies 2(64) \\)", explanation: "Take that answer (8) and drop it into the outside function. Plug 8 into the equation y = 2x². Square the 8 to get 64, then double it to get 128." }
                 ], ans_box: "128"
             }
         };
@@ -693,6 +694,20 @@
         let activeQuestionId = "";
         let currentStepIndex = 0;
         let visibleStepElements = [];
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
 
         function displaySolution() {
             const selectMenu = document.getElementById("question-select");
@@ -719,7 +734,6 @@
             const activeProblem = problemDataPack[activeQuestionId];
             const state = questionStates[activeQuestionId];
 
-            // Injects full prompt into statement container card card block dynamically
             questionTextCard.innerHTML = activeProblem.fullStatement;
 
             if (activeProblem.assetType && activeProblem.assetType !== "none") {
@@ -731,7 +745,7 @@
 
             if (activeProblem.type === "mc") {
                 kbdToolbar.style.display = "none";
-                document.getElementById("input-prompt-label").innerText = activeProblem.prompt;
+                document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt;
                 
                 let html = `<div class="mc-options-list">`;
                 activeProblem.options.forEach(opt => {
@@ -748,11 +762,8 @@
                 mountPoint.innerHTML = html;
             } else {
                 kbdToolbar.style.display = "flex";
-                if (activeProblem.prompt_html) {
-                    document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt_html;
-                } else {
-                    document.getElementById("input-prompt-label").innerText = "Type the numeric calculated value:";
-                }
+                document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt || "Type the numeric calculated value:";
+                
                 mountPoint.innerHTML = `
                     <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 15, -39, 128" autocomplete="off">`;
                 
@@ -774,6 +785,8 @@
             } else {
                 unlockQuizInterface();
             }
+            
+            renderMathElements();
         }
 
         function selectMcOptionCard(letter) {
@@ -796,6 +809,7 @@
             });
             html += `</div>`;
             mountPoint.innerHTML = html;
+            renderMathElements();
         }
 
         function pressMathKey(symbol) {
@@ -940,6 +954,7 @@
             workspace.innerHTML = html;
             targetDiv.style.display = "block";
             renderMethodSteps();
+            renderMathElements();
         }
 
         function renderMethodSteps() {
@@ -966,6 +981,7 @@
             if (currentStepIndex === visibleStepElements.length - 1) {
                 document.getElementById("next-btn").disabled = true;
             }
+            renderMathElements();
         }
 
         function restartSolution() {

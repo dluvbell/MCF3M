@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 2 Lesson 3</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .char-slots-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 15px 0 20px 0;
+        }
+
+        .char-slot {
+            width: 32px;
+            height: 42px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--math-color);
+            user-select: none;
+            transition: all 0.1s ease;
+        }
+
+        .char-slot.occupied {
+            border-color: var(--primary-color);
+            background-color: #f8fafc;
+        }
+
+        .char-slot.active-cursor {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px #dbeafe;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .math-tov {
+            border-collapse: collapse;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 240px;
+            text-align: center;
+        }
+
+        .math-tov th, .math-tov td {
+            border: 2px solid var(--primary-color);
+            padding: 8px 16px;
+        }
+
+        .math-tov th {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .ordered-pairs-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .pair-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .pair-row-label {
+            min-width: 120px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .pair-coord-field {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            outline: none;
+            color: var(--math-color);
+            font-family: inherit;
+        }
+
+        .pair-coord-field:focus {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .pair-coord-field:disabled {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+        .math-key.btn-danger-action:hover:not(:disabled) {
+            background-color: #fecaca;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 2 Lesson 3</h1>
+        <p>Horizontal and Vertical Translations of Functions</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions (Numerical Sequence Order):</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="u2l3q1a">Question 1a: Match f(x) = (x - 4)²</option>
+                <option value="u2l3q1b">Question 1b: Match g(x) = (x - 6)² - 2</option>
+                <option value="u2l3q1c">Question 1c: Match h(x) = (x + 6)² + 3</option>
+                <option value="u2l3q1d">Question 1d: Match k(x) = x² - 5</option>
+                <option value="u2l3q2a">Question 2a: Translated 3 units right</option>
+                <option value="u2l3q2b">Question 2b: Translated 3 units up</option>
+                <option value="u2l3q2c">Question 2c: Translated 4 units left</option>
+                <option value="u2l3q2d">Question 2d: Translated 4 units down</option>
+                <option value="u2l3q3a_v">Question 3a (Vertex): Features of f(x) = x² - 4</option>
+                <option value="u2l3q3a_g">Question 3a Graph: Plot f(x) = x² - 4</option>
+                <option value="u2l3q3b_v">Question 3b (Vertex): Features of g(x) = (x + 3)²</option>
+                <option value="u2l3q3b_g">Question 3b Graph: Plot g(x) = (x + 3)²</option>
+                <option value="u2l3q3c_v">Question 3c (Vertex): Features of h(x) = (x - 1)² + 6</option>
+                <option value="u2l3q3c_g">Question 3c Graph: Plot h(x) = (x - 1)² + 6</option>
+                <option value="u2l3q3d_v">Question 3d (Vertex): Features of k(x) = (x + 5)² - 8</option>
+                <option value="u2l3q3d_g">Question 3d Graph: Plot k(x) = (x + 5)² - 8</option>
+                <option value="u2l3q8a">Question 8a: Write Equation (2 left, 4 down)</option>
+                <option value="u2l3q8b_g">Question 8b Graph: Plot f(x) = (x + 2)² - 4</option>
+                <option value="u2l3q8c_v">Question 8c (Vertex): Vertex of f(x) = (x + 2)² - 4</option>
+                <option value="u2l3q8d_int">Question 8d (Intercepts): X-Intercepts for Question 8a</option>
+                <option value="u2l3q11a">Question 11a: Domain &amp; Range of g(x) = √(x - 3) + 2</option>
+                <option value="u2l3q11b">Question 11b: Relationship of √(x) and -√(x)</option>
+                <option value="u2l3q11c">Question 11c: Radical and Quadratic Relation Connections</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question from the list above to initialize the testing engine workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard"></div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            u2l3q1a: ["B"], u2l3q1b: ["C"], u2l3q1c: ["A"], u2l3q1d: ["D"],
+            u2l3q2a: ["f(x)=(x-3)2", "f(x)=(x-3)³", "y=(x-3)2", "y=(x-3)³"],
+            u2l3q2b: ["g(x)=x2+3", "g(x)=x³+3", "y=x2+3", "y=x³+3"],
+            u2l3q2c: ["p(x)=(x+4)2", "p(x)=(x+4)³", "y=(x+4)2", "y=(x+4)³"],
+            u2l3q2d: ["q(x)=x2-4", "q(x)=x³-4", "y=x2-4", "y=x³-4"],
+            u2l3q8a: ["f(x)=(x+2)2-4", "f(x)=(x+2)³-4", "y=(x+2)2-4", "y=(x+2)³-4"],
+            u2l3q3a_v: ["(0,-4)", "0,-4"], u2l3q3b_v: ["(-3,0)", "-3,0"], u2l3q3c_v: ["(1,6)", "1,6"], u2l3q3d_v: ["(-5,-8)", "-5,-8"],
+            u2l3q8c_v: ["(-2,-4)", "-2,-4"], u2l3q8d_int: ["-4,0", "0,-4", "-4and0", "0and-4"],
+            u2l3q3a_g: ["(-2,0);(-1,-3);(0,-4);(1,-3);(2,0)"],
+            u2l3q3b_g: ["(-5,4);(-4,1);(-3,0);(-2,1);(-1,4)"],
+            u2l3q3c_g: ["(-1,10);(0,7);(1,6);(2,7);(3,10)"],
+            u2l3q3d_g: ["(-7,-4);(-6,-7);(-5,-8);(-4,-7);(-3,-4)"],
+            u2l3q8b_g: ["(-4,0);(-3,-3);(-2,-4);(-1,-3);(0,0)"],
+            u2l3q11a: ["C"], u2l3q11b: ["A"], u2l3q11c: ["B"]
+        };
+
+        const problemDataPack = {
+            u2l3q1a: {
+                title: "Question 1a", type: "mc", assetType: "notice",
+                fullStatement: "Question 1a: Match the quadratic translation function equation to its corresponding textbook graph configuration:<br><br><strong>Equation:</strong> f(x) = (x - 4)²",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width:100%; text-align:center; box-sizing:border-box;">Refer to the graph in the question in PDF file.</div>`,
+                prompt: "Select the correct graph matching identifier letter:",
+                options: ["A) Graph A", "B) Graph B - Vertex shifted 4 units to the right along the horizontal axis.", "C) Graph C", "D) Graph D"],
+                steps: [
+                    { title: "Step 1: Find the Horizontal Shift", math: "\\( f(x) = (x - 4)^2 \\)", explanation: "Inside the brackets, the (x - 4) means the entire graph slides 4 units to the right. The starting vertex at (0,0) moves over to (4,0). This perfectly matches Graph B." }
+                ], ans: "B) Graph B"
+            },
+            u2l3q1b: {
+                title: "Question 1b", type: "mc", assetType: "notice",
+                fullStatement: "Question 1b: Match the quadratic translation function equation to its corresponding textbook graph configuration:<br><br><strong>Equation:</strong> g(x) = (x - 6)² - 2",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width:100%; text-align:center; box-sizing:border-box;">Refer to the graph in the question in PDF file.</div>`,
+                prompt: "Select the correct graph matching identifier letter:",
+                options: ["A) Graph A", "B) Graph B", "C) Graph C - Vertex shifted 6 units right and 2 units down.", "D) Graph D"],
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( \\text{Vertex} = (6, -2) \\)", explanation: "The (x - 6) tells us the graph moves right 6 units. The -2 at the very end tells us it moves down 2 units. So, the new vertex is located at (6, -2). This points us to Graph C." }
+                ], ans: "C) Graph C"
+            },
+            u2l3q1c: {
+                title: "Question 1c", type: "mc", assetType: "notice",
+                fullStatement: "Question 1c: Match the quadratic translation function equation to its corresponding textbook graph configuration:<br><br><strong>Equation:</strong> h(x) = (x + 6)² + 3",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width:100%; text-align:center; box-sizing:border-box;">Refer to the graph in the question in PDF file.</div>`,
+                prompt: "Select the correct graph matching identifier letter:",
+                options: ["A) Graph A - Vertex shifted 6 units left and 3 units up.", "B) Graph B", "C) Graph C", "D) Graph D"],
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( \\text{Vertex} = (-6, 3) \\)", explanation: "The (x + 6) inside the brackets means we move left 6 units. The +3 at the end means we move up 3 units. The vertex is now at (-6, 3), which matches Graph A." }
+                ], ans: "A) Graph A"
+            },
+            u2l3q1d: {
+                title: "Question 1d", type: "mc", assetType: "notice",
+                fullStatement: "Question 1d: Match the quadratic translation function equation to its corresponding textbook graph configuration:<br><br><strong>Equation:</strong> k(x) = x² - 5",
+                assetHtml: `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width:100%; text-align:center; box-sizing:border-box;">Refer to the graph in the question in PDF file.</div>`,
+                prompt: "Select the correct graph matching identifier letter:",
+                options: ["A) Graph A", "B) Graph B", "C) Graph C", "D) Graph D - Vertex shifted 5 units down on the vertical axis."],
+                steps: [
+                    { title: "Step 1: Find the Vertical Shift", math: "\\( \\text{Vertex} = (0, -5) \\)", explanation: "Notice there are no brackets with the x. This means the graph does not move left or right at all. It only has a -5 at the end, which moves it straight down 5 units. The vertex is at (0, -5), matching Graph D." }
+                ], ans: "D) Graph D"
+            },
+            u2l3q2a: {
+                title: "Question 2a", type: "numeric",
+                fullStatement: "Question 2a: Write an equation for the graph resulting from the given transformation mapping description:<br><br>The graph of f(x) = x² is translated 3 units to the right.",
+                steps: [
+                    { title: "Step 1: Apply the Right Shift", math: "\\( f(x) = (x - 3)^2 \\)", explanation: "To slide a graph to the right, we subtract that number from x directly inside the brackets. So, x becomes (x - 3)." }
+                ], ans_box: "f(x) = (x - 3)²"
+            },
+            u2l3q2b: {
+                title: "Question 2b", type: "numeric",
+                fullStatement: "Question 2b: Write an equation for the graph resulting from the given transformation mapping description:<br><br>The graph of g(x) = x² is translated 3 units up.",
+                steps: [
+                    { title: "Step 1: Apply the Upward Shift", math: "\\( g(x) = x^2 + 3 \\)", explanation: "To slide a graph upwards, we simply add that number to the very end of the equation, outside of any brackets. So, we just add 3." }
+                ], ans_box: "g(x) = x² + 3"
+            },
+            u2l3q2c: {
+                title: "Question 2c", type: "numeric",
+                fullStatement: "Question 2c: Write an equation for the graph resulting from the given transformation mapping description:<br><br>The graph of p(x) = x² is translated 4 units to the left.",
+                steps: [
+                    { title: "Step 1: Apply the Left Shift", math: "\\( p(x) = (x - (-4))^2 = (x + 4)^2 \\)", explanation: "기본 공식은 (x - h)입니다. 왼쪽으로 4칸 이동하므로 h는 -4입니다. 마이너스와 마이너스가 만나 플러스가 되어 (x + 4)가 됩니다." }
+                ], ans_box: "p(x) = (x + 4)²"
+            },
+            u2l3q2d: {
+                title: "Question 2d", type: "numeric",
+                fullStatement: "Question 2d: Write an equation for the graph resulting from the given transformation mapping description:<br><br>The graph of q(x) = x² is translated 4 units down.",
+                steps: [
+                    { title: "Step 1: Apply the Downward Shift", math: "\\( q(x) = x^2 - 4 \\)", explanation: "To slide a graph downwards, we subtract that number from the very end of the equation. So, we just subtract 4." }
+                ], ans_box: "q(x) = x² - 4"
+            },
+            u2l3q8a: {
+                title: "Question 8a", type: "numeric",
+                fullStatement: "Question 8a: Write an equation for the final graph resulting from the combined dual transformation descriptions:<br><br>The graph of f(x) = x² is translated 2 units to the left and 4 units down.",
+                steps: [
+                    { title: "Step 1: Combine the Shifts", math: "\\( f(x) = (x - (-2))^2 - 4 = (x + 2)^2 - 4 \\)", explanation: "왼쪽으로 2칸 이동하므로 괄호 안은 (x - (-2))가 되어 (x + 2)가 됩니다. 아래로 4칸 이동하므로 맨 끝에 -4를 붙입니다." }
+                ], ans_box: "f(x) = (x + 2)² - 4"
+            },
+            u2l3q3a_v: {
+                title: "Question 3a (Vertex)", type: "numeric",
+                fullStatement: "Question 3a: Identify the exact vertex coordinates for the given function:<br><br><strong>Equation:</strong> f(x) = x² - 4",
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( (0, -4) \\)", explanation: "Because there are no brackets hugging the x, the graph hasn't moved left or right at all (x=0). The -4 at the end tells us it moved straight down 4 units (y=-4)." }
+                ], ans_box: "(0, -4)"
+            },
+            u2l3q3b_v: {
+                title: "Question 3b (Vertex)", type: "numeric",
+                fullStatement: "Question 3b: Identify the exact vertex coordinates for the given function:<br><br><strong>Equation:</strong> g(x) = (x + 3)²",
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( (x + 3)^2 = (x - (-3))^2 \\rightarrow h = -3 \\)", explanation: "괄호 안의 모양이 (x + 3)입니다. 기본 공식 (x - h)에 맞추면 (x - (-3))이므로, x축으로 -3만큼 이동한 것입니다. 꼬리 숫자가 없으므로 y는 0입니다. 꼭짓점은 (-3, 0)입니다." }
+                ], ans_box: "(-3, 0)"
+            },
+            u2l3q3c_v: {
+                title: "Question 3c (Vertex)", type: "numeric",
+                fullStatement: "Question 3c: Identify the exact vertex coordinates for the given function:<br><br><strong>Equation:</strong> h(x) = (x - 1)² + 6",
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( (1, 6) \\)", explanation: "The -1 inside the brackets moves the graph right by 1 space. The +6 at the end moves it up by 6 spaces. Putting those together gives the vertex point (1, 6)." }
+                ], ans_box: "(1, 6)"
+            },
+            u2l3q3d_v: {
+                title: "Question 3d (Vertex)", type: "numeric",
+                fullStatement: "Question 3d: Identify the exact vertex coordinates for the given function:<br><br><strong>Equation:</strong> k(x) = (x + 5)² - 8",
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( (x + 5)^2 = (x - (-5))^2 \\rightarrow h = -5 \\)", explanation: "괄호 안이 (x + 5)라는 것은 마이너스가 두 번 겹친 (x - (-5))를 의미하므로, 왼쪽으로 5칸 이동했습니다. 괄호 밖의 -8은 아래로 8칸 이동을 의미합니다. 꼭짓점은 (-5, -8)입니다." }
+                ], ans_box: "(-5, -8)"
+            },
+            u2l3q8c_v: {
+                title: "Question 8c (Vertex)", type: "numeric",
+                fullStatement: "Question 8c: Specify the vertex coordinates for your compiled transformation equation in Question 8a:<br><br><strong>Function Model:</strong> f(x) = (x + 2)² - 4",
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( (x + 2)^2 = (x - (-2))^2 \\rightarrow h = -2 \\)", explanation: "괄호 안의 +2는 마이너스가 두 번 겹친 것이므로 왼쪽으로 2칸(x=-2) 이동을 뜻합니다. 밖의 -4는 아래로 4칸(y=-4) 이동입니다." }
+                ], ans_box: "(-2, -4)"
+            },
+            u2l3q8d_int: {
+                title: "Question 8d (Intercepts)", type: "numeric",
+                fullStatement: "Question 8d: Calculate the exact x-intercept coordinate points for the function: f(x) = (x + 2)² - 4",
+                steps: [
+                    { title: "Step 1: Find Where y is 0", math: "\\( (x + 2)^2 - 4 = 0 \\)", explanation: "An x-intercept is exactly where the graph crosses the flat ground line, which means its height (y) is exactly 0. So, set the whole equation to 0." },
+                    { title: "Step 2: Move the 4", math: "\\( (x + 2)^2 = 4 \\)", explanation: "To get the x part by itself, add 4 to both sides of the equals sign." },
+                    { title: "Step 3: Take the Square Root", math: "\\( x + 2 = \\pm 2 \\)", explanation: "To undo a square, we take the square root. Remember that the square root of 4 can be a positive 2 OR a negative 2, because 2x2=4 and (-2)x(-2)=4." },
+                    { title: "Step 4: Find the First Answer", math: "\\( x = 2 - 2 = 0 \\)", explanation: "Take the positive version: if x + 2 = 2, then x must be 0." },
+                    { title: "Step 5: Find the Second Answer", math: "\\( x = -2 - 2 = -4 \\)", explanation: "Take the negative version: if x + 2 = -2, then subtract 2 from both sides to find x = -4." }
+                ], ans_box: "-4, 0"
+            },
+            u2l3q3a_g: {
+                title: "Question 3a Graph", type: "graph",
+                fullStatement: "Question 3a: Map the core 5 ordered pairs to plot the translated parabola curve on the canvas layer:<br><br><strong>Function:</strong> f(x) = x² - 4",
+                gridConfig: { xMin: -4, xMax: 4, yMin: -6, yMax: 10, xStep: 1, yStep: 2, labelX: "x", labelY: "y" },
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( \\text{Vertex} = (0, -4) \\)", explanation: "방정식 f(x) = x² - 4에서 x 옆에 괄호가 없으므로 좌우 이동은 0입니다. 아래로 4칸 이동했으므로 꼭짓점은 (0, -4)입니다." },
+                    { title: "Step 2: Calculate Right Side Points", math: "\\( f(1) = 1^2 - 4 = -3 \\\\ f(2) = 2^2 - 4 = 0 \\)", explanation: "꼭짓점의 오른쪽 x값인 1과 2를 방정식에 대입하여 직접 계산합니다. 좌표는 (1, -3)과 (2, 0)입니다." },
+                    { title: "Step 3: Find Left Side Points Using Symmetry", math: "\\( f(-1) = -3 \\\\ f(-2) = 0 \\)", explanation: "포물선은 꼭짓점을 기준으로 좌우가 완벽히 대칭입니다. 계산할 필요 없이 왼쪽 좌표는 (-1, -3)과 (-2, 0)이 됩니다." }
+                ]
+            },
+            u2l3q3b_g: {
+                title: "Question 3b Graph", type: "graph",
+                fullStatement: "Question 3b: Map the core 5 ordered pairs to plot the translated parabola curve on the canvas layer:<br><br><strong>Function:</strong> g(x) = (x + 3)²",
+                gridConfig: { xMin: -7, xMax: 1, yMin: -2, yMax: 10, xStep: 1, yStep: 2, labelX: "x", labelY: "y" },
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( \\text{Vertex} = (-3, 0) \\)", explanation: "방정식 g(x) = (x + 3)²에서 +3은 왼쪽으로 3칸 이동을 의미하므로 꼭짓점은 (-3, 0)입니다." },
+                    { title: "Step 2: Calculate Right Side Points", math: "\\( g(-2) = (-2 + 3)^2 = 1^2 = 1 \\\\ g(-1) = (-1 + 3)^2 = 2^2 = 4 \\)", explanation: "꼭짓점 x=-3의 오른쪽인 -2와 -1을 대입하여 계산합니다. 좌표는 (-2, 1)과 (-1, 4)입니다." },
+                    { title: "Step 3: Find Left Side Points Using Symmetry", math: "\\( g(-4) = 1 \\\\ g(-5) = 4 \\)", explanation: "좌우 대칭 원리를 이용하면, 꼭짓점 왼쪽의 두 좌표는 높이가 같으므로 (-4, 1)과 (-5, 4)가 됩니다." }
+                ]
+            },
+            u2l3q3c_g: {
+                title: "Question 3c Graph", type: "graph",
+                fullStatement: "Question 3c: Map the core 5 ordered pairs to plot the translated parabola curve on the canvas layer:<br><br><strong>Function:</strong> h(x) = (x - 1)² + 6",
+                gridConfig: { xMin: -3, xMax: 5, yMin: 0, yMax: 16, xStep: 1, yStep: 2, labelX: "x", labelY: "y" },
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( \\text{Vertex} = (1, 6) \\)", explanation: "방정식 h(x) = (x - 1)² + 6에서 오른쪽으로 1칸, 위로 6칸 이동했으므로 꼭짓점은 (1, 6)입니다." },
+                    { title: "Step 2: Calculate Right Side Points", math: "\\( h(2) = (2 - 1)^2 + 6 = 1 + 6 = 7 \\\\ h(3) = (3 - 1)^2 + 6 = 4 + 6 = 10 \\)", explanation: "꼭짓점 x=1의 오른쪽인 2와 3을 대입하여 계산합니다. 좌표는 (2, 7)과 (3, 10)입니다." },
+                    { title: "Step 3: Find Left Side Points Using Symmetry", math: "\\( h(0) = 7 \\\\ h(-1) = 10 \\)", explanation: "좌우 대칭 원리를 이용하면, 왼쪽의 두 점은 오른쪽과 높이가 같으므로 (0, 7)과 (-1, 10)이 됩니다." }
+                ]
+            },
+            u2l3q3d_g: {
+                title: "Question 3d Graph", type: "graph",
+                fullStatement: "Question 3d: Map the core 5 ordered pairs to plot the translated parabola curve on the canvas layer:<br><br><strong>Function:</strong> k(x) = (x + 5)² - 8",
+                gridConfig: { xMin: -9, xMax: -1, yMin: -10, yMax: 4, xStep: 1, yStep: 2, labelX: "x", labelY: "y" },
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( \\text{Vertex} = (-5, -8) \\)", explanation: "방정식 k(x) = (x + 5)² - 8에서 +5는 왼쪽으로 5칸, -8은 아래로 8칸을 의미하므로 꼭짓점은 (-5, -8)입니다." },
+                    { title: "Step 2: Calculate Right Side Points", math: "\\( k(-4) = (-4 + 5)^2 - 8 = 1 - 8 = -7 \\\\ k(-3) = (-3 + 5)^2 - 8 = 4 - 8 = -4 \\)", explanation: "꼭짓점 x=-5의 오른쪽인 -4와 -3을 대입하여 계산합니다. 좌표는 (-4, -7)과 (-3, -4)입니다." },
+                    { title: "Step 3: Find Left Side Points Using Symmetry", math: "\\( k(-6) = -7 \\\\ k(-7) = -4 \\)", explanation: "좌우 대칭성에 의해 꼭짓점 왼쪽의 두 좌표는 높이가 같으므로 (-6, -7)과 (-7, -4)가 됩니다." }
+                ]
+            },
+            u2l3q8b_g: {
+                title: "Question 8b Graph", type: "graph",
+                fullStatement: "Question 8b: Map the core 5 ordered pairs to plot your Question 8a combined translation function:<br><br><strong>Function:</strong> f(x) = (x + 2)² - 4",
+                gridConfig: { xMin: -6, xMax: 2, yMin: -6, yMax: 8, xStep: 1, yStep: 2, labelX: "x", labelY: "y" },
+                steps: [
+                    { title: "Step 1: Find the Vertex", math: "\\( \\text{Vertex} = (-2, -4) \\)", explanation: "f(x) = (x + 2)² - 4에서 +2는 왼쪽으로 2칸을 의미하므로 꼭짓점은 (-2, -4)입니다." },
+                    { title: "Step 2: Calculate Right Side Points", math: "\\( f(-1) = (-1 + 2)^2 - 4 = 1 - 4 = -3 \\\\ f(0) = (0 + 2)^2 - 4 = 4 - 4 = 0 \\)", explanation: "오른쪽인 -1과 0을 대입합니다. 좌표는 (-1, -3)과 (0, 0)입니다. (0,0)은 y절편이자 동시에 하나의 x절편이 됩니다." },
+                    { title: "Step 3: Find Left Side Points Using Symmetry", math: "\\( f(-3) = -3 \\\\ f(-4) = 0 \\)", explanation: "대칭성에 의해 왼쪽 점들은 (-3, -3)과 (-4, 0)입니다. (-4,0)은 또 다른 x절편입니다." }
+                ]
+            },
+            u2l3q11a: {
+                title: "Question 11a", type: "mc",
+                fullStatement: "Question 11a: Determine the strict domain and range parameters for the given radical function expression:<br><br><strong>Function Model:</strong> g(x) = √(x - 3) + 2",
+                prompt: "Select the correct set notation configuration choice:",
+                options: [
+                    "A) Domain = {x ∈ ℝ}, Range = {y ∈ ℝ}",
+                    "B) Domain = {x ∈ ℝ | x ≥ 0}, Range = {y ∈ ℝ | y ≥ 0}",
+                    "C) Domain = {x ∈ ℝ | x ≥ 3}, Range = {y ∈ ℝ | y ≥ 2}",
+                    "D) Domain = {x ∈ ℝ | x ≤ 3}, Range = {y ∈ ℝ | y ≤ 2}"
+                ],
+                steps: [
+                    { title: "Step 1: Find the Domain Constraint", math: "\\( x - 3 \\ge 0 \\rightarrow x \\ge 3 \\)", explanation: "In math, you cannot take the square root of a negative number. This means whatever is inside the square root symbol (x - 3) must be 0 or a positive number. So, x must be at least 3." },
+                    { title: "Step 2: Find the Range Constraint", math: "\\( y \\ge 2 \\)", explanation: "A square root will only ever output positive numbers (or zero). The smallest output the root part can give is 0. Since we add 2 to the end of it, the smallest final answer (y-value) possible is 2." }
+                ], ans: "C) Domain = {x ∈ ℝ | x ≥ 3}, Range = {y ∈ ℝ | y ≥ 2}"
+            },
+            u2l3q11b: {
+                title: "Question 11b", type: "mc",
+                fullStatement: "Question 11b: Analyze the geometric relationship between the graphs of the following two radical functions:<br><br><strong>Functions:</strong> f(x) = √(x) and f(x) = -√(x)",
+                prompt: "Select the correct transformation relationship statement option:",
+                options: [
+                    "A) They are reflections of each other across the horizontal x-axis.",
+                    "B) They are reflections of each other across the vertical y-axis.",
+                    "C) They are simple horizontal translations of one another.",
+                    "D) They are completely unrelated non-polynomial curves."
+                ],
+                steps: [
+                    { title: "Step 1: Understand the Negative Sign", math: "\\( y = -\\sqrt{x} \\)", explanation: "Putting a negative sign on the very outside of a function takes all the normal positive height answers and flips them into negative answers. Visually, this grabs the graph and flips it completely upside down across the flat horizontal x-axis." }
+                ], ans: "A) They are reflections of each other across the horizontal x-axis."
+            },
+            u2l3q11c: {
+                title: "Question 11c", type: "mc",
+                fullStatement: "Question 11c: Explain how combining the square root graphs in part b relates structurally to a quadratic relation profile.",
+                prompt: "Select the most accurate structural geometric connection option:",
+                options: [
+                    "A) They combine to form a standard vertical straight line grid.",
+                    "B) Together, they form a complete horizontal parabola opening sideways, which is the inverse relation of a quadratic function.",
+                    "C) They form an identical copy of a vertical cubic polynomial path.",
+                    "D) They do not share any meaningful geometric patterns."
+                ],
+                steps: [
+                    { title: "Step 1: Combine to Make a Sideways Parabola", math: "\\( y^2 = x \\)", explanation: "If you physically glue the top curve (positive root) and the bottom upside-down curve (negative root) together, they make a perfect U-shape that opens sideways to the right. This is the exact shape you get when you take a regular parabola and swap its x and y values." }
+                ], ans: "B) Together, they form a complete horizontal parabola opening sideways, which is the inverse relation of a quadratic function."
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { 
+                answered: false, 
+                slotCharactersArray: [], 
+                textInputVal: "", 
+                isCorrect: false, 
+                currentStep: 0, 
+                solRevealed: false,
+                pairsData: [
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}  
+                ]
+            };
+        });
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        let activeQuestionId = "";
+        let activeFocusedSlotIndex = 0;
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        let canvasElement = null;
+        let ctx = null;
+        const CANVAS_DIMENSION = 420;
+        const CANVAS_PADDING = 50;
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const kbdToolbar = document.getElementById("math-keyboard");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                assetMount.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+
+            if (activeProblem.type === "graph") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = `<canvas id="sketch-canvas-node" width="${CANVAS_DIMENSION}" height="${CANVAS_DIMENSION}"></canvas>`;
+                initGraphCanvasEngine(activeProblem);
+            } else if (activeProblem.assetType === "tov" || activeProblem.assetType === "notice") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = activeProblem.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            if (activeProblem.type === "notation") {
+                document.getElementById("input-prompt-label").innerText = "Construct your solution notation using the math toolbar below:";
+                
+                let slotsHtml = `<div class="char-slots-container">`;
+                for (let i = 0; i < activeProblem.maxSlots; i++) {
+                    const char = state.slotCharactersArray[i] || "";
+                    const occupiedClass = char !== "" ? "occupied" : "";
+                    slotsHtml += `<div class="char-slot ${occupiedClass}" id="slot-node-${i}" onclick="setSlotFocusCursor(${i})">${char}</div>`;
+                }
+                slotsHtml += `</div>`;
+                mountPoint.innerHTML = slotsHtml;
+
+                kbdToolbar.style.display = "flex";
+                kbdToolbar.innerHTML = `
+                    <button class="math-key" onclick="pressSlotPaletteKey('{')">{</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('}')">}</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('|')">|</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('∈')">∈</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('R')">R</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('I')">I</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('≤')">≤</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('≥')">≥</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('<')">&lt;</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('>')">&gt;</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey(',')">,</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('x')">x</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('y')">y</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('h')">h</button>
+                    ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressSlotPaletteKey('${n}')">${n}</button>`).join("")}
+                    <button class="math-key btn-danger-action" onclick="triggerSlotBackspace()">Backspace</button>
+                    <button class="math-key btn-danger-action" onclick="triggerSlotClearAll()">Clear All</button>
+                `;
+
+                if (!state.answered) {
+                    setSlotFocusCursor(state.slotCharactersArray.length);
+                } else {
+                    deactivateAllSlotCursors();
+                }
+
+            } else if (activeProblem.type === "mc") {
+                kbdToolbar.style.display = "none";
+                document.getElementById("input-prompt-label").innerText = activeProblem.prompt;
+                
+                let html = `<div class="mc-options-list">`;
+                activeProblem.options.forEach(opt => {
+                    const letter = opt.charAt(0);
+                    const isSelected = state.selectedMcOption === letter ? "selected" : "";
+                    const isDisabled = state.answered ? "disabled" : "";
+                    html += `
+                        <div class="mc-option-card ${isSelected} ${isDisabled}" onclick="selectMcOptionCard('${letter}')">
+                            <span class="mc-badge">${letter}</span>
+                            <span>${opt.substring(3)}</span>
+                        </div>`;
+                });
+                html += `</div>`;
+                mountPoint.innerHTML = html;
+            } else if (activeProblem.type === "graph") {
+                kbdToolbar.style.display = "none";
+                document.getElementById("input-prompt-label").innerText = "Complete the 5 ordered pair coordinate slots below:";
+                
+                const labels = ["Left Point 2", "Left Point 1", "Vertex Point", "Right Point 1", "Right Point 2"];
+                const backgrounds = ["white", "white", "#fef08a", "white", "white"]; 
+                
+                let html = `<div class="ordered-pairs-layout">`;
+                for (let i = 0; i < 5; i++) {
+                    const disabledStr = state.answered ? "disabled" : "";
+                    html += `
+                        <div class="pair-input-row" style="background-color: ${backgrounds[i]};">
+                            <span class="pair-row-label">${labels[i]}:</span>
+                            <span>(</span>
+                            <input type="text" class="pair-coord-field" id="pair-${i}-x" value="${state.pairsData[i].x}" placeholder="x" ${disabledStr} oninput="syncOrderedPairTrack(${i}, 'x')">
+                            <span>,</span>
+                            <input type="text" class="pair-coord-field" id="pair-${i}-y" value="${state.pairsData[i].y}" placeholder="y" style="width: 100px;" ${disabledStr} oninput="syncOrderedPairTrack(${i}, 'y')">
+                            <span>)</span>
+                        </div>`;
+                }
+                html += `</div>`;
+                mountPoint.innerHTML = html;
+            } else {
+                kbdToolbar.style.display = "flex";
+                if (activeProblem.prompt_html) {
+                    document.getElementById("input-prompt-label").innerHTML = activeProblem.prompt_html;
+                } else {
+                    document.getElementById("input-prompt-label").innerText = "Type the numeric calculated value:";
+                }
+                mountPoint.innerHTML = `
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., (1,6), t=3, -4,0, y=(x-3)²" autocomplete="off">`;
+                
+                kbdToolbar.innerHTML = `
+                    <button class="math-key" onclick="pressStandardNumericKey('(')">(</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(')')">)</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('x²')">x²</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('y')">y</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('f')">f</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('g')">g</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('p')">p</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('q')">q</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('t')">t</button>
+                    ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressStandardNumericKey('${n}')">${n}</button>`).join("")}
+                `;
+
+                const numInput = document.getElementById("numeric-student-input");
+                numInput.value = state.textInputVal;
+                
+                numInput.addEventListener("input", () => {
+                    state.textInputVal = numInput.value;
+                });
+
+                if (state.answered) {
+                    numInput.disabled = true;
+                }
+            }
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            renderMathElements();
+        }
+
+        function syncOrderedPairTrack(index, axis) {
+            const state = questionStates[activeQuestionId];
+            const field = document.getElementById(`pair-${index}-${axis}`);
+            if (!field) return;
+
+            state.pairsData[index][axis] = field.value.trim();
+            renderGraphGridBase(problemDataPack[activeQuestionId]);
+        }
+
+        function initGraphCanvasEngine(problem) {
+            canvasElement = document.getElementById("sketch-canvas-node");
+            if (!canvasElement) return;
+            ctx = canvasElement.getContext("2d");
+            renderGraphGridBase(problem);
+        }
+
+        function renderGraphGridBase(problem) {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, CANVAS_DIMENSION, CANVAS_DIMENSION);
+            
+            const config = problem.gridConfig;
+            const state = questionStates[activeQuestionId];
+
+            const plotWidth = CANVAS_DIMENSION - (2 * CANVAS_PADDING);
+            const plotHeight = CANVAS_DIMENSION - (2 * CANVAS_PADDING);
+
+            function getPixelX(mathX) {
+                return CANVAS_PADDING + ((mathX - config.xMin) / (config.xMax - config.xMin)) * plotWidth;
+            }
+            function getPixelY(mathY) {
+                return CANVAS_PADDING + ((config.yMax - mathY) / (config.yMax - config.yMin)) * plotHeight;
+            }
+
+            ctx.strokeStyle = "#e2e8f0";
+            ctx.lineWidth = 1;
+            ctx.font = "11px system-ui";
+            ctx.fillStyle = "#64748b";
+
+            for (let y = config.yMin; y <= config.yMax; y += config.yStep) {
+                let py = getPixelY(y);
+                ctx.beginPath();
+                ctx.moveTo(CANVAS_PADDING, py);
+                ctx.lineTo(CANVAS_DIMENSION - CANVAS_PADDING, py);
+                ctx.stroke();
+                
+                ctx.textAlign = "right";
+                ctx.textBaseline = "middle";
+                ctx.fillText(y, CANVAS_PADDING - 8, py);
+            }
+
+            for (let x = config.xMin; x <= config.xMax; x += config.xStep) {
+                let px = getPixelX(x);
+                ctx.beginPath();
+                ctx.moveTo(px, CANVAS_PADDING);
+                ctx.lineTo(px, CANVAS_DIMENSION - CANVAS_PADDING);
+                ctx.stroke();
+
+                ctx.textAlign = "center";
+                ctx.textBaseline = "top";
+                ctx.fillText(x, px, CANVAS_DIMENSION - CANVAS_PADDING + 8);
+            }
+
+            ctx.strokeStyle = "#0f172a";
+            ctx.lineWidth = 2.5;
+            
+            let xAxisPy = (config.yMin <= 0 && 0 <= config.yMax) ? getPixelY(0) : CANVAS_DIMENSION - CANVAS_PADDING;
+            ctx.beginPath();
+            ctx.moveTo(CANVAS_PADDING, xAxisPy);
+            ctx.lineTo(CANVAS_DIMENSION - CANVAS_PADDING, xAxisPy);
+            ctx.stroke();
+
+            let yAxisPx = (config.xMin <= 0 && 0 <= config.xMax) ? getPixelX(0) : CANVAS_PADDING;
+            ctx.beginPath();
+            ctx.moveTo(yAxisPx, CANVAS_PADDING);
+            ctx.lineTo(yAxisPx, CANVAS_DIMENSION - CANVAS_PADDING);
+            ctx.stroke();
+
+            ctx.fillStyle = "#0f172a";
+            ctx.font = "bold 12px system-ui";
+            ctx.textAlign = "center";
+            ctx.fillText(config.labelX, CANVAS_DIMENSION - CANVAS_PADDING + 25, xAxisPy + 15);
+            ctx.fillText(config.labelY, yAxisPx, CANVAS_PADDING - 18);
+
+            let activePlottedPointsCount = 0;
+            let allFivePairsComplete = true;
+
+            state.pairsData.forEach((pt, idx) => {
+                if (pt.x === "" || pt.y === "") {
+                    allFivePairsComplete = false;
+                    return;
+                }
+                const mx = parseFloat(pt.x);
+                const my = parseFloat(pt.y);
+
+                if (!isNaN(mx) && !isNaN(my)) {
+                    activePlottedPointsCount++;
+                    let px = getPixelX(mx);
+                    let py = getPixelY(my);
+
+                    ctx.fillStyle = (idx === 2) ? "#dc2626" : "#2563eb";
+                    ctx.beginPath();
+                    ctx.arc(px, py, 6, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    if (idx === 2) {
+                        ctx.font = "bold 11px system-ui";
+                        ctx.fillText("V", px, py - 14);
+                    }
+                } else {
+                    allFivePairsComplete = false;
+                }
+            });
+
+            if (allFivePairsComplete && activePlottedPointsCount === 5) {
+                const vX = parseFloat(state.pairsData[2].x);
+                const vY = parseFloat(state.pairsData[2].y);
+                const refX = parseFloat(state.pairsData[1].x);
+                const refY = parseFloat(state.pairsData[1].y);
+
+                if (!isNaN(vX) && !isNaN(vY) && !isNaN(refX) && !isNaN(refY) && vX !== refX) {
+                    const derivedA = (refY - vY) / Math.pow((refX - vX), 2);
+
+                    ctx.strokeStyle = "#16a34a";
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+
+                    let initialPlotIteration = true;
+                    const evaluationResolution = 0.05;
+
+                    for (let mx = config.xMin; mx <= config.xMax; mx += evaluationResolution) {
+                        let my = derivedA * Math.pow((mx - vX), 2) + vY;
+                        if (my >= config.yMin && my <= config.yMax) {
+                            let px = getPixelX(mx);
+                            let py = getPixelY(my);
+                            if (initialPlotIteration) {
+                                ctx.moveTo(px, py);
+                                initialPlotIteration = false;
+                            } else {
+                                ctx.lineTo(px, py);
+                            }
+                        }
+                    }
+                    ctx.stroke();
+                }
+            }
+            
+            renderMathElements();
+        }
+
+        function setSlotFocusCursor(index) {
+            if (questionStates[activeQuestionId].answered) return;
+            const max = problemDataPack[activeQuestionId].maxSlots;
+            if (index >= max) index = max - 1;
+            if (index < 0) index = 0;
+
+            deactivateAllSlotCursors();
+            activeFocusedSlotIndex = index;
+            
+            const node = document.getElementById(`slot-node-${index}`);
+            if (node) node.classList.add("active-cursor");
+        }
+
+        function deactivateAllSlotCursors() {
+            document.querySelectorAll(".char-slot").forEach(s => s.classList.remove("active-cursor"));
+        }
+
+        function pressSlotPaletteKey(character) {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            state.slotCharactersArray[activeFocusedSlotIndex] = character;
+            
+            const node = document.getElementById(`slot-node-${activeFocusedSlotIndex}`);
+            if (node) {
+                node.innerText = character;
+                node.classList.add("occupied");
+            }
+
+            setSlotFocusCursor(activeFocusedSlotIndex + 1);
+        }
+
+        function triggerSlotBackspace() {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            let target = activeFocusedSlotIndex;
+            if (!state.slotCharactersArray[target] && target > 0) {
+                target = target - 1;
+            }
+
+            state.slotCharactersArray[target] = "";
+            const node = document.getElementById(`slot-node-${target}`);
+            if (node) {
+                node.innerText = "";
+                node.classList.remove("occupied");
+            }
+            setSlotFocusCursor(target);
+        }
+
+        function triggerSlotClearAll() {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            state.slotCharactersArray = [];
+            document.querySelectorAll(".char-slot").forEach(s => {
+                s.innerText = "";
+                s.classList.remove("occupied");
+            });
+            setSlotFocusCursor(0);
+        }
+
+        function selectMcOptionCard(letter) {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+            
+            questionStates[activeQuestionId].selectedMcOption = letter;
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            
+            let html = `<div class="mc-options-list">`;
+            activeProblem.options.forEach(opt => {
+                const currentLetter = opt.charAt(0);
+                const isSelected = currentLetter === letter ? "selected" : "";
+                html += `
+                    <div class="mc-option-card ${isSelected}" onclick="selectMcOptionCard('${currentLetter}')">
+                        <span class="mc-badge">${currentLetter}</span>
+                        <span>${opt.substring(3)}</span>
+                    </div>`;
+            });
+            html += `</div>`;
+            mountPoint.innerHTML = html;
+            
+            renderMathElements();
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            let appendVal = symbol;
+            if (symbol === 'x²') appendVal = 'x2';
+            
+            txtInput.value = currentText.substring(0, startPos) + appendVal + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + appendVal.length;
+            txtInput.selectionEnd = startPos + appendVal.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let logString = "";
+
+            if (activeProblem.type === "graph") {
+                let parts = [];
+                for (let i = 0; i < 5; i++) {
+                    if (state.pairsData[i].x === "" || state.pairsData[i].y === "") {
+                        alert("Please populate all 5 ordered pair fields across both coordinates parameters before checking submissions.");
+                        return;
+                    }
+                    parts.push(`(${state.pairsData[i].x},${state.pairsData[i].y})`);
+                }
+                logString = parts.join(";");
+                if (answerRegistry[activeQuestionId].includes(logString)) {
+                    matchingCorrect = true;
+                }
+            } else if (activeProblem.type === "notation") {
+                let fullString = "";
+                for (let i = 0; i < activeProblem.maxSlots; i++) {
+                    fullString += state.slotCharactersArray[i] || " ";
+                }
+
+                let closingBraceIndex = fullString.indexOf("}");
+                if (closingBraceIndex !== -1) {
+                    logString = fullString.substring(0, closingBraceIndex + 1);
+                } else {
+                    logString = fullString.trim();
+                }
+
+                let normalizedInput = logString.replace(/\s+/g, '').toLowerCase();
+                const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+
+                if (possibleAnswers.includes(normalizedInput)) {
+                    matchingCorrect = true;
+                }
+            } else if (activeProblem.type === "mc") {
+                if (state.selectedMcOption === "") {
+                    alert("Please select an option card before verifying your submission.");
+                    return;
+                }
+                logString = "Option " + state.selectedMcOption;
+                if (answerRegistry[activeQuestionId].includes(state.selectedMcOption)) {
+                    matchingCorrect = true;
+                }
+            } else {
+                const rawVal = state.textInputVal;
+                let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2');
+                logString = rawVal;
+                
+                if (answerRegistry[activeQuestionId].includes(normalizedInput)) {
+                    matchingCorrect = true;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_2",
+                lessonId: "Lesson_3",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: activeProblem.type === "graph" ? "Ordered Pairs Algebra Input Grid" : (activeProblem.type === "notation" ? "Custom Toolbar Notation Input" : "Direct Keypad Input Validation"),
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (activeQuestionId && problemDataPack[activeQuestionId].type === "graph") {
+                for (let i = 0; i < 5; i++) {
+                    document.getElementById(`pair-${i}-x`).disabled = true;
+                    document.getElementById(`pair-${i}-y`).disabled = true;
+                }
+            }
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            if (document.querySelectorAll(".mc-option-card")) {
+                document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
+            }
+            
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Relational parameters mapped and logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect matching coordinates metrics. Review step modules below.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans || data.ans_box;
+            if (activeQuestionId === "u2l3q3a_g") {
+                finalAnsText = "Parabola shifted downwards with vertex at (0,-4) passing through matching roots (2,0) and (-2,0).";
+            } else if (activeQuestionId === "u2l3q3b_g") {
+                finalAnsText = "Parabola shifted horizontally left with vertex at (-3,0) passing through steps (-2,1) and (-4,1).";
+            } else if (activeQuestionId === "u2l3q3c_g") {
+                finalAnsText = "Parabola shifted right and up with vertex at (1,6) passing through parameters (0,7) and (2,7).";
+            } else if (activeQuestionId === "u2l3q3d_g") {
+                finalAnsText = "Parabola shifted left and down with vertex at (-5,-8) passing through parameters (-4,-7) and (-6,-7).";
+            } else if (activeQuestionId === "u2l3q8b_g") {
+                finalAnsText = "Parabola with vertex centered at (-2,-4) opening upwards seamlessly intersecting the horizontal axis at x = 0 and x = -4.";
+            }
+            
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Curriculum Master Reference Solution</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

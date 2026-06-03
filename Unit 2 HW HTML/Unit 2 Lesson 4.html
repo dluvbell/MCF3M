@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 2 Lesson 4</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .char-slots-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 15px 0 20px 0;
+        }
+
+        .char-slot {
+            width: 32px;
+            height: 42px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--math-color);
+            user-select: none;
+            transition: all 0.1s ease;
+        }
+
+        .char-slot.occupied {
+            border-color: var(--primary-color);
+            background-color: #f8fafc;
+        }
+
+        .char-slot.active-cursor {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px #dbeafe;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+        .math-key.btn-danger-action:hover:not(:disabled) {
+            background-color: #fecaca;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 2 Lesson 4</h1>
+        <p>Demonstrating Understanding of the Roles of a, h &amp; k parameters</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions (Numerical Sequence Order Layout):</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question Index --</option>
+                
+                <option value="u2l4q1a">Question 1a: Identify parameters a, h, k for y = 3(x - 2)² + 1</option>
+                <option value="u2l4q1b">Question 1b: Find Vertex coordinates for y = 3(x - 2)² + 1</option>
+                <option value="u2l4q1c">Question 1c: Count x-intercepts for y = 3(x - 2)² + 1</option>
+                <option value="u2l4q1d">Question 1d: Transformation sequence of y = 3(x - 2)² + 1</option>
+                <option value="u2l4q1e">Question 1e: Range notation for y = 3(x - 2)² + 1</option>
+                
+                <option value="u2l4q2a">Question 2a: Identify parameters a, h, k for y = -2(x - 3)² + 3</option>
+                <option value="u2l4q2b">Question 2b: Find Vertex coordinates for y = -2(x - 3)² + 3</option>
+                <option value="u2l4q2c">Question 2c: Count x-intercepts for y = -2(x - 3)² + 3</option>
+                <option value="u2l4q2d">Question 2d: Transformation sequence of y = -2(x - 3)² + 3</option>
+                <option value="u2l4q2e">Question 2e: Range notation for y = -2(x - 3)² + 3</option>
+                
+                <option value="u2l4q3a">Question 3a: Identify parameters a, h, k for y = 1/2(x + 1)² + 5</option>
+                <option value="u2l4q3b">Question 3b: Find Vertex coordinates for y = 1/2(x + 1)² + 5</option>
+                <option value="u2l4q3c">Question 3c: Count x-intercepts for y = 1/2(x + 1)² + 5</option>
+                <option value="u2l4q3d">Question 3d: Transformation sequence of y = 1/2(x + 1)² + 5</option>
+                <option value="u2l4q3e">Question 3e: Range notation for y = 1/2(x + 1)² + 5</option>
+                
+                <option value="u2l4q4a">Question 4a: Identify parameters a, h, k for y = 0.3(x + 2)² + 15</option>
+                <option value="u2l4q4b">Question 4b: Find Vertex coordinates for y = 0.3(x + 2)² + 15</option>
+                <option value="u2l4q4c">Question 4c: Count x-intercepts for y = 0.3(x + 2)² + 15</option>
+                <option value="u2l4q4d">Question 4d: Transformation sequence of y = 0.3(x + 2)² + 15</option>
+                <option value="u2l4q4e">Question 4e: Range notation for y = 0.3(x + 2)² + 15</option>
+                
+                <option value="u2l4q5a">Question 5a: Identify parameters a, h, k for y = -2/3(x - 4)² - 8</option>
+                <option value="u2l4q5b">Question 5b: Find Vertex coordinates for y = -2/3(x - 4)² - 8</option>
+                <option value="u2l4q5c">Question 5c: Count x-intercepts for y = -2/3(x - 4)² - 8</option>
+                <option value="u2l4q5d">Question 5d: Transformation sequence of y = -2/3(x - 4)² - 8</option>
+                <option value="u2l4q5e">Question 5e: Range notation for y = -2/3(x - 4)² - 8</option>
+                
+                <option value="u2l4q6a">Question 6a: Identify parameters a, h, k for y = 2x² + 9</option>
+                <option value="u2l4q6b">Question 6b: Find Vertex coordinates for y = 2x² + 9</option>
+                <option value="u2l4q6c">Question 6c: Count x-intercepts for y = 2x² + 9</option>
+                <option value="u2l4q6d">Question 6d: Transformation sequence of y = 2x² + 9</option>
+                <option value="u2l4q6e">Question 6e: Range notation for y = 2x² + 9</option>
+                
+                <option value="u2l4q7a">Question 7a: Identify parameters a, h, k for y = -3(x + 5)²</option>
+                <option value="u2l4q7b">Question 7b: Find Vertex coordinates for y = -3(x + 5)²</option>
+                <option value="u2l4q7c">Question 7c: Count x-intercepts for y = -3(x + 5)²</option>
+                <option value="u2l4q7d">Question 7d: Transformation sequence of y = -3(x + 5)²</option>
+                <option value="u2l4q7e">Question 7e: Range notation for y = -3(x + 5)²</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question from the sequential list above to initialize the testing module workbook.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard"></div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            u2l4q1a: ["a=3,h=2,k=1"], u2l4q1b: ["(2,1)", "2,1"], u2l4q1c: ["0", "none"], u2l4q1d: ["A"], u2l4q1e: ["{y∈r|y≥1}"],
+            u2l4q2a: ["a=-2,h=3,k=3"], u2l4q2b: ["(3,3)", "3,3"], u2l4q2c: ["2"], u2l4q2d: ["B"], u2l4q2e: ["{y∈r|y≤3}"],
+            u2l4q3a: ["a=1/2,h=-1,k=5", "a=0.5,h=-1,k=5"], u2l4q3b: ["(-1,5)", "-1,5"], u2l4q3c: ["0", "none"], u2l4q3d: ["C"], u2l4q3e: ["{y∈r|y≥5}"],
+            u2l4q4a: ["a=0.3,h=-2,k=15"], u2l4q4b: ["(-2,15)", "-2,15"], u2l4q4c: ["0", "none"], u2l4q4d: ["C"], u2l4q4e: ["{y∈r|y≥15}"],
+            u2l4q5a: ["a=-2/3,h=4,k=-8"], u2l4q5b: ["(4,-8)", "4,-8"], u2l4q5c: ["0", "none"], u2l4q5d: ["A"], u2l4q5e: ["{y∈r|y≤-8}"],
+            u2l4q6a: ["a=2,h=0,k=9"], u2l4q6b: ["(0,9)", "0,9"], u2l4q6c: ["0", "none"], u2l4q6d: ["B"], u2l4q6e: ["{y∈r|y≥9}"],
+            u2l4q7a: ["a=-3,h=-5,k=0"], u2l4q7b: ["(-5,0)", "-5,0"], u2l4q7c: ["1"], u2l4q7d: ["C"], u2l4q7e: ["{y∈r|y≤0}"]
+        };
+
+        const problemDataPack = {
+            u2l4q1a: { title: "Question 1a", type: "numeric", fullStatement: "Question 1a: Identify the explicit parameters a, h, and k from the vertex form equation:<br><br><strong>Equation:</strong> \\( y = 3(x - 2)^2 + 1 \\)", steps: [{ title: "Step 1: Compare to standard vertex form", math: "\\( y = a(x - h)^2 + k \\)", explanation: "Compare the given equation to the standard template. The coefficient 'a' is 3. The value subtracted inside the brackets is 'h', so h = 2. The constant added at the end is 'k', so k = 1." }], ans_box: "a=3,h=2,k=1" },
+            u2l4q1b: { title: "Question 1b", type: "numeric", fullStatement: "Question 1b: Determine the coordinates of the vertex for:<br><br><strong>Equation:</strong> \\( y = 3(x - 2)^2 + 1 \\)", steps: [{ title: "Step 1: Extract coordinates", math: "\\( \\text{Vertex} = (h, k) = (2, 1) \\)", explanation: "The vertex of a parabola in this form is always the coordinate pair (h, k). Using the values identified previously, the vertex is exactly at (2, 1)." }], ans_box: "(2, 1)" },
+            u2l4q1c: { title: "Question 1c", type: "numeric", fullStatement: "Question 1c: Calculate the total number of x-intercepts for:<br><br><strong>Equation:</strong> \\( y = 3(x - 2)^2 + 1 \\)", steps: [{ title: "Step 1: Analyze vertex position and opening direction", math: "\\( a = 3 > 0 \\)", explanation: "The positive 'a' value means the parabola opens upwards. Its lowest point (vertex) is at y = 1. Since it starts above the x-axis and only goes up, it will never intersect the x-axis. Thus, there are 0 x-intercepts." }], ans_box: "0" },
+            u2l4q1d: { title: "Question 1d", type: "mc", fullStatement: "Question 1d: Specify the geometric sequence transformations starting from \\( y = x^2 \\) for:<br><br><strong>Equation:</strong> \\( y = 3(x - 2)^2 + 1 \\)", options: [
+                "A) Vertical stretch by a factor of 3, horizontal translation 2 units right, vertical translation 1 unit up.",
+                "B) Vertical compression by a factor of 3, horizontal translation 2 units left, vertical translation 1 unit down.",
+                "C) Reflection in the x-axis, vertical stretch by a factor of 3, horizontal translation 2 units right.",
+                "D) Vertical stretch by a factor of 1, horizontal translation 3 units right, vertical translation 2 units up."
+            ], steps: [{ title: "Step 1: Map parameters to geometric actions", math: "\\( a=3, \\, h=2, \\, k=1 \\)", explanation: "The value a=3 creates a vertical stretch by a factor of 3. The value h=2 shifts the graph 2 units horizontally to the right. The value k=1 shifts the graph 1 unit vertically upwards." }], ans: "A" },
+            u2l4q1e: { title: "Question 1e", type: "notation", maxSlots: 9, fullStatement: "Question 1e: Write the range using standard set notation for:<br><br><strong>Equation:</strong> \\( y = 3(x - 2)^2 + 1 \\)", steps: [{ title: "Step 1: Identify the minimum boundary", math: "\\( y \\ge 1 \\)", explanation: "Because the parabola opens upwards, its vertex represents the absolute minimum y-value. The y-coordinate is 1, meaning all graph outputs must be greater than or equal to 1." }], ans_box: "{y ∈ ℝ | y ≥ 1}" },
+
+            u2l4q2a: { title: "Question 2a", type: "numeric", fullStatement: "Question 2a: Identify the explicit parameters a, h, and k from the vertex form equation:<br><br><strong>Equation:</strong> \\( y = -2(x - 3)^2 + 3 \\)", steps: [{ title: "Step 1: Align with standard template", math: "\\( y = a(x - h)^2 + k \\)", explanation: "Direct matching reveals the coefficient 'a' is -2, the subtracted value 'h' is 3, and the added constant 'k' is 3." }], ans_box: "a=-2,h=3,k=3" },
+            u2l4q2b: { title: "Question 2b", type: "numeric", fullStatement: "Question 2b: Determine the coordinates of the vertex for:<br><br><strong>Equation:</strong> \\( y = -2(x - 3)^2 + 3 \\)", steps: [{ title: "Step 1: Form the coordinate pair", math: "\\( \\text{Vertex} = (3, 3) \\)", explanation: "By placing the 'h' and 'k' parameters into the (h, k) format, the vertex is confirmed at (3, 3)." }], ans_box: "(3, 3)" },
+            u2l4q2c: { title: "Question 2c", type: "numeric", fullStatement: "Question 2c: Calculate the total number of x-intercepts for:<br><br><strong>Equation:</strong> \\( y = -2(x - 3)^2 + 3 \\)", steps: [{ title: "Step 1: Evaluate trajectory crossing the axis", math: "\\( a = -2 < 0 \\)", explanation: "The negative 'a' value dictates the parabola opens downwards. The vertex is situated above the x-axis at y = 3. Because it starts high and points down, both arms will cross the x-axis, creating 2 intercepts." }], ans_box: "2" },
+            u2l4q2d: { title: "Question 2d", type: "mc", fullStatement: "Question 2d: Specify the geometric sequence transformations starting from \\( y = x^2 \\) for:<br><br><strong>Equation:</strong> \\( y = -2(x - 3)^2 + 3 \\)", options: [
+                "A) Vertical stretch by a factor of 2, horizontal translation 3 units left, vertical translation 3 units up.",
+                "B) Reflection in the x-axis, vertical stretch by a factor of 2, horizontal translation 3 units right, vertical translation 3 units up.",
+                "C) Reflection in the x-axis, vertical compression by a factor of 2, horizontal translation 3 units left, vertical translation 3 units down.",
+                "D) Horizontal translation 3 units left, vertical translation 3 units down."
+            ], steps: [{ title: "Step 1: Translate parameters into movement definitions", math: "\\( a=-2, \\, h=3, \\, k=3 \\)", explanation: "The negative sign on 'a' causes a reflection across the x-axis. The numerical value 2 dictates a vertical stretch by a factor of 2. Finally, h=3 shifts it right, and k=3 shifts it up." }], ans: "B" },
+            u2l4q2e: { title: "Question 2e", type: "notation", maxSlots: 9, fullStatement: "Question 2e: Write the range using standard set notation for:<br><br><strong>Equation:</strong> \\( y = -2(x - 3)^2 + 3 \\)", steps: [{ title: "Step 1: Determine the maximum boundary limit", math: "\\( y \\le 3 \\)", explanation: "Opening downwards means the vertex acts as the absolute maximum peak. Therefore, all output y-values will be less than or equal to the peak height of 3." }], ans_box: "{y ∈ ℝ | y ≤ 3}" },
+
+            u2l4q3a: { title: "Question 3a", type: "numeric", fullStatement: "Question 3a: Identify the explicit parameters a, h, and k from the vertex form equation:<br><br><strong>Equation:</strong> \\( y = \\frac{1}{2}(x + 1)^2 + 5 \\)", steps: [{ title: "Step 1: Resolve the internal bracket sign", math: "\\( y = a(x - (-1))^2 + k \\)", explanation: "The standard formula requires subtraction: (x - h). We rewrite (x + 1) as (x - (-1)) to correctly identify that h = -1. The other parameters are straightforward: a = 1/2 and k = 5." }], ans_box: "a=1/2,h=-1,k=5" },
+            u2l4q3b: { title: "Question 3b", type: "numeric", fullStatement: "Question 3b: Determine the coordinates of the vertex for:<br><br><strong>Equation:</strong> \\( y = \\frac{1}{2}(x + 1)^2 + 5 \\)", steps: [{ title: "Step 1: Combine shift parameters", math: "\\( \\text{Vertex} = (-1, 5) \\)", explanation: "The horizontal shift is -1 (left) and the vertical shift is 5 (up), establishing the vertex at (-1, 5)." }], ans_box: "(-1, 5)" },
+            u2l4q3c: { title: "Question 3c", type: "numeric", fullStatement: "Question 3c: Calculate the total number of x-intercepts for:<br><br><strong>Equation:</strong> \\( y = \\frac{1}{2}(x + 1)^2 + 5 \\)", steps: [{ title: "Step 1: Check crossing threshold feasibility", math: "\\( a = 0.5 > 0 \\)", explanation: "The parabola opens upwards from a minimum y-value of 5. It is physically impossible for the curve to drop down to intersect the horizontal x-axis (y=0)." }], ans_box: "0" },
+            u2l4q3d: { title: "Question 3d", type: "mc", fullStatement: "Question 3d: Specify the geometric sequence transformations starting from \\( y = x^2 \\) for:<br><br><strong>Equation:</strong> \\( y = \\frac{1}{2}(x + 1)^2 + 5 \\)", options: [
+                "A) Vertical stretch by a factor of 2, horizontal translation 1 unit left, vertical translation 5 units up.",
+                "B) Reflection in the x-axis, vertical compression by a factor of 1/2, vertical translation 5 units down.",
+                "C) Vertical compression by a factor of 1/2, horizontal translation 1 unit left, vertical translation 5 units up.",
+                "D) Horizontal translation 1 unit right, vertical translation 5 units down."
+            ], steps: [{ title: "Step 1: Decode the fraction coefficient", math: "\\( a=\\frac{1}{2}, \\, h=-1, \\, k=5 \\)", explanation: "An 'a' value strictly between 0 and 1 results in a vertical compression by that factor (1/2). The graph also translates 1 unit left (h=-1) and 5 units up (k=5)." }], ans: "C" },
+            u2l4q3e: { title: "Question 3e", type: "notation", maxSlots: 9, fullStatement: "Question 3e: Write the range using standard set notation for:<br><br><strong>Equation:</strong> \\( y = \\frac{1}{2}(x + 1)^2 + 5 \\)", steps: [{ title: "Step 1: Define output inequality boundaries", math: "\\( y \\ge 5 \\)", explanation: "Because the curve opens upwards from a low point of y=5, the set of all possible outcomes covers real numbers greater than or equal to 5." }], ans_box: "{y ∈ ℝ | y ≥ 5}" },
+
+            u2l4q4a: { title: "Question 4a", type: "numeric", fullStatement: "Question 4a: Identify the explicit parameters a, h, and k from the vertex form equation:<br><br><strong>Equation:</strong> \\( y = 0.3(x + 2)^2 + 15 \\)", steps: [{ title: "Step 1: Identify decimal values and signs", math: "\\( y = 0.3(x - (-2))^2 + 15 \\)", explanation: "Rewriting the bracketed addition as subtraction isolates h = -2. The leading coefficient is a = 0.3, and the trailing constant is k = 15." }], ans_box: "a=0.3,h=-2,k=15" },
+            u2l4q4b: { title: "Question 4b", type: "numeric", fullStatement: "Question 4b: Determine the coordinates of the vertex for:<br><br><strong>Equation:</strong> \\( y = 0.3(x + 2)^2 + 15 \\)", steps: [{ title: "Step 1: Pair the h and k parameters", math: "\\( \\text{Vertex} = (-2, 15) \\)", explanation: "Directly placing the variables into the (h, k) format yields (-2, 15)." }], ans_box: "(-2, 15)" },
+            u2l4q4c: { title: "Question 4c", type: "numeric", fullStatement: "Question 4c: Calculate the total number of x-intercepts for:<br><br><strong>Equation:</strong> \\( y = 0.3(x + 2)^2 + 15 \\)", steps: [{ title: "Step 1: Visualize path intersection mechanics", math: "\\( a = 0.3 > 0 \\)", explanation: "The parabola has a minimum floor at y = 15 and opens upwards towards positive infinity. It will never touch the x-axis below." }], ans_box: "0" },
+            u2l4q4d: { title: "Question 4d", type: "mc", fullStatement: "Question 4d: Specify the geometric sequence transformations starting from \\( y = x^2 \\) for:<br><br><strong>Equation:</strong> \\( y = 0.3(x + 2)^2 + 15 \\)", options: [
+                "A) Reflection in the x-axis, horizontal translation 2 units right, vertical translation 15 down.",
+                "B) Vertical stretch by a factor of 3, horizontal translation 2 units left, vertical translation 15 up.",
+                "C) Vertical compression by a factor of 0.3, horizontal translation 2 units left, vertical translation 15 units up.",
+                "D) Horizontal translation 2 units right, vertical translation 15 up."
+            ], steps: [{ title: "Step 1: Map the decimal parameter effect", math: "\\( a=0.3, \\, h=-2, \\, k=15 \\)", explanation: "A coefficient between 0 and 1 triggers a vertical compression by that exact factor. The shifts h=-2 and k=15 move the shape left and up respectively." }], ans: "C" },
+            u2l4q4e: { title: "Question 4e", type: "notation", maxSlots: 10, fullStatement: "Question 4e: Write the range using standard set notation for:<br><br><strong>Equation:</strong> \\( y = 0.3(x + 2)^2 + 15 \\)", steps: [{ title: "Step 1: Secure the base boundary condition", math: "\\( y \\ge 15 \\)", explanation: "Starting from the vertex y-coordinate of 15 and opening upwards defines the range as all numbers greater than or equal to 15." }], ans_box: "{y ∈ ℝ | y ≥ 15}" },
+
+            u2l4q5a: { title: "Question 5a", type: "numeric", fullStatement: "Question 5a: Identify the explicit parameters a, h, and k from the vertex form equation:<br><br><strong>Equation:</strong> \\( y = -\\frac{2}{3}(x - 4)^2 - 8 \\)", steps: [{ title: "Step 1: Compare exact signs to the template", math: "\\( y = a(x - h)^2 + k \\)", explanation: "The equation perfectly matches the structure, allowing direct extraction: a = -2/3, h = 4, and k = -8." }], ans_box: "a=-2/3,h=4,k=-8" },
+            u2l4q5b: { title: "Question 5b", type: "numeric", fullStatement: "Question 5b: Determine the coordinates of the vertex for:<br><br><strong>Equation:</strong> \\( y = -\\frac{2}{3}(x - 4)^2 - 8 \\)", steps: [{ title: "Step 1: Link the extracted vertex components", math: "\\( \\text{Vertex} = (4, -8) \\)", explanation: "The vertex coordinate pair is mapped directly from (h, k) as (4, -8)." }], ans_box: "(4, -8)" },
+            u2l4q5c: { title: "Question 5c", type: "numeric", fullStatement: "Question 5c: Calculate the total number of x-intercepts for:<br><br><strong>Equation:</strong> \\( y = -\\frac{2}{3}(x - 4)^2 - 8 \\)", steps: [{ title: "Step 1: Review peak position against opening trajectory", math: "\\( a = -\\frac{2}{3} < 0 \\)", explanation: "The negative 'a' value ensures the parabola opens downwards. Since its highest point is already below the x-axis at y = -8, it will never reach up to intersect it." }], ans_box: "0" },
+            u2l4q5d: { title: "Question 5d", type: "mc", fullStatement: "Question 5d: Specify the geometric sequence transformations starting from \\( y = x^2 \\) for:<br><br><strong>Equation:</strong> \\( y = -\\frac{2}{3}(x - 4)^2 - 8 \\)", options: [
+                "A) Reflection in the x-axis, vertical compression by a factor of 2/3, horizontal translation 4 units right, vertical translation 8 units down.",
+                "B) Vertical stretch by a factor of 2/3, horizontal translation 4 units left, vertical translation 8 units up.",
+                "C) Reflection in the x-axis, vertical stretch by a factor of 3, horizontal translation 4 units left.",
+                "D) Vertical compression by a factor of 2/3, horizontal translation 4 units right, vertical translation 8 units up."
+            ], steps: [{ title: "Step 1: Categorize transformation markers", math: "\\( a=-\\frac{2}{3}, \\, h=4, \\, k=-8 \\)", explanation: "The negative sign triggers an x-axis reflection. The 2/3 magnitude applies a vertical compression. The h and k values indicate shifts to the right and downwards." }], ans: "A" },
+            u2l4q5e: { title: "Question 5e", type: "notation", maxSlots: 10, fullStatement: "Question 5e: Write the range using standard set notation for:<br><br><strong>Equation:</strong> \\( y = -\\frac{2}{3}(x - 4)^2 - 8 \\)", steps: [{ title: "Step 1: Set the downward range limitation", math: "\\( y \\le -8 \\)", explanation: "With a peak maximum at y = -8 and a downward opening direction, all dependent variable outputs are strictly less than or equal to -8." }], ans_box: "{y ∈ ℝ | y ≤ -8}" },
+
+            u2l4q6a: { title: "Question 6a", type: "numeric", fullStatement: "Question 6a: Identify the explicit parameters a, h, and k from the vertex form equation:<br><br><strong>Equation:</strong> \\( y = 2x^2 + 9 \\)", steps: [{ title: "Step 1: Expose hidden zero values", math: "\\( y = 2(x - 0)^2 + 9 \\)", explanation: "When 'x' has no brackets or subtracted numbers, it implies h = 0. Therefore, a = 2, h = 0, and k = 9." }], ans_box: "a=2,h=0,k=9" },
+            u2l4q6b: { title: "Question 6b", type: "numeric", fullStatement: "Question 6b: Determine the coordinates of the vertex for:<br><br><strong>Equation:</strong> \\( y = 2x^2 + 9 \\)", steps: [{ title: "Step 1: Plot the central y-axis vertex", math: "\\( \\text{Vertex} = (0, 9) \\)", explanation: "With no horizontal shift (h=0), the vertex is firmly positioned on the vertical y-axis at (0, 9)." }], ans_box: "(0, 9)" },
+            u2l4q6c: { title: "Question 6c", type: "numeric", fullStatement: "Question 6c: Calculate the total number of x-intercepts for:<br><br><strong>Equation:</strong> \\( y = 2x^2 + 9 \\)", steps: [{ title: "Step 1: Check baseline elevation restrictions", math: "\\( a = 2 > 0 \\)", explanation: "The graph initiates from a minimum base at y = 9 and extends upwards. Consequently, it maintains clearance above the x-axis entirely." }], ans_box: "0" },
+            u2l4q6d: { title: "Question 6d", type: "mc", fullStatement: "Question 6d: Specify the geometric sequence transformations starting from \\( y = x^2 \\) for:<br><br><strong>Equation:</strong> \\( y = 2x^2 + 9 \\)", options: [
+                "A) Vertical compression by a factor of 2, vertical translation 9 units down.",
+                "B) Vertical stretch by a factor of 2, vertical translation 9 units up.",
+                "C) Reflection in the x-axis, horizontal translation 9 units right.",
+                "D) Horizontal translation 2 units right, vertical translation 9 units up."
+            ], steps: [{ title: "Step 1: Identify applied physical modifications", math: "\\( a=2, \\, h=0, \\, k=9 \\)", explanation: "The multiplier 2 instigates a vertical stretch by a factor of 2. The addition of 9 executes a vertical translation 9 units upwards. No horizontal movement occurs." }], ans: "B" },
+            u2l4q6e: { title: "Question 6e", type: "notation", maxSlots: 9, fullStatement: "Question 6e: Write the range using standard set notation for:<br><br><strong>Equation:</strong> \\( y = 2x^2 + 9 \\)", steps: [{ title: "Step 1: Restrict range to upper limits", math: "\\( y \\ge 9 \\)", explanation: "The lowest potential value rests at the vertex coordinate y = 9, meaning the functional range encompasses all values greater than or equal to 9." }], ans_box: "{y ∈ ℝ | y ≥ 9}" },
+
+            u2l4q7a: { title: "Question 7a", type: "numeric", fullStatement: "Question 7a: Identify the explicit parameters a, h, and k from the vertex form equation:<br><br><strong>Equation:</strong> \\( y = -3(x + 5)^2 \\)", steps: [{ title: "Step 1: Expand the missing constant parameter", math: "\\( y = -3(x - (-5))^2 + 0 \\)", explanation: "The absence of a trailing numerical constant confirms k = 0. Expanding the bracket to reflect subtraction shows h = -5, alongside a = -3." }], ans_box: "a=-3,h=-5,k=0" },
+            u2l4q7b: { title: "Question 7b", type: "numeric", fullStatement: "Question 7b: Determine the coordinates of the vertex for:<br><br><strong>Equation:</strong> \\( y = -3(x + 5)^2 \\)", steps: [{ title: "Step 1: Isolate horizontal axis positioning", math: "\\( \\text{Vertex} = (-5, 0) \\)", explanation: "The vertical shift factor k is 0, locking the vertex precisely onto the horizontal x-axis at coordinate (-5, 0)." }], ans_box: "(-5, 0)" },
+            u2l4q7c: { title: "Question 7c", type: "numeric", fullStatement: "Question 7c: Calculate the total number of x-intercepts for:<br><br><strong>Equation:</strong> \\( y = -3(x + 5)^2 \\)", steps: [{ title: "Step 1: Assess contact point metrics", math: "\\( k = 0 \\)", explanation: "Because the vertex coordinate inherently rests exactly on the x-axis, the graph makes contact at exactly one single point, resulting in exactly 1 x-intercept." }], ans_box: "1" },
+            u2l4q7d: { title: "Question 7d", type: "mc", fullStatement: "Question 7d: Specify the geometric sequence transformations starting from \\( y = x^2 \\) for:<br><br><strong>Equation:</strong> \\( y = -3(x + 5)^2 \\)", options: [
+                "A) Vertical stretch by a factor of 3, horizontal translation 5 units right.",
+                "B) Vertical compression by a factor of 3, vertical translation 5 units up.",
+                "C) Reflection in the x-axis, vertical stretch by a factor of 3, horizontal translation 5 units left.",
+                "D) Reflection in the x-axis, horizontal translation 5 units right."
+            ], steps: [{ title: "Step 1: Verify the ordered parameter transformation map", math: "\\( a=-3, \\, h=-5, \\, k=0 \\)", explanation: "The negative component reflects the structure across the x-axis. The integer 3 administers a vertical stretch. The parameter h=-5 forces a translation 5 units left." }], ans: "C" },
+            u2l4q7e: { title: "Question 7e", type: "notation", maxSlots: 9, fullStatement: "Question 7e: Write the range using standard set notation for:<br><br><strong>Equation:</strong> \\( y = -3(x + 5)^2 \\)", steps: [{ title: "Step 1: Bound parameters to negative region", math: "\\( y \\le 0 \\)", explanation: "Initiating from a peak maximum of y = 0 and progressing downwards establishes that all possible range outputs are less than or equal to 0." }], ans_box: "{y ∈ ℝ | y ≤ 0}" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, slotCharactersArray: [], textInputVal: "", selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let activeFocusedSlotIndex = 0;
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const kbdToolbar = document.getElementById("math-keyboard");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                assetMount.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+
+            if (activeProblem.assetType === "fraction") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = activeProblem.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            if (activeProblem.type === "notation") {
+                document.getElementById("input-prompt-label").innerText = "Construct your solution notation using the math toolbar below:";
+                
+                let slotsHtml = `<div class="char-slots-container">`;
+                for (let i = 0; i < activeProblem.maxSlots; i++) {
+                    const char = state.slotCharactersArray[i] || "";
+                    const occupiedClass = char !== "" ? "occupied" : "";
+                    slotsHtml += `<div class="char-slot ${occupiedClass}" id="slot-node-${i}" onclick="setSlotFocusCursor(${i})">${char}</div>`;
+                }
+                slotsHtml += `</div>`;
+                mountPoint.innerHTML = slotsHtml;
+
+                kbdToolbar.style.display = "flex";
+                kbdToolbar.innerHTML = `
+                    <button class="math-key" onclick="pressSlotPaletteKey('{')">{</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('}')">}</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('|')">|</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('∈')">∈</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('ℝ')">ℝ</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('≤')">≤</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('≥')">≥</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('<')">&lt;</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('>')">&gt;</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey(',')">,</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('y')">y</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('x')">x</button>
+                    <button class="math-key" onclick="pressSlotPaletteKey('-')">-</button>
+                    ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressSlotPaletteKey('${n}')">${n}</button>`).join("")}
+                    <button class="math-key btn-danger-action" onclick="triggerSlotBackspace()">Backspace</button>
+                    <button class="math-key btn-danger-action" onclick="triggerSlotClearAll()">Clear All</button>
+                `;
+
+                if (!state.answered) {
+                    setSlotFocusCursor(state.slotCharactersArray.length);
+                } else {
+                    deactivateAllSlotCursors();
+                }
+
+            } else if (activeProblem.type === "mc") {
+                kbdToolbar.style.display = "none";
+                document.getElementById("input-prompt-label").innerText = "Select the correct alternative selection choice option card:";
+                
+                let html = `<div class="mc-options-list">`;
+                activeProblem.options.forEach(opt => {
+                    const letter = opt.charAt(0);
+                    const isSelected = state.selectedMcOption === letter ? "selected" : "";
+                    const isDisabled = state.answered ? "disabled" : "";
+                    html += `
+                        <div class="mc-option-card ${isSelected} ${isDisabled}" onclick="selectMcOptionCard('${letter}')">
+                            <span class="mc-badge">${letter}</span>
+                            <span>${opt.substring(3)}</span>
+                        </div>`;
+                });
+                html += `</div>`;
+                mountPoint.innerHTML = html;
+            } else {
+                kbdToolbar.style.display = "flex";
+                document.getElementById("input-prompt-label").innerText = "Type your response value directly into the text field below:";
+                mountPoint.innerHTML = `<input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., a=3,h=2,k=1 or (2,1) or 0" autocomplete="off">`;
+                
+                kbdToolbar.innerHTML = `
+                    <button class="math-key" onclick="pressStandardNumericKey('a')">a</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('h')">h</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('k')">k</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('(')">(</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(')')">)</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressStandardNumericKey('${n}')">${n}</button>`).join("")}
+                `;
+
+                const numInput = document.getElementById("numeric-student-input");
+                numInput.value = state.textInputVal;
+                
+                numInput.addEventListener("input", () => {
+                    state.textInputVal = numInput.value;
+                });
+
+                if (state.answered) {
+                    numInput.disabled = true;
+                }
+            }
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+            renderMathElements();
+        }
+
+        function setSlotFocusCursor(index) {
+            if (questionStates[activeQuestionId].answered) return;
+            const max = problemDataPack[activeQuestionId].maxSlots;
+            if (index >= max) index = max - 1;
+            if (index < 0) index = 0;
+
+            deactivateAllSlotCursors();
+            activeFocusedSlotIndex = index;
+            
+            const node = document.getElementById(`slot-node-${index}`);
+            if (node) node.classList.add("active-cursor");
+        }
+
+        function deactivateAllSlotCursors() {
+            document.querySelectorAll(".char-slot").forEach(s => s.classList.remove("active-cursor"));
+        }
+
+        function pressSlotPaletteKey(character) {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            state.slotCharactersArray[activeFocusedSlotIndex] = character;
+            const node = document.getElementById(`slot-node-${activeFocusedSlotIndex}`);
+            if (node) {
+                node.innerText = character;
+                node.classList.add("occupied");
+            }
+            setSlotFocusCursor(activeFocusedSlotIndex + 1);
+        }
+
+        function triggerSlotBackspace() {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            let target = activeFocusedSlotIndex;
+            if (!state.slotCharactersArray[target] && target > 0) {
+                target = target - 1;
+            }
+
+            state.slotCharactersArray[target] = "";
+            const node = document.getElementById(`slot-node-${target}`);
+            if (node) {
+                node.innerText = "";
+                node.classList.remove("occupied");
+            }
+            setSlotFocusCursor(target);
+        }
+
+        function triggerSlotClearAll() {
+            const state = questionStates[activeQuestionId];
+            if (state.answered) return;
+
+            state.slotCharactersArray = [];
+            document.querySelectorAll(".char-slot").forEach(s => {
+                s.innerText = "";
+                s.classList.remove("occupied");
+            });
+            setSlotFocusCursor(0);
+        }
+
+        function selectMcOptionCard(letter) {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+            questionStates[activeQuestionId].selectedMcOption = letter;
+            displaySolution();
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let logString = "";
+
+            if (activeProblem.type === "notation") {
+                let fullString = "";
+                for (let i = 0; i < activeProblem.maxSlots; i++) {
+                    fullString += state.slotCharactersArray[i] || " ";
+                }
+                let closingBraceIndex = fullString.indexOf("}");
+                logString = (closingBraceIndex !== -1) ? fullString.substring(0, closingBraceIndex + 1) : fullString.trim();
+
+                let normalizedInput = logString.replace(/\s+/g, '').toLowerCase().replace(/r/g, 'ℝ');
+                const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase().replace(/r/g, 'ℝ'));
+
+                if (possibleAnswers.includes(normalizedInput)) {
+                    matchingCorrect = true;
+                }
+            } else if (activeProblem.type === "mc") {
+                if (state.selectedMcOption === "") {
+                    alert("Please click an option card choice before verifying verification.");
+                    return;
+                }
+                logString = "Option " + state.selectedMcOption;
+                if (answerRegistry[activeQuestionId].includes(state.selectedMcOption)) {
+                    matchingCorrect = true;
+                }
+            } else {
+                const rawVal = state.textInputVal;
+                let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2');
+                logString = rawVal;
+                
+                const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2'));
+                if (possibleAnswers.includes(normalizedInput)) {
+                    matchingCorrect = true;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_2",
+                lessonId: "Lesson_4",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: activeProblem.type === "mc" ? "Multiple Choice Option Selection" : (activeProblem.type === "notation" ? "Interactive Set Notation Builder" : "Standard Alphanumeric Parameter Matching"),
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            deactivateAllSlotCursors();
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            if (document.querySelectorAll(".mc-option-card")) {
+                document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
+            }
+            
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Worksheet metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment variables configuration. Review step modules below.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans || data.ans_box;
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Matrix Entry Solution</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

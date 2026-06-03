@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 2 Lesson 12</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--math-color);
+        }
+
+        .ordered-pairs-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .pair-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .pair-row-label {
+            min-width: 120px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .pair-coord-field {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            outline: none;
+            color: var(--math-color);
+            font-family: inherit;
+        }
+
+        .pair-coord-field:focus {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .pair-coord-field:disabled {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+        .math-key.btn-danger-action:hover:not(:disabled) {
+            background-color: #fecaca;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 2 Lesson 12</h1>
+        <p>Quadratic Applications & Optimization Word Problems Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                
+                <optgroup label="Question 8 & 9: Bottle Rocket Trajectory">
+                    <option value="u2l12q8a">8a) Launch Height of Bottle Rocket</option>
+                    <option value="u2l12q8b">8b) Max Height of Bottle Rocket</option>
+                    <option value="u2l12q8c">8c) Hang Time of Bottle Rocket</option>
+                    <option value="u2l12q9b">9b) Vertex Form Equation for Bottle Rocket</option>
+                </optgroup>
+
+                <optgroup label="Question 12: Object Thrown Into Air">
+                    <option value="u2l12q12a">12a) Identify Quadratic Form Name</option>
+                    <option value="u2l12q12b">12b) Find the Zeros (t-intercepts)</option>
+                    <option value="u2l12q12c">12c) Convert to Standard Form Equation</option>
+                    <option value="u2l12q12d">12d) Coordinates of the Maximum Vertex</option>
+                    <option value="u2l12q12e_g">12e) Graph the Trajectory Function</option>
+                </optgroup>
+
+                <optgroup label="Question 13: Golfing on the Moon">
+                    <option value="u2l12q13a">13a) Identify Quadratic Form Name</option>
+                    <option value="u2l12q13b">13b) Coordinates of the Maximum Vertex</option>
+                    <option value="u2l12q13c">13c) Convert to Standard Form</option>
+                    <option value="u2l12q13d_g">13d) Graph the Golf Ball Trajectory</option>
+                    <option value="u2l12q13e_i">13e-i) Interval where function is Positive</option>
+                    <option value="u2l12q13e_ii">13e-ii) Interval where function is Increasing</option>
+                </optgroup>
+
+                <optgroup label="Question 16 & 17: T-Shirt Sales Revenue Optimization">
+                    <option value="u2l12q16b">16b) Find the y-intercept of Revenue Function</option>
+                    <option value="u2l12q16c">16c) Convert Revenue Function to Standard Form</option>
+                    <option value="u2l12q16d">16d) Maximum Revenue from Price Increase ($)</option>
+                    <option value="u2l12q17a">17a) Revenue Function for Price Decrease</option>
+                    <option value="u2l12q17b">17b) Maximum Revenue from Price Decrease ($)</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+                
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Type your answer below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;">
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 5.5, y=-5(x-0.875)²+5.5" autocomplete="off">
+                </div>
+                <div class="math-keyboard-toolbar" id="math-keyboard"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const staticBannerHtml = `<div style="padding: 15px; background-color: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; font-weight: bold; width:100%; text-align:center; box-sizing:border-box;">Refer to graphs in the homework question PDF, and answer the question.</div>`;
+
+        const answerRegistry = {
+            u2l12q8a: ["2", "2m"],
+            u2l12q8b: ["5.5", "5.5m"],
+            u2l12q8c: ["1.9", "1.9s"],
+            u2l12q9b: ["y=-5(x-0.875)2+5.5", "y=-5(x-0.875)²+5.5", "-5(x-0.875)²+5.5"],
+            u2l12q12a: ["factoredform", "factored"],
+            u2l12q12b: ["0,2", "t=0,t=2", "2,0"],
+            u2l12q12c: ["h(t)=-4.9t2+9.8t", "h(t)=-4.9t²+9.8t", "-4.9t²+9.8t"],
+            u2l12q12d: ["(1,4.9)", "1,4.9"],
+            u2l12q12e_g: ["(0,0);(0.5,3.675);(1,4.9);(1.5,3.675);(2,0)"],
+            u2l12q13a: ["vertexform", "vertex"],
+            u2l12q13b: ["(25,500)", "25,500"],
+            u2l12q13c: ["h(t)=-0.8t2+40t", "h(t)=-0.8t²+40t", "-0.8t²+40t"],
+            u2l12q13d_g: ["(0,0);(12.5,375);(25,500);(37.5,375);(50,0)"],
+            u2l12q13e_i: ["0<t<50", "(0,50)"],
+            u2l12q13e_ii: ["0<t<25", "(0,25)"],
+            u2l12q16b: ["1500"],
+            u2l12q16c: ["R(x)=-3x2+55x+1500", "R(x)=-3x²+55x+1500", "-3x²+55x+1500"],
+            u2l12q16d: ["1752"],
+            u2l12q17a: ["R(x)=(15-x)(100+18x)", "(15-x)(100+18x)"],
+            u2l12q17b: ["1900"]
+        };
+
+        const problemDataPack = {
+            u2l12q8a: { title: "Question 8a", type: "numeric", requiresBanner: true, fullStatement: "Question 8a: From what height above ground was this bottle rocket launched?", steps: [
+                { title: "Step 1: Understand Initial Conditions", math: "\\( t = 0 \\)", explanation: "The launch height occurs exactly at the very beginning of the flight when time (t) is zero." },
+                { title: "Step 2: Read the y-intercept", math: "\\( (0, 2) \\)", explanation: "Look at the vertical axis on the provided graph. The curve starts at a height of 2 meters." },
+                { title: "Step 3: State the Answer", math: "\\( \\text{Height } = 2 \\text{ m} \\)", explanation: "The initial launch height is 2 meters." }
+            ], ans_box: "2" },
+
+            u2l12q8b: { title: "Question 8b", type: "numeric", requiresBanner: true, fullStatement: "Question 8b: What is the approximate maximum height reached?", steps: [
+                { title: "Step 1: Locate the Apex", math: "\\( \\text{Peak of the Parabola} \\)", explanation: "Identify the absolute highest point on the curved path in the graph." },
+                { title: "Step 2: Read the corresponding y-value", math: "\\( y \\approx 5.5 \\)", explanation: "Trace a horizontal line from the peak over to the y-axis. It aligns exactly halfway between 5 and 6." },
+                { title: "Step 3: State the Answer", math: "\\( \\text{Max Height } = 5.5 \\text{ m} \\)", explanation: "The maximum height is approximately 5.5 meters." }
+            ], ans_box: "5.5" },
+
+            u2l12q8c: { title: "Question 8c", type: "numeric", requiresBanner: true, fullStatement: "Question 8c: Estimate the hang time of the rocket.", steps: [
+                { title: "Step 1: Understand Hang Time", math: "\\( \\text{Total Flight Duration} \\)", explanation: "Hang time is the total seconds the rocket spends in the air before hitting the ground." },
+                { title: "Step 2: Locate the Landing Point", math: "\\( y = 0 \\)", explanation: "Find where the graph crosses the horizontal x-axis (height equals zero)." },
+                { title: "Step 3: Read the x-intercept", math: "\\( x \\approx 1.9 \\)", explanation: "The curve intersects the axis just slightly before the 2.0 second mark." },
+                { title: "Step 4: State the Answer", math: "\\( \\text{Hang Time } = 1.9 \\text{ s} \\)", explanation: "The estimated hang time is 1.9 seconds." }
+            ], ans_box: "1.9" },
+
+            u2l12q9b: { title: "Question 9b", type: "algebra", requiresBanner: true, fullStatement: "Question 9b: Use both x-intercepts to find an approximate value for the vertex, and write the Vertex Form Equation.", steps: [
+                { title: "Step 1: Identify Both x-intercepts", math: "\\( x_1 \\approx -0.15, \\; x_2 \\approx 1.9 \\)", explanation: "Estimate the landing point (1.9) and the backward-extended imaginary start point (-0.15)." },
+                { title: "Step 2: Calculate the x-coordinate of the Vertex", math: "\\( h = \\frac{-0.15 + 1.9}{2} = \\frac{1.75}{2} = 0.875 \\)", explanation: "The axis of symmetry lies exactly halfway between the two intercepts." },
+                { title: "Step 3: Identify the y-coordinate of the Vertex", math: "\\( k = 5.5 \\)", explanation: "Using the maximum height identified in Question 8b." },
+                { title: "Step 4: Set Up the Vertex Form Equation", math: "\\( y = a(x - 0.875)^2 + 5.5 \\)", explanation: "Substitute the vertex (h, k) into the standard template." },
+                { title: "Step 5: Solve for the Leading Coefficient 'a'", math: "\\( 2 = a(0 - 0.875)^2 + 5.5 \\)", explanation: "Use the initial launch point (0, 2) as a reference point to solve for 'a'." },
+                { title: "Step 6: Compute the Final Value", math: "\\( -3.5 = a(0.765) \\rightarrow a \\approx -4.57 \\approx -5 \\)", explanation: "Isolate 'a'. For simplicity in this textbook curriculum, it rounds cleanly to -5." },
+                { title: "Step 7: Final Equation", math: "\\( y = -5(x - 0.875)^2 + 5.5 \\)", explanation: "Write the complete function." }
+            ], ans_box: "y = -5(x - 0.875)² + 5.5" },
+
+            u2l12q12a: { title: "Question 12a", type: "numeric", fullStatement: "Question 12a: In which form is the quadratic function \\( h(t) = -4.9t(t - 2) \\) expressed?", steps: [
+                { title: "Step 1: Analyze the Structure", math: "\\( h(t) = a(t - r)(t - s) \\)", explanation: "The function consists of a constant multiplied by distinct binomial factors containing 't'." },
+                { title: "Step 2: Identify the Form", math: "\\( \\text{Factored Form} \\)", explanation: "Because it clearly displays the roots (x-intercepts) directly inside parentheses, it is in Factored Form." }
+            ], ans_box: "factored form" },
+
+            u2l12q12b: { title: "Question 12b", type: "numeric", fullStatement: "Question 12b: Find the zeros (t-intercepts) of this function.", steps: [
+                { title: "Step 1: Set the Function to Zero", math: "\\( -4.9t(t - 2) = 0 \\)", explanation: "Roots occur when the height 'h' is exactly zero." },
+                { title: "Step 2: Solve Each Factor", math: "\\( -4.9t = 0 \\rightarrow t = 0 \\)", explanation: "The first zero represents the exact moment the object is launched from the ground." },
+                { title: "Step 3: Solve the Second Factor", math: "\\( t - 2 = 0 \\rightarrow t = 2 \\)", explanation: "The second zero represents the exact moment the object returns and hits the ground." },
+                { title: "Step 4: Final Output", math: "\\( t = 0, \\; t = 2 \\)", explanation: "The intercepts are 0 and 2." }
+            ], ans_box: "0, 2" },
+
+            u2l12q12c: { title: "Question 12c", type: "algebra", fullStatement: "Question 12c: Write the function \\( h(t) = -4.9t(t - 2) \\) in standard form.", steps: [
+                { title: "Step 1: Understand Standard Form", math: "\\( y = ax^2 + bx + c \\)", explanation: "Standard form requires all brackets to be fully expanded and terms collected." },
+                { title: "Step 2: Distribute the Leading Term", math: "\\( -4.9t \\times t = -4.9t^2 \\)", explanation: "Multiply the outside term by the first inside term." },
+                { title: "Step 3: Distribute to the Second Term", math: "\\( -4.9t \\times (-2) = +9.8t \\)", explanation: "Multiply the outside term by the second inside term. A negative times a negative is positive." },
+                { title: "Step 4: Final Standard Form Equation", math: "\\( h(t) = -4.9t^2 + 9.8t \\)", explanation: "Combine the results into the final equation." }
+            ], ans_box: "h(t) = -4.9t² + 9.8t" },
+
+            u2l12q12d: { title: "Question 12d", type: "numeric", fullStatement: "Question 12d: Find the coordinates of the vertex.", steps: [
+                { title: "Step 1: Calculate the x-coordinate (Midpoint)", math: "\\( h = \\frac{0 + 2}{2} = \\frac{2}{2} = 1 \\)", explanation: "The axis of symmetry is exactly halfway between the two roots (0 and 2)." },
+                { title: "Step 2: Calculate the y-coordinate (Height)", math: "\\( k = -4.9(1)(1 - 2) \\)", explanation: "Substitute the time t = 1 back into the original factored equation." },
+                { title: "Step 3: Solve the Math", math: "\\( k = -4.9(1)(-1) = 4.9 \\)", explanation: "Multiply to find the maximum peak height." },
+                { title: "Step 4: Final Vertex Coordinates", math: "\\( (1, 4.9) \\)", explanation: "The object reaches a maximum height of 4.9m exactly 1 second after launch." }
+            ], ans_box: "(1, 4.9)" },
+
+            u2l12q12e_g: { title: "Question 12e Graph", type: "graph", fullStatement: "Question 12e: Map 5 core ordered pairs to sketch the trajectory graph of the object:<br><br><strong>Function:</strong> \\( h(t) = -4.9t^2 + 9.8t \\)", gridConfig: { xMin: 0, xMax: 2.5, yMin: 0, yMax: 6, xStep: 0.5, yStep: 1, labelX: "t (sec)", labelY: "h (m)" }, steps: [
+                { title: "Step 1: Locate Vertex Center", math: "\\( \\text{Vertex} = (1, 4.9) \\)", explanation: "Place the apex of the curve at 1 second." },
+                { title: "Step 2: Map x-intercepts", math: "\\( (0, 0) \\text{ and } (2, 0) \\)", explanation: "Map the launch point and landing point on the horizontal axis." },
+                { title: "Step 3: Evaluate Intermediary Points", math: "\\( h(0.5) = -4.9(0.5)^2 + 9.8(0.5) = 3.675 \\)", explanation: "Calculate heights at the quarter-marks to guide the parabola's curvature." }
+            ]},
+
+            u2l12q13a: { title: "Question 13a", type: "numeric", fullStatement: "Question 13a: In which form is the quadratic function \\( h(t) = -0.8(t - 25)^2 + 500 \\) expressed?", steps: [
+                { title: "Step 1: Analyze the Structure", math: "\\( y = a(x - h)^2 + k \\)", explanation: "The equation contains a squared binomial with a trailing constant." },
+                { title: "Step 2: Identify the Form", math: "\\( \\text{Vertex Form} \\)", explanation: "Because the equation perfectly isolates the 'h' and 'k' shifting parameters, it is in Vertex Form." }
+            ], ans_box: "vertex form" },
+
+            u2l12q13b: { title: "Question 13b", type: "numeric", fullStatement: "Question 13b: What are the coordinates of the vertex?", steps: [
+                { title: "Step 1: Extract Parameters from Equation", math: "\\( h(t) = -0.8(t - 25)^2 + 500 \\)", explanation: "Identify the values inside the bracket and outside the bracket." },
+                { title: "Step 2: Read the Coordinates", math: "\\( h = 25, \\; k = 500 \\)", explanation: "Reverse the sign for the inner value. Keep the outer sign." },
+                { title: "Step 3: Final Output", math: "\\( (25, 500) \\)", explanation: "The golf ball hits a maximum height of 500 meters exactly 25 seconds into the flight." }
+            ], ans_box: "(25, 500)" },
+
+            u2l12q13c: { title: "Question 13c", type: "algebra", fullStatement: "Question 13c: Write the function \\( h(t) = -0.8(t - 25)^2 + 500 \\) in standard form.", steps: [
+                { title: "Step 1: Expand the Perfect Square", math: "\\( (t - 25)^2 = t^2 - 50t + 625 \\)", explanation: "Expand the binomial expression." },
+                { title: "Step 2: Distribute the Leading Coefficient", math: "\\( -0.8(t^2 - 50t + 625) = -0.8t^2 + 40t - 500 \\)", explanation: "Multiply every term inside the new trinomial by -0.8." },
+                { title: "Step 3: Add the Trailing Constant", math: "\\( h(t) = -0.8t^2 + 40t - 500 + 500 \\)", explanation: "Combine the expanded constants with the outer +500." },
+                { title: "Step 4: Final Standard Form Equation", math: "\\( h(t) = -0.8t^2 + 40t \\)", explanation: "The constants cancel each other out to zero." }
+            ], ans_box: "h(t) = -0.8t² + 40t" },
+
+            u2l12q13d_g: { title: "Question 13d Graph", type: "graph", fullStatement: "Question 13d: Map 5 core ordered pairs to sketch the trajectory graph of the golf ball:<br><br><strong>Function:</strong> \\( h(t) = -0.8(t - 25)^2 + 500 \\)", gridConfig: { xMin: 0, xMax: 60, yMin: 0, yMax: 600, xStep: 10, yStep: 100, labelX: "t (sec)", labelY: "h (m)" }, steps: [
+                { title: "Step 1: Locate Vertex Center", math: "\\( \\text{Vertex} = (25, 500) \\)", explanation: "Place the apex of the curve exactly at 25 seconds." },
+                { title: "Step 2: Determine Landing Time", math: "\\( t = 50 \\)", explanation: "Because the apex is at 25s starting from 0, symmetry dictates landing is exactly at 50s." },
+                { title: "Step 3: Map Intermediary Points", math: "\\( h(12.5) = 375 \\)", explanation: "Fill in symmetrical altitude points to guide the parabolic drawing arc." }
+            ]},
+
+            u2l12q13e_i: { title: "Question 13e-i", type: "numeric", fullStatement: "Question 13e-i: Identify the interval for which the function is positive.", steps: [
+                { title: "Step 1: Understand 'Positive' in Context", math: "\\( h(t) > 0 \\)", explanation: "The function is positive whenever the golf ball is physically flying in the air above the ground." },
+                { title: "Step 2: Identify the Boundary Roots", math: "\\( t = 0 \\text{ to } t = 50 \\)", explanation: "The ball leaves the ground at 0 seconds and lands at 50 seconds." },
+                { title: "Step 3: Write the Inequality Interval", math: "\\( 0 < t < 50 \\)", explanation: "The height is strictly positive between these two time bounds." }
+            ], ans_box: "0 < t < 50" },
+
+            u2l12q13e_ii: { title: "Question 13e-ii", type: "numeric", fullStatement: "Question 13e-ii: Identify the interval for which the function is increasing.", steps: [
+                { title: "Step 1: Understand 'Increasing' in Context", math: "\\( \\text{Going Upward} \\)", explanation: "A parabola increases while it travels from the ground toward its maximum apex." },
+                { title: "Step 2: Identify the Apex Time", math: "\\( t = 25 \\)", explanation: "The ball stops rising and begins to fall exactly at 25 seconds." },
+                { title: "Step 3: Write the Inequality Interval", math: "\\( 0 < t < 25 \\)", explanation: "The ball's height is strictly increasing from launch until the apex." }
+            ], ans_box: "0 < t < 25" },
+
+            u2l12q16b: { title: "Question 16b", type: "numeric", fullStatement: "Question 16b: Find the y-intercept of the function \\( R(x) = (15 + x)(100 - 3x) \\)", steps: [
+                { title: "Step 1: Set x to Zero", math: "\\( R(0) = (15 + 0)(100 - 3(0)) \\)", explanation: "The y-intercept occurs when the price increase amount 'x' is zero." },
+                { title: "Step 2: Multiply the Terms", math: "\\( R(0) = (15)(100) = 1500 \\)", explanation: "Calculate the base revenue." },
+                { title: "Step 3: Interpret Significance", math: "\\( \\$1500 \\)", explanation: "This value represents the total base revenue generated when there is absolutely no increase in the T-shirt price." }
+            ], ans_box: "1500" },
+
+            u2l12q16c: { title: "Question 16c", type: "algebra", fullStatement: "Question 16c: Write the function \\( R(x) = (15 + x)(100 - 3x) \\) in standard form.", steps: [
+                { title: "Step 1: Expand the Binomials (FOIL)", math: "\\( (15)(100) + (15)(-3x) + (x)(100) + (x)(-3x) \\)", explanation: "Multiply each term in the first bracket by each term in the second." },
+                { title: "Step 2: Perform the Multiplications", math: "\\( 1500 - 45x + 100x - 3x^2 \\)", explanation: "Execute the arithmetic." },
+                { title: "Step 3: Combine Like Terms and Reorder", math: "\\( R(x) = -3x^2 + 55x + 1500 \\)", explanation: "Group the 'x' terms together and sort the equation from highest power to lowest." }
+            ], ans_box: "R(x) = -3x² + 55x + 1500" },
+
+            u2l12q16d: { title: "Question 16d", type: "numeric", fullStatement: "Question 16d: Find the T-shirt selling price that will maximize revenue, and the total expected revenue. (Enter the maximum revenue)", steps: [
+                { title: "Step 1: Find the x-intercepts (Roots)", math: "\\( 15 + x = 0 \\rightarrow x = -15 \\\\ 100 - 3x = 0 \\rightarrow x = 33.33 \\)", explanation: "Set each bracket to zero to find where revenue drops to absolute zero." },
+                { title: "Step 2: Find the Axis of Symmetry", math: "\\( h = \\frac{-15 + 33.33}{2} = \\frac{18.33}{2} \\approx 9.16 \\)", explanation: "The optimal price increase is the exact midpoint between the roots. Since it is a dollar amount, round to x = 9." },
+                { title: "Step 3: Determine the Optimal Selling Price", math: "\\( \\text{Price} = 15 + x = 15 + 9 = 24 \\)", explanation: "Add the optimal $9 increase to the base $15 price to get a $24 selling price." },
+                { title: "Step 4: Calculate the Maximum Expected Revenue", math: "\\( R(9) = (15 + 9)(100 - 3(9)) = (24)(73) = 1752 \\)", explanation: "Substitute x = 9 into the formula. Selling 73 shirts at $24 yields $1752." }
+            ], ans_box: "1752" },
+
+            u2l12q17a: { title: "Question 17a", type: "algebra", fullStatement: "Question 17a: Write the equation that expresses revenue as a function of x, where x is the price reduction in dollars.", steps: [
+                { title: "Step 1: Set Up the Price Term", math: "\\( \\text{Price} = (15 - x) \\)", explanation: "The new price is the base $15 minus the discount 'x'." },
+                { title: "Step 2: Set Up the Quantity Term", math: "\\( \\text{Quantity} = (100 + 18x) \\)", explanation: "For every $1 decrease, sales increase by 18 shirts." },
+                { title: "Step 3: Formulate Revenue Equation", math: "\\( R(x) = (15 - x)(100 + 18x) \\)", explanation: "Revenue is Price multiplied by Quantity." }
+            ], ans_box: "R(x) = (15 - x)(100 + 18x)" },
+
+            u2l12q17b: { title: "Question 17b", type: "numeric", fullStatement: "Question 17b: If the company decreases the price, what is the price of a T-shirt that will maximize revenue? What is the maximum revenue? (Enter the maximum revenue)", steps: [
+                { title: "Step 1: Find the x-intercepts", math: "\\( 15 - x = 0 \\rightarrow x = 15 \\\\ 100 + 18x = 0 \\rightarrow x = -5.55 \\)", explanation: "Find the boundaries where revenue equals zero." },
+                { title: "Step 2: Calculate the Axis of Symmetry", math: "\\( h = \\frac{15 + (-5.55)}{2} = \\frac{9.45}{2} = 4.725 \\)", explanation: "Find the exact midpoint. Since discounts must be in whole dollars, the optimal integer 'x' is 5." },
+                { title: "Step 3: Determine the Optimal Price", math: "\\( \\text{Price} = 15 - 5 = 10 \\)", explanation: "Apply the $5 discount to the base $15 price. The optimal selling price is $10." },
+                { title: "Step 4: Calculate Maximum Revenue", math: "\\( R(5) = (15 - 5)(100 + 18(5)) = (10)(190) = 1900 \\)", explanation: "Multiply the optimal price ($10) by the new quantity (190) to find the absolute maximum revenue." }
+            ], ans_box: "1900" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { 
+                answered: false, 
+                textInputVal: "", 
+                isCorrect: false, 
+                currentStep: 0, 
+                solRevealed: false,
+                pairsData: [
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}  
+                ]
+            };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        let canvasElement = null;
+        let ctx = null;
+        const CANVAS_DIMENSION = 420;
+        const CANVAS_PADDING = 50;
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const kbdToolbar = document.getElementById("math-keyboard");
+
+            mountPoint.innerHTML = "";
+            kbdToolbar.innerHTML = "";
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                assetMount.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+
+            if (activeProblem.requiresBanner) {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = staticBannerHtml;
+            } else if (activeProblem.type === "graph") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = `<canvas id="sketch-canvas-node" width="${CANVAS_DIMENSION}" height="${CANVAS_DIMENSION}"></canvas>`;
+                initGraphCanvasEngine(activeProblem);
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            if (activeProblem.type === "graph") {
+                kbdToolbar.style.display = "none";
+                document.getElementById("input-prompt-label").innerText = "Complete the 5 ordered pair coordinate slots strictly in horizontal numerical sequence from left to right:";
+                
+                const labels = ["Left Point 2", "Left Point 1", "Vertex Point", "Right Point 1", "Right Point 2"];
+                const backgrounds = ["white", "white", "#fef08a", "white", "white"]; 
+                
+                let html = `<div class="ordered-pairs-layout">`;
+                for (let i = 0; i < 5; i++) {
+                    const disabledStr = state.answered ? "disabled" : "";
+                    html += `
+                        <div class="pair-input-row" style="background-color: ${backgrounds[i]};">
+                            <span class="pair-row-label">${labels[i]}:</span>
+                            <span>(</span>
+                            <input type="text" class="pair-coord-field" id="pair-${i}-x" value="${state.pairsData[i].x}" placeholder="x" ${disabledStr} oninput="syncOrderedPairTrack(${i}, 'x')">
+                            <span>,</span>
+                            <input type="text" class="pair-coord-field" id="pair-${i}-y" value="${state.pairsData[i].y}" placeholder="y" style="width: 100px;" ${disabledStr} oninput="syncOrderedPairTrack(${i}, 'y')">
+                            <span>)</span>
+                        </div>`;
+                }
+                html += `</div>`;
+                mountPoint.innerHTML = html;
+            } else {
+                kbdToolbar.style.display = "flex";
+                document.getElementById("input-prompt-label").innerText = "Type your response value directly into the text field below:";
+                mountPoint.innerHTML = `<input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 5.5, y=-5(x-0.875)²+5.5" autocomplete="off">`;
+                
+                kbdToolbar.innerHTML = `
+                    <button class="math-key" onclick="pressStandardNumericKey('y')">y</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('x')">x</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('t')">t</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('h')">h</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('R')">R</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('a')">a</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('k')">k</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('²')">²</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('(')">(</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(')')">)</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('<')"><</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('>')">></button>
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('+')">+</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressStandardNumericKey('${n}')">${n}</button>`).join("")}
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                `;
+
+                const numInput = document.getElementById("numeric-student-input");
+                numInput.value = state.textInputVal;
+                
+                numInput.addEventListener("input", () => {
+                    state.textInputVal = numInput.value;
+                });
+
+                if (state.answered) {
+                    numInput.disabled = true;
+                }
+            }
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function triggerBackspace() {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                questionStates[activeQuestionId].textInputVal = txtInput.value;
+            }
+        }
+
+        function syncOrderedPairTrack(index, axis) {
+            const state = questionStates[activeQuestionId];
+            const field = document.getElementById(`pair-${index}-${axis}`);
+            if (!field) return;
+
+            state.pairsData[index][axis] = field.value.trim();
+            renderGraphGridBase(problemDataPack[activeQuestionId]);
+        }
+
+        function initGraphCanvasEngine(problem) {
+            canvasElement = document.getElementById("sketch-canvas-node");
+            if (!canvasElement) return;
+            ctx = canvasElement.getContext("2d");
+            renderGraphGridBase(problem);
+        }
+
+        function renderGraphGridBase(problem) {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, CANVAS_DIMENSION, CANVAS_DIMENSION);
+            
+            const config = problem.gridConfig;
+            const state = questionStates[activeQuestionId];
+
+            const plotWidth = CANVAS_DIMENSION - (2 * CANVAS_PADDING);
+            const plotHeight = CANVAS_DIMENSION - (2 * CANVAS_PADDING);
+
+            function getPixelX(mathX) {
+                return CANVAS_PADDING + ((mathX - config.xMin) / (config.xMax - config.xMin)) * plotWidth;
+            }
+            function getPixelY(mathY) {
+                return CANVAS_PADDING + ((config.yMax - mathY) / (config.yMax - config.yMin)) * plotHeight;
+            }
+
+            ctx.strokeStyle = "#e2e8f0";
+            ctx.lineWidth = 1;
+            ctx.font = "11px system-ui";
+            ctx.fillStyle = "#64748b";
+
+            for (let y = config.yMin; y <= config.yMax; y += config.yStep) {
+                let py = getPixelY(y);
+                ctx.beginPath();
+                ctx.moveTo(CANVAS_PADDING, py);
+                ctx.lineTo(CANVAS_DIMENSION - CANVAS_PADDING, py);
+                ctx.stroke();
+                
+                ctx.textAlign = "right";
+                ctx.textBaseline = "middle";
+                ctx.fillText(y, CANVAS_PADDING - 8, py);
+            }
+
+            for (let x = config.xMin; x <= config.xMax; x += config.xStep) {
+                let px = getPixelX(x);
+                ctx.beginPath();
+                ctx.moveTo(px, CANVAS_PADDING);
+                ctx.lineTo(px, CANVAS_DIMENSION - CANVAS_PADDING);
+                ctx.stroke();
+
+                ctx.textAlign = "center";
+                ctx.textBaseline = "top";
+                ctx.fillText(x, px, CANVAS_DIMENSION - CANVAS_PADDING + 8);
+            }
+
+            ctx.strokeStyle = "#0f172a";
+            ctx.lineWidth = 2.5;
+            
+            let xAxisPy = (config.yMin <= 0 && 0 <= config.yMax) ? getPixelY(0) : CANVAS_DIMENSION - CANVAS_PADDING;
+            ctx.beginPath();
+            ctx.moveTo(CANVAS_PADDING, xAxisPy);
+            ctx.lineTo(CANVAS_DIMENSION - CANVAS_PADDING, xAxisPy);
+            ctx.stroke();
+
+            let yAxisPx = (config.xMin <= 0 && 0 <= config.xMax) ? getPixelX(0) : CANVAS_PADDING;
+            ctx.beginPath();
+            ctx.moveTo(yAxisPx, CANVAS_PADDING);
+            ctx.lineTo(yAxisPx, CANVAS_DIMENSION - CANVAS_PADDING);
+            ctx.stroke();
+
+            ctx.fillStyle = "#0f172a";
+            ctx.font = "bold 12px system-ui";
+            ctx.textAlign = "center";
+            ctx.fillText(config.labelX, CANVAS_DIMENSION - CANVAS_PADDING + 25, xAxisPy + 15);
+            ctx.fillText(config.labelY, yAxisPx, CANVAS_PADDING - 18);
+
+            let activePlottedPointsCount = 0;
+            let allFivePairsComplete = true;
+
+            state.pairsData.forEach((pt, idx) => {
+                if (pt.x === "" || pt.y === "") {
+                    allFivePairsComplete = false;
+                    return;
+                }
+                const mx = parseFloat(pt.x);
+                const my = parseFloat(pt.y);
+
+                if (!isNaN(mx) && !isNaN(my)) {
+                    activePlottedPointsCount++;
+                    let px = getPixelX(mx);
+                    let py = getPixelY(my);
+
+                    ctx.fillStyle = (idx === 2) ? "#dc2626" : "#2563eb";
+                    ctx.beginPath();
+                    ctx.arc(px, py, 6, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    if (idx === 2) {
+                        ctx.font = "bold 11px system-ui";
+                        ctx.fillText("V", px, py - 14);
+                    }
+                } else {
+                    allFivePairsComplete = false;
+                }
+            });
+
+            if (allFivePairsComplete && activePlottedPointsCount === 5) {
+                const vX = parseFloat(state.pairsData[2].x);
+                const vY = parseFloat(state.pairsData[2].y);
+                const refX = parseFloat(state.pairsData[1].x);
+                const refY = parseFloat(state.pairsData[1].y);
+
+                if (!isNaN(vX) && !isNaN(vY) && !isNaN(refX) && !isNaN(refY) && vX !== refX) {
+                    const derivedA = (refY - vY) / Math.pow((refX - vX), 2);
+
+                    ctx.strokeStyle = "#16a34a";
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+
+                    let initialPlotIteration = true;
+                    const evaluationResolution = (config.xMax - config.xMin) / 100;
+
+                    for (let mx = config.xMin; mx <= config.xMax; mx += evaluationResolution) {
+                        let my = derivedA * Math.pow((mx - vX), 2) + vY;
+                        if (my >= config.yMin && my <= config.yMax) {
+                            let px = getPixelX(mx);
+                            let py = getPixelY(my);
+                            if (initialPlotIteration) {
+                                ctx.moveTo(px, py);
+                                initialPlotIteration = false;
+                            } else {
+                                ctx.lineTo(px, py);
+                            }
+                        }
+                    }
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            let appendVal = symbol;
+            
+            txtInput.value = currentText.substring(0, startPos) + appendVal + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + appendVal.length;
+            txtInput.selectionEnd = startPos + appendVal.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let rawVal = "";
+            let logString = "";
+
+            if (activeProblem.type === "graph") {
+                let parts = [];
+                for (let i = 0; i < 5; i++) {
+                    if (state.pairsData[i].x === "" || state.pairsData[i].y === "") {
+                        alert("Please populate all 5 ordered pair fields across both coordinates parameters before checking submissions.");
+                        return;
+                    }
+                    parts.push(`(${state.pairsData[i].x},${state.pairsData[i].y})`);
+                }
+                logString = parts.join(";");
+                if (answerRegistry[activeQuestionId].includes(logString)) {
+                    matchingCorrect = true;
+                }
+            } else {
+                rawVal = state.textInputVal;
+                let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2');
+                logString = rawVal;
+                
+                const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2'));
+                if (possibleAnswers.includes(normalizedInput)) {
+                    matchingCorrect = true;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_2",
+                lessonId: "Lesson_12",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: activeProblem.type === "graph" ? "Ordered Pairs Algebra Input Grid" : "Word Problem Parameter Optimization Input",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (activeQuestionId && problemDataPack[activeQuestionId].type === "graph") {
+                for (let i = 0; i < 5; i++) {
+                    if (document.getElementById(`pair-${i}-x`)) document.getElementById(`pair-${i}-x`).disabled = true;
+                    if (document.getElementById(`pair-${i}-y`)) document.getElementById(`pair-${i}-y`).disabled = true;
+                }
+            }
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Workbook metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment variables configuration. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (activeQuestionId && problemDataPack[activeQuestionId].type === "graph") {
+                for (let i = 0; i < 5; i++) {
+                    if (document.getElementById(`pair-${i}-x`)) document.getElementById(`pair-${i}-x`).disabled = false;
+                    if (document.getElementById(`pair-${i}-y`)) document.getElementById(`pair-${i}-y`).disabled = false;
+                }
+            }
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            if (activeQuestionId.endsWith("_g")) {
+                finalAnsText = "Completed parabolic trace trajectory securely registered to coordinate map.";
+            }
+
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

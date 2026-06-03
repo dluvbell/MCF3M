@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 2 Lesson 7</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .method-toggle-container {
+            display: none;
+            background-color: #e2e8f0;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .method-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .criss-cross-box {
+            display: block;
+            background-color: #f8fafc;
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+            margin: 12px 0;
+            max-width: 500px;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr 40px 1.2fr;
+            align-items: center;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            row-gap: 10px;
+        }
+
+        .svg-intersection-container {
+            grid-row: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            width: 80px;
+            user-select: none;
+        }
+
+        .grid-arrow-label {
+            font-size: 1.3rem;
+            color: var(--disabled-color);
+        }
+
+        .matrix-total-line {
+            grid-column: 1 / -1;
+            border-top: 2px solid var(--border-color);
+            margin-top: 12px;
+            padding-top: 12px;
+            text-align: left;
+            font-size: 1.15rem;
+            color: var(--primary-color);
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--math-color);
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+        .math-key.btn-danger-action:hover:not(:disabled) {
+            background-color: #fecaca;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 2 Lesson 7</h1>
+        <p>Quadratic Functions Forms &amp; Conversions Step-by-Step Interactive Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question Reference Line --</option>
+                
+                <optgroup label="Section 1: Standard Form Coefficients Mapping">
+                    <option value="u2l7q1a">1a) Coefficients of f(x) = 2x² + 4x + 8</option>
+                    <option value="u2l7q1b">1b) Coefficients of y = x² + 9x - 6</option>
+                    <option value="u2l7q1c">1c) Coefficients of h(x) = -x² - 2x</option>
+                    <option value="u2l7q1d">1d) Coefficients of y = ½x² - 16</option>
+                </optgroup>
+
+                <optgroup label="Section 2: Standard Form Properties Analysis">
+                    <option value="u2l7q2ai">2a(i) Direction of Opening for f(x) = 2x² + 4x + 8</option>
+                    <option value="u2l7q2aii">2a(ii) Vertex Type (Max/Min) for f(x) = 2x² + 4x + 8</option>
+                    <option value="u2l7q2aiii">2a(iii) y-intercept for f(x) = 2x² + 4x + 8</option>
+                    <option value="u2l7q2bi">2b(i) Direction of Opening for y = x² + 9x - 6</option>
+                    <option value="u2l7q2bii">2b(ii) Vertex Type (Max/Min) for y = x² + 9x - 6</option>
+                    <option value="u2l7q2biii">2b(iii) y-intercept for y = x² + 9x - 6</option>
+                    <option value="u2l7q2ci">2c(i) Direction of Opening for h(x) = -x² - 2x</option>
+                    <option value="u2l7q2cii">2c(ii) Vertex Type (Max/Min) for h(x) = -x² - 2x</option>
+                    <option value="u2l7q2ciii">2c(iii) y-intercept for h(x) = -x² - 2x</option>
+                    <option value="u2l7q2di">2d(i) Direction of Opening for y = ½x² - 16</option>
+                    <option value="u2l7q2dii">2d(ii) Vertex Type (Max/Min) for y = ½x² - 16</option>
+                    <option value="u2l7q2diii">2d(iii) y-intercept for y = ½x² - 16</option>
+                </optgroup>
+
+                <optgroup label="Section 4 (Page 1): Factored Form Property Breakdown">
+                    <option value="u2l7q4ai_dir">4a(i) Direction of Opening for f(x) = (x - 3)(x - 7)</option>
+                    <option value="u2l7q4ai_xint">4a(ii) x-intercepts for f(x) = (x - 3)(x - 7)</option>
+                    <option value="u2l7q4ai_vtx">4a(iii) Coordinates of Vertex for f(x) = (x - 3)(x - 7)</option>
+                    <option value="u2l7q4ai_sym">4a(iv) Axis of Symmetry for f(x) = (x - 3)(x - 7)</option>
+                    <option value="u2l7q4ai_yint">4a(v) y-intercept for f(x) = (x - 3)(x - 7)</option>
+                    <option value="u2l7q4bi_dir">4b(i) Direction of Opening for y = -(x + 1)(x + 9)</option>
+                    <option value="u2l7q4bi_xint">4b(ii) x-intercepts for y = -(x + 1)(x + 9)</option>
+                    <option value="u2l7q4bi_vtx">4b(iii) Coordinates of Vertex for y = -(x + 1)(x + 9)</option>
+                    <option value="u2l7q4bi_sym">4b(iv) Axis of Symmetry for y = -(x + 1)(x + 9)</option>
+                    <option value="u2l7q4bi_yint">4b(v) y-intercept for y = -(x + 1)(x + 9)</option>
+                    <option value="u2l7q4ci_dir">4c(i) Direction of Opening for f(x) = -2(x - 4)(x + 2)</option>
+                    <option value="u2l7q4ci_xint">4c(ii) x-intercepts for f(x) = -2(x - 4)(x + 2)</option>
+                    <option value="u2l7q4ci_vtx">4c(iii) Coordinates of Vertex for f(x) = -2(x - 4)(x + 2)</option>
+                    <option value="u2l7q4ci_sym">4c(iv) Axis of Symmetry for f(x) = -2(x - 4)(x + 2)</option>
+                    <option value="u2l7q4ci_yint">4c(v) y-intercept for f(x) = -2(x - 4)(x + 2)</option>
+                    <option value="u2l7q4di_dir">4d(i) Direction of Opening for y = ½x(x + 6)</option>
+                    <option value="u2l7q4di_xint">4d(ii) x-intercepts for y = ½x(x + 6)</option>
+                    <option value="u2l7q4di_vtx">4d(iii) Coordinates of Vertex for y = ½x(x + 6)</option>
+                    <option value="u2l7q4di_sym">4d(iv) Axis of Symmetry for y = ½x(x + 6)</option>
+                    <option value="u2l7q4di_yint">4d(v) y-intercept for y = ½x(x + 6)</option>
+                </optgroup>
+
+                <optgroup label="Section 6 (Page 1): Vertex Form Property Breakdown">
+                    <option value="u2l7q6ai_dir">6a(i) Direction of Opening for f(x) = (x - 3)² + 2</option>
+                    <option value="u2l7q6ai_vtx">6a(ii) Coordinates of Vertex for f(x) = (x - 3)² + 2</option>
+                    <option value="u2l7q6ai_sym">6a(iii) Axis of Symmetry for f(x) = (x - 3)² + 2</option>
+                    <option value="u2l7q6ai_yint">6a(iv) y-intercept for f(x) = (x - 3)² + 2</option>
+                    <option value="u2l7q6bi_dir">6b(i) Direction of Opening for y = (x + 4)² - 5</option>
+                    <option value="u2l7q6bi_vtx">6b(ii) Coordinates of Vertex for y = (x + 4)² - 5</option>
+                    <option value="u2l7q6bi_sym">6b(iii) Axis of Symmetry for y = (x + 4)² - 5</option>
+                    <option value="u2l7q6bi_yint">6b(iv) y-intercept for y = (x + 4)² - 5</option>
+                    <option value="u2l7q6ci_dir">6c(i) Direction of Opening for f(x) = -3(x + 1)² - 6</option>
+                    <option value="u2l7q6ci_vtx">6c(ii) Coordinates of Vertex for f(x) = -3(x + 1)² - 6</option>
+                    <option value="u2l7q6ci_sym">6c(iii) Axis of Symmetry for f(x) = -3(x + 1)² - 6</option>
+                    <option value="u2l7q6ci_yint">6c(iv) y-intercept for f(x) = -3(x + 1)² - 6</option>
+                </optgroup>
+
+                <optgroup label="Section 4 (Page 1 - Lower): Factored to Standard Form">
+                    <option value="u2l7q4a_std_eq">4a(i) Standard Form Equation for h(x) = 3(x + 2)(x - 5)</option>
+                    <option value="u2l7q4a_std_y">4a(ii) y-intercept for h(x) = 3(x + 2)(x - 5)</option>
+                    <option value="u2l7q4b_std_eq">4b(i) Standard Form Equation for y = -2(x + 7)(x - 2)</option>
+                    <option value="u2l7q4b_std_y">4b(ii) y-intercept for y = -2(x + 7)(x - 2)</option>
+                    <option value="u2l7q4c_std_eq">4c(i) Standard Form Equation for f(x) = 4(x + 2)²</option>
+                    <option value="u2l7q4c_std_y">4c(ii) y-intercept for f(x) = 4(x + 2)²</option>
+                </optgroup>
+
+                <optgroup label="Section 6 (Page 1 - Lower): Vertex to Standard Form">
+                    <option value="u2l7q6a_std_eq">6a(i) Standard Form Equation for m(x) = (x + 2)² + 3</option>
+                    <option value="u2l7q6a_std_y">6a(ii) y-intercept for m(x) = (x + 2)² + 3</option>
+                    <option value="u2l7q6b_std_eq">6b(i) Standard Form Equation for y = (x - 1)² - 4</option>
+                    <option value="u2l7q6b_std_y">6b(ii) y-intercept for y = (x - 1)² - 4</option>
+                    <option value="u2l7q6c_std_eq">6c(i) Standard Form Equation for d(x) = 3(x - 5)² + 8</option>
+                    <option value="u2l7q6c_std_y">6c(ii) y-intercept for d(x) = 3(x - 5)² + 8</option>
+                    <option value="u2l7q6d_std_eq">6d(i) Standard Form Equation for y = -4(x + 3)² - 9</option>
+                    <option value="u2l7q6d_std_y">6d(ii) y-intercept for y = -4(x + 3)² - 9</option>
+                </optgroup>
+
+                <optgroup label="Section 6 (Page 2): Standard to Factored Form">
+                    <option value="u2l7q6a_fact_eq">6a(i) Factored Form Equation for y = x² + 10x + 21</option>
+                    <option value="u2l7q6a_fact_x">6a(ii) x-intercepts for y = x² + 10x + 21</option>
+                    <option value="u2l7q6b_fact_eq">6b(i) Factored Form Equation for y = x² - 4x - 12</option>
+                    <option value="u2l7q6b_fact_x">6b(ii) x-intercepts for y = x² - 4x - 12</option>
+                    <option value="u2l7q6c_fact_eq">6c(i) Factored Form Equation for y = 3x² - 18x + 15</option>
+                    <option value="u2l7q6c_fact_x">6c(ii) x-intercepts for y = 3x² - 18x + 15</option>
+                    <option value="u2l7q6d_fact_eq">6d(i) Factored Form Equation for y = 2x² - 8x + 6</option>
+                    <option value="u2l7q6d_fact_x">6d(ii) x-intercepts for y = 2x² - 8x + 6</option>
+                    <option value="u2l7q6e_fact_eq">6e(i) Factored Form Equation for f(x) = 5x² + 10x - 15</option>
+                    <option value="u2l7q6e_fact_x">6e(ii) x-intercepts for f(x) = 5x² + 10x - 15</option>
+                    <option value="u2l7q6f_fact_eq">6f(i) Factored Form Equation for g(x) = x² - 3x - 18</option>
+                    <option value="u2l7q6f_fact_x">6f(ii) x-intercepts for g(x) = x² - 3x - 18</option>
+                    <option value="u2l7q6g_fact_eq">6g(i) Factored Form Equation for r(x) = 3x² - 9x + 6</option>
+                    <option value="u2l7q6g_fact_x">6g(ii) x-intercepts for r(x) = 3x² - 9x + 6</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module layout.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+                <div class="math-keyboard-toolbar" id="math-keyboard"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="method-toggle-container" id="method-toggle-bar">
+                <button class="method-btn active" id="mode-ps" onclick="changeMethod('ps')">Product & Sum Method</button>
+                <button class="method-btn" id="mode-cc" onclick="changeMethod('cc')">Criss-Cross Matrix Method</button>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            u2l7q1a: ["a=2,b=4,c=8"], u2l7q1b: ["a=1,b=9,c=-6"], u2l7q1c: ["a=-1,b=-2,c=0"], u2l7q1d: ["a=½,b=0,c=-16", "a=0.5,b=0,c=-16"],
+            u2l7q2ai: ["upward", "up"], u2l7q2aii: ["minimum", "min"], u2l7q2aiii: ["8"],
+            u2l7q2bi: ["upward", "up"], u2l7q2bii: ["minimum", "min"], u2l7q2biii: ["-6"],
+            u2l7q2ci: ["downward", "down"], u2l7q2cii: ["maximum", "max"], u2l7q2ciii: ["0"],
+            u2l7q2di: ["upward", "up"], u2l7q2dii: ["minimum", "min"], u2l7q2diii: ["-16"],
+            u2l7q4ai_dir: ["upward", "up"], u2l7q4ai_xint: ["3,7", "x=3,x=7"], u2l7q4ai_vtx: ["(5,-4)", "5,-4"], u2l7q4ai_sym: ["x=5", "5"], u2l7q4ai_yint: ["21"],
+            u2l7q4bi_dir: ["downward", "down"], u2l7q4bi_xint: ["-1,-9", "x=-1,x=-9"], u2l7q4bi_vtx: ["(-5,16)", "-5,16"], u2l7q4bi_sym: ["x=-5", "-5"], u2l7q4bi_yint: ["-9"],
+            u2l7q4ci_dir: ["downward", "down"], u2l7q4ci_xint: ["4,-2", "x=4,x=-2"], u2l7q4ci_vtx: ["(1,18)", "1,18"], u2l7q4ci_sym: ["x=1", "1"], u2l7q4ci_yint: ["16"],
+            u2l7q4di_dir: ["upward", "up"], u2l7q4di_xint: ["0,-6", "x=0,x=-6"], u2l7q4di_vtx: ["(-3,-4.5)", "-3,-4.5"], u2l7q4di_sym: ["x=-3", "-3"], u2l7q4di_yint: ["0"],
+            u2l7q6ai_dir: ["upward", "up"], u2l7q6ai_vtx: ["(3,2)", "3,2"], u2l7q6ai_sym: ["x=3", "3"], u2l7q6ai_yint: ["11"],
+            u2l7q6bi_dir: ["upward", "up"], u2l7q6bi_vtx: ["(-4,-5)", "-4,-5"], u2l7q6bi_sym: ["x=-4", "-4"], u2l7q6bi_yint: ["11"],
+            u2l7q6ci_dir: ["downward", "down"], u2l7q6ci_vtx: ["(-1,-6)", "-1,-6"], u2l7q6ci_sym: ["x=-1", "-1"], u2l7q6ci_yint: ["-9"],
+            u2l7q4a_std_eq: ["h(x)=3x²-9x-30", "3x²-9x-30"], u2l7q4a_std_y: ["-30"],
+            u2l7q4b_std_eq: ["y=-2x²-10x+28", "-2x²-10x+28"], u2l7q4b_std_y: ["28"],
+            u2l7q4c_std_eq: ["f(x)=4x²+16x+16", "4x²+16x+16"], u2l7q4c_std_y: ["16"],
+            u2l7q6a_std_eq: ["m(x)=x²+4x+7", "x²+4x+7"], u2l7q6a_std_y: ["7"],
+            u2l7q6b_std_eq: ["y=x²-2x-3", "x²-2x-3"], u2l7q6b_std_y: ["-3"],
+            u2l7q6c_std_eq: ["d(x)=3x²-30x+83", "3x²-30x+83"], u2l7q6c_std_y: ["83"],
+            u2l7q6d_std_eq: ["y=-4x²-24x-45", "-4x²-24x-45"], u2l7q6d_std_y: ["-45"],
+            u2l7q6a_fact_eq: ["y=(x+3)(x+7)", "(x+3)(x+7)"], u2l7q6a_fact_x: ["-7,-3", "-3,-7"],
+            u2l7q6b_fact_eq: ["y=(x-6)(x+2)", "(x-6)(x+2)"], u2l7q6b_fact_x: ["-2,6", "6,-2"],
+            u2l7q6c_fact_eq: ["y=3(x-5)(x-1)", "3(x-5)(x-1)"], u2l7q6c_fact_x: ["1,5", "5,1"],
+            u2l7q6d_fact_eq: ["y=2(x-3)(x-1)", "2(x-3)(x-1)"], u2l7q6d_fact_x: ["1,3", "3,1"],
+            u2l7q6e_fact_eq: ["f(x)=5(x+3)(x-1)", "5(x+3)(x-1)"], u2l7q6e_fact_x: ["-3,1", "1,-3"],
+            u2l7q6f_fact_eq: ["g(x)=(x-6)(x+3)", "(x-6)(x+3)"], u2l7q6f_fact_x: ["-3,6", "6,-3"],
+            u2l7q6g_fact_eq: ["r(x)=3(x-2)(x-1)", "3(x-2)(x-1)"], u2l7q6g_fact_x: ["1,2", "2,1"]
+        };
+
+        function generateCCHTML(lt, lb, rt, rb, pt, pb, sum) {
+            return `
+            <div class="criss-cross-box">
+                <div class="matrix-grid">
+                    <div>${lt}</div>
+                    <div class="svg-intersection-container">
+                        <svg width="70" height="70" viewBox="0 0 70 70" style="overflow: visible;">
+                            <defs><marker id="arrowhead-cc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" /></marker></defs>
+                            <line x1="5" y1="10" x2="65" y2="60" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrowhead-cc)" />
+                            <line x1="5" y1="60" x2="65" y2="10" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrowhead-cc)" />
+                        </svg>
+                    </div>
+                    <div>${rt}</div> <div class="grid-arrow-label">&rarr;</div> <div>${pt}</div>
+                    <div>${lb}</div> <div>${rb}</div> <div class="grid-arrow-label">&rarr;</div> <div>${pb}</div>
+                    <div class="matrix-total-line"><strong>Sum Verification:</strong> (${pt}) + (${pb}) = <strong>${sum}</strong> (Matches Middle Term!)</div>
+                </div>
+            </div>`;
+        }
+
+        const problemDataPack = {
+            u2l7q1a: { title: "Question 1a", type: "numeric", fullStatement: "Question 1a: Identify the values of a, b, and c for \\( f(x) = 2x^2 + 4x + 8 \\)", steps: [
+                { title: "Step 1: Compare to Standard Form", math: "\\( y = ax^2 + bx + c \\)", explanation: "Compare the given equation to the standard form quadratic template. Identify the numerical coefficients for each term." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = 2, \\; b = 4, \\; c = 8 \\)", explanation: "The leading coefficient 'a' is 2, the linear coefficient 'b' is 4, and the constant 'c' is 8." }
+            ], ans_box: "a=2,b=4,c=8" },
+            u2l7q1b: { title: "Question 1b", type: "numeric", fullStatement: "Question 1b: Identify the values of a, b, and c for \\( y = x^2 + 9x - 6 \\)", steps: [
+                { title: "Step 1: Reveal Hidden Coefficients", math: "\\( y = 1x^2 + 9x - 6 \\)", explanation: "When no number is written in front of a variable, the coefficient is understood to be 1." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = 1, \\; b = 9, \\; c = -6 \\)", explanation: "The 'a' value is 1, the 'b' value is 9, and the constant 'c' includes its negative sign: -6." }
+            ], ans_box: "a=1,b=9,c=-6" },
+            u2l7q1c: { title: "Question 1c", type: "numeric", fullStatement: "Question 1c: Identify the values of a, b, and c for \\( h(x) = -x^2 - 2x \\)", steps: [
+                { title: "Step 1: Identify Missing Terms", math: "\\( h(x) = -1x^2 - 2x + 0 \\)", explanation: "A missing constant term indicates that its value is exactly 0. Also, the negative sign in front implies a coefficient of -1." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = -1, \\; b = -2, \\; c = 0 \\)", explanation: "Therefore, 'a' is -1, 'b' is -2, and 'c' is 0." }
+            ], ans_box: "a=-1,b=-2,c=0" },
+            u2l7q1d: { title: "Question 1d", type: "numeric", fullStatement: "Question 1d: Identify the values of a, b, and c for \\( y = \\frac{1}{2}x^2 - 16 \\)", steps: [
+                { title: "Step 1: Identify Missing Linear Term", math: "\\( y = \\frac{1}{2}x^2 + 0x - 16 \\)", explanation: "If there is no linear 'x' term in the equation, it means the coefficient 'b' is 0." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = \\frac{1}{2}, \\; b = 0, \\; c = -16 \\)", explanation: "The 'a' value is the fraction 1/2, 'b' is 0, and the constant 'c' is -16." }
+            ], ans_box: "a=½,b=0,c=-16" },
+
+            u2l7q2ai: { title: "Question 2a(i)", type: "numeric", fullStatement: "Question 2a(i): Find the direction of opening for \\( f(x) = 2x^2 + 4x + 8 \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = 2 \\)", explanation: "The direction a parabola opens is completely determined by the sign of the leading coefficient 'a'." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a = 2 > 0 \\rightarrow \\text{Upward} \\)", explanation: "Because 2 is a positive number, the parabola opens upward." }
+            ], ans_box: "upward" },
+            u2l7q2aii: { title: "Question 2a(ii)", type: "numeric", fullStatement: "Question 2a(ii): Identify whether the vertex is a maximum or minimum for \\( f(x) = 2x^2 + 4x + 8 \\)", steps: [
+                { title: "Step 1: Reference Opening Direction", math: "\\text{Direction} = \\text{Upward} \\)", explanation: "The parabola forms a U-shape opening toward positive infinity." },
+                { title: "Step 2: Determine Vertex Type", math: "\\text{Vertex} = \\text{Minimum} \\)", explanation: "For an upward-opening parabola, the vertex represents the lowest possible point, making it a minimum." }
+            ], ans_box: "minimum" },
+            u2l7q2aiii: { title: "Question 2a(iii)", type: "numeric", fullStatement: "Question 2a(iii): Identify the y-intercept for \\( f(x) = 2x^2 + 4x + 8 \\)", steps: [
+                { title: "Step 1: Set x to Zero", math: "\\( x = 0 \\)", explanation: "The y-intercept always occurs where the graph crosses the y-axis, meaning the x-coordinate must be exactly 0." },
+                { title: "Step 2: Evaluate the Function", math: "\\( f(0) = 2(0)^2 + 4(0) + 8 = 8 \\)", explanation: "Substituting x = 0 eliminates all terms containing x, leaving only the constant term 'c', which is 8." }
+            ], ans_box: "8" },
+
+            u2l7q2bi: { title: "Question 2b(i)", type: "numeric", fullStatement: "Question 2b(i): Find the direction of opening for \\( y = x^2 + 9x - 6 \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = 1 \\)", explanation: "Since there is no number written in front of the x squared term, the coefficient 'a' is 1." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a > 0 \\rightarrow \\text{Upward} \\)", explanation: "Since 1 is positive, the graph opens upward." }
+            ], ans_box: "upward" },
+            u2l7q2bii: { title: "Question 2b(ii)", type: "numeric", fullStatement: "Question 2b(ii): Identify whether the vertex is a maximum or minimum for \\( y = x^2 + 9x - 6 \\)", steps: [
+                { title: "Step 1: Reference Opening Direction", math: "\\text{Direction} = \\text{Upward} \\)", explanation: "The parabola opens upward." },
+                { title: "Step 2: Determine Vertex Type", math: "\\text{Vertex} = \\text{Minimum} \\)", explanation: "The turning point at the bottom of the curve is a minimum." }
+            ], ans_box: "minimum" },
+            u2l7q2biii: { title: "Question 2b(iii)", type: "numeric", fullStatement: "Question 2b(iii): Find the y-intercept for \\( y = x^2 + 9x - 6 \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow y = (0)^2 + 9(0) - 6 \\)", explanation: "Substitute 0 for x to find where the graph intersects the y-axis." },
+                { title: "Step 2: Simplify", math: "\\( y = -6 \\)", explanation: "The constant term -6 is the y-intercept." }
+            ], ans_box: "-6" },
+
+            u2l7q2ci: { title: "Question 2c(i)", type: "numeric", fullStatement: "Question 2c(i): Find the direction of opening for \\( h(x) = -x^2 - 2x \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = -1 \\)", explanation: "The negative sign in front of the leading term indicates an 'a' value of -1." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a < 0 \\rightarrow \\text{Downward} \\)", explanation: "A negative 'a' value means the parabola is reflected and opens downward." }
+            ], ans_box: "downward" },
+            u2l7q2cii: { title: "Question 2c(ii)", type: "numeric", fullStatement: "Question 2c(ii): Identify whether the vertex is a maximum or minimum for \\( h(x) = -x^2 - 2x \\)", steps: [
+                { title: "Step 1: Reference Opening Direction", math: "\\text{Direction} = \\text{Downward} \\)", explanation: "The parabola forms a mountain-like shape opening downward." },
+                { title: "Step 2: Determine Vertex Type", math: "\\text{Vertex} = \\text{Maximum} \\)", explanation: "The peak of the parabola represents the highest possible point, making it a maximum." }
+            ], ans_box: "maximum" },
+            u2l7q2ciii: { title: "Question 2c(iii)", type: "numeric", fullStatement: "Question 2c(iii): Find the y-intercept for \\( h(x) = -x^2 - 2x \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( h(0) = -1(0)^2 - 2(0) \\)", explanation: "Substitute x = 0 to locate the y-axis crossing point." },
+                { title: "Step 2: Simplify", math: "\\( h(0) = 0 \\)", explanation: "Since all terms become zero, the y-intercept is exactly 0, meaning it passes through the origin." }
+            ], ans_box: "0" },
+
+            u2l7q2di: { title: "Question 2d(i)", type: "numeric", fullStatement: "Question 2d(i): Find the direction of opening for \\( y = \\frac{1}{2}x^2 - 16 \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = \\frac{1}{2} \\)", explanation: "The leading coefficient is the fraction 1/2." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a > 0 \\rightarrow \\text{Upward} \\)", explanation: "Since the fraction is positive, the parabola opens upward." }
+            ], ans_box: "upward" },
+            u2l7q2dii: { title: "Question 2d(ii)", type: "numeric", fullStatement: "Question 2d(ii): Identify whether the vertex is a maximum or minimum for \\( y = \\frac{1}{2}x^2 - 16 \\)", steps: [
+                { title: "Step 1: Reference Opening Direction", math: "\\text{Direction} = \\text{Upward} \\)", explanation: "The parabola opens upward." },
+                { title: "Step 2: Determine Vertex Type", math: "\\text{Vertex} = \\text{Minimum} \\)", explanation: "The lowest point of the upward-opening curve is a minimum." }
+            ], ans_box: "minimum" },
+            u2l7q2diii: { title: "Question 2d(iii)", type: "numeric", fullStatement: "Question 2d(iii): Find the y-intercept for \\( y = \\frac{1}{2}x^2 - 16 \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow y = \\frac{1}{2}(0)^2 - 16 \\)", explanation: "Replace x with 0 to isolate the y-intercept." },
+                { title: "Step 2: Simplify", math: "\\( y = -16 \\)", explanation: "The remaining constant term is -16." }
+            ], ans_box: "-16" },
+
+            u2l7q4ai_dir: { title: "Question 4a(i)", type: "numeric", fullStatement: "Question 4a(i): Find the direction of opening for \\( f(x) = (x - 3)(x - 7) \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = 1 \\)", explanation: "In factored form \\( y = a(x - r)(x - s) \\), the 'a' value is the constant multiplier in front. Here, there is no number, meaning a = 1." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a > 0 \\rightarrow \\text{Upward} \\)", explanation: "Since 1 is positive, the parabola opens upward." }
+            ], ans_box: "upward" },
+            u2l7q4ai_xint: { title: "Question 4a(ii)", type: "numeric", fullStatement: "Question 4a(ii): Find x-intercepts for \\( f(x) = (x - 3)(x - 7) \\)", steps: [
+                { title: "Step 1: Set the Function to Zero", math: "\\( (x - 3)(x - 7) = 0 \\)", explanation: "x-intercepts occur where the height of the graph is zero (y = 0)." },
+                { title: "Step 2: Solve for x", math: "\\( x - 3 = 0 \\rightarrow x = 3 \\; \\text{and} \\; x - 7 = 0 \\rightarrow x = 7 \\)", explanation: "Set each binomial factor to zero. The x-intercepts are 3 and 7." }
+            ], ans_box: "3,7" },
+            u2l7q4ai_vtx: { title: "Question 4a(iii)", type: "numeric", fullStatement: "Question 4a(iii): Find coordinates of the vertex for \\( f(x) = (x - 3)(x - 7) \\)", steps: [
+                { title: "Step 1: Calculate the x-coordinate (Midpoint)", math: "\\( h = \\frac{3 + 7}{2} = \\frac{10}{2} = 5 \\)", explanation: "The vertex lies perfectly halfway between the x-intercepts. Average the intercepts to find the x-coordinate." },
+                { title: "Step 2: Calculate the y-coordinate", math: "\\( k = f(5) = (5 - 3)(5 - 7) \\)", explanation: "Substitute the calculated x-coordinate back into the original equation to find the corresponding y-height." },
+                { title: "Step 3: Simplify", math: "\\( k = (2)(-2) = -4 \\rightarrow \\text{Vertex} = (5, -4) \\)", explanation: "The final vertex coordinate is (5, -4)." }
+            ], ans_box: "(5,-4)" },
+            u2l7q4ai_sym: { title: "Question 4a(iv)", type: "numeric", fullStatement: "Question 4a(iv): Find the axis of symmetry for \\( f(x) = (x - 3)(x - 7) \\)", steps: [
+                { title: "Step 1: Calculate the Midpoint of x-intercepts", math: "\\( h = \\frac{3 + 7}{2} = \\frac{10}{2} = 5 \\)", explanation: "The axis of symmetry lies exactly halfway between the two x-intercepts. We locate this center by adding the two x-intercepts together and dividing the result by 2." },
+                { title: "Step 2: Write as an Equation", math: "\\( x = 5 \\)", explanation: "The axis of symmetry is a vertical line passing through the vertex, so it must be written as an equation in the form x = h." }
+            ], ans_box: "x=5" },
+            u2l7q4ai_yint: { title: "Question 4a(v)", type: "numeric", fullStatement: "Question 4a(v): Find the y-intercept for \\( f(x) = (x - 3)(x - 7) \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow f(0) = (0 - 3)(0 - 7) \\)", explanation: "Substitute x = 0 into the equation." },
+                { title: "Step 2: Multiply Constants", math: "\\( f(0) = (-3)(-7) = 21 \\)", explanation: "Multiply the values inside the brackets to find the y-intercept is 21." }
+            ], ans_box: "21" },
+
+            u2l7q4bi_dir: { title: "Question 4b(i)", type: "numeric", fullStatement: "Question 4b(i): Find the direction of opening for \\( y = -(x + 1)(x + 9) \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = -1 \\)", explanation: "The negative sign in front of the brackets means 'a' is -1." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a < 0 \\rightarrow \\text{Downward} \\)", explanation: "A negative multiplier causes the graph to reflect and open downward." }
+            ], ans_box: "downward" },
+            u2l7q4bi_xint: { title: "Question 4b(ii)", type: "numeric", fullStatement: "Question 4b(ii): Find x-intercepts for \\( y = -(x + 1)(x + 9) \\)", steps: [
+                { title: "Step 1: Set the Function to Zero", math: "\\( -(x + 1)(x + 9) = 0 \\)", explanation: "Identify the values that make each factor equal zero." },
+                { title: "Step 2: Solve for x", math: "\\( x + 1 = 0 \\rightarrow x = -1 \\; \\text{and} \\; x + 9 = 0 \\rightarrow x = -9 \\)", explanation: "The x-intercepts are -1 and -9." }
+            ], ans_box: "-1,-9" },
+            u2l7q4bi_vtx: { title: "Question 4b(iii)", type: "numeric", fullStatement: "Question 4b(iii): Find coordinates of the vertex for \\( y = -(x + 1)(x + 9) \\)", steps: [
+                { title: "Step 1: Calculate the x-coordinate (Midpoint)", math: "\\( h = \\frac{-1 + (-9)}{2} = \\frac{-10}{2} = -5 \\)", explanation: "Find the average of the two x-intercepts." },
+                { title: "Step 2: Calculate the y-coordinate", math: "\\( k = -(-5 + 1)(-5 + 9) = -(-4)(4) = 16 \\)", explanation: "Substitute x = -5 into the equation and solve for y to find the vertex (-5, 16)." }
+            ], ans_box: "(-5,16)" },
+            u2l7q4bi_sym: { title: "Question 4b(iv)", type: "numeric", fullStatement: "Question 4b(iv): Find the axis of symmetry for \\( y = -(x + 1)(x + 9) \\)", steps: [
+                { title: "Step 1: Calculate the Midpoint of x-intercepts", math: "\\( h = \\frac{-1 + (-9)}{2} = \\frac{-10}{2} = -5 \\)", explanation: "Add the two x-intercepts and divide by 2 to locate the exact symmetrical center." },
+                { title: "Step 2: Write as an Equation", math: "\\( x = -5 \\)", explanation: "State the vertical line equation passing through the center." }
+            ], ans_box: "x=-5" },
+            u2l7q4bi_yint: { title: "Question 4b(v)", type: "numeric", fullStatement: "Question 4b(v): Find the y-intercept for \\( y = -(x + 1)(x + 9) \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow y = -(0 + 1)(0 + 9) \\)", explanation: "Substitute x = 0." },
+                { title: "Step 2: Multiply Constants", math: "\\( y = -(1)(9) = -9 \\)", explanation: "Remember to include the leading negative sign in the final calculation." }
+            ], ans_box: "-9" },
+
+            u2l7q4ci_dir: { title: "Question 4c(i)", type: "numeric", fullStatement: "Question 4c(i): Find the direction of opening for \\( f(x) = -2(x - 4)(x + 2) \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = -2 \\)", explanation: "The leading coefficient is -2." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a < 0 \\rightarrow \\text{Downward} \\)", explanation: "Because it's negative, the parabola opens downward." }
+            ], ans_box: "downward" },
+            u2l7q4ci_xint: { title: "Question 4c(ii)", type: "numeric", fullStatement: "Question 4c(ii): Find x-intercepts for \\( f(x) = -2(x - 4)(x + 2) \\)", steps: [
+                { title: "Step 1: Set the Factors to Zero", math: "\\( x - 4 = 0 \\; \\text{or} \\; x + 2 = 0 \\)", explanation: "The multiplier -2 does not affect the x-intercepts." },
+                { title: "Step 2: Solve for x", math: "\\( x = 4, \\; x = -2 \\)", explanation: "The intercepts occur at 4 and -2." }
+            ], ans_box: "4,-2" },
+            u2l7q4ci_vtx: { title: "Question 4c(iii)", type: "numeric", fullStatement: "Question 4c(iii): Find coordinates of the vertex for \\( f(x) = -2(x - 4)(x + 2) \\)", steps: [
+                { title: "Step 1: Calculate the x-coordinate (Midpoint)", math: "\\( h = \\frac{4 + (-2)}{2} = \\frac{2}{2} = 1 \\)", explanation: "The midpoint between 4 and -2 is 1." },
+                { title: "Step 2: Calculate the y-coordinate", math: "\\( k = f(1) = -2(1 - 4)(1 + 2) = -2(-3)(3) = 18 \\)", explanation: "Substitute x = 1 into the equation to find a maximum height of 18. The vertex is (1, 18)." }
+            ], ans_box: "(1,18)" },
+            u2l7q4ci_sym: { title: "Question 4c(iv)", type: "numeric", fullStatement: "Question 4c(iv): Find the axis of symmetry for \\( f(x) = -2(x - 4)(x + 2) \\)", steps: [
+                { title: "Step 1: Calculate the Midpoint of x-intercepts", math: "\\( h = \\frac{4 + (-2)}{2} = \\frac{2}{2} = 1 \\)", explanation: "Calculate the average of the two x-intercepts to find the symmetrical center line." },
+                { title: "Step 2: Write as an Equation", math: "\\( x = 1 \\)", explanation: "The line equation is x = 1." }
+            ], ans_box: "x=1" },
+            u2l7q4ci_yint: { title: "Question 4c(v)", type: "numeric", fullStatement: "Question 4c(v): Find the y-intercept for \\( f(x) = -2(x - 4)(x + 2) \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow f(0) = -2(0 - 4)(0 + 2) \\)", explanation: "Set x to 0." },
+                { title: "Step 2: Multiply Constants", math: "\\( f(0) = -2(-4)(2) = 16 \\)", explanation: "Multiply all numerical components to find the y-intercept is 16." }
+            ], ans_box: "16" },
+
+            u2l7q4di_dir: { title: "Question 4d(i)", type: "numeric", fullStatement: "Question 4d(i): Find the direction of opening for \\( y = \\frac{1}{2}x(x + 6) \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = \\frac{1}{2} \\)", explanation: "The leading value is a positive fraction." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a > 0 \\rightarrow \\text{Upward} \\)", explanation: "Positive indicates it opens upward." }
+            ], ans_box: "upward" },
+            u2l7q4di_xint: { title: "Question 4d(ii)", type: "numeric", fullStatement: "Question 4d(ii): Find x-intercepts for \\( y = \\frac{1}{2}x(x + 6) \\)", steps: [
+                { title: "Step 1: Identify Isolated Variables", math: "\\( x = 0 \\; \\text{or} \\; x + 6 = 0 \\)", explanation: "The single 'x' outside acts as a factor of (x - 0)." },
+                { title: "Step 2: Solve for x", math: "\\( x = 0, \\; x = -6 \\)", explanation: "The x-intercepts are 0 and -6." }
+            ], ans_box: "0,-6" },
+            u2l7q4di_vtx: { title: "Question 4d(iii)", type: "numeric", fullStatement: "Question 4d(iii): Find coordinates of the vertex for \\( y = \\frac{1}{2}x(x + 6) \\)", steps: [
+                { title: "Step 1: Calculate the x-coordinate (Midpoint)", math: "\\( h = \\frac{0 + (-6)}{2} = \\frac{-6}{2} = -3 \\)", explanation: "The midpoint between 0 and -6 is -3." },
+                { title: "Step 2: Calculate the y-coordinate", math: "\\( k = \\frac{1}{2}(-3)(-3 + 6) = \\frac{1}{2}(-3)(3) = -4.5 \\)", explanation: "Substitute x = -3 to find the vertex at (-3, -4.5)." }
+            ], ans_box: "(-3,-4.5)" },
+            u2l7q4di_sym: { title: "Question 4d(iv)", type: "numeric", fullStatement: "Question 4d(iv): Find the axis of symmetry for \\( y = \\frac{1}{2}x(x + 6) \\)", steps: [
+                { title: "Step 1: Calculate the Midpoint of x-intercepts", math: "\\( h = \\frac{0 + (-6)}{2} = \\frac{-6}{2} = -3 \\)", explanation: "Add the x-intercepts and divide by 2 to determine the horizontal center." },
+                { title: "Step 2: Write as an Equation", math: "\\( x = -3 \\)", explanation: "State the line equation." }
+            ], ans_box: "x=-3" },
+            u2l7q4di_yint: { title: "Question 4d(v)", type: "numeric", fullStatement: "Question 4d(v): Find the y-intercept for \\( y = \\frac{1}{2}x(x + 6) \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow y = \\frac{1}{2}(0)(0 + 6) \\)", explanation: "Because x is a standalone factor, replacing it with 0 multiplies the entire term by zero." },
+                { title: "Step 2: Simplify", math: "\\( y = 0 \\)", explanation: "The y-intercept is 0, meaning the graph passes through the origin." }
+            ], ans_box: "0" },
+
+            u2l7q6ai_dir: { title: "Question 6a(i)", type: "numeric", fullStatement: "Question 6a(i): Find the direction of opening for \\( f(x) = (x - 3)^2 + 2 \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = 1 \\)", explanation: "There is no coefficient written outside the squared binomial, implying a = +1." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a > 0 \\rightarrow \\text{Upward} \\)", explanation: "Since it is positive, it opens upward." }
+            ], ans_box: "upward" },
+            u2l7q6ai_vtx: { title: "Question 6a(ii)", type: "numeric", fullStatement: "Question 6a(ii): Find vertex coordinates for \\( f(x) = (x - 3)^2 + 2 \\)", steps: [
+                { title: "Step 1: Compare to Vertex Form", math: "\\( y = a(x - h)^2 + k \\)", explanation: "In vertex form, the x-coordinate 'h' takes the opposite sign of the value inside the bracket, and the y-coordinate 'k' keeps the same sign as the outside constant." },
+                { title: "Step 2: Extract Coordinates", math: "\\( h = 3, \\; k = 2 \\rightarrow \\text{Vertex} = (3, 2) \\)", explanation: "The vertex is located at (3, 2)." }
+            ], ans_box: "(3,2)" },
+            u2l7q6ai_sym: { title: "Question 6a(iii)", type: "numeric", fullStatement: "Question 6a(iii): Find the axis of symmetry for \\( f(x) = (x - 3)^2 + 2 \\)", steps: [
+                { title: "Step 1: Isolate the 'h' Parameter", math: "\\( h = 3 \\)", explanation: "The axis of symmetry runs perfectly vertically through the x-coordinate of the vertex." },
+                { title: "Step 2: Write as an Equation", math: "\\( x = 3 \\)", explanation: "State the equation as x = 3." }
+            ], ans_box: "x=3" },
+            u2l7q6ai_yint: { title: "Question 6a(iv)", type: "numeric", fullStatement: "Question 6a(iv): Find the y-intercept for \\( f(x) = (x - 3)^2 + 2 \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow f(0) = (0 - 3)^2 + 2 \\)", explanation: "Substitute 0 for x and follow the order of operations." },
+                { title: "Step 2: Calculate Exponents and Add", math: "\\( f(0) = (-3)^2 + 2 = 9 + 2 = 11 \\)", explanation: "Square the -3 to get 9, then add 2 to find the y-intercept is 11." }
+            ], ans_box: "11" },
+
+            u2l7q6bi_dir: { title: "Question 6b(i)", type: "numeric", fullStatement: "Question 6b(i): Find the direction of opening for \\( y = (x + 4)^2 - 5 \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = 1 \\)", explanation: "The unwritten leading coefficient is positive 1." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a > 0 \\rightarrow \\text{Upward} \\)", explanation: "It opens upward." }
+            ], ans_box: "upward" },
+            u2l7q6bi_vtx: { title: "Question 6b(ii)", type: "numeric", fullStatement: "Question 6b(ii): Find vertex coordinates for \\( y = (x + 4)^2 - 5 \\)", steps: [
+                { title: "Step 1: Interpret Shift Directions", math: "\\( x + 4 \\rightarrow x - (-4) \\)", explanation: "The positive value inside the bracket indicates a shift to the left, so h = -4." },
+                { title: "Step 2: Extract Coordinates", math: "\\( h = -4, \\; k = -5 \\rightarrow \\text{Vertex} = (-4, -5) \\)", explanation: "The vertex is at (-4, -5)." }
+            ], ans_box: "(-4,-5)" },
+            u2l7q6bi_sym: { title: "Question 6b(iii)", type: "numeric", fullStatement: "Question 6b(iii): Find the axis of symmetry for \\( y = (x + 4)^2 - 5 \\)", steps: [
+                { title: "Step 1: Isolate the 'h' Parameter", math: "\\( h = -4 \\)", explanation: "Identify the x-coordinate of the vertex." },
+                { title: "Step 2: Write as an Equation", math: "\\( x = -4 \\)", explanation: "The axis of symmetry is x = -4." }
+            ], ans_box: "x=-4" },
+            u2l7q6bi_yint: { title: "Question 6b(iv)", type: "numeric", fullStatement: "Question 6b(iv): Find the y-intercept for \\( y = (x + 4)^2 - 5 \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow y = (0 + 4)^2 - 5 \\)", explanation: "Substitute x = 0." },
+                { title: "Step 2: Calculate", math: "\\( y = (4)^2 - 5 = 16 - 5 = 11 \\)", explanation: "Square 4 to get 16, then subtract 5." }
+            ], ans_box: "11" },
+
+            u2l7q6ci_dir: { title: "Question 6c(i)", type: "numeric", fullStatement: "Question 6c(i): Find the direction of opening for \\( f(x) = -3(x + 1)^2 - 6 \\)", steps: [
+                { title: "Step 1: Identify the 'a' Value", math: "\\( a = -3 \\)", explanation: "The leading coefficient is a negative number." },
+                { title: "Step 2: Analyze the Sign", math: "\\( a < 0 \\rightarrow \\text{Downward} \\)", explanation: "The parabola opens downward." }
+            ], ans_box: "downward" },
+            u2l7q6ci_vtx: { title: "Question 6c(ii)", type: "numeric", fullStatement: "Question 6c(ii): Find vertex coordinates for \\( f(x) = -3(x + 1)^2 - 6 \\)", steps: [
+                { title: "Step 1: Interpret Shift Directions", math: "\\( x + 1 \\rightarrow x - (-1) \\)", explanation: "Reverse the sign inside the bracket to find the horizontal shift." },
+                { title: "Step 2: Extract Coordinates", math: "\\( h = -1, \\; k = -6 \\rightarrow \\text{Vertex} = (-1, -6) \\)", explanation: "The vertex coordinate is (-1, -6)." }
+            ], ans_box: "(-1,-6)" },
+            u2l7q6ci_sym: { title: "Question 6c(iii)", type: "numeric", fullStatement: "Question 6c(iii): Find the axis of symmetry for \\( f(x) = -3(x + 1)^2 - 6 \\)", steps: [
+                { title: "Step 1: Isolate the 'h' Parameter", math: "\\( h = -1 \\)", explanation: "Extract the horizontal turning point." },
+                { title: "Step 2: Write as an Equation", math: "\\( x = -1 \\)", explanation: "Write the final vertical line equation." }
+            ], ans_box: "x=-1" },
+            u2l7q6ci_yint: { title: "Question 6c(iv)", type: "numeric", fullStatement: "Question 6c(iv): Find the y-intercept for \\( f(x) = -3(x + 1)^2 - 6 \\)", steps: [
+                { title: "Step 1: Evaluate at x = 0", math: "\\( x = 0 \\rightarrow f(0) = -3(0 + 1)^2 - 6 \\)", explanation: "Set x to 0." },
+                { title: "Step 2: Calculate", math: "\\( f(0) = -3(1)^2 - 6 = -3 - 6 = -9 \\)", explanation: "Multiply -3 by 1, then subtract 6." }
+            ], ans_box: "-9" },
+
+            u2l7q4a_std_eq: { title: "Question 4a (Equation)", type: "numeric", fullStatement: "Question 4a(i): Express function \\( h(x) = 3(x + 2)(x - 5) \\) in standard form", steps: [
+                { title: "Step 1: Expand the Binomials (FOIL)", math: "\\( (x + 2)(x - 5) = x^2 - 5x + 2x - 10 = x^2 - 3x - 10 \\)", explanation: "First, multiply the terms inside the brackets using the FOIL method and combine like terms." },
+                { title: "Step 2: Distribute the Coefficient", math: "\\( 3(x^2 - 3x - 10) = 3x^2 - 9x - 30 \\)", explanation: "Multiply each term inside the expanded trinomial by the leading coefficient 3." },
+                { title: "Step 3: Final Standard Form", math: "\\( h(x) = 3x^2 - 9x - 30 \\)", explanation: "The equation is now in the form \\( y = ax^2 + bx + c \\)." }
+            ], ans_box: "h(x) = 3x² - 9x - 30" },
+            u2l7q4a_std_y: { title: "Question 4a (y-intercept)", type: "numeric", fullStatement: "Question 4a(ii): Identify the y-intercept for \\( h(x) = 3(x + 2)(x - 5) \\)", steps: [
+                { title: "Step 1: Locate the Constant Term", math: "\\( c = -30 \\)", explanation: "In standard form, the y-intercept is simply the constant term 'c'." },
+                { title: "Step 2: Write the Value", math: "\\( y = -30 \\)", explanation: "The graph intersects the y-axis at -30." }
+            ], ans_box: "-30" },
+
+            u2l7q4b_std_eq: { title: "Question 4b (Equation)", type: "numeric", fullStatement: "Question 4b(i): Express function \\( y = -2(x + 7)(x - 2) \\) in standard form", steps: [
+                { title: "Step 1: Expand the Binomials", math: "\\( (x + 7)(x - 2) = x^2 - 2x + 7x - 14 = x^2 + 5x - 14 \\)", explanation: "Multiply the binomials together." },
+                { title: "Step 2: Distribute the Coefficient", math: "\\( -2(x^2 + 5x - 14) = -2x^2 - 10x + 28 \\)", explanation: "Distribute the -2 across all terms, being careful to flip the signs." }
+            ], ans_box: "y = -2x² - 10x + 28" },
+            u2l7q4b_std_y: { title: "Question 4b (y-intercept)", type: "numeric", fullStatement: "Question 4b(ii): Identify the y-intercept for \\( y = -2(x + 7)(x - 2) \\)", steps: [
+                { title: "Step 1: Locate the Constant Term", math: "\\( c = 28 \\)", explanation: "Find the isolated number without an 'x' variable." },
+                { title: "Step 2: Write the Value", math: "\\( y = 28 \\)", explanation: "The y-intercept is 28." }
+            ], ans_box: "28" },
+
+            u2l7q4c_std_eq: { title: "Question 4c (Equation)", type: "numeric", fullStatement: "Question 4c(i): Express function \\( f(x) = 4(x + 2)^2 \\) in standard form", steps: [
+                { title: "Step 1: Expand the Perfect Square", math: "\\( (x + 2)^2 = (x + 2)(x + 2) = x^2 + 4x + 4 \\)", explanation: "Write out the binomial twice and multiply." },
+                { title: "Step 2: Distribute the Coefficient", math: "\\( 4(x^2 + 4x + 4) = 4x^2 + 16x + 16 \\)", explanation: "Multiply every term inside the new trinomial by 4." },
+                { title: "Step 3: Final Standard Form", math: "\\( f(x) = 4x^2 + 16x + 16 \\)", explanation: "The equation is now in standard form." }
+            ], ans_box: "f(x) = 4x² + 16x + 16" },
+            u2l7q4c_std_y: { title: "Question 4c (y-intercept)", type: "numeric", fullStatement: "Question 4c(ii): Identify the y-intercept for \\( f(x) = 4(x + 2)^2 \\)", steps: [
+                { title: "Step 1: Locate the Constant Term", math: "\\( c = 16 \\)", explanation: "Read the 'c' value from the standard form equation." },
+                { title: "Step 2: Write the Value", math: "\\( y = 16 \\)", explanation: "The answer is 16." }
+            ], ans_box: "16" },
+
+            u2l7q6a_std_eq: { title: "Question 6a (Equation)", type: "numeric", fullStatement: "Question 6a(i): Convert vertex form \\( m(x) = (x + 2)^2 + 3 \\) to standard form", steps: [
+                { title: "Step 1: Expand the Perfect Square", math: "\\( (x + 2)^2 = x^2 + 4x + 4 \\)", explanation: "First, resolve the squared binomial." },
+                { title: "Step 2: Combine the Constants", math: "\\( m(x) = (x^2 + 4x + 4) + 3 = x^2 + 4x + 7 \\)", explanation: "Add the outside constant 'k' to the constant generated from the expansion." }
+            ], ans_box: "m(x) = x² + 4x + 7" },
+            u2l7q6a_std_y: { title: "Question 6a (y-intercept)", type: "numeric", fullStatement: "Question 6a(ii): Identify the y-intercept for \\( m(x) = (x + 2)^2 + 3 \\)", steps: [
+                { title: "Step 1: Locate the Constant Term", math: "\\( c = 7 \\)", explanation: "Identify the trailing number in the standard form." },
+                { title: "Step 2: Write the Value", math: "\\( y = 7 \\)", explanation: "The y-intercept is 7." }
+            ], ans_box: "7" },
+
+            u2l7q6b_std_eq: { title: "Question 6b (Equation)", type: "numeric", fullStatement: "Question 6b(i): Convert vertex form \\( y = (x - 1)^2 - 4 \\) to standard form", steps: [
+                { title: "Step 1: Expand the Perfect Square", math: "\\( (x - 1)^2 = x^2 - 2x + 1 \\)", explanation: "Expand the binomial." },
+                { title: "Step 2: Combine the Constants", math: "\\( y = (x^2 - 2x + 1) - 4 = x^2 - 2x - 3 \\)", explanation: "Subtract 4 from the +1 to finalize the expression." }
+            ], ans_box: "y = x² - 2x - 3" },
+            u2l7q6b_std_y: { title: "Question 6b (y-intercept)", type: "numeric", fullStatement: "Question 6b(ii): Identify the y-intercept for \\( y = (x - 1)^2 - 4 \\)", steps: [
+                { title: "Step 1: Locate the Constant Term", math: "\\( c = -3 \\)", explanation: "Read the final constant including its sign." },
+                { title: "Step 2: Write the Value", math: "\\( y = -3 \\)", explanation: "The y-intercept is -3." }
+            ], ans_box: "-3" },
+
+            u2l7q6c_std_eq: { title: "Question 6c (Equation)", type: "numeric", fullStatement: "Question 6c(i): Convert vertex form \\( d(x) = 3(x - 5)^2 + 8 \\) to standard form", steps: [
+                { title: "Step 1: Expand the Perfect Square", math: "\\( (x - 5)^2 = x^2 - 10x + 25 \\)", explanation: "Expand the brackets first according to BEDMAS." },
+                { title: "Step 2: Distribute the Coefficient", math: "\\( 3(x^2 - 10x + 25) = 3x^2 - 30x + 75 \\)", explanation: "Multiply the leading factor of 3 across the trinomial." },
+                { title: "Step 3: Combine the Constants", math: "\\( d(x) = (3x^2 - 30x + 75) + 8 = 3x^2 - 30x + 83 \\)", explanation: "Add the remaining +8 at the end to complete the standard form." }
+            ], ans_box: "d(x) = 3x² - 30x + 83" },
+            u2l7q6c_std_y: { title: "Question 6c (y-intercept)", type: "numeric", fullStatement: "Question 6c(ii): Identify the y-intercept for \\( d(x) = 3(x - 5)^2 + 8 \\)", steps: [
+                { title: "Step 1: Locate the Constant Term", math: "\\( c = 83 \\)", explanation: "Extract the final isolated numerical value." },
+                { title: "Step 2: Write the Value", math: "\\( y = 83 \\)", explanation: "The answer is 83." }
+            ], ans_box: "83" },
+
+            u2l7q6d_std_eq: { title: "Question 6d (Equation)", type: "numeric", fullStatement: "Question 6d(i): Convert vertex form \\( y = -4(x + 3)^2 - 9 \\) to standard form", steps: [
+                { title: "Step 1: Expand the Perfect Square", math: "\\( (x + 3)^2 = x^2 + 6x + 9 \\)", explanation: "Expand the inner squared term." },
+                { title: "Step 2: Distribute the Coefficient", math: "\\( -4(x^2 + 6x + 9) = -4x^2 - 24x - 36 \\)", explanation: "Distribute the negative 4, carefully flipping the operational signs." },
+                { title: "Step 3: Combine the Constants", math: "\\( y = (-4x^2 - 24x - 36) - 9 = -4x^2 - 24x - 45 \\)", explanation: "Combine the -36 and -9." }
+            ], ans_box: "y = -4x² - 24x - 45" },
+            u2l7q6d_std_y: { title: "Question 6d (y-intercept)", type: "numeric", fullStatement: "Question 6d(ii): Identify the y-intercept for \\( y = -4(x + 3)^2 - 9 \\)", steps: [
+                { title: "Step 1: Locate the Constant Term", math: "\\( c = -45 \\)", explanation: "Identify the c parameter." },
+                { title: "Step 2: Write the Value", math: "\\( y = -45 \\)", explanation: "The y-intercept is -45." }
+            ], ans_box: "-45" },
+
+            u2l7q6a_fact_eq: { title: "Question 6a (Factored Equation)", type: "numeric", hasMethodToggle: true, fullStatement: "Question 6a(i): Factor completely standard form trinomial equation \\( y = x^2 + 10x + 21 \\)", steps: [
+                { cls: "ps-only", title: "Step 1 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = 21 \\; \\text{and} \\; r + s = 10 \\)", explanation: "Search for exactly two integers that multiply to the constant term (21) and simultaneously add up to the middle coefficient (10)." },
+                { cls: "ps-only", title: "Step 2: Evaluate Combinations", math: "\\( 3 \\times 7 = 21 \\; \\text{and} \\; 3 + 7 = 10 \\)", explanation: "Evaluating number pairs reveals that +3 and +7 satisfy both conditions." },
+                { cls: "cc-only", title: "Step 1 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('x', 'x', '+3', '+7', '+3x', '+7x', '+10x'), explanation: "1. Break down the leading term (x²) vertically.<br>2. Break down the constant term (+21) vertically.<br>3. Cross-multiply. The sum must match the middle term (+10x)." },
+                { title: "Step 3: Group into Binomial Factors", math: "\\( y = (x + 3)(x + 7) \\)", explanation: "Assemble the binomial factors by reading the matrix or components horizontally." }
+            ], ans_box: "y = (x + 3)(x + 7)" },
+            u2l7q6a_fact_x: { title: "Question 6a (x-intercepts)", type: "numeric", fullStatement: "Question 6a(ii): Identify the x-intercepts for \\( y = x^2 + 10x + 21 \\)", steps: [
+                { title: "Step 1: Set Factors to Zero", math: "\\( x + 3 = 0 \\; \\text{or} \\; x + 7 = 0 \\)", explanation: "Solve for x by switching the signs of the bracketed numbers." },
+                { title: "Step 2: Extract Solutions", math: "\\( x = -3, \\; x = -7 \\)", explanation: "The x-intercepts are -3 and -7." }
+            ], ans_box: "-7,-3" },
+
+            u2l7q6b_fact_eq: { title: "Question 6b (Factored Equation)", type: "numeric", hasMethodToggle: true, fullStatement: "Question 6b(i): Factor completely standard form trinomial equation \\( y = x^2 - 4x - 12 \\)", steps: [
+                { cls: "ps-only", title: "Step 1 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = -12 \\; \\text{and} \\; r + s = -4 \\)", explanation: "Search for exactly two integers that multiply to the constant term (-12) and simultaneously add up to the middle coefficient (-4)." },
+                { cls: "ps-only", title: "Step 2: Evaluate Combinations", math: "\\( (-6) \\times 2 = -12 \\; \\text{and} \\; (-6) + 2 = -4 \\)", explanation: "Evaluating number pairs reveals that -6 and +2 satisfy both conditions." },
+                { cls: "cc-only", title: "Step 1 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('x', 'x', '-6', '+2', '-6x', '+2x', '-4x'), explanation: "1. Break down the leading term (x²) vertically.<br>2. Break down the constant term (-12) vertically.<br>3. Cross-multiply. The sum must match the middle term (-4x)." },
+                { title: "Step 3: Group into Binomial Factors", math: "\\( y = (x - 6)(x + 2) \\)", explanation: "Construct the final factored form reading horizontally." }
+            ], ans_box: "y = (x - 6)(x + 2)" },
+            u2l7q6b_fact_x: { title: "Question 6b (x-intercepts)", type: "numeric", fullStatement: "Question 6b(ii): Identify the x-intercepts for \\( y = x^2 - 4x - 12 \\)", steps: [
+                { title: "Step 1: Set Factors to Zero", math: "\\( x - 6 = 0 \\; \\text{or} \\; x + 2 = 0 \\)", explanation: "Switch the signs to isolate the roots." },
+                { title: "Step 2: Extract Solutions", math: "\\( x = 6, \\; x = -2 \\)", explanation: "The x-intercepts are 6 and -2." }
+            ], ans_box: "-2,6" },
+
+            u2l7q6c_fact_eq: { title: "Question 6c (Factored Equation)", type: "numeric", hasMethodToggle: true, fullStatement: "Question 6c(i): Factor completely standard form trinomial equation \\( y = 3x^2 - 18x + 15 \\)", steps: [
+                { title: "Step 1: Extract Greatest Common Factor (GCF)", math: "\\( y = 3(x^2 - 6x + 5) \\)", explanation: "All three terms share a common divisor. Factoring out 3 simplifies the interior expression to a simple trinomial." },
+                { cls: "ps-only", title: "Step 2 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = 5 \\; \\text{and} \\; r + s = -6 \\)", explanation: "Focusing on the inside trinomial, search for two integers that multiply to the constant (+5) and add to the middle term (-6)." },
+                { cls: "ps-only", title: "Step 3: Evaluate Combinations", math: "\\( (-5) \\times (-1) = 5 \\; \\text{and} \\; (-5) + (-1) = -6 \\)", explanation: "The numbers -5 and -1 satisfy the conditions." },
+                { cls: "cc-only", title: "Step 2 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('x', 'x', '-5', '-1', '-5x', '-1x', '-6x'), explanation: "Apply the Criss-Cross matrix to the inner trinomial components." },
+                { title: "Step 4: Group into Binomial Factors", math: "\\( y = 3(x - 5)(x - 1) \\)", explanation: "Assemble the binomial factors and carry down the initial GCF multiplier." }
+            ], ans_box: "y = 3(x - 5)(x - 1)" },
+            u2l7q6c_fact_x: { title: "Question 6c (x-intercepts)", type: "numeric", fullStatement: "Question 6c(ii): Identify the x-intercepts for \\( y = 3x^2 - 18x + 15 \\)", steps: [
+                { title: "Step 1: Set Factors to Zero", math: "\\( x - 5 = 0 \\; \\text{or} \\; x - 1 = 0 \\)", explanation: "The leading GCF does not affect the roots. Just switch the signs of the bracketed numbers." },
+                { title: "Step 2: Extract Solutions", math: "\\( x = 5, \\; x = 1 \\)", explanation: "The x-intercepts are 5 and 1." }
+            ], ans_box: "1,5" },
+
+            u2l7q6d_fact_eq: { title: "Question 6d (Factored Equation)", type: "numeric", hasMethodToggle: true, fullStatement: "Question 6d(i): Factor completely standard form trinomial equation \\( y = 2x^2 - 8x + 6 \\)", steps: [
+                { title: "Step 1: Extract Greatest Common Factor (GCF)", math: "\\( y = 2(x^2 - 4x + 3) \\)", explanation: "Factor out the common multiplier of 2 from all terms to simplify the trinomial." },
+                { cls: "ps-only", title: "Step 2 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = 3 \\; \\text{and} \\; r + s = -4 \\)", explanation: "Find two numbers that multiply to +3 and add up to -4." },
+                { cls: "ps-only", title: "Step 3: Evaluate Combinations", math: "\\( (-3) \\times (-1) = 3 \\; \\text{and} \\; (-3) + (-1) = -4 \\)", explanation: "The numbers -3 and -1 work perfectly." },
+                { cls: "cc-only", title: "Step 2 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('x', 'x', '-3', '-1', '-3x', '-1x', '-4x'), explanation: "Apply the matrix matching to the inner trinomial components." },
+                { title: "Step 4: Group into Binomial Factors", math: "\\( y = 2(x - 3)(x - 1) \\)", explanation: "Form the brackets reading horizontally and include the leading 2." }
+            ], ans_box: "y = 2(x - 3)(x - 1)" },
+            u2l7q6d_fact_x: { title: "Question 6d (x-intercepts)", type: "numeric", fullStatement: "Question 6d(ii): Identify the x-intercepts for \\( y = 2x^2 - 8x + 6 \\)", steps: [
+                { title: "Step 1: Set Factors to Zero", math: "\\( x - 3 = 0 \\; \\text{or} \\; x - 1 = 0 \\)", explanation: "Identify the values that zero out each binomial." },
+                { title: "Step 2: Extract Solutions", math: "\\( x = 3, \\; x = 1 \\)", explanation: "The x-intercepts are 3 and 1." }
+            ], ans_box: "1,3" },
+
+            u2l7q6e_fact_eq: { title: "Question 6e (Factored Equation)", type: "numeric", hasMethodToggle: true, fullStatement: "Question 6e(i): Factor completely standard form trinomial equation \\( f(x) = 5x^2 + 10x - 15 \\)", steps: [
+                { title: "Step 1: Extract Greatest Common Factor (GCF)", math: "\\( f(x) = 5(x^2 + 2x - 3) \\)", explanation: "Divide every term by 5 and move the 5 outside the brackets." },
+                { cls: "ps-only", title: "Step 2 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = -3 \\; \\text{and} \\; r + s = 2 \\)", explanation: "Look for two integers that multiply to -3 and add to +2." },
+                { cls: "ps-only", title: "Step 3: Evaluate Combinations", math: "\\( 3 \\times (-1) = -3 \\; \\text{and} \\; 3 + (-1) = 2 \\)", explanation: "The numbers +3 and -1 fit the criteria." },
+                { cls: "cc-only", title: "Step 2 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('x', 'x', '+3', '-1', '+3x', '-1x', '+2x'), explanation: "Deconstruct the trinomial into vector mapping elements." },
+                { title: "Step 4: Group into Binomial Factors", math: "\\( f(x) = 5(x + 3)(x - 1) \\)", explanation: "Construct the final expression combining the elements horizontally." }
+            ], ans_box: "f(x) = 5(x + 3)(x - 1)" },
+            u2l7q6e_fact_x: { title: "Question 6e (x-intercepts)", type: "numeric", fullStatement: "Question 6e(ii): Identify the x-intercepts for \\( f(x) = 5x^2 + 10x - 15 \\)", steps: [
+                { title: "Step 1: Set Factors to Zero", math: "\\( x + 3 = 0 \\; \\text{or} \\; x - 1 = 0 \\)", explanation: "Reverse the signs." },
+                { title: "Step 2: Extract Solutions", math: "\\( x = -3, \\; x = 1 \\)", explanation: "The x-intercepts are -3 and 1." }
+            ], ans_box: "-3,1" },
+
+            u2l7q6f_fact_eq: { title: "Question 6f (Factored Equation)", type: "numeric", hasMethodToggle: true, fullStatement: "Question 6f(i): Factor completely standard form trinomial equation \\( g(x) = x^2 - 3x - 18 \\)", steps: [
+                { cls: "ps-only", title: "Step 1 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = -18 \\; \\text{and} \\; r + s = -3 \\)", explanation: "Find two integers that multiply to -18 and simultaneously add up to -3." },
+                { cls: "ps-only", title: "Step 2: Evaluate Combinations", math: "\\( (-6) \\times 3 = -18 \\; \\text{and} \\; (-6) + 3 = -3 \\)", explanation: "Testing factors reveals that -6 and +3 satisfy the required conditions." },
+                { cls: "cc-only", title: "Step 1 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('x', 'x', '-6', '+3', '-6x', '+3x', '-3x'), explanation: "Calculate intersecting terms to verify the middle sum." },
+                { title: "Step 3: Group into Binomial Factors", math: "\\( g(x) = (x - 6)(x + 3) \\)", explanation: "Build the factored equation using these verified numbers." }
+            ], ans_box: "g(x) = (x - 6)(x + 3)" },
+            u2l7q6f_fact_x: { title: "Question 6f (x-intercepts)", type: "numeric", fullStatement: "Question 6f(ii): Identify the x-intercepts for \\( g(x) = x^2 - 3x - 18 \\)", steps: [
+                { title: "Step 1: Set Factors to Zero", math: "\\( x - 6 = 0 \\; \\text{or} \\; x + 3 = 0 \\)", explanation: "Flip the signs from the brackets." },
+                { title: "Step 2: Extract Solutions", math: "\\( x = 6, \\; x = -3 \\)", explanation: "The x-intercepts are 6 and -3." }
+            ], ans_box: "-3,6" },
+
+            u2l7q6g_fact_eq: { title: "Question 6g (Factored Equation)", type: "numeric", hasMethodToggle: true, fullStatement: "Question 6g(i): Write the quadratic function in factored form: \\( r(x) = 3x^2 - 9x + 6 \\)", steps: [
+                { title: "Step 1: Extract Greatest Common Factor (GCF)", math: "\\( r(x) = 3(x^2 - 3x + 2) \\)", explanation: "Extract the common factor of 3 to leave a simple trinomial." },
+                { cls: "ps-only", title: "Step 2 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = 2 \\; \\text{and} \\; r + s = -3 \\)", explanation: "Determine two numbers that multiply to +2 and add up to -3." },
+                { cls: "ps-only", title: "Step 3: Evaluate Combinations", math: "\\( (-2) \\times (-1) = 2 \\; \\text{and} \\; (-2) + (-1) = -3 \\)", explanation: "The numbers are -2 and -1." },
+                { cls: "cc-only", title: "Step 2 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('x', 'x', '-2', '-1', '-2x', '-1x', '-3x'), explanation: "Plot matrix combinations to achieve an intersecting sum equal to -3x." },
+                { title: "Step 4: Group into Binomial Factors", math: "\\( r(x) = 3(x - 2)(x - 1) \\)", explanation: "Construct the equation using the extracted GCF and the identified binomial components." }
+            ], ans_box: "r(x) = 3(x - 2)(x - 1)" },
+            u2l7q6g_fact_x: { title: "Question 6g (x-intercepts)", type: "numeric", fullStatement: "Question 6g(ii): Identify the x-intercepts for \\( r(x) = 3x^2 - 9x + 6 \\)", steps: [
+                { title: "Step 1: Set Factors to Zero", math: "\\( x - 2 = 0 \\; \\text{or} \\; x - 1 = 0 \\)", explanation: "Solve for the roots by changing the signs." },
+                { title: "Step 2: Extract Solutions", math: "\\( x = 2, \\; x = 1 \\)", explanation: "The x-intercepts are 2 and 1." }
+            ], ans_box: "1,2" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false, selectedMethod: 'ps' };
+        });
+
+        let activeQuestionId = "";
+        let currentMethod = 'ps';
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            document.getElementById("method-toggle-bar").style.display = "none";
+
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const kbdToolbar = document.getElementById("math-keyboard");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                assetMount.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            currentMethod = state.selectedMethod || 'ps';
+            document.getElementById("mode-ps").classList.toggle("active", currentMethod === 'ps');
+            document.getElementById("mode-cc").classList.toggle("active", currentMethod === 'cc');
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+
+            if (activeQuestionId === "u2l7q1d" || activeQuestionId === "u2l7q2di" || activeQuestionId === "u2l7q2dii" || activeQuestionId === "u2l7q2diii") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = "\\( y = \\frac{1}{2}x^2 - 16 \\)";
+            } else if (activeQuestionId === "u2l7q4di_dir" || activeQuestionId === "u2l7q4di_xint" || activeQuestionId === "u2l7q4di_vtx" || activeQuestionId === "u2l7q4di_sym" || activeQuestionId === "u2l7q4di_yint") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = "\\( y = \\frac{1}{2}x(x + 6) \\)";
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            kbdToolbar.style.display = "flex";
+            document.getElementById("input-prompt-label").innerText = "Type your response value directly into the text field container slot below:";
+            mountPoint.innerHTML = `<input type="text" id="numeric-student-input" class="student-answer-input" placeholder="Enter alphanumeric responses parameters values..." autocomplete="off">`;
+            
+            kbdToolbar.innerHTML = `
+                <button class="math-key" onclick="pressStandardNumericKey('a')">a</button>
+                <button class="math-key" onclick="pressStandardNumericKey('b')">b</button>
+                <button class="math-key" onclick="pressStandardNumericKey('c')">c</button>
+                <button class="math-key" onclick="pressStandardNumericKey('x')">x</button>
+                <button class="math-key" onclick="pressStandardNumericKey('y')">y</button>
+                <button class="math-key" onclick="pressStandardNumericKey('f')">f</button>
+                <button class="math-key" onclick="pressStandardNumericKey('h')">h</button>
+                <button class="math-key" onclick="pressStandardNumericKey('m')">m</button>
+                <button class="math-key" onclick="pressStandardNumericKey('d')">d</button>
+                <button class="math-key" onclick="pressStandardNumericKey('r')">r</button>
+                <button class="math-key" onclick="pressStandardNumericKey('g')">g</button>
+                <button class="math-key" onclick="pressStandardNumericKey('½')">½</button>
+                <button class="math-key" onclick="pressStandardNumericKey('²')">²</button>
+                <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                <button class="math-key" onclick="pressStandardNumericKey('(')">(</button>
+                <button class="math-key" onclick="pressStandardNumericKey(')')">)</button>
+                <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressStandardNumericKey('${n}')">${n}</button>`).join("")}
+            `;
+
+            const numInput = document.getElementById("numeric-student-input");
+            numInput.value = state.textInputVal;
+            
+            numInput.addEventListener("input", () => {
+                state.textInputVal = numInput.value;
+            });
+
+            if (state.answered) {
+                numInput.disabled = true;
+            }
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            let appendVal = symbol;
+            
+            txtInput.value = currentText.substring(0, startPos) + appendVal + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + appendVal.length;
+            txtInput.selectionEnd = startPos + appendVal.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let rawVal = state.textInputVal;
+            
+            let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2');
+            const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2'));
+
+            if (possibleAnswers.includes(normalizedInput)) {
+                matchingCorrect = true;
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_2",
+                lessonId: "Lesson_7",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawVal,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "Deconstructed Subquestion Parameter Input",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Workbook metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment variables configuration. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                let stepClass = step.cls ? `step-block ${step.cls}` : "step-block";
+                html += `
+                <div class="${stepClass}" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            if (data.hasMethodToggle) {
+                document.getElementById("method-toggle-bar").style.display = "flex";
+            } else {
+                document.getElementById("method-toggle-bar").style.display = "none";
+            }
+
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            const allSteps = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            allSteps.forEach(step => step.style.display = 'none');
+            
+            visibleStepElements = allSteps.filter(step => {
+                if (currentMethod === 'ps' && step.classList.contains('cc-only')) return false;
+                if (currentMethod === 'cc' && step.classList.contains('ps-only')) return false;
+                return true;
+            });
+
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function changeMethod(methodKey) {
+            if (currentMethod === methodKey) return;
+            currentMethod = methodKey;
+            questionStates[activeQuestionId].selectedMethod = methodKey;
+            questionStates[activeQuestionId].currentStep = 0;
+
+            document.getElementById("mode-ps").classList.toggle("active", methodKey === 'ps');
+            document.getElementById("mode-cc").classList.toggle("active", methodKey === 'cc');
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

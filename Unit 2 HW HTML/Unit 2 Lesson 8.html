@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 2 Lesson 8</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--math-color);
+        }
+
+        .ordered-pairs-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .pair-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .pair-row-label {
+            min-width: 120px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .pair-coord-field {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            outline: none;
+            color: var(--math-color);
+            font-family: inherit;
+        }
+
+        .pair-coord-field:focus {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .pair-coord-field:disabled {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+        .math-key.btn-danger-action:hover:not(:disabled) {
+            background-color: #fecaca;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 2 Lesson 8</h1>
+        <p>Completing the Square & Optimization Problems Step-by-Step Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                
+                <optgroup label="Section 3: Find 'k' for Perfect Square Trinomial">
+                    <option value="u2l8q3a">3a) Find k for x² + 2x + k</option>
+                    <option value="u2l8q3b">3b) Find k for x² - 8x + k</option>
+                    <option value="u2l8q3c">3c) Find k for x² - 16x + k</option>
+                    <option value="u2l8q3d">3d) Find k for x² - 9x + k</option>
+                    <option value="u2l8q3e">3e) Find k for x² + 26x + k</option>
+                    <option value="u2l8q3f">3f) Find k for x² + 13x + k</option>
+                </optgroup>
+
+                <optgroup label="Section 4: Rewrite in Vertex Form">
+                    <option value="u2l8q4a">4a) Rewrite y = x² + 10x + 4</option>
+                    <option value="u2l8q4b">4b) Rewrite y = x² + 16x + 1</option>
+                    <option value="u2l8q4c">4c) Rewrite y = x² - 8x + 13</option>
+                    <option value="u2l8q4d">4d) Rewrite y = 3x² + 6x + 1</option>
+                    <option value="u2l8q4e">4e) Rewrite y = -2x² + 4x + 3</option>
+                    <option value="u2l8q4f">4f) Rewrite y = 4x² - 16x - 2</option>
+                </optgroup>
+
+                <optgroup label="Section 9: Find Maximum/Minimum Value">
+                    <option value="u2l8q9a">9a) Max/Min for y = 2x² - x + 1</option>
+                    <option value="u2l8q9b">9b) Max/Min for y = -3x² + x</option>
+                    <option value="u2l8q9c">9c) Max/Min for y = ¼x² - 2x + 1</option>
+                    <option value="u2l8q9d">9d) Max/Min for y = 4x² - x</option>
+                    <option value="u2l8q9e">9e) Max/Min for y = -2x² + 5x - 1</option>
+                    <option value="u2l8q9f">9f) Max/Min for y = ¾x² + 6x + 1</option>
+                    <option value="u2l8q9g">9g) Max/Min for y = 5x² + 2x - 3</option>
+                    <option value="u2l8q9h">9h) Max/Min for y = -⅔x² - x + 2</option>
+                </optgroup>
+
+                <optgroup label="Section 13: Aircraft Simulation Trajectory">
+                    <option value="u2l8q13a_g">13a) Sketch the trajectory graph</option>
+                    <option value="u2l8q13b">13b) Find the maximum height (m)</option>
+                    <option value="u2l8q13c">13c) Time to reach maximum height (s)</option>
+                </optgroup>
+
+                <optgroup label="Section 14: Thrown Ball Trajectory">
+                    <option value="u2l8q14a_g">14a) Sketch the trajectory graph</option>
+                    <option value="u2l8q14b">14b) Height of the ball after 2 s (m)</option>
+                    <option value="u2l8q14c">14c) Find the maximum height (m)</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+                <div class="math-keyboard-toolbar" id="math-keyboard"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            u2l8q3a: ["1"], u2l8q3b: ["16"], u2l8q3c: ["64"], u2l8q3d: ["20.25", "81/4"], u2l8q3e: ["169"], u2l8q3f: ["42.25", "169/4"],
+            u2l8q4a: ["y=(x+5)2-21", "y=(x+5)²-21", "(x+5)²-21"], 
+            u2l8q4b: ["y=(x+8)2-63", "y=(x+8)²-63", "(x+8)²-63"],
+            u2l8q4c: ["y=(x-4)2-3", "y=(x-4)²-3", "(x-4)²-3"],
+            u2l8q4d: ["y=3(x+1)2-2", "y=3(x+1)²-2", "3(x+1)²-2"],
+            u2l8q4e: ["y=-2(x-1)2+5", "y=-2(x-1)²+5", "-2(x-1)²+5"],
+            u2l8q4f: ["y=4(x-2)2-18", "y=4(x-2)²-18", "4(x-2)²-18"],
+            u2l8q9a: ["7/8", "0.875"], u2l8q9b: ["1/12"], u2l8q9c: ["-3"], u2l8q9d: ["-1/16", "-0.0625"],
+            u2l8q9e: ["17/8", "2.125"], u2l8q9f: ["-11"], u2l8q9g: ["-3.2", "-16/5"], u2l8q9h: ["19/8", "2.375", "23/8"],
+            u2l8q13a_g: ["(0,9750);(10,11000);(15,12000);(20,11000);(30,9750)"],
+            u2l8q13b: ["12000"], u2l8q13c: ["15"],
+            u2l8q14a_g: ["(-1,19);(0,34);(1,39);(2,34);(3,19)"],
+            u2l8q14b: ["34"], u2l8q14c: ["39"]
+        };
+
+        const problemDataPack = {
+            u2l8q3a: { title: "Question 3a", type: "numeric", fullStatement: "Question 3a: Find the value of k that makes the expression a perfect square trinomial:<br><br>\\( x^2 + 2x + k \\)", steps: [
+                { title: "Step 1: Identify the middle coefficient 'b'", math: "\\( b = 2 \\)", explanation: "In a standard trinomial \\( ax^2 + bx + c \\), locate the coefficient of the linear term." },
+                { title: "Step 2: Apply the Perfect Square Formula", math: "\\( k = (\\frac{b}{2})^2 = (\\frac{2}{2})^2 \\)", explanation: "To complete the square, divide 'b' by 2 and square the result." },
+                { title: "Step 3: Calculate 'k'", math: "\\( k = (1)^2 = 1 \\)", explanation: "The required value to complete the perfect square is 1." }
+            ], ans_box: "1" },
+            u2l8q3b: { title: "Question 3b", type: "numeric", fullStatement: "Question 3b: Find the value of k that makes the expression a perfect square trinomial:<br><br>\\( x^2 - 8x + k \\)", steps: [
+                { title: "Step 1: Identify the middle coefficient", math: "\\( b = -8 \\)", explanation: "Locate the 'b' value." },
+                { title: "Step 2: Apply the Formula", math: "\\( k = (\\frac{-8}{2})^2 \\)", explanation: "Divide by 2 and square it." },
+                { title: "Step 3: Calculate", math: "\\( k = (-4)^2 = 16 \\)", explanation: "The negative sign is squared away, resulting in a positive 16." }
+            ], ans_box: "16" },
+            u2l8q3c: { title: "Question 3c", type: "numeric", fullStatement: "Question 3c: Find the value of k that makes the expression a perfect square trinomial:<br><br>\\( x^2 - 16x + k \\)", steps: [
+                { title: "Step 1: Identify the middle coefficient", math: "\\( b = -16 \\)", explanation: "Locate 'b'." },
+                { title: "Step 2: Apply the Formula", math: "\\( k = (\\frac{-16}{2})^2 \\)", explanation: "Half the middle term squared." },
+                { title: "Step 3: Calculate", math: "\\( k = (-8)^2 = 64 \\)", explanation: "The resulting perfect square constant is 64." }
+            ], ans_box: "64" },
+            u2l8q3d: { title: "Question 3d", type: "numeric", fullStatement: "Question 3d: Find the value of k that makes the expression a perfect square trinomial:<br><br>\\( x^2 - 9x + k \\)", steps: [
+                { title: "Step 1: Identify the middle coefficient", math: "\\( b = -9 \\)", explanation: "Locate 'b'." },
+                { title: "Step 2: Apply the Formula", math: "\\( k = (\\frac{-9}{2})^2 \\)", explanation: "For odd numbers, keep it as a fraction or convert to decimal." },
+                { title: "Step 3: Calculate", math: "\\( k = (-4.5)^2 = 20.25 \\)", explanation: "Squaring -4.5 yields 20.25." }
+            ], ans_box: "20.25" },
+            u2l8q3e: { title: "Question 3e", type: "numeric", fullStatement: "Question 3e: Find the value of k that makes the expression a perfect square trinomial:<br><br>\\( x^2 + 26x + k \\)", steps: [
+                { title: "Step 1: Identify the middle coefficient", math: "\\( b = 26 \\)", explanation: "Locate 'b'." },
+                { title: "Step 2: Apply the Formula", math: "\\( k = (\\frac{26}{2})^2 \\)", explanation: "Divide by 2 and square." },
+                { title: "Step 3: Calculate", math: "\\( k = (13)^2 = 169 \\)", explanation: "The perfect square value is 169." }
+            ], ans_box: "169" },
+            u2l8q3f: { title: "Question 3f", type: "numeric", fullStatement: "Question 3f: Find the value of k that makes the expression a perfect square trinomial:<br><br>\\( x^2 + 13x + k \\)", steps: [
+                { title: "Step 1: Identify the middle coefficient", math: "\\( b = 13 \\)", explanation: "Locate 'b'." },
+                { title: "Step 2: Apply the Formula", math: "\\( k = (\\frac{13}{2})^2 \\)", explanation: "Divide the odd number by 2 and square." },
+                { title: "Step 3: Calculate", math: "\\( k = (6.5)^2 = 42.25 \\)", explanation: "The calculated constant is 42.25." }
+            ], ans_box: "42.25" },
+
+            u2l8q4a: { title: "Question 4a", type: "numeric", fullStatement: "Question 4a: Rewrite the quadratic function in the vertex form \\( y = a(x - h)^2 + k \\) by completing the square.<br><br>\\( y = x^2 + 10x + 4 \\)", steps: [
+                { title: "Step 1: Group the variable terms", math: "\\( y = (x^2 + 10x) + 4 \\)", explanation: "Isolate the terms containing 'x' inside brackets." },
+                { title: "Step 2: Calculate the perfect square constant", math: "\\( c = (\\frac{10}{2})^2 = (5)^2 = 25 \\)", explanation: "Determine the magic number needed to complete the square." },
+                { title: "Step 3: Add and subtract inside brackets", math: "\\( y = (x^2 + 10x + 25 - 25) + 4 \\)", explanation: "Maintain the balance of the equation by adding and subtracting 25." },
+                { title: "Step 4: Move the subtracted value out", math: "\\( y = (x^2 + 10x + 25) - 25 + 4 \\)", explanation: "Since the leading coefficient 'a' is 1, just pull the -25 directly out of the brackets." },
+                { title: "Step 5: Factor and simplify", math: "\\( y = (x + 5)^2 - 21 \\)", explanation: "Factor the perfect square trinomial and combine the constant terms." }
+            ], ans_box: "y = (x + 5)² - 21" },
+            u2l8q4b: { title: "Question 4b", type: "numeric", fullStatement: "Question 4b: Rewrite the quadratic function in the vertex form \\( y = a(x - h)^2 + k \\) by completing the square.<br><br>\\( y = x^2 + 16x + 1 \\)", steps: [
+                { title: "Step 1: Group the variable terms", math: "\\( y = (x^2 + 16x) + 1 \\)", explanation: "Group the x terms." },
+                { title: "Step 2: Calculate the magic number", math: "\\( c = (\\frac{16}{2})^2 = 64 \\)", explanation: "Half of 16 is 8, and 8 squared is 64." },
+                { title: "Step 3: Add and subtract", math: "\\( y = (x^2 + 16x + 64 - 64) + 1 \\)", explanation: "Add and subtract 64 inside the bracket." },
+                { title: "Step 4: Move the subtracted value out", math: "\\( y = (x^2 + 16x + 64) - 64 + 1 \\)", explanation: "Extract the -64." },
+                { title: "Step 5: Factor and simplify", math: "\\( y = (x + 8)^2 - 63 \\)", explanation: "Write the final vertex form." }
+            ], ans_box: "y = (x + 8)² - 63" },
+            u2l8q4c: { title: "Question 4c", type: "numeric", fullStatement: "Question 4c: Rewrite the quadratic function in the vertex form \\( y = a(x - h)^2 + k \\) by completing the square.<br><br>\\( y = x^2 - 8x + 13 \\)", steps: [
+                { title: "Step 1: Group the variable terms", math: "\\( y = (x^2 - 8x) + 13 \\)", explanation: "Group the x terms." },
+                { title: "Step 2: Calculate the magic number", math: "\\( c = (\\frac{-8}{2})^2 = 16 \\)", explanation: "Half of -8 is -4, squared is 16." },
+                { title: "Step 3: Add and subtract", math: "\\( y = (x^2 - 8x + 16 - 16) + 13 \\)", explanation: "Add and subtract 16." },
+                { title: "Step 4: Move the subtracted value out", math: "\\( y = (x^2 - 8x + 16) - 16 + 13 \\)", explanation: "Extract the -16." },
+                { title: "Step 5: Factor and simplify", math: "\\( y = (x - 4)^2 - 3 \\)", explanation: "Simplify into vertex form." }
+            ], ans_box: "y = (x - 4)² - 3" },
+            u2l8q4d: { title: "Question 4d", type: "numeric", fullStatement: "Question 4d: Rewrite the quadratic function in the vertex form \\( y = a(x - h)^2 + k \\) by completing the square.<br><br>\\( y = 3x^2 + 6x + 1 \\)", steps: [
+                { title: "Step 1: Factor 'a' from the variable terms", math: "\\( y = 3(x^2 + 2x) + 1 \\)", explanation: "Factor the leading coefficient 3 out of the x terms only." },
+                { title: "Step 2: Calculate the magic number", math: "\\( c = (\\frac{2}{2})^2 = 1 \\)", explanation: "Determine the constant needed to complete the square inside the bracket." },
+                { title: "Step 3: Add and subtract", math: "\\( y = 3(x^2 + 2x + 1 - 1) + 1 \\)", explanation: "Add and subtract 1 inside the bracket." },
+                { title: "Step 4: Distribute and extract", math: "\\( y = 3(x^2 + 2x + 1) - 3(1) + 1 \\)", explanation: "To move the -1 outside, it must be multiplied by the leading factor 3." },
+                { title: "Step 5: Factor and simplify", math: "\\( y = 3(x + 1)^2 - 2 \\)", explanation: "Combine constants to reach the final vertex form." }
+            ], ans_box: "y = 3(x + 1)² - 2" },
+            u2l8q4e: { title: "Question 4e", type: "numeric", fullStatement: "Question 4e: Rewrite the quadratic function in the vertex form \\( y = a(x - h)^2 + k \\) by completing the square.<br><br>\\( y = -2x^2 + 4x + 3 \\)", steps: [
+                { title: "Step 1: Factor 'a' from the variable terms", math: "\\( y = -2(x^2 - 2x) + 3 \\)", explanation: "Factoring out -2 changes the sign of the inner x term." },
+                { title: "Step 2: Calculate the magic number", math: "\\( c = (\\frac{-2}{2})^2 = 1 \\)", explanation: "The magic number is 1." },
+                { title: "Step 3: Add and subtract", math: "\\( y = -2(x^2 - 2x + 1 - 1) + 3 \\)", explanation: "Inject +1 and -1." },
+                { title: "Step 4: Distribute and extract", math: "\\( y = -2(x^2 - 2x + 1) - 2(-1) + 3 \\)", explanation: "Multiply the extracted -1 by the leading -2, generating a +2 outside." },
+                { title: "Step 5: Factor and simplify", math: "\\( y = -2(x - 1)^2 + 2 + 3 = -2(x - 1)^2 + 5 \\)", explanation: "Consolidate the tail constants." }
+            ], ans_box: "y = -2(x - 1)² + 5" },
+            u2l8q4f: { title: "Question 4f", type: "numeric", fullStatement: "Question 4f: Rewrite the quadratic function in the vertex form \\( y = a(x - h)^2 + k \\) by completing the square.<br><br>\\( y = 4x^2 - 16x - 2 \\)", steps: [
+                { title: "Step 1: Factor 'a' from the variable terms", math: "\\( y = 4(x^2 - 4x) - 2 \\)", explanation: "Factor out the 4." },
+                { title: "Step 2: Calculate the magic number", math: "\\( c = (\\frac{-4}{2})^2 = 4 \\)", explanation: "The magic number is 4." },
+                { title: "Step 3: Add and subtract", math: "\\( y = 4(x^2 - 4x + 4 - 4) - 2 \\)", explanation: "Inject +4 and -4." },
+                { title: "Step 4: Distribute and extract", math: "\\( y = 4(x^2 - 4x + 4) - 4(4) - 2 \\)", explanation: "Extracting the -4 requires multiplying by the leading 4, yielding -16." },
+                { title: "Step 5: Factor and simplify", math: "\\( y = 4(x - 2)^2 - 16 - 2 = 4(x - 2)^2 - 18 \\)", explanation: "Simplify the final constants." }
+            ], ans_box: "y = 4(x - 2)² - 18" },
+
+            u2l8q9a: { title: "Question 9a", type: "numeric", fullStatement: "Question 9a: Find the maximum or minimum value of the quadratic function by completing the square.<br><br>\\( y = 2x^2 - x + 1 \\)", steps: [
+                { title: "Step 1: Factor 'a'", math: "\\( y = 2(x^2 - 0.5x) + 1 \\)", explanation: "Factor 2 out of the variable terms." },
+                { title: "Step 2: Magic number", math: "\\( c = (\\frac{-0.5}{2})^2 = 0.0625 \\)", explanation: "Calculate the constant needed." },
+                { title: "Step 3: Add, subtract, and extract", math: "\\( y = 2(x^2 - 0.5x + 0.0625) - 2(0.0625) + 1 \\)", explanation: "Distribute the 2 to the subtracted term and pull it out." },
+                { title: "Step 4: Simplify", math: "\\( y = 2(x - 0.25)^2 - 0.125 + 1 = 2(x - 0.25)^2 + 0.875 \\)", explanation: "The constant tail is 0.875, or 7/8." },
+                { title: "Step 5: Identify the Extremum", math: "\\( \\text{Minimum: } \\frac{7}{8} \\)", explanation: "Since a=2 is positive, the parabola opens upward, forming a minimum value at the vertex height." }
+            ], ans_box: "7/8" },
+            u2l8q9b: { title: "Question 9b", type: "numeric", fullStatement: "Question 9b: Find the maximum or minimum value of the quadratic function by completing the square.<br><br>\\( y = -3x^2 + x \\)", steps: [
+                { title: "Step 1: Factor 'a'", math: "\\( y = -3(x^2 - \\frac{1}{3}x) \\)", explanation: "Factor -3 from the variable terms." },
+                { title: "Step 2: Magic number", math: "\\( c = (\\frac{-1/3}{2})^2 = (\\frac{-1}{6})^2 = \\frac{1}{36} \\)", explanation: "Calculate the fractional magic number." },
+                { title: "Step 3: Add, subtract, and extract", math: "\\( y = -3(x^2 - \\frac{1}{3}x + \\frac{1}{36}) - 3(-\\frac{1}{36}) \\)", explanation: "Multiply the extracted term by -3." },
+                { title: "Step 4: Simplify", math: "\\( y = -3(x - \\frac{1}{6})^2 + \\frac{3}{36} = -3(x - \\frac{1}{6})^2 + \\frac{1}{12} \\)", explanation: "Simplify the fraction." },
+                { title: "Step 5: Identify the Extremum", math: "\\( \\text{Maximum: } \\frac{1}{12} \\)", explanation: "Since a=-3 is negative, it opens downward, producing a maximum." }
+            ], ans_box: "1/12" },
+            u2l8q9c: { title: "Question 9c", type: "numeric", fullStatement: "Question 9c: Find the maximum or minimum value of the quadratic function by completing the square.<br><br>\\( y = \\frac{1}{4}x^2 - 2x + 1 \\)", steps: [
+                { title: "Step 1: Factor 'a'", math: "\\( y = \\frac{1}{4}(x^2 - 8x) + 1 \\)", explanation: "Factoring out 1/4 is equivalent to multiplying the inner term by 4." },
+                { title: "Step 2: Magic number", math: "\\( c = (\\frac{-8}{2})^2 = 16 \\)", explanation: "Calculate the magic number." },
+                { title: "Step 3: Add, subtract, and extract", math: "\\( y = \\frac{1}{4}(x^2 - 8x + 16) - \\frac{1}{4}(16) + 1 \\)", explanation: "Distribute the 1/4 to the subtracted 16." },
+                { title: "Step 4: Simplify", math: "\\( y = \\frac{1}{4}(x - 4)^2 - 4 + 1 = \\frac{1}{4}(x - 4)^2 - 3 \\)", explanation: "The tail computes to -3." },
+                { title: "Step 5: Identify the Extremum", math: "\\( \\text{Minimum: } -3 \\)", explanation: "Opening upward (positive 'a') yields a minimum." }
+            ], ans_box: "-3" },
+            u2l8q9d: { title: "Question 9d", type: "numeric", fullStatement: "Question 9d: Find the maximum or minimum value of the quadratic function by completing the square.<br><br>\\( y = 4x^2 - x \\)", steps: [
+                { title: "Step 1: Factor 'a'", math: "\\( y = 4(x^2 - \\frac{1}{4}x) \\)", explanation: "Factor out 4." },
+                { title: "Step 2: Magic number", math: "\\( c = (\\frac{-1/4}{2})^2 = (\\frac{-1}{8})^2 = \\frac{1}{64} \\)", explanation: "Find the fractional constant." },
+                { title: "Step 3: Add, subtract, and extract", math: "\\( y = 4(x^2 - \\frac{1}{4}x + \\frac{1}{64}) - 4(\\frac{1}{64}) \\)", explanation: "Extract and multiply." },
+                { title: "Step 4: Simplify", math: "\\( y = 4(x - \\frac{1}{8})^2 - \\frac{4}{64} = 4(x - \\frac{1}{8})^2 - \\frac{1}{16} \\)", explanation: "Reduce the fraction." },
+                { title: "Step 5: Identify the Extremum", math: "\\( \\text{Minimum: } -\\frac{1}{16} \\)", explanation: "A positive leading coefficient generates a minimum." }
+            ], ans_box: "-1/16" },
+            u2l8q9e: { title: "Question 9e", type: "numeric", fullStatement: "Question 9e: Find the maximum or minimum value of the quadratic function by completing the square.<br><br>\\( y = -2x^2 + 5x - 1 \\)", steps: [
+                { title: "Step 1: Factor 'a'", math: "\\( y = -2(x^2 - 2.5x) - 1 \\)", explanation: "Factor out -2." },
+                { title: "Step 2: Magic number", math: "\\( c = (\\frac{-2.5}{2})^2 = 1.5625 \\)", explanation: "Compute the decimal magic number." },
+                { title: "Step 3: Add, subtract, and extract", math: "\\( y = -2(x^2 - 2.5x + 1.5625) - 2(-1.5625) - 1 \\)", explanation: "Multiply the extracted term by -2." },
+                { title: "Step 4: Simplify", math: "\\( y = -2(x - 1.25)^2 + 3.125 - 1 = -2(x - 1.25)^2 + 2.125 \\)", explanation: "Simplify the constants. (2.125 equals 17/8)" },
+                { title: "Step 5: Identify the Extremum", math: "\\( \\text{Maximum: } 2.125 \\)", explanation: "A negative 'a' means the parabola opens downward, forming a maximum." }
+            ], ans_box: "17/8" },
+            u2l8q9f: { title: "Question 9f", type: "numeric", fullStatement: "Question 9f: Find the maximum or minimum value of the quadratic function by completing the square.<br><br>\\( y = \\frac{3}{4}x^2 + 6x + 1 \\)", steps: [
+                { title: "Step 1: Factor 'a'", math: "\\( y = \\frac{3}{4}(x^2 + 8x) + 1 \\)", explanation: "Factoring out 3/4 requires dividing 6 by 3/4 (which is multiplying by 4/3)." },
+                { title: "Step 2: Magic number", math: "\\( c = (\\frac{8}{2})^2 = 16 \\)", explanation: "The magic number is 16." },
+                { title: "Step 3: Add, subtract, and extract", math: "\\( y = \\frac{3}{4}(x^2 + 8x + 16) - \\frac{3}{4}(16) + 1 \\)", explanation: "Multiply the extracted 16 by 3/4, which yields 12." },
+                { title: "Step 4: Simplify", math: "\\( y = \\frac{3}{4}(x + 4)^2 - 12 + 1 = \\frac{3}{4}(x + 4)^2 - 11 \\)", explanation: "The vertex height 'k' is strictly -11." },
+                { title: "Step 5: Identify the Extremum", math: "\\( \\text{Minimum: } -11 \\)", explanation: "The positive 'a' value dictates a minimum at -11. (Note: The worksheet answer key misprinted this as positive 11)." }
+            ], ans_box: "-11" },
+            u2l8q9g: { title: "Question 9g", type: "numeric", fullStatement: "Question 9g: Find the maximum or minimum value of the quadratic function by completing the square.<br><br>\\( y = 5x^2 + 2x - 3 \\)", steps: [
+                { title: "Step 1: Factor 'a'", math: "\\( y = 5(x^2 + 0.4x) - 3 \\)", explanation: "Factor out 5." },
+                { title: "Step 2: Magic number", math: "\\( c = (\\frac{0.4}{2})^2 = 0.04 \\)", explanation: "Compute the decimal magic number." },
+                { title: "Step 3: Add, subtract, and extract", math: "\\( y = 5(x^2 + 0.4x + 0.04) - 5(0.04) - 3 \\)", explanation: "Extract and multiply." },
+                { title: "Step 4: Simplify", math: "\\( y = 5(x + 0.2)^2 - 0.2 - 3 = 5(x + 0.2)^2 - 3.2 \\)", explanation: "The tail computes to -3.2." },
+                { title: "Step 5: Identify the Extremum", math: "\\( \\text{Minimum: } -3.2 \\)", explanation: "Positive leading coefficient means a minimum." }
+            ], ans_box: "-3.2" },
+            u2l8q9h: { title: "Question 9h", type: "numeric", fullStatement: "Question 9h: Find the maximum or minimum value of the quadratic function by completing the square.<br><br>\\( y = -\\frac{2}{3}x^2 - x + 2 \\)", steps: [
+                { title: "Step 1: Factor 'a'", math: "\\( y = -\\frac{2}{3}(x^2 + \\frac{3}{2}x) + 2 \\)", explanation: "Factor out -2/3, flipping the inner sign and multiplying by 3/2." },
+                { title: "Step 2: Magic number", math: "\\( c = (\\frac{3/2}{2})^2 = (\\frac{3}{4})^2 = \\frac{9}{16} \\)", explanation: "Calculate the fractional magic number." },
+                { title: "Step 3: Add, subtract, and extract", math: "\\( y = -\\frac{2}{3}(x^2 + \\frac{3}{2}x + \\frac{9}{16}) - (-\\frac{2}{3})(\\frac{9}{16}) + 2 \\)", explanation: "Distribute the leading coefficient to the extracted term." },
+                { title: "Step 4: Simplify", math: "\\( y = -\\frac{2}{3}(x + \\frac{3}{4})^2 + \\frac{18}{48} + 2 = -\\frac{2}{3}(x + \\frac{3}{4})^2 + \\frac{3}{8} + \\frac{16}{8} \\)", explanation: "Simplify fractions and find a common denominator." },
+                { title: "Step 5: Identify the Extremum", math: "\\( \\text{Maximum: } \\frac{19}{8} \\)", explanation: "Negative 'a' yields a maximum at 19/8 (or 2.375)." }
+            ], ans_box: "19/8" },
+
+            u2l8q13a_g: { title: "Question 13a Graph", type: "graph", fullStatement: "Question 13a: Map 5 core ordered pairs to sketch the trajectory graph of the aircraft:<br><br><strong>Function:</strong> \\( h(t) = -10t^2 + 300t + 9750 \\)", gridConfig: { xMin: 0, xMax: 35, yMin: 0, yMax: 15000, xStep: 5, yStep: 2500, labelX: "t (sec)", labelY: "h (m)" }, steps: [
+                { title: "Step 1: Locate Vertex Axis", math: "\\( t = \\frac{-b}{2a} = \\frac{-300}{-20} = 15 \\)", explanation: "The aircraft reaches its apex at 15 seconds." },
+                { title: "Step 2: Calculate Apex Height", math: "\\( h(15) = 12000 \\)", explanation: "Substitute 15 seconds to find the maximum altitude of 12,000 meters." },
+                { title: "Step 3: Map Symmetric Points", math: "\\( h(10) = 11000, \\; h(20) = 11000 \\)", explanation: "Map altitude points before and after the apex to graph the parabolic arc." }
+            ]},
+            u2l8q13b: { title: "Question 13b", type: "numeric", fullStatement: "Question 13b: Find the maximum height of the aircraft by completing the square (m).<br><br>\\( h(t) = -10t^2 + 300t + 9750 \\)", steps: [
+                { title: "Step 1: Complete the Square", math: "\\( h(t) = -10(t^2 - 30t) + 9750 \\)", explanation: "Factor out the -10." },
+                { title: "Step 2: Extract Magic Number", math: "\\( h(t) = -10(t^2 - 30t + 225 - 225) + 9750 \\)", explanation: "The magic number is 225." },
+                { title: "Step 3: Vertex Form Translation", math: "\\( h(t) = -10(t - 15)^2 + 2250 + 9750 = -10(t - 15)^2 + 12000 \\)", explanation: "The 'k' value in vertex form reveals the maximum achievable height." }
+            ], ans_box: "12000" },
+            u2l8q13c: { title: "Question 13c", type: "numeric", fullStatement: "Question 13c: How long does it take to reach its maximum height? (s)", steps: [
+                { title: "Step 1: Reference the Vertex Coordinate", math: "\\( \\text{Vertex} = (15, 12000) \\)", explanation: "The x-coordinate (or 't') of the vertex represents the time taken to reach the apex." },
+                { title: "Step 2: Conclude Time", math: "\\( t = 15 \\)", explanation: "It takes exactly 15 seconds." }
+            ], ans_box: "15" },
+
+            u2l8q14a_g: { title: "Question 14a Graph", type: "graph", fullStatement: "Question 14a: Map 5 core ordered pairs to sketch the trajectory graph of the thrown ball:<br><br><strong>Function:</strong> \\( h(t) = -5t^2 + 10t + 34 \\)", gridConfig: { xMin: -3, xMax: 5, yMin: 0, yMax: 50, xStep: 1, yStep: 10, labelX: "t (sec)", labelY: "h (m)" }, steps: [
+                { title: "Step 1: Locate Vertex Axis", math: "\\( t = \\frac{-10}{-10} = 1 \\)", explanation: "The ball reaches its apex at 1 second." },
+                { title: "Step 2: Calculate Apex Height", math: "\\( h(1) = 39 \\)", explanation: "Substitute 1 second to find the maximum height of 39 meters." },
+                { title: "Step 3: Map Symmetric Points", math: "\\( h(0) = 34, \\; h(2) = 34 \\)", explanation: "Evaluate coordinates surrounding the apex." }
+            ]},
+            u2l8q14b: { title: "Question 14b", type: "numeric", fullStatement: "Question 14b: How high is the ball after 2 s? (m)<br><br>\\( h(t) = -5t^2 + 10t + 34 \\)", steps: [
+                { title: "Step 1: Direct Substitution", math: "\\( h(2) = -5(2)^2 + 10(2) + 34 \\)", explanation: "Replace the time variable 't' with 2." },
+                { title: "Step 2: Compute", math: "\\( h(2) = -20 + 20 + 34 = 34 \\)", explanation: "The ball is at exactly the same height as the launch point." }
+            ], ans_box: "34" },
+            u2l8q14c: { title: "Question 14c", type: "numeric", fullStatement: "Question 14c: Find the maximum height of the ball. (m)", steps: [
+                { title: "Step 1: Complete the Square", math: "\\( h(t) = -5(t^2 - 2t) + 34 \\)", explanation: "Factor out the -5." },
+                { title: "Step 2: Extract Magic Number", math: "\\( h(t) = -5(t^2 - 2t + 1 - 1) + 34 \\)", explanation: "The magic number is 1." },
+                { title: "Step 3: Evaluate Peak Height", math: "\\( h(t) = -5(t - 1)^2 + 5 + 34 = -5(t - 1)^2 + 39 \\)", explanation: "The constant 'k' indicates the maximum height is 39 meters." }
+            ], ans_box: "39" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { 
+                answered: false, 
+                textInputVal: "", 
+                isCorrect: false, 
+                currentStep: 0, 
+                solRevealed: false,
+                pairsData: [
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}, 
+                    {x: "", y: ""}  
+                ]
+            };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        let canvasElement = null;
+        let ctx = null;
+        const CANVAS_DIMENSION = 420;
+        const CANVAS_PADDING = 50;
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const kbdToolbar = document.getElementById("math-keyboard");
+
+            mountPoint.innerHTML = "";
+            kbdToolbar.innerHTML = "";
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                assetMount.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+
+            if (activeProblem.type === "graph") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = `<canvas id="sketch-canvas-node" width="${CANVAS_DIMENSION}" height="${CANVAS_DIMENSION}"></canvas>`;
+                initGraphCanvasEngine(activeProblem);
+                kbdToolbar.style.display = "none";
+                document.getElementById("input-prompt-label").innerText = "Complete the 5 ordered pair coordinate slots strictly in horizontal numerical sequence from left to right:";
+                
+                const labels = ["Left Point 2", "Left Point 1", "Vertex Point", "Right Point 1", "Right Point 2"];
+                const backgrounds = ["white", "white", "#fef08a", "white", "white"]; 
+                
+                let html = `<div class="ordered-pairs-layout">`;
+                for (let i = 0; i < 5; i++) {
+                    const disabledStr = state.answered ? "disabled" : "";
+                    html += `
+                        <div class="pair-input-row" style="background-color: ${backgrounds[i]};">
+                            <span class="pair-row-label">${labels[i]}:</span>
+                            <span>(</span>
+                            <input type="text" class="pair-coord-field" id="pair-${i}-x" value="${state.pairsData[i].x}" placeholder="x" ${disabledStr} oninput="syncOrderedPairTrack(${i}, 'x')">
+                            <span>,</span>
+                            <input type="text" class="pair-coord-field" id="pair-${i}-y" value="${state.pairsData[i].y}" placeholder="y" style="width: 100px;" ${disabledStr} oninput="syncOrderedPairTrack(${i}, 'y')">
+                            <span>)</span>
+                        </div>`;
+                }
+                html += `</div>`;
+                mountPoint.innerHTML = html;
+            } else {
+                assetMount.style.display = "none";
+                kbdToolbar.style.display = "flex";
+                document.getElementById("input-prompt-label").innerText = "Type your response value directly into the text field below:";
+                mountPoint.innerHTML = `<input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 64, y=3(x+1)²-2, 7/8" autocomplete="off">`;
+                
+                kbdToolbar.innerHTML = `
+                    <button class="math-key" onclick="pressStandardNumericKey('y')">y</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('x')">x</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('t')">t</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('a')">a</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('h')">h</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('k')">k</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('²')">²</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('(')">(</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(')')">)</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    ${[0,1,2,3,4,5,6,7,8,9].map(n => `<button class="math-key" onclick="pressStandardNumericKey('${n}')">${n}</button>`).join("")}
+                `;
+
+                const numInput = document.getElementById("numeric-student-input");
+                numInput.value = state.textInputVal;
+                
+                numInput.addEventListener("input", () => {
+                    state.textInputVal = numInput.value;
+                });
+
+                if (state.answered) {
+                    numInput.disabled = true;
+                }
+            }
+
+            if (state.answered) {
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function syncOrderedPairTrack(index, axis) {
+            const state = questionStates[activeQuestionId];
+            const field = document.getElementById(`pair-${index}-${axis}`);
+            if (!field) return;
+
+            state.pairsData[index][axis] = field.value.trim();
+            renderGraphGridBase(problemDataPack[activeQuestionId]);
+        }
+
+        function initGraphCanvasEngine(problem) {
+            canvasElement = document.getElementById("sketch-canvas-node");
+            if (!canvasElement) return;
+            ctx = canvasElement.getContext("2d");
+            renderGraphGridBase(problem);
+        }
+
+        function renderGraphGridBase(problem) {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, CANVAS_DIMENSION, CANVAS_DIMENSION);
+            
+            const config = problem.gridConfig;
+            const state = questionStates[activeQuestionId];
+
+            const plotWidth = CANVAS_DIMENSION - (2 * CANVAS_PADDING);
+            const plotHeight = CANVAS_DIMENSION - (2 * CANVAS_PADDING);
+
+            function getPixelX(mathX) {
+                return CANVAS_PADDING + ((mathX - config.xMin) / (config.xMax - config.xMin)) * plotWidth;
+            }
+            function getPixelY(mathY) {
+                return CANVAS_PADDING + ((config.yMax - mathY) / (config.yMax - config.yMin)) * plotHeight;
+            }
+
+            ctx.strokeStyle = "#e2e8f0";
+            ctx.lineWidth = 1;
+            ctx.font = "11px system-ui";
+            ctx.fillStyle = "#64748b";
+
+            for (let y = config.yMin; y <= config.yMax; y += config.yStep) {
+                let py = getPixelY(y);
+                ctx.beginPath();
+                ctx.moveTo(CANVAS_PADDING, py);
+                ctx.lineTo(CANVAS_DIMENSION - CANVAS_PADDING, py);
+                ctx.stroke();
+                
+                ctx.textAlign = "right";
+                ctx.textBaseline = "middle";
+                ctx.fillText(y, CANVAS_PADDING - 8, py);
+            }
+
+            for (let x = config.xMin; x <= config.xMax; x += config.xStep) {
+                let px = getPixelX(x);
+                ctx.beginPath();
+                ctx.moveTo(px, CANVAS_PADDING);
+                ctx.lineTo(px, CANVAS_DIMENSION - CANVAS_PADDING);
+                ctx.stroke();
+
+                ctx.textAlign = "center";
+                ctx.textBaseline = "top";
+                ctx.fillText(x, px, CANVAS_DIMENSION - CANVAS_PADDING + 8);
+            }
+
+            ctx.strokeStyle = "#0f172a";
+            ctx.lineWidth = 2.5;
+            
+            let xAxisPy = (config.yMin <= 0 && 0 <= config.yMax) ? getPixelY(0) : CANVAS_DIMENSION - CANVAS_PADDING;
+            ctx.beginPath();
+            ctx.moveTo(CANVAS_PADDING, xAxisPy);
+            ctx.lineTo(CANVAS_DIMENSION - CANVAS_PADDING, xAxisPy);
+            ctx.stroke();
+
+            let yAxisPx = (config.xMin <= 0 && 0 <= config.xMax) ? getPixelX(0) : CANVAS_PADDING;
+            ctx.beginPath();
+            ctx.moveTo(yAxisPx, CANVAS_PADDING);
+            ctx.lineTo(yAxisPx, CANVAS_DIMENSION - CANVAS_PADDING);
+            ctx.stroke();
+
+            ctx.fillStyle = "#0f172a";
+            ctx.font = "bold 12px system-ui";
+            ctx.textAlign = "center";
+            ctx.fillText(config.labelX, CANVAS_DIMENSION - CANVAS_PADDING + 25, xAxisPy + 15);
+            ctx.fillText(config.labelY, yAxisPx, CANVAS_PADDING - 18);
+
+            let activePlottedPointsCount = 0;
+            let allFivePairsComplete = true;
+
+            state.pairsData.forEach((pt, idx) => {
+                if (pt.x === "" || pt.y === "") {
+                    allFivePairsComplete = false;
+                    return;
+                }
+                const mx = parseFloat(pt.x);
+                const my = parseFloat(pt.y);
+
+                if (!isNaN(mx) && !isNaN(my)) {
+                    activePlottedPointsCount++;
+                    let px = getPixelX(mx);
+                    let py = getPixelY(my);
+
+                    ctx.fillStyle = (idx === 2) ? "#dc2626" : "#2563eb";
+                    ctx.beginPath();
+                    ctx.arc(px, py, 6, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    if (idx === 2) {
+                        ctx.font = "bold 11px system-ui";
+                        ctx.fillText("V", px, py - 14);
+                    }
+                } else {
+                    allFivePairsComplete = false;
+                }
+            });
+
+            if (allFivePairsComplete && activePlottedPointsCount === 5) {
+                const vX = parseFloat(state.pairsData[2].x);
+                const vY = parseFloat(state.pairsData[2].y);
+                const refX = parseFloat(state.pairsData[1].x);
+                const refY = parseFloat(state.pairsData[1].y);
+
+                if (!isNaN(vX) && !isNaN(vY) && !isNaN(refX) && !isNaN(refY) && vX !== refX) {
+                    const derivedA = (refY - vY) / Math.pow((refX - vX), 2);
+
+                    ctx.strokeStyle = "#16a34a";
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+
+                    let initialPlotIteration = true;
+                    const evaluationResolution = (config.xMax - config.xMin) / 100;
+
+                    for (let mx = config.xMin; mx <= config.xMax; mx += evaluationResolution) {
+                        let my = derivedA * Math.pow((mx - vX), 2) + vY;
+                        if (my >= config.yMin && my <= config.yMax) {
+                            let px = getPixelX(mx);
+                            let py = getPixelY(my);
+                            if (initialPlotIteration) {
+                                ctx.moveTo(px, py);
+                                initialPlotIteration = false;
+                            } else {
+                                ctx.lineTo(px, py);
+                            }
+                        }
+                    }
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            let appendVal = symbol;
+            
+            txtInput.value = currentText.substring(0, startPos) + appendVal + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + appendVal.length;
+            txtInput.selectionEnd = startPos + appendVal.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            let matchingCorrect = false;
+            let rawVal = "";
+            let logString = "";
+
+            if (activeProblem.type === "graph") {
+                let parts = [];
+                for (let i = 0; i < 5; i++) {
+                    if (state.pairsData[i].x === "" || state.pairsData[i].y === "") {
+                        alert("Please populate all 5 ordered pair fields across both coordinates parameters before checking submissions.");
+                        return;
+                    }
+                    parts.push(`(${state.pairsData[i].x},${state.pairsData[i].y})`);
+                }
+                logString = parts.join(";");
+                if (answerRegistry[activeQuestionId].includes(logString)) {
+                    matchingCorrect = true;
+                }
+            } else {
+                rawVal = state.textInputVal;
+                let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2');
+                logString = rawVal;
+                
+                const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase().replace(/²/g, '2'));
+                if (possibleAnswers.includes(normalizedInput)) {
+                    matchingCorrect = true;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_2",
+                lessonId: "Lesson_8",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: activeProblem.type === "graph" ? "Ordered Pairs Algebra Input Grid" : "Completing the Square Algebraic Input",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (activeQuestionId && problemDataPack[activeQuestionId].type === "graph") {
+                for (let i = 0; i < 5; i++) {
+                    if (document.getElementById(`pair-${i}-x`)) document.getElementById(`pair-${i}-x`).disabled = true;
+                    if (document.getElementById(`pair-${i}-y`)) document.getElementById(`pair-${i}-y`).disabled = true;
+                }
+            }
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Workbook metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment variables configuration. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (activeQuestionId && problemDataPack[activeQuestionId].type === "graph") {
+                for (let i = 0; i < 5; i++) {
+                    if (document.getElementById(`pair-${i}-x`)) document.getElementById(`pair-${i}-x`).disabled = false;
+                    if (document.getElementById(`pair-${i}-y`)) document.getElementById(`pair-${i}-y`).disabled = false;
+                }
+            }
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            if (activeQuestionId.endsWith("_g")) {
+                finalAnsText = "Completed parabolic trace trajectory securely registered to coordinate map.";
+            }
+
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

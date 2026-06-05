@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 3 Lesson 4</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 3 Lesson 4</h1>
+        <p>The Discriminant & Real Roots Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1a">Question 1a: D = -10</option>
+                <option value="q1b">Question 1b: D = 0</option>
+                <option value="q1c">Question 1c: D = 7</option>
+                <option value="q1d">Question 1d: D = 2/9</option>
+                <option value="q1e">Question 1e: D = -0.04</option>
+                <option value="q1f">Question 1f: D = 9.57</option>
+                <option value="q2a">Question 2a: x² - 9x + 4 = 0</option>
+                <option value="q2b">Question 2b: -4x² - 2x + 1 = 0</option>
+                <option value="q2c">Question 2c: x² - 6x + 9 = 0</option>
+                <option value="q2d">Question 2d: 4x² - 12x + 9 = 0</option>
+                <option value="q2e">Question 2e: 5x² + x + 1 = 0</option>
+                <option value="q2f">Question 2f: -x² + 2x - 4 = 0</option>
+                <option value="q4a">Question 4a: 2x² = 9x - 4</option>
+                <option value="q4b">Question 4b: x² + 8x = -7</option>
+                <option value="q4c">Question 4c: 3x² - 2x - 5 = 0</option>
+                <option value="q4d">Question 4d: x² - 2x + 1 = 0</option>
+                <option value="q4e">Question 4e: -8x² + 32 = 0</option>
+                <option value="q4f">Question 4f: -x² - 25 = -10x</option>
+                <option value="q8a">Question 8a: y = 2x² - 5x + 6</option>
+                <option value="q8b">Question 8b: y = x² + 6x + 1</option>
+                <option value="q8c">Question 8c: y = x² + 3x - 12</option>
+                <option value="q8d">Question 8d: y = 9x² - 24x + 16</option>
+                <option value="q8e">Question 8e: y = -3x² + 2x - 1</option>
+                <option value="q8f">Question 8f: y = 20x² - 3x - 9</option>
+                <option value="q9a">Question 9a: Graph A</option>
+                <option value="q9b">Question 9b: Graph B</option>
+                <option value="q9c">Question 9c: Graph C</option>
+                <option value="q9d">Question 9d: Graph D</option>
+                <option value="q9e">Question 9e: Graph E</option>
+                <option value="q9f">Question 9f: Graph F</option>
+                <option value="q10a">Question 10a: 3x² - 5x - 4 = 0</option>
+                <option value="q10b">Question 10b: 2x² - x + 5 = 0</option>
+                <option value="q10c">Question 10c: x² - 8x + 16 = 0</option>
+                <option value="q10mc">Question 10: Factoring Conditions</option>
+                <option value="q16">Question 16: Vertex (h, 10)</option>
+                <option value="q17">Question 17: Vertex (h, -7)</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Type your answer below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;">
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 2, none, D>0, B, etc." autocomplete="off">
+                </div>
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('D')">D</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('>')">></button>
+                    <button class="math-key" onclick="pressStandardNumericKey('<')"><</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('A')">A</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('B')">B</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('C')">C</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('D')">D</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            q1a: ["0", "zero", "0roots"],
+            q1b: ["1", "one", "1root"],
+            q1c: ["2", "two", "2roots"],
+            q1d: ["2", "two", "2roots"],
+            q1e: ["0", "zero", "0roots"],
+            q1f: ["2", "two", "2roots"],
+            q2a: ["2", "two", "2roots"],
+            q2b: ["2", "two", "2roots"],
+            q2c: ["1", "one", "1root"],
+            q2d: ["1", "one", "1root"],
+            q2e: ["0", "zero", "0roots", "none"],
+            q2f: ["0", "zero", "0roots", "none"],
+            q4a: ["2", "x=4,x=1/2", "x=1/2,x=4", "4,1/2", "1/2,4"],
+            q4b: ["2", "x=-1,x=-7", "x=-7,x=-1", "-1,-7", "-7,-1"],
+            q4c: ["2", "x=-1,x=5/3", "x=5/3,x=-1", "-1,5/3", "5/3,-1"],
+            q4d: ["1", "x=1", "1"],
+            q4e: ["2", "x=2,x=-2", "x=-2,x=2", "2,-2", "-2,2"],
+            q4f: ["1", "x=5", "5"],
+            q8a: ["none", "no", "0", "nox-intercepts"],
+            q8b: ["-0.17,-5.83", "-5.83,-0.17"],
+            q8c: ["2.27,-5.27", "-5.27,2.27"],
+            q8d: ["4/3", "1.33"],
+            q8e: ["none", "no", "0", "nox-intercepts"],
+            q8f: ["3/4,-3/5", "-3/5,3/4", "0.75,-0.6", "-0.6,0.75"],
+            q9a: ["d>0", "D>0", ">0"],
+            q9b: ["d<0", "D<0", "<0"],
+            q9c: ["d=0", "D=0", "=0"],
+            q9d: ["d>0", "D>0", ">0"],
+            q9e: ["d=0", "D=0", "=0"],
+            q9f: ["d<0", "D<0", "<0"],
+            q10a: ["d=73,2", "D=73,2", "73,2"],
+            q10b: ["d=-39,0", "D=-39,0", "-39,0"],
+            q10c: ["d=0,1", "D=0,1", "0,1"],
+            q10mc: ["b", "B"],
+            q16: ["b", "B"],
+            q17: ["a", "A"]
+        };
+
+        const problemDataPack = {
+            q1a: { title: "Question 1a", fullStatement: "Identify the number of roots of the quadratic equation given the following values for the discriminant, D:<br><br>\\( D = -10 \\)", steps: [
+                { title: "Step 1: Analyze the Discriminant", math: "\\( D < 0 \\)", explanation: "The discriminant is a negative number." },
+                { title: "Step 2: State Conclusion", math: "\\( 0 \\)", explanation: "Because we cannot take the square root of a negative number in the real number system, there are no real roots." }
+            ], ans_box: "0" },
+
+            q1b: { title: "Question 1b", fullStatement: "Identify the number of roots of the quadratic equation given the following values for the discriminant, D:<br><br>\\( D = 0 \\)", steps: [
+                { title: "Step 1: Analyze the Discriminant", math: "\\( D = 0 \\)", explanation: "The discriminant is exactly zero." },
+                { title: "Step 2: State Conclusion", math: "\\( 1 \\)", explanation: "Because adding or subtracting the square root of zero yields the same single number, there is exactly one real root." }
+            ], ans_box: "1" },
+
+            q1c: { title: "Question 1c", fullStatement: "Identify the number of roots of the quadratic equation given the following values for the discriminant, D:<br><br>\\( D = 7 \\)", steps: [
+                { title: "Step 1: Analyze the Discriminant", math: "\\( D > 0 \\)", explanation: "The discriminant is a positive number." },
+                { title: "Step 2: State Conclusion", math: "\\( 2 \\)", explanation: "Because we can add or subtract a real positive square root, the equation branches into two distinct real roots." }
+            ], ans_box: "2" },
+
+            q1d: { title: "Question 1d", fullStatement: "Identify the number of roots of the quadratic equation given the following values for the discriminant, D:<br><br>\\( D = \\frac{2}{9} \\)", steps: [
+                { title: "Step 1: Analyze the Discriminant", math: "\\( D > 0 \\)", explanation: "Even though the discriminant is a fraction, it is still a positive number." },
+                { title: "Step 2: State Conclusion", math: "\\( 2 \\)", explanation: "Any positive discriminant produces two distinct real roots." }
+            ], ans_box: "2" },
+
+            q1e: { title: "Question 1e", fullStatement: "Identify the number of roots of the quadratic equation given the following values for the discriminant, D:<br><br>\\( D = -0.04 \\)", steps: [
+                { title: "Step 1: Analyze the Discriminant", math: "\\( D < 0 \\)", explanation: "Even though the discriminant is a small decimal, it is a negative number." },
+                { title: "Step 2: State Conclusion", math: "\\( 0 \\)", explanation: "A negative discriminant means there are no real solutions." }
+            ], ans_box: "0" },
+
+            q1f: { title: "Question 1f", fullStatement: "Identify the number of roots of the quadratic equation given the following values for the discriminant, D:<br><br>\\( D = 9.57 \\)", steps: [
+                { title: "Step 1: Analyze the Discriminant", math: "\\( D > 0 \\)", explanation: "The discriminant is a positive decimal number." },
+                { title: "Step 2: State Conclusion", math: "\\( 2 \\)", explanation: "A positive discriminant always yields two real roots." }
+            ], ans_box: "2" },
+
+            q2a: { title: "Question 2a", fullStatement: "Determine how many real roots each equation has:<br><br>\\( x^2 - 9x + 4 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 1, \\; b = -9, \\; c = 4 \\)", explanation: "Identify a, b, and c from the standard form equation." },
+                { title: "Step 2: Substitute into Discriminant Formula", math: "\\( D = (-9)^2 - 4(1)(4) \\)", explanation: "Substitute the variables into the discriminant part of the quadratic formula." },
+                { title: "Step 3: Evaluate the Discriminant", math: "\\( D = 81 - 16 = 65 \\)", explanation: "Squaring -9 gives positive 81. Multiplying outer parameters gives -16. The total discriminant is 65." },
+                { title: "Step 4: State Conclusion", math: "\\( 2 \\)", explanation: "Because the discriminant is greater than zero, the equation has two real roots." }
+            ], ans_box: "2" },
+
+            q2b: { title: "Question 2b", fullStatement: "Determine how many real roots each equation has:<br><br>\\( -4x^2 - 2x + 1 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = -4, \\; b = -2, \\; c = 1 \\)", explanation: "Identify the parameters." },
+                { title: "Step 2: Substitute into Discriminant Formula", math: "\\( D = (-2)^2 - 4(-4)(1) \\)", explanation: "Substitute the parameters. Pay attention to the double negative." },
+                { title: "Step 3: Evaluate the Discriminant", math: "\\( D = 4 + 16 = 20 \\)", explanation: "Squaring -2 gives 4. The double negative makes the product positive 16. The discriminant is 20." },
+                { title: "Step 4: State Conclusion", math: "\\( 2 \\)", explanation: "Because the discriminant is positive, the equation has two real roots." }
+            ], ans_box: "2" },
+
+            q2c: { title: "Question 2c", fullStatement: "Determine how many real roots each equation has:<br><br>\\( x^2 - 6x + 9 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 1, \\; b = -6, \\; c = 9 \\)", explanation: "Identify the constants." },
+                { title: "Step 2: Substitute into Discriminant Formula", math: "\\( D = (-6)^2 - 4(1)(9) \\)", explanation: "Insert values into the discriminant." },
+                { title: "Step 3: Evaluate the Discriminant", math: "\\( D = 36 - 36 = 0 \\)", explanation: "The exponent gives 36, and the trailing product gives -36. The discriminant is exactly 0." },
+                { title: "Step 4: State Conclusion", math: "\\( 1 \\)", explanation: "Because the discriminant is exactly zero, the equation has exactly one real root." }
+            ], ans_box: "1" },
+
+            q2d: { title: "Question 2d", fullStatement: "Determine how many real roots each equation has:<br><br>\\( 4x^2 - 12x + 9 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 4, \\; b = -12, \\; c = 9 \\)", explanation: "Extract a, b, and c." },
+                { title: "Step 2: Substitute into Discriminant Formula", math: "\\( D = (-12)^2 - 4(4)(9) \\)", explanation: "Substitute into the formula." },
+                { title: "Step 3: Evaluate the Discriminant", math: "\\( D = 144 - 144 = 0 \\)", explanation: "Squaring -12 gives 144. Multiplying the back terms gives -144. The total is 0." },
+                { title: "Step 4: State Conclusion", math: "\\( 1 \\)", explanation: "Because the discriminant is zero, there is exactly one real root." }
+            ], ans_box: "1" },
+
+            q2e: { title: "Question 2e", fullStatement: "Determine how many real roots each equation has:<br><br>\\( 5x^2 + x + 1 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 5, \\; b = 1, \\; c = 1 \\)", explanation: "Identify the parameters." },
+                { title: "Step 2: Substitute into Discriminant Formula", math: "\\( D = (1)^2 - 4(5)(1) \\)", explanation: "Input the values." },
+                { title: "Step 3: Evaluate the Discriminant", math: "\\( D = 1 - 20 = -19 \\)", explanation: "The final arithmetic gives a negative number." },
+                { title: "Step 4: State Conclusion", math: "\\( 0 \\)", explanation: "Because the discriminant is less than zero, there are no real roots." }
+            ], ans_box: "0" },
+
+            q2f: { title: "Question 2f", fullStatement: "Determine how many real roots each equation has:<br><br>\\( -x^2 + 2x - 4 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = -1, \\; b = 2, \\; c = -4 \\)", explanation: "Extract the constants." },
+                { title: "Step 2: Substitute into Discriminant Formula", math: "\\( D = (2)^2 - 4(-1)(-4) \\)", explanation: "Substitute the variables into the discriminant." },
+                { title: "Step 3: Evaluate the Discriminant", math: "\\( D = 4 - 16 = -12 \\)", explanation: "Squaring 2 gives 4. The triple negative yields -16. The total is -12." },
+                { title: "Step 4: State Conclusion", math: "\\( 0 \\)", explanation: "Because the discriminant is negative, there are no real roots." }
+            ], ans_box: "0" },
+
+            q4a: { title: "Question 4a", fullStatement: "Determine the number of real roots. Then, find the roots by factoring:<br><br>\\( 2x^2 = 9x - 4 \\)", steps: [
+                { title: "Step 1: Rearrange to Standard Form", math: "\\( 2x^2 - 9x + 4 = 0 \\)", explanation: "Move all terms to the left side by subtracting 9x and adding 4." },
+                { title: "Step 2: Evaluate the Discriminant", math: "\\( D = (-9)^2 - 4(2)(4) = 81 - 32 = 49 \\)", explanation: "Since D is 49 (which is greater than 0), there are 2 real roots." },
+                { title: "Step 3: Factor the Quadratic", math: "\\( 2x^2 - 8x - 1x + 4 = 0 \\rightarrow 2x(x - 4) - 1(x - 4) = 0 \\)", explanation: "Decompose the middle term: Find two numbers that multiply to 8 and add to -9. The numbers are -8 and -1. Factor by grouping." },
+                { title: "Step 4: Group Binomials", math: "\\( (x - 4)(2x - 1) = 0 \\)", explanation: "Group the common factors." },
+                { title: "Step 5: Apply Zero Product Property", math: "\\( x - 4 = 0 \\rightarrow x = 4 \\quad \\text{or} \\quad 2x - 1 = 0 \\rightarrow x = \\frac{1}{2} \\)", explanation: "Set each bracket to zero to find the final roots." }
+            ], ans_box: "4, 1/2" },
+
+            q4b: { title: "Question 4b", fullStatement: "Determine the number of real roots. Then, find the roots by factoring:<br><br>\\( x^2 + 8x = -7 \\)", steps: [
+                { title: "Step 1: Rearrange to Standard Form", math: "\\( x^2 + 8x + 7 = 0 \\)", explanation: "Add 7 to both sides to bring the equation to zero." },
+                { title: "Step 2: Evaluate the Discriminant", math: "\\( D = (8)^2 - 4(1)(7) = 64 - 28 = 36 \\)", explanation: "Since D is 36, there are 2 real roots." },
+                { title: "Step 3: Factor the Quadratic", math: "\\( (x + 7)(x + 1) = 0 \\)", explanation: "Find numbers that multiply to 7 and add to 8. The numbers are 7 and 1." },
+                { title: "Step 4: Apply Zero Product Property", math: "\\( x + 7 = 0 \\rightarrow x = -7 \\quad \\text{or} \\quad x + 1 = 0 \\rightarrow x = -1 \\)", explanation: "Set each bracket to zero." }
+            ], ans_box: "-7, -1" },
+
+            q4c: { title: "Question 4c", fullStatement: "Determine the number of real roots. Then, find the roots by factoring:<br><br>\\( 3x^2 - 2x - 5 = 0 \\)", steps: [
+                { title: "Step 1: The Equation is in Standard Form", math: "\\( 3x^2 - 2x - 5 = 0 \\)", explanation: "The equation is already set to zero." },
+                { title: "Step 2: Evaluate the Discriminant", math: "\\( D = (-2)^2 - 4(3)(-5) = 4 + 60 = 64 \\)", explanation: "Since D is 64, there are 2 real roots." },
+                { title: "Step 3: Factor the Quadratic", math: "\\( 3x^2 - 5x + 3x - 5 = 0 \\rightarrow x(3x - 5) + 1(3x - 5) = 0 \\)", explanation: "Decompose the middle term: Find numbers that multiply to -15 and add to -2. They are -5 and 3." },
+                { title: "Step 4: Group Binomials", math: "\\( (3x - 5)(x + 1) = 0 \\)", explanation: "Group the factors." },
+                { title: "Step 5: Apply Zero Product Property", math: "\\( 3x - 5 = 0 \\rightarrow x = \\frac{5}{3} \\quad \\text{or} \\quad x + 1 = 0 \\rightarrow x = -1 \\)", explanation: "Set each bracket to zero." }
+            ], ans_box: "5/3, -1" },
+
+            q4d: { title: "Question 4d", fullStatement: "Determine the number of real roots. Then, find the roots by factoring:<br><br>\\( x^2 - 2x + 1 = 0 \\)", steps: [
+                { title: "Step 1: The Equation is in Standard Form", math: "\\( x^2 - 2x + 1 = 0 \\)", explanation: "The equation is already set to zero." },
+                { title: "Step 2: Evaluate the Discriminant", math: "\\( D = (-2)^2 - 4(1)(1) = 4 - 4 = 0 \\)", explanation: "Since D is exactly 0, there is exactly 1 real root." },
+                { title: "Step 3: Factor the Quadratic", math: "\\( (x - 1)^2 = 0 \\)", explanation: "This is a perfect square trinomial." },
+                { title: "Step 4: Apply Zero Product Property", math: "\\( x - 1 = 0 \\rightarrow x = 1 \\)", explanation: "The only unique root is 1." }
+            ], ans_box: "1" },
+
+            q4e: { title: "Question 4e", fullStatement: "Determine the number of real roots. Then, find the roots by factoring:<br><br>\\( -8x^2 + 32 = 0 \\)", steps: [
+                { title: "Step 1: The Equation is in Standard Form", math: "\\( -8x^2 + 32 = 0 \\)", explanation: "The equation is already set to zero." },
+                { title: "Step 2: Evaluate the Discriminant", math: "\\( D = (0)^2 - 4(-8)(32) = 0 + 1024 = 1024 \\)", explanation: "Notice that the middle term 'b' is 0. Since D is positive, there are 2 real roots." },
+                { title: "Step 3: Extract GCF", math: "\\( -8(x^2 - 4) = 0 \\)", explanation: "Factor out the greatest common factor." },
+                { title: "Step 4: Factor the Difference of Squares", math: "\\( -8(x - 2)(x + 2) = 0 \\)", explanation: "The inner term is a difference of squares pattern." },
+                { title: "Step 5: Apply Zero Product Property", math: "\\( x - 2 = 0 \\rightarrow x = 2 \\quad \\text{or} \\quad x + 2 = 0 \\rightarrow x = -2 \\)", explanation: "Set the brackets to zero." }
+            ], ans_box: "2, -2" },
+
+            q4f: { title: "Question 4f", fullStatement: "Determine the number of real roots. Then, find the roots by factoring:<br><br>\\( -x^2 - 25 = -10x \\)", steps: [
+                { title: "Step 1: Rearrange to Standard Form", math: "\\( -x^2 + 10x - 25 = 0 \\rightarrow x^2 - 10x + 25 = 0 \\)", explanation: "Add 10x to both sides. Then, to make factoring easier, multiply the entire equation by -1." },
+                { title: "Step 2: Evaluate the Discriminant", math: "\\( D = (-10)^2 - 4(1)(25) = 100 - 100 = 0 \\)", explanation: "Since D is 0, there is exactly 1 real root." },
+                { title: "Step 3: Factor the Quadratic", math: "\\( (x - 5)^2 = 0 \\)", explanation: "This is a perfect square trinomial." },
+                { title: "Step 4: Apply Zero Product Property", math: "\\( x - 5 = 0 \\rightarrow x = 5 \\)", explanation: "The only unique root is 5." }
+            ], ans_box: "5" },
+
+            q8a: { title: "Question 8a", fullStatement: "Find the x-intercepts of each quadratic function. Round to the nearest hundredth, when necessary:<br><br>\\( y = 2x^2 - 5x + 6 \\)", steps: [
+                { title: "Step 1: Substitute and Evaluate Discriminant", math: "\\( D = (-5)^2 - 4(2)(6) = 25 - 48 = -23 \\)", explanation: "Before plugging everything into the quadratic formula, check the discriminant." },
+                { title: "Step 2: Interpret Discriminant", math: "\\( D < 0 \\)", explanation: "Because the discriminant is negative, we cannot take the square root." },
+                { title: "Step 3: Final Answer", math: "\\emptyset", explanation: "The parabola never touches the x-axis, so there are no x-intercepts." }
+            ], ans_box: "none" },
+
+            q8b: { title: "Question 8b", fullStatement: "Find the x-intercepts of each quadratic function. Round to the nearest hundredth, when necessary:<br><br>\\( y = x^2 + 6x + 1 \\)", steps: [
+                { title: "Step 1: Evaluate Discriminant", math: "\\( D = (6)^2 - 4(1)(1) = 36 - 4 = 32 \\)", explanation: "The discriminant is positive, so there are 2 real roots." },
+                { title: "Step 2: Apply Quadratic Formula", math: "\\( x = \\frac{-6 \\pm \\sqrt{32}}{2} \\)", explanation: "Substitute into the formula." },
+                { title: "Step 3: Branch and Calculate", math: "\\( x = \\frac{-6 + 5.66}{2} \\quad \\text{and} \\quad x = \\frac{-6 - 5.66}{2} \\)", explanation: "The square root of 32 is approximately 5.66." },
+                { title: "Step 4: Final Decimal Roots", math: "\\( x \\approx -0.17 \\text{ and } x \\approx -5.83 \\)", explanation: "Divide by 2." }
+            ], ans_box: "-0.17, -5.83" },
+
+            q8c: { title: "Question 8c", fullStatement: "Find the x-intercepts of each quadratic function. Round to the nearest hundredth, when necessary:<br><br>\\( y = x^2 + 3x - 12 \\)", steps: [
+                { title: "Step 1: Evaluate Discriminant", math: "\\( D = (3)^2 - 4(1)(-12) = 9 + 48 = 57 \\)", explanation: "The discriminant is positive, meaning there are 2 real roots." },
+                { title: "Step 2: Apply Quadratic Formula", math: "\\( x = \\frac{-3 \\pm \\sqrt{57}}{2} \\)", explanation: "Substitute into the formula." },
+                { title: "Step 3: Branch and Calculate", math: "\\( x = \\frac{-3 + 7.55}{2} \\quad \\text{and} \\quad x = \\frac{-3 - 7.55}{2} \\)", explanation: "The square root of 57 is approximately 7.55." },
+                { title: "Step 4: Final Decimal Roots", math: "\\( x \\approx 2.27 \\text{ and } x \\approx -5.27 \\)", explanation: "Divide by 2." }
+            ], ans_box: "2.27, -5.27" },
+
+            q8d: { title: "Question 8d", fullStatement: "Find the x-intercepts of each quadratic function. Round to the nearest hundredth, when necessary:<br><br>\\( y = 9x^2 - 24x + 16 \\)", steps: [
+                { title: "Step 1: Evaluate Discriminant", math: "\\( D = (-24)^2 - 4(9)(16) = 576 - 576 = 0 \\)", explanation: "The discriminant is exactly zero, meaning there is only 1 real root." },
+                { title: "Step 2: Apply Quadratic Formula", math: "\\( x = \\frac{-(-24) \\pm \\sqrt{0}}{2(9)} \\)", explanation: "Substitute into the formula. The square root part disappears." },
+                { title: "Step 3: Calculate Final Root", math: "\\( x = \\frac{24}{18} = \\frac{4}{3} \\)", explanation: "Simplify the fraction." }
+            ], ans_box: "4/3" },
+
+            q8e: { title: "Question 8e", fullStatement: "Find the x-intercepts of each quadratic function. Round to the nearest hundredth, when necessary:<br><br>\\( y = -3x^2 + 2x - 1 \\)", steps: [
+                { title: "Step 1: Evaluate Discriminant", math: "\\( D = (2)^2 - 4(-3)(-1) = 4 - 12 = -8 \\)", explanation: "Check the discriminant first." },
+                { title: "Step 2: Interpret Discriminant", math: "\\( D < 0 \\)", explanation: "Because the discriminant is negative, we cannot take the square root." },
+                { title: "Step 3: Final Answer", math: "\\emptyset", explanation: "The parabola never touches the x-axis." }
+            ], ans_box: "none" },
+
+            q8f: { title: "Question 8f", fullStatement: "Find the x-intercepts of each quadratic function. Round to the nearest hundredth, when necessary:<br><br>\\( y = 20x^2 - 3x - 9 \\)", steps: [
+                { title: "Step 1: Evaluate Discriminant", math: "\\( D = (-3)^2 - 4(20)(-9) = 9 + 720 = 729 \\)", explanation: "The discriminant is positive (and a perfect square)." },
+                { title: "Step 2: Apply Quadratic Formula", math: "\\( x = \\frac{-(-3) \\pm \\sqrt{729}}{2(20)} \\)", explanation: "Substitute into the formula." },
+                { title: "Step 3: Branch and Calculate", math: "\\( x = \\frac{3 + 27}{40} \\quad \\text{and} \\quad x = \\frac{3 - 27}{40} \\)", explanation: "The square root of 729 is exactly 27." },
+                { title: "Step 4: Final Roots", math: "\\( x = \\frac{30}{40} = \\frac{3}{4} \\quad \\text{and} \\quad x = \\frac{-24}{40} = -\\frac{3}{5} \\)", explanation: "Simplify the fractions." }
+            ], ans_box: "3/4, -3/5" },
+
+            q9a: { title: "Question 9a", fullStatement: "Refer to Graph A (Opens Upward, crosses x-axis twice). Determine whether the discriminant is greater than zero, equal to zero, or less than zero.", steps: [
+                { title: "Step 1: Analyze Intersections", math: "\\text{Graph A}", explanation: "The parabola crosses the horizontal x-axis at two distinct points." },
+                { title: "Step 2: Relate to Discriminant", math: "\\( D > 0 \\)", explanation: "Having two real roots means the discriminant must be a positive number." }
+            ], ans_box: "D>0" },
+
+            q9b: { title: "Question 9b", fullStatement: "Refer to Graph B (Opens Upward, never touches x-axis). Determine whether the discriminant is greater than zero, equal to zero, or less than zero.", steps: [
+                { title: "Step 1: Analyze Intersections", math: "\\text{Graph B}", explanation: "The parabola floats above the x-axis and never touches it." },
+                { title: "Step 2: Relate to Discriminant", math: "\\( D < 0 \\)", explanation: "Having no real roots means the discriminant must be a negative number." }
+            ], ans_box: "D<0" },
+
+            q9c: { title: "Question 9c", fullStatement: "Refer to Graph C (Opens Upward, touches x-axis exactly once). Determine whether the discriminant is greater than zero, equal to zero, or less than zero.", steps: [
+                { title: "Step 1: Analyze Intersections", math: "\\text{Graph C}", explanation: "The parabola's vertex rests exactly on the x-axis." },
+                { title: "Step 2: Relate to Discriminant", math: "\\( D = 0 \\)", explanation: "Having exactly one real root means the discriminant must be zero." }
+            ], ans_box: "D=0" },
+
+            q9d: { title: "Question 9d", fullStatement: "Refer to Graph D (Opens Downward, crosses x-axis twice). Determine whether the discriminant is greater than zero, equal to zero, or less than zero.", steps: [
+                { title: "Step 1: Analyze Intersections", math: "\\text{Graph D}", explanation: "The parabola crosses the horizontal x-axis at two distinct points." },
+                { title: "Step 2: Relate to Discriminant", math: "\\( D > 0 \\)", explanation: "Regardless of the opening direction, two real roots mean a positive discriminant." }
+            ], ans_box: "D>0" },
+
+            q9e: { title: "Question 9e", fullStatement: "Refer to Graph E (Opens Downward, touches x-axis exactly once). Determine whether the discriminant is greater than zero, equal to zero, or less than zero.", steps: [
+                { title: "Step 1: Analyze Intersections", math: "\\text{Graph E}", explanation: "The parabola's apex touches the x-axis exactly once." },
+                { title: "Step 2: Relate to Discriminant", math: "\\( D = 0 \\)", explanation: "One real root means the discriminant is zero." }
+            ], ans_box: "D=0" },
+
+            q9f: { title: "Question 9f", fullStatement: "Refer to Graph F (Opens Downward, never touches x-axis). Determine whether the discriminant is greater than zero, equal to zero, or less than zero.", steps: [
+                { title: "Step 1: Analyze Intersections", math: "\\text{Graph F}", explanation: "The parabola sinks below the x-axis and never touches it." },
+                { title: "Step 2: Relate to Discriminant", math: "\\( D < 0 \\)", explanation: "No real roots mean the discriminant must be negative." }
+            ], ans_box: "D<0" },
+
+            q10a: { title: "Question 10a", fullStatement: "State the value of the discriminant, D, and the number of roots for the equation:<br><br>\\( 3x^2 - 5x - 4 = 0 \\)", steps: [
+                { title: "Step 1: Calculate Discriminant", math: "\\( D = (-5)^2 - 4(3)(-4) = 25 + 48 = 73 \\)", explanation: "Evaluate b squared minus 4ac." },
+                { title: "Step 2: State Number of Roots", math: "\\( 2 \\)", explanation: "Because 73 is positive, there are 2 real roots." }
+            ], ans_box: "D=73, 2" },
+
+            q10b: { title: "Question 10b", fullStatement: "State the value of the discriminant, D, and the number of roots for the equation:<br><br>\\( 2x^2 - x + 5 = 0 \\)", steps: [
+                { title: "Step 1: Calculate Discriminant", math: "\\( D = (-1)^2 - 4(2)(5) = 1 - 40 = -39 \\)", explanation: "Evaluate b squared minus 4ac." },
+                { title: "Step 2: State Number of Roots", math: "\\( 0 \\)", explanation: "Because -39 is negative, there are no real roots." }
+            ], ans_box: "D=-39, 0" },
+
+            q10c: { title: "Question 10c", fullStatement: "State the value of the discriminant, D, and the number of roots for the equation:<br><br>\\( x^2 - 8x + 16 = 0 \\)", steps: [
+                { title: "Step 1: Calculate Discriminant", math: "\\( D = (-8)^2 - 4(1)(16) = 64 - 64 = 0 \\)", explanation: "Evaluate b squared minus 4ac." },
+                { title: "Step 2: State Number of Roots", math: "\\( 1 \\)", explanation: "Because the discriminant is exactly 0, there is 1 real root." }
+            ], ans_box: "D=0, 1" },
+
+            q10mc: { title: "Question 10", fullStatement: "Explain under what conditions \\( ax^2 + bx + c = 0 \\) can be solved by factoring.<br><br>A) When the discriminant D < 0<br>B) When the discriminant D is a perfect square<br>C) When the discriminant D is an irrational number<br>D) When the discriminant D = 0 only<br><br>Type the correct letter (A, B, C, or D):", steps: [
+                { title: "Step 1: Identify the Requirement", math: "\\( D = k^2 \\)", explanation: "In order for a quadratic equation to be fully factorable using integer methods, the discriminant must be a perfect square (e.g., 0, 1, 4, 9, 16, 25)." },
+                { title: "Step 2: Logical Explanation", math: "\\( \\sqrt{D} = k \\)", explanation: "When the discriminant is a perfect square, taking the square root in the quadratic formula yields a clean integer, resulting in clean fractional or integer roots that translate directly back to binomial brackets." },
+                { title: "Step 3: Concrete Example", math: "\\( x^2 - 5x + 6 = 0 \\)", explanation: "Consider this equation. Let's calculate its discriminant." },
+                { title: "Step 4: Check Discriminant of Example", math: "\\( D = (-5)^2 - 4(1)(6) = 25 - 24 = 1 \\)", explanation: "The discriminant is exactly 1, which is a perfect square. This confirms the equation can be factored." },
+                { title: "Step 5: Factor the Example", math: "\\( (x - 2)(x - 3) = 0 \\)", explanation: "As expected, the equation factors cleanly. Therefore, the correct choice is B." }
+            ], ans_box: "B" },
+
+            q16: { title: "Question 16", fullStatement: "If \\( y = a(x - h)^2 + k \\) has vertex (h, 10), explain under what circumstances D = 0, D > 0, or D < 0.<br><br>A) D > 0 if a > 0; D < 0 if a < 0<br>B) D > 0 if a < 0; D < 0 if a > 0<br>C) D = 0 regardless of a<br>D) D > 0 regardless of a<br><br>Type the correct letter (A, B, C, or D):", steps: [
+                { title: "Step 1: Analyze Vertex Position", math: "\\( y = 10 \\)", explanation: "The vertex of this parabola is physically located 10 units above the horizontal x-axis." },
+                { title: "Step 2: Condition for 2 Roots (D > 0)", math: "\\( a < 0 \\)", explanation: "To have 2 roots (D > 0), the parabola must cross the x-axis twice. Since it starts above the axis, it MUST open downward (a is negative)." },
+                { title: "Step 3: Condition for 0 Roots (D < 0)", math: "\\( a > 0 \\)", explanation: "To have no roots (D < 0), the parabola must never touch the x-axis. Since it starts above the axis, it MUST open upward (a is positive)." },
+                { title: "Step 4: Conclusion", math: "\\text{B}", explanation: "Therefore, D > 0 when a < 0, and D < 0 when a > 0. The correct choice is B." }
+            ], ans_box: "B" },
+
+            q17: { title: "Question 17", fullStatement: "If \\( y = a(x - h)^2 + k \\) has vertex (h, -7), explain under what circumstances D = 0, D > 0, or D < 0.<br><br>A) D > 0 if a > 0; D < 0 if a < 0<br>B) D > 0 if a < 0; D < 0 if a > 0<br>C) D = 0 regardless of a<br>D) D < 0 regardless of a<br><br>Type the correct letter (A, B, C, or D):", steps: [
+                { title: "Step 1: Analyze Vertex Position", math: "\\( y = -7 \\)", explanation: "The vertex of this parabola is physically located 7 units below the horizontal x-axis." },
+                { title: "Step 2: Condition for 2 Roots (D > 0)", math: "\\( a > 0 \\)", explanation: "To have 2 roots (D > 0), the parabola must cross the x-axis twice. Since it starts below the axis, it MUST open upward (a is positive)." },
+                { title: "Step 3: Condition for 0 Roots (D < 0)", math: "\\( a < 0 \\)", explanation: "To have no roots (D < 0), the parabola must never touch the x-axis. Since it starts below the axis, it MUST open downward (a is negative) to move further away." },
+                { title: "Step 4: Conclusion", math: "\\text{A}", explanation: "Therefore, D > 0 when a > 0, and D < 0 when a < 0. The correct choice is A." }
+            ], ans_box: "A" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const numInput = document.getElementById("numeric-student-input");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            numInput.value = state.textInputVal;
+            
+            numInput.oninput = function() {
+                state.textInputVal = numInput.value;
+            };
+
+            if (state.answered) {
+                numInput.disabled = true;
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                numInput.disabled = false;
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                questionStates[activeQuestionId].textInputVal = txtInput.value;
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            let rawVal = state.textInputVal;
+            let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+            
+            const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+            let matchingCorrect = possibleAnswers.includes(normalizedInput);
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_3",
+                lessonId: "Lesson_4",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawVal,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "Discriminant Analysis Engine",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

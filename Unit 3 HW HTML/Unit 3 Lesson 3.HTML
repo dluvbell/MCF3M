@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 3 Lesson 3</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .method-toggle-container {
+            display: none;
+            background-color: #e2e8f0;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .method-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 3 Lesson 3</h1>
+        <p>Solving Equations Using The Quadratic Formula</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1a">Question 1a: x² - 7x + 4 = 0</option>
+                <option value="q1b">Question 1b: x² + 3x - 2 = 0</option>
+                <option value="q1c">Question 1c: x² + 9x + 6 = 0</option>
+                <option value="q1d">Question 1d: x² - 5x - 3 = 0</option>
+                <option value="q1e">Question 1e: x² - 2x - 14 = 0</option>
+                <option value="q1f">Question 1f: x² + 9x + 1 = 0</option>
+                <option value="q2a">Question 2a: 4x² + 2x - 1 = 0</option>
+                <option value="q2b">Question 2b: -3x² - 7x + 2 = 0</option>
+                <option value="q2c">Question 2c: 2x² - 8x - 3 = 0</option>
+                <option value="q2d">Question 2d: 5x² + 6x + 1 = 0</option>
+                <option value="q2e">Question 2e: -6x² + x + 5 = 0</option>
+                <option value="q2f">Question 2f: -6x² + 5x + 1 = 0</option>
+                <option value="q2g">Question 2g: -6x² - 5x - 1 = 0</option>
+                <option value="q2h">Question 2h: 7x² + 3x - 1 = 0</option>
+                <option value="q4a">Question 4a: -0.03x² - 0.6x + 0.5 = 0</option>
+                <option value="q4b">Question 4b: -3x² + 0.06x + 4 = 0</option>
+                <option value="q4c">Question 4c: x² - 0.8x + 0.08 = 0</option>
+                <option value="q4d">Question 4d: 2/5x² + 3x + 1 = 0</option>
+                <option value="q4e">Question 4e: 1/10x² + x/5 - 1 = 0</option>
+                <option value="q4f">Question 4f: 1/2x² - x - 5/2 = 0</option>
+                <option value="q4g">Question 4g: 1/3x² - x - 5/3 = 0</option>
+                <option value="q5">Question 5: Michael's Dirt Bike Flight</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Type your roots separated by a comma (Round to 2 decimal places):</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;">
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 6.37, 0.63" autocomplete="off">
+                </div>
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="method-toggle-container" id="method-toggle-bar">
+                <button class="method-btn active" id="mode-exact" onclick="changeMethod('exact')">Exact Root Format</button>
+                <button class="method-btn" id="mode-approx" onclick="changeMethod('approx')">Decimal Approximation</button>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            q1a: ["6.37,0.63", "0.63,6.37"],
+            q1b: ["0.56,-3.56", "-3.56,0.56"],
+            q1c: ["-0.73,-8.28", "-8.28,-0.73"],
+            q1d: ["5.54,-0.54", "-0.54,5.54"],
+            q1e: ["4.88,-2.88", "-2.88,4.88"],
+            q1f: ["-0.12,-8.89", "-8.89,-0.12"],
+            q2a: ["0.31,-0.81", "-0.81,0.31"],
+            q2b: ["0.26,-2.59", "-2.59,0.26"],
+            q2c: ["4.35,-0.35", "-0.35,4.35"],
+            q2d: ["-1,-0.2", "-0.2,-1", "-1,-1/5", "-1/5,-1"],
+            q2e: ["1,-0.83", "-0.83,1", "1,-5/6", "-5/6,1"],
+            q2f: ["1,-0.17", "-0.17,1", "1,-1/6", "-1/6,1"],
+            q2g: ["-0.5,-0.33", "-0.33,-0.5", "-1/2,-1/3", "-1/3,-1/2"],
+            q2h: ["0.22,-0.65", "-0.65,0.22"],
+            q4a: ["0.80,-20.80", "-20.80,0.80", "0.8,-20.8", "-20.8,0.8"],
+            q4b: ["1.16,-1.14", "-1.14,1.16"],
+            q4c: ["0.68,0.12", "0.12,0.68"],
+            q4d: ["-0.35,-7.15", "-7.15,-0.35"],
+            q4e: ["2.32,-4.32", "-4.32,2.32"],
+            q4f: ["3.45,-1.45", "-1.45,3.45"],
+            q4g: ["4.19,-1.19", "-1.19,4.19"],
+            q5: ["7.1", "7.11"]
+        };
+
+        const problemDataPack = {
+            q1a: { title: "Question 1a", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Express as exact roots:<br><br>\\( x^2 - 7x + 4 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 1, \\; b = -7, \\; c = 4 \\)", explanation: "Identify the constants from the standard form equation \\( ax^2 + bx + c = 0 \\)." },
+                { title: "Step 2: Substitute into the Quadratic Formula", math: "\\( x = \\frac{-(-7) \\pm \\sqrt{(-7)^2 - 4(1)(4)}}{2(1)} \\)", explanation: "Substitute the extracted values into the formula \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\). Notice that substituting a negative 'b' value creates a double negative \\( -(-7) \\), which will become positive 7." },
+                { title: "Step 3: Calculate the Discriminant (Value inside the root)", math: "\\( x = \\frac{7 \\pm \\sqrt{49 - 16}}{2} = \\frac{7 \\pm \\sqrt{33}}{2} \\)", explanation: "First, square the -7 to get positive 49. Then, multiply \\( -4 \\times 1 \\times 4 \\) to get -16. Subtracting 16 from 49 gives a final discriminant of 33." },
+                { title: "Step 4: Branch into Positive and Negative Paths", math: "\\( x = \\frac{7 + \\sqrt{33}}{2} \\quad \\text{and} \\quad x = \\frac{7 - \\sqrt{33}}{2} \\)", explanation: "The \\( \\pm \\) symbol indicates two separate solutions. We branch the equation into one path that adds the square root, and another path that subtracts it." },
+                { title: "Step 5: Final Exact Roots", math: "\\( x = \\frac{7 \\pm \\sqrt{33}}{2} \\)", explanation: "Because 33 does not have a perfect integer square root, we leave the values in their exact radical fraction form." }
+            ], ans_box: "6.37, 0.63" },
+
+            q1b: { title: "Question 1b", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Express as exact roots:<br><br>\\( x^2 + 3x - 2 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 1, \\; b = 3, \\; c = -2 \\)", explanation: "Identify the constants from the standard form equation." },
+                { title: "Step 2: Substitute into the Quadratic Formula", math: "\\( x = \\frac{-(3) \\pm \\sqrt{(3)^2 - 4(1)(-2)}}{2(1)} \\)", explanation: "Substitute the values into the formula. Note that substituting a negative 'c' value will reverse the subtraction inside the root." },
+                { title: "Step 3: Calculate the Discriminant", math: "\\( x = \\frac{-3 \\pm \\sqrt{9 + 8}}{2} = \\frac{-3 \\pm \\sqrt{17}}{2} \\)", explanation: "Square the 3 to get 9. Multiply \\( -4 \\times 1 \\times -2 \\) to get positive 8. Adding 9 and 8 gives a discriminant of 17." },
+                { title: "Step 4: Final Exact Roots", math: "\\( x = \\frac{-3 \\pm \\sqrt{17}}{2} \\)", explanation: "Since 17 is a prime number and has no perfect square, the exact radical fraction is our final answer." }
+            ], ans_box: "0.56, -3.56" },
+
+            q1c: { title: "Question 1c", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Express as exact roots:<br><br>\\( x^2 + 9x + 6 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 1, \\; b = 9, \\; c = 6 \\)", explanation: "Identify the a, b, and c variables from the given quadratic." },
+                { title: "Step 2: Substitute into the Quadratic Formula", math: "\\( x = \\frac{-(9) \\pm \\sqrt{(9)^2 - 4(1)(6)}}{2(1)} \\)", explanation: "Input the numbers into the corresponding positions in the quadratic formula." },
+                { title: "Step 3: Calculate the Discriminant", math: "\\( x = \\frac{-9 \\pm \\sqrt{81 - 24}}{2} = \\frac{-9 \\pm \\sqrt{57}}{2} \\)", explanation: "Compute the exponent \\( (9^2 = 81) \\) and the trailing product \\( (-4 \\times 1 \\times 6 = -24) \\). Subtracting these gives 57." },
+                { title: "Step 4: Final Exact Roots", math: "\\( x = \\frac{-9 \\pm \\sqrt{57}}{2} \\)", explanation: "Leave the answer in radical form to maintain exact precision." }
+            ], ans_box: "-0.73, -8.28" },
+
+            q1d: { title: "Question 1d", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Express as exact roots:<br><br>\\( x^2 - 5x - 3 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 1, \\; b = -5, \\; c = -3 \\)", explanation: "Identify the leading coefficient, middle coefficient, and the constant." },
+                { title: "Step 2: Substitute into the Quadratic Formula", math: "\\( x = \\frac{-(-5) \\pm \\sqrt{(-5)^2 - 4(1)(-3)}}{2(1)} \\)", explanation: "Pay close attention to double negatives. The outer \\( -b \\) becomes positive 5, and the inner product contains two negatives." },
+                { title: "Step 3: Calculate the Discriminant", math: "\\( x = \\frac{5 \\pm \\sqrt{25 + 12}}{2} = \\frac{5 \\pm \\sqrt{37}}{2} \\)", explanation: "Squaring -5 gives positive 25. Multiplying \\( -4 \\times 1 \\times -3 \\) flips the sign to positive 12. Adding them gives a discriminant of 37." },
+                { title: "Step 4: Final Exact Roots", math: "\\( x = \\frac{5 \\pm \\sqrt{37}}{2} \\)", explanation: "The exact roots are represented perfectly by this irreducible radical." }
+            ], ans_box: "5.54, -0.54" },
+
+            q1e: { title: "Question 1e", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Express as exact roots:<br><br>\\( x^2 - 2x - 14 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 1, \\; b = -2, \\; c = -14 \\)", explanation: "Identify the constants from the standard form equation." },
+                { title: "Step 2: Substitute into the Quadratic Formula", math: "\\( x = \\frac{-(-2) \\pm \\sqrt{(-2)^2 - 4(1)(-14)}}{2(1)} \\)", explanation: "Substitute the extracted values. The double negatives will both cancel out to form positive numbers." },
+                { title: "Step 3: Calculate the Discriminant", math: "\\( x = \\frac{2 \\pm \\sqrt{4 + 56}}{2} = \\frac{2 \\pm \\sqrt{60}}{2} \\)", explanation: "Squaring -2 yields 4. The product of \\( -4 \\times 1 \\times -14 \\) is 56. Adding these values makes the discriminant 60." },
+                { title: "Step 4: Final Exact Roots", math: "\\( x = \\frac{2 \\pm \\sqrt{60}}{2} \\)", explanation: "This radical represents the two exact solutions." }
+            ], ans_box: "4.88, -2.88" },
+
+            q1f: { title: "Question 1f", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Express as exact roots:<br><br>\\( x^2 + 9x + 1 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Coefficients", math: "\\( a = 1, \\; b = 9, \\; c = 1 \\)", explanation: "Identify the numeric values attached to each term." },
+                { title: "Step 2: Substitute into the Quadratic Formula", math: "\\( x = \\frac{-(9) \\pm \\sqrt{(9)^2 - 4(1)(1)}}{2(1)} \\)", explanation: "Input the parameters into the quadratic formula structure." },
+                { title: "Step 3: Calculate the Discriminant", math: "\\( x = \\frac{-9 \\pm \\sqrt{81 - 4}}{2} = \\frac{-9 \\pm \\sqrt{77}}{2} \\)", explanation: "The exponent gives 81, and the trailing product gives -4. The final discriminant is 77." },
+                { title: "Step 4: Final Exact Roots", math: "\\( x = \\frac{-9 \\pm \\sqrt{77}}{2} \\)", explanation: "Leave the expression untouched to maintain exact mathematical precision." }
+            ], ans_box: "-0.12, -8.89" },
+
+            q2a: { title: "Question 2a", hasMethodToggle: true, fullStatement: "Solve using the quadratic formula:<br><br>\\( 4x^2 + 2x - 1 = 0 \\)", steps: [
+                { cls: "exact-only", title: "Step 1 (Exact): Extract Coefficients", math: "\\( a = 4, \\; b = 2, \\; c = -1 \\)", explanation: "Identify the leading coefficient, middle coefficient, and constant." },
+                { cls: "exact-only", title: "Step 2 (Exact): Substitute into Formula", math: "\\( x = \\frac{-(2) \\pm \\sqrt{(2)^2 - 4(4)(-1)}}{2(4)} \\)", explanation: "Insert the values into the formula. Note that the denominator will be \\( 2 \\times 4 = 8 \\)." },
+                { cls: "exact-only", title: "Step 3 (Exact): Calculate Discriminant", math: "\\( x = \\frac{-2 \\pm \\sqrt{4 + 16}}{8} = \\frac{-2 \\pm \\sqrt{20}}{8} \\)", explanation: "Squaring 2 gives 4. Multiplying \\( -4(4)(-1) \\) yields a positive 16. The total discriminant is 20." },
+                { cls: "exact-only", title: "Step 4 (Exact): Simplify Radical", math: "\\( x = \\frac{-2 \\pm 2\\sqrt{5}}{8} = \\frac{-1 \\pm \\sqrt{5}}{4} \\)", explanation: "Reduce the radical \\( \\sqrt{20} \\) to \\( 2\\sqrt{5} \\), then divide all outer terms by 2 to reach the final simplified exact root." },
+                { cls: "approx-only", title: "Step 1 (Approx): Convert to Decimals", math: "\\( \\sqrt{20} \\approx 4.47 \\)", explanation: "Calculate the decimal approximation of the square root value obtained in the exact steps." },
+                { cls: "approx-only", title: "Step 2 (Approx): Branch into Paths", math: "\\( x = \\frac{-2 + 4.47}{8} \\quad \\text{and} \\quad x = \\frac{-2 - 4.47}{8} \\)", explanation: "Split into the positive addition path and the negative subtraction path using the decimal value." },
+                { cls: "approx-only", title: "Step 3 (Approx): Final Decimal Roots", math: "\\( x \\approx 0.31 \\text{ and } x \\approx -0.81 \\)", explanation: "Divide the computed numerators by 8 to reach the final decimal values." }
+            ], ans_box: "0.31, -0.81" },
+
+            q2b: { title: "Question 2b", hasMethodToggle: true, fullStatement: "Solve using the quadratic formula:<br><br>\\( -3x^2 - 7x + 2 = 0 \\)", steps: [
+                { cls: "exact-only", title: "Step 1 (Exact): Extract Coefficients", math: "\\( a = -3, \\; b = -7, \\; c = 2 \\)", explanation: "Extract the values from the standard form equation." },
+                { cls: "exact-only", title: "Step 2 (Exact): Substitute into Formula", math: "\\( x = \\frac{-(-7) \\pm \\sqrt{(-7)^2 - 4(-3)(2)}}{2(-3)} \\)", explanation: "Substitute the extracted values carefully, managing the multiple negative signs." },
+                { cls: "exact-only", title: "Step 3 (Exact): Calculate Discriminant", math: "\\( x = \\frac{7 \\pm \\sqrt{49 + 24}}{-6} = \\frac{7 \\pm \\sqrt{73}}{-6} \\)", explanation: "Square the -7 to get 49. Multiply \\( -4(-3)(2) \\) to get +24. The total discriminant is 73." },
+                { cls: "exact-only", title: "Step 4 (Exact): Final Exact Roots", math: "\\( x = \\frac{7 \\pm \\sqrt{73}}{-6} \\)", explanation: "This irreducible radical represents the two exact solutions." },
+                { cls: "approx-only", title: "Step 1 (Approx): Convert to Decimals", math: "\\( \\sqrt{73} \\approx 8.54 \\)", explanation: "Evaluate the square root to a decimal." },
+                { cls: "approx-only", title: "Step 2 (Approx): Branch into Paths", math: "\\( x = \\frac{7 + 8.54}{-6} \\quad \\text{and} \\quad x = \\frac{7 - 8.54}{-6} \\)", explanation: "Create the separate positive and negative tracking paths." },
+                { cls: "approx-only", title: "Step 3 (Approx): Final Decimal Roots", math: "\\( x \\approx -2.59 \\text{ and } x \\approx 0.26 \\)", explanation: "Calculate the numerator values and divide by -6." }
+            ], ans_box: "0.26, -2.59" },
+
+            q2c: { title: "Question 2c", hasMethodToggle: true, fullStatement: "Solve using the quadratic formula:<br><br>\\( 2x^2 - 8x - 3 = 0 \\)", steps: [
+                { cls: "exact-only", title: "Step 1 (Exact): Extract Coefficients", math: "\\( a = 2, \\; b = -8, \\; c = -3 \\)", explanation: "Identify the leading coefficient, middle coefficient, and constant." },
+                { cls: "exact-only", title: "Step 2 (Exact): Substitute into Formula", math: "\\( x = \\frac{-(-8) \\pm \\sqrt{(-8)^2 - 4(2)(-3)}}{2(2)} \\)", explanation: "Input the parameters into the quadratic formula." },
+                { cls: "exact-only", title: "Step 3 (Exact): Calculate Discriminant", math: "\\( x = \\frac{8 \\pm \\sqrt{64 + 24}}{4} = \\frac{8 \\pm \\sqrt{88}}{4} \\)", explanation: "Calculate the exponent and trailing product. Adding them yields a discriminant of 88." },
+                { cls: "exact-only", title: "Step 4 (Exact): Simplify Radical", math: "\\( x = \\frac{8 \\pm 2\\sqrt{22}}{4} = \\frac{4 \\pm \\sqrt{22}}{2} \\)", explanation: "Reduce the radical \\( \\sqrt{88} \\) to \\( 2\\sqrt{22} \\), then divide the outer numbers by 2." },
+                { cls: "approx-only", title: "Step 1 (Approx): Convert to Decimals", math: "\\( \\sqrt{88} \\approx 9.38 \\)", explanation: "Approximate the square root." },
+                { cls: "approx-only", title: "Step 2 (Approx): Branch into Paths", math: "\\( x = \\frac{8 + 9.38}{4} \\quad \\text{and} \\quad x = \\frac{8 - 9.38}{4} \\)", explanation: "Split the calculation using the decimal approximation." },
+                { cls: "approx-only", title: "Step 3 (Approx): Final Decimal Roots", math: "\\( x \\approx 4.35 \\text{ and } x \\approx -0.35 \\)", explanation: "Divide the top calculations by 4 to establish the final answers." }
+            ], ans_box: "4.35, -0.35" },
+
+            q2d: { title: "Question 2d", hasMethodToggle: true, fullStatement: "Solve using the quadratic formula:<br><br>\\( 5x^2 + 6x + 1 = 0 \\)", steps: [
+                { cls: "exact-only", title: "Step 1 (Exact): Extract Coefficients", math: "\\( a = 5, \\; b = 6, \\; c = 1 \\)", explanation: "Extract a, b, and c from the standard form equation." },
+                { cls: "exact-only", title: "Step 2 (Exact): Substitute into Formula", math: "\\( x = \\frac{-(6) \\pm \\sqrt{(6)^2 - 4(5)(1)}}{2(5)} \\)", explanation: "Insert the values into the quadratic formula." },
+                { cls: "exact-only", title: "Step 3 (Exact): Calculate Discriminant", math: "\\( x = \\frac{-6 \\pm \\sqrt{36 - 20}}{10} = \\frac{-6 \\pm \\sqrt{16}}{10} \\)", explanation: "Since the discriminant is 16, which is a perfect square, we will end up with clean rational fractions." },
+                { cls: "exact-only", title: "Step 4 (Exact): Branch into Fraction Paths", math: "\\( x = \\frac{-6 + 4}{10} \\quad \\text{and} \\quad x = \\frac{-6 - 4}{10} \\)", explanation: "The square root of 16 is exactly 4. We separate the paths to solve for the exact fractions." },
+                { cls: "exact-only", title: "Step 5 (Exact): Final Exact Roots", math: "\\( x = -\\frac{1}{5} \\text{ and } x = -1 \\)", explanation: "The simplified fractions provide the exact rational roots." },
+                { cls: "approx-only", title: "Step 1 (Approx): Convert Fractions to Decimals", math: "\\( x = -\\frac{1}{5} = -0.2 \\quad \\text{and} \\quad x = -1 \\)", explanation: "Since the exact roots are clean rational numbers, we simply convert the fractions into decimal values directly." }
+            ], ans_box: "-1, -0.2" },
+
+            q2e: { title: "Question 2e", hasMethodToggle: true, fullStatement: "Solve using the quadratic formula:<br><br>\\( -6x^2 + x + 5 = 0 \\)", steps: [
+                { cls: "exact-only", title: "Step 1 (Exact): Extract Coefficients", math: "\\( a = -6, \\; b = 1, \\; c = 5 \\)", explanation: "Identify the parameters." },
+                { cls: "exact-only", title: "Step 2 (Exact): Substitute into Formula", math: "\\( x = \\frac{-(1) \\pm \\sqrt{(1)^2 - 4(-6)(5)}}{2(-6)} \\)", explanation: "Input the values into the formula." },
+                { cls: "exact-only", title: "Step 3 (Exact): Calculate Discriminant", math: "\\( x = \\frac{-1 \\pm \\sqrt{1 + 120}}{-12} = \\frac{-1 \\pm \\sqrt{121}}{-12} \\)", explanation: "The discriminant is 121, which is a perfect square." },
+                { cls: "exact-only", title: "Step 4 (Exact): Branch into Fraction Paths", math: "\\( x = \\frac{-1 + 11}{-12} \\quad \\text{and} \\quad x = \\frac{-1 - 11}{-12} \\)", explanation: "The square root of 121 is exactly 11. Separate the paths." },
+                { cls: "exact-only", title: "Step 5 (Exact): Final Exact Roots", math: "\\( x = -\\frac{5}{6} \\text{ and } x = 1 \\)", explanation: "Simplify the resulting fractions." },
+                { cls: "approx-only", title: "Step 1 (Approx): Convert Fractions to Decimals", math: "\\( x = -\\frac{5}{6} \\approx -0.83 \\quad \\text{and} \\quad x = 1 \\)", explanation: "Convert the exact rational fractions into approximate decimal formats." }
+            ], ans_box: "1, -0.83" },
+
+            q2f: { title: "Question 2f", hasMethodToggle: true, fullStatement: "Solve using the quadratic formula:<br><br>\\( -6x^2 + 5x + 1 = 0 \\)", steps: [
+                { cls: "exact-only", title: "Step 1 (Exact): Extract Coefficients", math: "\\( a = -6, \\; b = 5, \\; c = 1 \\)", explanation: "Identify the leading coefficient, middle coefficient, and constant." },
+                { cls: "exact-only", title: "Step 2 (Exact): Substitute into Formula", math: "\\( x = \\frac{-(5) \\pm \\sqrt{(5)^2 - 4(-6)(1)}}{2(-6)} \\)", explanation: "Substitute the variables into the structure." },
+                { cls: "exact-only", title: "Step 3 (Exact): Calculate Discriminant", math: "\\( x = \\frac{-5 \\pm \\sqrt{25 + 24}}{-12} = \\frac{-5 \\pm \\sqrt{49}}{-12} \\)", explanation: "The discriminant evaluates to 49, a perfect square." },
+                { cls: "exact-only", title: "Step 4 (Exact): Branch into Fraction Paths", math: "\\( x = \\frac{-5 + 7}{-12} \\quad \\text{and} \\quad x = \\frac{-5 - 7}{-12} \\)", explanation: "The square root of 49 is exactly 7. Separate the calculation paths." },
+                { cls: "exact-only", title: "Step 5 (Exact): Final Exact Roots", math: "\\( x = -\\frac{1}{6} \\text{ and } x = 1 \\)", explanation: "Simplify the arithmetic to find the exact fraction roots." },
+                { cls: "approx-only", title: "Step 1 (Approx): Convert Fractions to Decimals", math: "\\( x = -\\frac{1}{6} \\approx -0.17 \\quad \\text{and} \\quad x = 1 \\)", explanation: "Perform the division to convert the fraction into a decimal." }
+            ], ans_box: "1, -0.17" },
+
+            q2g: { title: "Question 2g", hasMethodToggle: true, fullStatement: "Solve using the quadratic formula:<br><br>\\( -6x^2 - 5x - 1 = 0 \\)", steps: [
+                { cls: "exact-only", title: "Step 1 (Exact): Extract Coefficients", math: "\\( a = -6, \\; b = -5, \\; c = -1 \\)", explanation: "Extract a, b, and c from the standard form equation." },
+                { cls: "exact-only", title: "Step 2 (Exact): Substitute into Formula", math: "\\( x = \\frac{-(-5) \\pm \\sqrt{(-5)^2 - 4(-6)(-1)}}{2(-6)} \\)", explanation: "Input the values. Notice that the negative outer 'b' becomes positive 5." },
+                { cls: "exact-only", title: "Step 3 (Exact): Calculate Discriminant", math: "\\( x = \\frac{5 \\pm \\sqrt{25 - 24}}{-12} = \\frac{5 \\pm \\sqrt{1}}{-12} \\)", explanation: "The discriminant is exactly 1." },
+                { cls: "exact-only", title: "Step 4 (Exact): Branch into Fraction Paths", math: "\\( x = \\frac{5 + 1}{-12} \\quad \\text{and} \\quad x = \\frac{5 - 1}{-12} \\)", explanation: "The square root of 1 is 1. We split the paths to evaluate the roots." },
+                { cls: "exact-only", title: "Step 5 (Exact): Final Exact Roots", math: "\\( x = -\\frac{1}{2} \\text{ and } x = -\\frac{1}{3} \\)", explanation: "Simplify the resulting fractions." },
+                { cls: "approx-only", title: "Step 1 (Approx): Convert Fractions to Decimals", math: "\\( x = -\\frac{1}{2} = -0.5 \\quad \\text{and} \\quad x = -\\frac{1}{3} \\approx -0.33 \\)", explanation: "Calculate the decimal values of the exact fractions." }
+            ], ans_box: "-0.5, -0.33" },
+
+            q2h: { title: "Question 2h", hasMethodToggle: true, fullStatement: "Solve using the quadratic formula:<br><br>\\( 7x^2 + 3x - 1 = 0 \\)", steps: [
+                { cls: "exact-only", title: "Step 1 (Exact): Extract Coefficients", math: "\\( a = 7, \\; b = 3, \\; c = -1 \\)", explanation: "Identify the numerical constants." },
+                { cls: "exact-only", title: "Step 2 (Exact): Substitute into Formula", math: "\\( x = \\frac{-(3) \\pm \\sqrt{(3)^2 - 4(7)(-1)}}{2(7)} \\)", explanation: "Insert the values into the formula structure." },
+                { cls: "exact-only", title: "Step 3 (Exact): Calculate Discriminant", math: "\\( x = \\frac{-3 \\pm \\sqrt{9 + 28}}{14} = \\frac{-3 \\pm \\sqrt{37}}{14} \\)", explanation: "Compute the exponent and trailing product to find a discriminant of 37." },
+                { cls: "exact-only", title: "Step 4 (Exact): Final Exact Roots", math: "\\( x = \\frac{-3 \\pm \\sqrt{37}}{14} \\)", explanation: "This irreducible radical represents the exact solutions." },
+                { cls: "approx-only", title: "Step 1 (Approx): Convert to Decimals", math: "\\( \\sqrt{37} \\approx 6.08 \\)", explanation: "Approximate the square root value." },
+                { cls: "approx-only", title: "Step 2 (Approx): Branch into Paths", math: "\\( x = \\frac{-3 + 6.08}{14} \\quad \\text{and} \\quad x = \\frac{-3 - 6.08}{14} \\)", explanation: "Split the formula using the decimal value." },
+                { cls: "approx-only", title: "Step 3 (Approx): Final Decimal Roots", math: "\\( x \\approx 0.22 \\text{ and } x \\approx -0.65 \\)", explanation: "Perform the final division calculations to reach the exact rounded decimals." }
+            ], ans_box: "0.22, -0.65" },
+
+            q4a: { title: "Question 4a", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Round to 2 decimal places:<br><br>\\( -0.03x^2 - 0.6x + 0.5 = 0 \\)", steps: [
+                { title: "Step 1: Extract Coefficients", math: "\\( a = -0.03, \\; b = -0.6, \\; c = 0.5 \\)", explanation: "Identify the decimal coefficients from the standard form equation." },
+                { title: "Step 2: Substitute into Formula", math: "\\( x = \\frac{-(-0.6) \\pm \\sqrt{(-0.6)^2 - 4(-0.03)(0.5)}}{2(-0.03)} \\)", explanation: "Substitute the negative decimals carefully inside parentheses to manage the signs correctly." },
+                { title: "Step 3: Calculate the Discriminant", math: "\\( x = \\frac{0.6 \\pm \\sqrt{0.36 + 0.06}}{-0.06} = \\frac{0.6 \\pm \\sqrt{0.42}}{-0.06} \\)", explanation: "Squaring -0.6 gives a positive 0.36. Multiplying \\( -4(-0.03)(0.5) \\) yields a positive 0.06. Adding them gives a discriminant of 0.42." },
+                { title: "Step 4: Branch into Two Paths", math: "\\( x = \\frac{0.6 + 0.648}{-0.06} \\quad \\text{and} \\quad x = \\frac{0.6 - 0.648}{-0.06} \\)", explanation: "Evaluate the square root of 0.42 and separate the paths for the plus and minus operations." },
+                { title: "Step 5: Calculate Final Roots", math: "\\( x \\approx -20.80 \\text{ and } x \\approx 0.80 \\)", explanation: "Perform the numerator arithmetic and divide by the negative denominator to find the final answers." }
+            ], ans_box: "0.80, -20.80" },
+
+            q4b: { title: "Question 4b", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Round to 2 decimal places:<br><br>\\( -3x^2 + 0.06x + 4 = 0 \\)", steps: [
+                { title: "Step 1: Extract Coefficients", math: "\\( a = -3, \\; b = 0.06, \\; c = 4 \\)", explanation: "Identify the parameters from the given mixed-decimal equation." },
+                { title: "Step 2: Substitute into Formula", math: "\\( x = \\frac{-(0.06) \\pm \\sqrt{(0.06)^2 - 4(-3)(4)}}{2(-3)} \\)", explanation: "Insert the values into the formula structure." },
+                { title: "Step 3: Calculate the Discriminant", math: "\\( x = \\frac{-0.06 \\pm \\sqrt{0.0036 + 48}}{-6} = \\frac{-0.06 \\pm \\sqrt{48.0036}}{-6} \\)", explanation: "Calculate the exponent and perform the multiplication. The negative multiplied by negative gives a positive 48." },
+                { title: "Step 4: Branch into Two Paths", math: "\\( x = \\frac{-0.06 + 6.93}{-6} \\quad \\text{and} \\quad x = \\frac{-0.06 - 6.93}{-6} \\)", explanation: "Extract the square root and branch the equation into the positive and negative addition structures." },
+                { title: "Step 5: Calculate Final Roots", math: "\\( x \\approx -1.14 \\text{ and } x \\approx 1.16 \\)", explanation: "Process the numerators and divide by -6." }
+            ], ans_box: "1.16, -1.14" },
+
+            q4c: { title: "Question 4c", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Round to 2 decimal places:<br><br>\\( x^2 - 0.8x + 0.08 = 0 \\)", steps: [
+                { title: "Step 1: Extract Coefficients", math: "\\( a = 1, \\; b = -0.8, \\; c = 0.08 \\)", explanation: "Extract a, b, and c from the decimal quadratic equation." },
+                { title: "Step 2: Substitute into Formula", math: "\\( x = \\frac{-(-0.8) \\pm \\sqrt{(-0.8)^2 - 4(1)(0.08)}}{2(1)} \\)", explanation: "Substitute the variables. The double negative on the outside makes it a positive 0.8." },
+                { title: "Step 3: Calculate the Discriminant", math: "\\( x = \\frac{0.8 \\pm \\sqrt{0.64 - 0.32}}{2} = \\frac{0.8 \\pm \\sqrt{0.32}}{2} \\)", explanation: "Squaring -0.8 gives 0.64. Multiplying \\( -4(1)(0.08) \\) gives -0.32. The discriminant is 0.32." },
+                { title: "Step 4: Branch into Two Paths", math: "\\( x = \\frac{0.8 + 0.566}{2} \\quad \\text{and} \\quad x = \\frac{0.8 - 0.566}{2} \\)", explanation: "The square root of 0.32 is approximately 0.566. Split the paths." },
+                { title: "Step 5: Calculate Final Roots", math: "\\( x \\approx 0.68 \\text{ and } x \\approx 0.12 \\)", explanation: "Perform the arithmetic and divide by 2." }
+            ], ans_box: "0.68, 0.12" },
+
+            q4d: { title: "Question 4d", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Round to 2 decimal places:<br><br>\\( \\frac{2}{5}x^2 + 3x + 1 = 0 \\)", steps: [
+                { title: "Step 1: Clear the fraction multiplier", math: "\\( 2x^2 + 15x + 5 = 0 \\)", explanation: "To make the formula easier to use and avoid complex fractions inside a root, we can eliminate the fraction by multiplying the entire equation by the denominator 5." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = 2, \\; b = 15, \\; c = 5 \\)", explanation: "Identify the new integer parameters from our simplified standard form equation." },
+                { title: "Step 3: Substitute into Formula", math: "\\( x = \\frac{-(15) \\pm \\sqrt{(15)^2 - 4(2)(5)}}{2(2)} \\)", explanation: "Substitute the integer variables into the quadratic formula." },
+                { title: "Step 4: Calculate the Discriminant", math: "\\( x = \\frac{-15 \\pm \\sqrt{225 - 40}}{4} = \\frac{-15 \\pm \\sqrt{185}}{4} \\)", explanation: "Evaluate the exponent to 225, and the multiplication cluster to 40. Subtracting them creates a discriminant of 185." },
+                { title: "Step 5: Branch into Two Paths", math: "\\( x = \\frac{-15 + 13.60}{4} \\quad \\text{and} \\quad x = \\frac{-15 - 13.60}{4} \\)", explanation: "Separate into the addition and subtraction paths utilizing the square root of 185." },
+                { title: "Step 6: Calculate Final Roots", math: "\\( x \\approx -0.35 \\text{ and } x \\approx -7.15 \\)", explanation: "Perform the final division to compute the roots." }
+            ], ans_box: "-0.35, -7.15" },
+
+            q4e: { title: "Question 4e", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Round to 2 decimal places:<br><br>\\( \\frac{1}{10}x^2 + \\frac{x}{5} - 1 = 0 \\)", steps: [
+                { title: "Step 1: Clear the fraction multipliers", math: "\\( x^2 + 2x - 10 = 0 \\)", explanation: "To eliminate the fractions, multiply every term in the equation by the lowest common multiple, which is 10." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = 1, \\; b = 2, \\; c = -10 \\)", explanation: "Identify the parameters from the cleaned integer equation." },
+                { title: "Step 3: Substitute into Formula", math: "\\( x = \\frac{-(2) \\pm \\sqrt{(2)^2 - 4(1)(-10)}}{2(1)} \\)", explanation: "Input the values into the formula." },
+                { title: "Step 4: Calculate the Discriminant", math: "\\( x = \\frac{-2 \\pm \\sqrt{4 + 40}}{2} = \\frac{-2 \\pm \\sqrt{44}}{2} \\)", explanation: "The discriminant is 44." },
+                { title: "Step 5: Branch into Two Paths", math: "\\( x = \\frac{-2 + 6.63}{2} \\quad \\text{and} \\quad x = \\frac{-2 - 6.63}{2} \\)", explanation: "The square root of 44 is 6.63. Separate the tracking paths." },
+                { title: "Step 6: Calculate Final Roots", math: "\\( x \\approx 2.32 \\text{ and } x \\approx -4.32 \\)", explanation: "Compute the final outputs by dividing the numerators by 2." }
+            ], ans_box: "2.32, -4.32" },
+
+            q4f: { title: "Question 4f", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Round to 2 decimal places:<br><br>\\( \\frac{1}{2}x^2 - x - \\frac{5}{2} = 0 \\)", steps: [
+                { title: "Step 1: Clear the fraction multipliers", math: "\\( x^2 - 2x - 5 = 0 \\)", explanation: "Multiply every term in the equation by 2 to eliminate the fractional denominators." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = 1, \\; b = -2, \\; c = -5 \\)", explanation: "Identify a, b, and c." },
+                { title: "Step 3: Substitute into Formula", math: "\\( x = \\frac{-(-2) \\pm \\sqrt{(-2)^2 - 4(1)(-5)}}{2(1)} \\)", explanation: "Insert the values. The outer double negative will become positive 2." },
+                { title: "Step 4: Calculate the Discriminant", math: "\\( x = \\frac{2 \\pm \\sqrt{4 + 20}}{2} = \\frac{2 \\pm \\sqrt{24}}{2} \\)", explanation: "The discriminant evaluates to 24." },
+                { title: "Step 5: Branch into Two Paths", math: "\\( x = \\frac{2 + 4.90}{2} \\quad \\text{and} \\quad x = \\frac{2 - 4.90}{2} \\)", explanation: "The square root of 24 is approximately 4.90. Separate the paths." },
+                { title: "Step 6: Calculate Final Roots", math: "\\( x \\approx 3.45 \\text{ and } x \\approx -1.45 \\)", explanation: "Perform the arithmetic and divide by 2." }
+            ], ans_box: "3.45, -1.45" },
+
+            q4g: { title: "Question 4g", hasMethodToggle: false, fullStatement: "Solve using the quadratic formula. Round to 2 decimal places:<br><br>\\( \\frac{1}{3}x^2 - x - \\frac{5}{3} = 0 \\)", steps: [
+                { title: "Step 1: Clear the fraction multipliers", math: "\\( x^2 - 3x - 5 = 0 \\)", explanation: "Multiply every term by 3 to wipe out the fractions and generate integers." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = 1, \\; b = -3, \\; c = -5 \\)", explanation: "Identify the parameters." },
+                { title: "Step 3: Substitute into Formula", math: "\\( x = \\frac{-(-3) \\pm \\sqrt{(-3)^2 - 4(1)(-5)}}{2(1)} \\)", explanation: "Input the values into the formula structure." },
+                { title: "Step 4: Calculate the Discriminant", math: "\\( x = \\frac{3 \\pm \\sqrt{9 + 20}}{2} = \\frac{3 \\pm \\sqrt{29}}{2} \\)", explanation: "The total discriminant is 29." },
+                { title: "Step 5: Branch into Two Paths", math: "\\( x = \\frac{3 + 5.39}{2} \\quad \\text{and} \\quad x = \\frac{3 - 5.39}{2} \\)", explanation: "The square root of 29 is 5.39. Split the operations." },
+                { title: "Step 6: Calculate Final Roots", math: "\\( x \\approx 4.19 \\text{ and } x \\approx -1.19 \\)", explanation: "Compute the final rounded values." }
+            ], ans_box: "4.19, -1.19" },
+
+            q5: { title: "Question 5", hasMethodToggle: false, fullStatement: "When Michael drives his dirt bike off a ramp, his flight path can be modelled by \\( h(d) = -0.57d^2 + 3.7d + 2.5 \\), where d is the horizontal distance from the ramp, in metres, and h(d) is his height, in metres.<br><br>How far away from the end of the ramp did he land, to the nearest tenth of a metre?", steps: [
+                { title: "Step 1: Determine the Landing Condition", math: "\\( 0 = -0.57d^2 + 3.7d + 2.5 \\)", explanation: "Landing occurs when the height of the bike is exactly zero. We set \\( h(d) = 0 \\) to find the horizontal distance 'd' at impact." },
+                { title: "Step 2: Extract Coefficients", math: "\\( a = -0.57, \\; b = 3.7, \\; c = 2.5 \\)", explanation: "Identify the parameters from the standard quadratic equation." },
+                { title: "Step 3: Substitute into Formula", math: "\\( d = \\frac{-(3.7) \\pm \\sqrt{(3.7)^2 - 4(-0.57)(2.5)}}{2(-0.57)} \\)", explanation: "Input the values into the quadratic formula to solve for distance 'd'." },
+                { title: "Step 4: Calculate the Discriminant", math: "\\( d = \\frac{-3.7 \\pm \\sqrt{13.69 + 5.7}}{-1.14} = \\frac{-3.7 \\pm \\sqrt{19.39}}{-1.14} \\)", explanation: "Square the 3.7, and multiply the trailing terms. The double negative becomes a positive addition. The discriminant is 19.39." },
+                { title: "Step 5: Branch into Two Paths", math: "\\( d = \\frac{-3.7 + 4.40}{-1.14} \\quad \\text{and} \\quad d = \\frac{-3.7 - 4.40}{-1.14} \\)", explanation: "The square root of 19.39 is approximately 4.40. Separate into two paths." },
+                { title: "Step 6: Evaluate the Roots", math: "\\( d \\approx -0.61 \\text{ and } d \\approx 7.11 \\)", explanation: "Divide the numerators by -1.14 to find both mathematical roots." },
+                { title: "Step 7: Reject the Negative Root", math: "\\( d = 7.1 \\text{ m} \\)", explanation: "Because horizontal distance moving forward cannot be negative in this physical context, we reject the -0.61 root. The landing distance rounded to the nearest tenth is 7.1 meters." }
+            ], ans_box: "7.1" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false, selectedMethod: 'exact' };
+        });
+
+        let activeQuestionId = "";
+        let currentMethod = 'exact';
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            document.getElementById("method-toggle-bar").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const numInput = document.getElementById("numeric-student-input");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            currentMethod = state.selectedMethod || 'exact';
+            if (activeProblem.hasMethodToggle) {
+                document.getElementById("method-toggle-bar").style.display = "flex";
+                document.getElementById("mode-exact").classList.toggle("active", currentMethod === 'exact');
+                document.getElementById("mode-approx").classList.toggle("active", currentMethod === 'approx');
+            }
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            numInput.value = state.textInputVal;
+            
+            numInput.oninput = function() {
+                state.textInputVal = numInput.value;
+            };
+
+            if (state.answered) {
+                numInput.disabled = true;
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                numInput.disabled = false;
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                questionStates[activeQuestionId].textInputVal = txtInput.value;
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            let rawVal = state.textInputVal;
+            let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+            
+            const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+            let matchingCorrect = possibleAnswers.includes(normalizedInput);
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_3",
+                lessonId: "Lesson_3",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawVal,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "Quadratic Formula Arithmetic",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                let stepClass = step.cls ? `step-block ${step.cls}` : "step-block";
+                html += `
+                <div class="${stepClass}" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            if (data.hasMethodToggle) {
+                document.getElementById("method-toggle-bar").style.display = "flex";
+            } else {
+                document.getElementById("method-toggle-bar").style.display = "none";
+            }
+
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            const allSteps = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            allSteps.forEach(step => step.style.display = 'none');
+            
+            visibleStepElements = allSteps.filter(step => {
+                if (currentMethod === 'exact' && step.classList.contains('approx-only')) return false;
+                if (currentMethod === 'approx' && step.classList.contains('exact-only')) return false;
+                return true;
+            });
+
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function changeMethod(methodKey) {
+            if (currentMethod === methodKey) return;
+            currentMethod = methodKey;
+            questionStates[activeQuestionId].selectedMethod = methodKey;
+            questionStates[activeQuestionId].currentStep = 0;
+
+            document.getElementById("mode-exact").classList.toggle("active", methodKey === 'exact');
+            document.getElementById("mode-approx").classList.toggle("active", methodKey === 'approx');
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

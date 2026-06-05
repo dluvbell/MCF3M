@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 3 Review</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 3 Review</h1>
+        <p>Solving by Rearranging and Taking Square Roots</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1">1) m² = 64</option>
+                <option value="q2">2) r² = -3</option>
+                <option value="q3">3) x² = 100</option>
+                <option value="q4">4) a² = 25</option>
+                <option value="q5">5) n² + 4 = 104</option>
+                <option value="q6">6) -x² = -36</option>
+                <option value="q7">7) r² - 7 = 42</option>
+                <option value="q8">8) 4b² = 16</option>
+                <option value="q9">9) 3x² = 48</option>
+                <option value="q10">10) 10k² = 360</option>
+                <option value="q11">11) 9n² + 2 = 11</option>
+                <option value="q12">12) 6p² + 4 = 0</option>
+                <option value="q13">13) 8v² - 6 = 794</option>
+                <option value="q14">14) 7p² - 6 = 442</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Type your roots separated by a comma (or type "none"):</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;">
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 8, -8 or none" autocomplete="off">
+                </div>
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('n')">n</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('o')">o</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('n')">n</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('e')">e</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            q1: ["8,-8", "-8,8"],
+            q2: ["none", "nosolution", "0"],
+            q3: ["10,-10", "-10,10"],
+            q4: ["5,-5", "-5,5"],
+            q5: ["10,-10", "-10,10"],
+            q6: ["6,-6", "-6,6"],
+            q7: ["7,-7", "-7,7"],
+            q8: ["2,-2", "-2,2"],
+            q9: ["4,-4", "-4,4"],
+            q10: ["6,-6", "-6,6"],
+            q11: ["1,-1", "-1,1"],
+            q12: ["none", "nosolution", "0"],
+            q13: ["10,-10", "-10,10"],
+            q14: ["8,-8", "-8,8"]
+        };
+
+        const problemDataPack = {
+            q1: { title: "Question 1", fullStatement: "Solve the equation by taking square roots:<br><br>\\( m^2 = 64 \\)", steps: [
+                { title: "Step 1: Take the square root", math: "m = \\pm\\sqrt{64}", explanation: "Take the square root of both sides to isolate the variable. Remember to include the plus-minus symbol." },
+                { title: "Step 2: State the final solution", math: "m = 8, \\; m = -8", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "8, -8" },
+
+            q2: { title: "Question 2", fullStatement: "Solve the equation by taking square roots:<br><br>\\( r^2 = -3 \\)", steps: [
+                { title: "Step 1: Take the square root", math: "r = \\pm\\sqrt{-3}", explanation: "Take the square root of both sides." },
+                { title: "Step 2: State the final solution", math: "\\emptyset", explanation: "A squared real number cannot result in a negative value. Therefore, there is no real solution." }
+            ], ans_box: "none" },
+
+            q3: { title: "Question 3", fullStatement: "Solve the equation by taking square roots:<br><br>\\( x^2 = 100 \\)", steps: [
+                { title: "Step 1: Take the square root", math: "x = \\pm\\sqrt{100}", explanation: "Take the square root of both sides." },
+                { title: "Step 2: State the final solution", math: "x = 10, \\; x = -10", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "10, -10" },
+
+            q4: { title: "Question 4", fullStatement: "Solve the equation by taking square roots:<br><br>\\( a^2 = 25 \\)", steps: [
+                { title: "Step 1: Take the square root", math: "a = \\pm\\sqrt{25}", explanation: "Take the square root of both sides." },
+                { title: "Step 2: State the final solution", math: "a = 5, \\; a = -5", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "5, -5" },
+
+            q5: { title: "Question 5", fullStatement: "Solve the equation by taking square roots:<br><br>\\( n^2 + 4 = 104 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "n^2 = 100", explanation: "Subtract 4 from both sides of the equation." },
+                { title: "Step 2: Take the square root", math: "n = \\pm\\sqrt{100}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "n = 10, \\; n = -10", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "10, -10" },
+
+            q6: { title: "Question 6", fullStatement: "Solve the equation by taking square roots:<br><br>\\( -x^2 = -36 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "x^2 = 36", explanation: "Divide both sides by -1 to isolate the squared variable." },
+                { title: "Step 2: Take the square root", math: "x = \\pm\\sqrt{36}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "x = 6, \\; x = -6", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "6, -6" },
+
+            q7: { title: "Question 7", fullStatement: "Solve the equation by taking square roots:<br><br>\\( r^2 - 7 = 42 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "r^2 = 49", explanation: "Add 7 to both sides of the equation." },
+                { title: "Step 2: Take the square root", math: "r = \\pm\\sqrt{49}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "r = 7, \\; r = -7", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "7, -7" },
+
+            q8: { title: "Question 8", fullStatement: "Solve the equation by taking square roots:<br><br>\\( 4b^2 = 16 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "b^2 = 4", explanation: "Divide both sides by 4." },
+                { title: "Step 2: Take the square root", math: "b = \\pm\\sqrt{4}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "b = 2, \\; b = -2", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "2, -2" },
+
+            q9: { title: "Question 9", fullStatement: "Solve the equation by taking square roots:<br><br>\\( 3x^2 = 48 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "x^2 = 16", explanation: "Divide both sides by 3." },
+                { title: "Step 2: Take the square root", math: "x = \\pm\\sqrt{16}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "x = 4, \\; x = -4", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "4, -4" },
+
+            q10: { title: "Question 10", fullStatement: "Solve the equation by taking square roots:<br><br>\\( 10k^2 = 360 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "k^2 = 36", explanation: "Divide both sides by 10." },
+                { title: "Step 2: Take the square root", math: "k = \\pm\\sqrt{36}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "k = 6, \\; k = -6", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "6, -6" },
+
+            q11: { title: "Question 11", fullStatement: "Solve the equation by taking square roots:<br><br>\\( 9n^2 + 2 = 11 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "9n^2 = 9 \\rightarrow n^2 = 1", explanation: "Subtract 2 from both sides, then divide by 9." },
+                { title: "Step 2: Take the square root", math: "n = \\pm\\sqrt{1}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "n = 1, \\; n = -1", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "1, -1" },
+
+            q12: { title: "Question 12", fullStatement: "Solve the equation by taking square roots:<br><br>\\( 6p^2 + 4 = 0 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "6p^2 = -4 \\rightarrow p^2 = -\\frac{4}{6}", explanation: "Subtract 4 from both sides, then divide by 6." },
+                { title: "Step 2: Take the square root", math: "p = \\pm\\sqrt{-\\frac{4}{6}}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "\\emptyset", explanation: "A squared real number cannot result in a negative value. Therefore, there is no real solution." }
+            ], ans_box: "none" },
+
+            q13: { title: "Question 13", fullStatement: "Solve the equation by taking square roots:<br><br>\\( 8v^2 - 6 = 794 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "8v^2 = 800 \\rightarrow v^2 = 100", explanation: "Add 6 to both sides, then divide by 8." },
+                { title: "Step 2: Take the square root", math: "v = \\pm\\sqrt{100}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "v = 10, \\; v = -10", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "10, -10" },
+
+            q14: { title: "Question 14", fullStatement: "Solve the equation by taking square roots:<br><br>\\( 7p^2 - 6 = 442 \\)", steps: [
+                { title: "Step 1: Isolate the squared variable", math: "7p^2 = 448 \\rightarrow p^2 = 64", explanation: "Add 6 to both sides, then divide by 7." },
+                { title: "Step 2: Take the square root", math: "p = \\pm\\sqrt{64}", explanation: "Take the square root of both sides." },
+                { title: "Step 3: State the final solution", math: "p = 8, \\; p = -8", explanation: "Evaluate the square root to find the roots." }
+            ], ans_box: "8, -8" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const numInput = document.getElementById("numeric-student-input");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            numInput.value = state.textInputVal;
+            
+            numInput.oninput = function() {
+                state.textInputVal = numInput.value;
+            };
+
+            if (state.answered) {
+                numInput.disabled = true;
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                numInput.disabled = false;
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                questionStates[activeQuestionId].textInputVal = txtInput.value;
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            let rawVal = state.textInputVal;
+            let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+            
+            const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+            let matchingCorrect = possibleAnswers.includes(normalizedInput);
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_3",
+                lessonId: "Review",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawVal,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "Rearranging and Taking Square Roots",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">${finalAnsText === 'none' ? '\\emptyset \\text{ (No Solution)}' : '\\( ' + finalAnsText + ' \\)'}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

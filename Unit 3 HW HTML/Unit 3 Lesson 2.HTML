@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 3 Lesson 2</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .method-toggle-container {
+            display: none;
+            background-color: #e2e8f0;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .method-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .criss-cross-box {
+            display: block;
+            background-color: #f8fafc;
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+            margin: 12px 0;
+            max-width: 500px;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr 40px 1.2fr;
+            align-items: center;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            row-gap: 10px;
+        }
+
+        .svg-intersection-container {
+            grid-row: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            width: 80px;
+            user-select: none;
+        }
+
+        .grid-arrow-label {
+            font-size: 1.3rem;
+            color: var(--disabled-color);
+        }
+
+        .matrix-total-line {
+            grid-column: 1 / -1;
+            border-top: 2px solid var(--border-color);
+            margin-top: 12px;
+            padding-top: 12px;
+            text-align: left;
+            font-size: 1.15rem;
+            color: var(--primary-color);
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 3 Lesson 2</h1>
+        <p>Solving Quadratic Equations by Factoring</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <optgroup label="Question 1: Already Factored Form">
+                    <option value="q1a">1a) x(x + 4) = 0</option>
+                    <option value="q1b">1b) (y - 3)(y + 2) = 0</option>
+                    <option value="q1c">1c) (k - 9)(2k + 7) = 0</option>
+                    <option value="q1d">1d) (3m + 1)(2m - 5) = 0</option>
+                    <option value="q1e">1e) (3g + 12)(11g - 23) = 0</option>
+                    <option value="q1f">1f) (3t + 3)(t + 5) = 0</option>
+                </optgroup>
+                <optgroup label="Question 2: Standard Form to Solve">
+                    <option value="q2a">2a) x² + 13x + 22 = 0</option>
+                    <option value="q2b">2b) p² - 4p - 45 = 0</option>
+                    <option value="q2c">2c) 2r² + 5r + 2 = 0</option>
+                    <option value="q2d">2d) 3d² - 7d - 6 = 0</option>
+                    <option value="q2e">2e) 9k² - 25 = 0</option>
+                    <option value="q2f">2f) 4q² - 28q + 49 = 0</option>
+                    <option value="q2g">2g) 7s² - 21s + 14 = 0</option>
+                    <option value="q2h">2h) 5w² - 45 = 0</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Type your roots separated by a comma (e.g., 5/2, -1/3 or none):</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;">
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="Enter answers here..." autocomplete="off">
+                </div>
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('n')">n</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('o')">o</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('e')">e</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="method-toggle-container" id="method-toggle-bar">
+                <button class="method-btn active" id="mode-ps" onclick="changeMethod('ps')">Product & Sum Method</button>
+                <button class="method-btn" id="mode-cc" onclick="changeMethod('cc')">Criss-Cross Matrix Method</button>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            q1a: ["-4,0", "0,-4", "x=-4,x=0", "x=0,x=-4"],
+            q1b: ["-2,3", "3,-2", "y=-2,y=3", "y=3,y=-2"],
+            q1c: ["-7/2,9", "9,-7/2", "k=-7/2,k=9", "k=9,k=-7/2"],
+            q1d: ["-1/3,5/2", "5/2,-1/3", "m=-1/3,m=5/2", "m=5/2,m=-1/3"],
+            q1e: ["-4,23/11", "23/11,-4", "g=-4,g=23/11", "g=23/11,g=-4"],
+            q1f: ["-5,-1", "-1,-5", "t=-5,t=-1", "t=-1,t=-5"],
+            q2a: ["-11,-2", "-2,-11", "x=-11,x=-2", "x=-2,x=-11"],
+            q2b: ["-5,9", "9,-5", "p=-5,p=9", "p=9,p=-5"],
+            q2c: ["-1/2,-2", "-2,-1/2", "r=-1/2,r=-2", "r=-2,r=-1/2"],
+            q2d: ["-2/3,3", "3,-2/3", "d=-2/3,d=3", "d=3,d=-2/3"],
+            q2e: ["-5/3,5/3", "5/3,-5/3", "k=-5/3,k=5/3", "k=5/3,k=-5/3"],
+            q2f: ["7/2", "7/2,7/2", "q=7/2"],
+            q2g: ["1,2", "2,1", "s=1,s=2", "s=2,s=1"],
+            q2h: ["-3,3", "3,-3", "w=-3,w=3", "w=3,w=-3"]
+        };
+
+        function generateCCHTML(lt, lb, rt, rb, pt, pb, sum) {
+            return `
+            <div class="criss-cross-box">
+                <div class="matrix-grid">
+                    <div>${lt}</div>
+                    <div class="svg-intersection-container">
+                        <svg width="70" height="70" viewBox="0 0 70 70" style="overflow: visible;">
+                            <defs><marker id="arrowhead-cc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" /></marker></defs>
+                            <line x1="5" y1="10" x2="65" y2="60" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrowhead-cc)" />
+                            <line x1="5" y1="60" x2="65" y2="10" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrowhead-cc)" />
+                        </svg>
+                    </div>
+                    <div>${rt}</div> <div class="grid-arrow-label">&rarr;</div> <div>${pt}</div>
+                    <div>${lb}</div> <div>${rb}</div> <div class="grid-arrow-label">&rarr;</div> <div>${pb}</div>
+                    <div class="matrix-total-line"><strong>Sum Verification:</strong> (${pt}) + (${pb}) = <strong>${sum}</strong> (Matches Middle Term)</div>
+                </div>
+            </div>`;
+        }
+
+        const problemDataPack = {
+            q1a: { title: "Question 1a", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( x(x + 4) = 0 \\)", steps: [
+                { title: "Step 1: Apply the Zero Product Property", math: "\\( x = 0 \\quad \\text{or} \\quad x + 4 = 0 \\)", explanation: "If two parts multiply to make zero, at least one part MUST be zero. Set each separated part equal to 0." },
+                { title: "Step 2: Solve the first part", math: "\\( x = 0 \\)", explanation: "The first part is already isolated, giving us our first root directly." },
+                { title: "Step 3: Solve the second part", math: "\\( x + 4 = 0 \\rightarrow x = -4 \\)", explanation: "For the second part, following reverse BEDMAS, subtract 4 from both sides to eliminate the positive constant +4 from the left side." },
+                { title: "Step 4: State final roots", math: "\\( x = 0 \\text{ and } x = -4 \\)", explanation: "The two valid roots are 0 and -4." }
+            ], ans_box: "0, -4" },
+
+            q1b: { title: "Question 1b", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( (y - 3)(y + 2) = 0 \\)", steps: [
+                { title: "Step 1: Apply the Zero Product Property", math: "\\( y - 3 = 0 \\quad \\text{or} \\quad y + 2 = 0 \\)", explanation: "If two parts multiply to make zero, at least one part MUST be zero. Split the factors into two separate equations." },
+                { title: "Step 2: Solve the first equation", math: "\\( y - 3 = 0 \\rightarrow y = 3 \\)", explanation: "Following reverse BEDMAS, add 3 to both sides to eliminate the negative constant -3 from the left side." },
+                { title: "Step 3: Solve the second equation", math: "\\( y + 2 = 0 \\rightarrow y = -2 \\)", explanation: "Following reverse BEDMAS, subtract 2 from both sides to eliminate the positive constant +2 from the left side." },
+                { title: "Step 4: State final roots", math: "\\( y = 3 \\text{ and } y = -2 \\)", explanation: "The two valid roots are 3 and -2." }
+            ], ans_box: "3, -2" },
+
+            q1c: { title: "Question 1c", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( (k - 9)(2k + 7) = 0 \\)", steps: [
+                { title: "Step 1: Apply the Zero Product Property", math: "\\( k - 9 = 0 \\quad \\text{or} \\quad 2k + 7 = 0 \\)", explanation: "If two parts multiply to make zero, at least one part MUST be zero." },
+                { title: "Step 2: Solve the first equation", math: "\\( k - 9 = 0 \\rightarrow k = 9 \\)", explanation: "Following reverse BEDMAS, add 9 to both sides to eliminate the negative constant -9 from the left side." },
+                { title: "Step 3: Solve the second equation (Isolate constant)", math: "\\( 2k + 7 = 0 \\rightarrow 2k = -7 \\)", explanation: "Following reverse BEDMAS, we address addition first. Subtract 7 from both sides to eliminate the positive constant +7 from the left side." },
+                { title: "Step 4: Solve the second equation (Isolate variable)", math: "\\( k = -\\frac{7}{2} \\)", explanation: "Next, address the multiplication. Divide both sides by the coefficient 2 to completely isolate the 'k' variable." },
+                { title: "Step 5: State final roots", math: "\\( k = 9 \\text{ and } k = -\\frac{7}{2} \\)", explanation: "The two valid roots are 9 and -7/2." }
+            ], ans_box: "9, -7/2" },
+
+            q1d: { title: "Question 1d", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( (3m + 1)(2m - 5) = 0 \\)", steps: [
+                { title: "Step 1: Apply the Zero Product Property", math: "\\( 3m + 1 = 0 \\quad \\text{or} \\quad 2m - 5 = 0 \\)", explanation: "If two parts multiply to make zero, at least one part MUST be zero. Set each bracketed factor to 0." },
+                { title: "Step 2: Solve the first equation", math: "\\( 3m + 1 = 0 \\rightarrow 3m = -1 \\rightarrow m = -\\frac{1}{3} \\)", explanation: "Following reverse BEDMAS, subtract 1 from both sides to eliminate +1. Then, divide both sides by 3 to isolate 'm'." },
+                { title: "Step 3: Solve the second equation", math: "\\( 2m - 5 = 0 \\rightarrow 2m = 5 \\rightarrow m = \\frac{5}{2} \\)", explanation: "Following reverse BEDMAS, add 5 to both sides to eliminate -5. Then, divide both sides by 2 to isolate 'm'." },
+                { title: "Step 4: State final roots", math: "\\( m = -\\frac{1}{3} \\text{ and } m = \\frac{5}{2} \\)", explanation: "The valid roots are -1/3 and 5/2." }
+            ], ans_box: "-1/3, 5/2" },
+
+            q1e: { title: "Question 1e", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( (3g + 12)(11g - 23) = 0 \\)", steps: [
+                { title: "Step 1: Apply the Zero Product Property", math: "\\( 3g + 12 = 0 \\quad \\text{or} \\quad 11g - 23 = 0 \\)", explanation: "Set each individual factored piece to zero because their product is zero." },
+                { title: "Step 2: Solve the first equation", math: "\\( 3g + 12 = 0 \\rightarrow 3g = -12 \\rightarrow g = -4 \\)", explanation: "Following reverse BEDMAS, subtract 12 from both sides to eliminate +12. Then divide by 3 to isolate 'g'." },
+                { title: "Step 3: Solve the second equation", math: "\\( 11g - 23 = 0 \\rightarrow 11g = 23 \\rightarrow g = \\frac{23}{11} \\)", explanation: "Following reverse BEDMAS, add 23 to both sides to eliminate -23. Then divide by 11 to isolate 'g'." },
+                { title: "Step 4: State final roots", math: "\\( g = -4 \\text{ and } g = \\frac{23}{11} \\)", explanation: "The valid fractional and integer roots are -4 and 23/11." }
+            ], ans_box: "-4, 23/11" },
+
+            q1f: { title: "Question 1f", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( (3t + 3)(t + 5) = 0 \\)", steps: [
+                { title: "Step 1: Apply the Zero Product Property", math: "\\( 3t + 3 = 0 \\quad \\text{or} \\quad t + 5 = 0 \\)", explanation: "Separate the brackets into two independent zero-equations." },
+                { title: "Step 2: Solve the first equation", math: "\\( 3t + 3 = 0 \\rightarrow 3t = -3 \\rightarrow t = -1 \\)", explanation: "Following reverse BEDMAS, subtract 3 from both sides to eliminate +3, then divide by 3 to isolate 't'." },
+                { title: "Step 3: Solve the second equation", math: "\\( t + 5 = 0 \\rightarrow t = -5 \\)", explanation: "Following reverse BEDMAS, subtract 5 from both sides to eliminate +5 and isolate 't'." },
+                { title: "Step 4: State final roots", math: "\\( t = -1 \\text{ and } t = -5 \\)", explanation: "The valid roots are -1 and -5." }
+            ], ans_box: "-1, -5" },
+
+            q2a: { title: "Question 2a", hasMethodToggle: true, fullStatement: "Find the roots of the equation:<br><br>\\( x^2 + 13x + 22 = 0 \\)", steps: [
+                { cls: "ps-only", title: "Step 1 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = 22 \\quad \\text{and} \\quad r + s = 13 \\)", explanation: "Search for exactly two integers that multiply to the constant term (22) and simultaneously add up to the middle coefficient (13)." },
+                { cls: "ps-only", title: "Step 2: Evaluate Combinations", math: "\\( 11 \\times 2 = 22 \\quad \\text{and} \\quad 11 + 2 = 13 \\)", explanation: "Evaluating number pairs reveals that 11 and 2 satisfy both conditions." },
+                { cls: "cc-only", title: "Step 1 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('x', 'x', '+11', '+2', '+11x', '+2x', '+13x'), explanation: "1. Break down the leading term (x²) vertically.<br>2. Break down the constant term (+22) vertically.<br>3. Cross-multiply. The sum must match the middle term (+13x)." },
+                { title: "Step 3: Group into Binomial Factors", math: "\\( (x + 11)(x + 2) = 0 \\)", explanation: "Assemble the binomial factors." },
+                { title: "Step 4: Apply the Zero Product Property", math: "\\( x + 11 = 0 \\rightarrow x = -11 \\quad \\text{or} \\quad x + 2 = 0 \\rightarrow x = -2 \\)", explanation: "If two parts multiply to make zero, at least one part MUST be zero. Subtract 11 or 2 from both sides to find the roots." }
+            ], ans_box: "-11, -2" },
+
+            q2b: { title: "Question 2b", hasMethodToggle: true, fullStatement: "Find the roots of the equation:<br><br>\\( p^2 - 4p - 45 = 0 \\)", steps: [
+                { cls: "ps-only", title: "Step 1 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = -45 \\quad \\text{and} \\quad r + s = -4 \\)", explanation: "Search for exactly two integers that multiply to the constant term (-45) and simultaneously add up to the middle coefficient (-4)." },
+                { cls: "ps-only", title: "Step 2: Evaluate Combinations", math: "\\( (-9) \\times 5 = -45 \\quad \\text{and} \\quad (-9) + 5 = -4 \\)", explanation: "Evaluating number pairs reveals that -9 and 5 satisfy both conditions." },
+                { cls: "cc-only", title: "Step 1 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('p', 'p', '-9', '+5', '-9p', '+5p', '-4p'), explanation: "1. Break down the leading term (p²) vertically.<br>2. Break down the constant term (-45) vertically.<br>3. Cross-multiply. The sum must match the middle term (-4p)." },
+                { title: "Step 3: Group into Binomial Factors", math: "\\( (p - 9)(p + 5) = 0 \\)", explanation: "Assemble the binomial factors." },
+                { title: "Step 4: Apply the Zero Product Property", math: "\\( p - 9 = 0 \\rightarrow p = 9 \\quad \\text{or} \\quad p + 5 = 0 \\rightarrow p = -5 \\)", explanation: "Set each bracket to zero. Add 9 or subtract 5 from both sides to find the roots." }
+            ], ans_box: "9, -5" },
+
+            q2c: { title: "Question 2c", hasMethodToggle: true, fullStatement: "Find the roots of the equation:<br><br>\\( 2r^2 + 5r + 2 = 0 \\)", steps: [
+                { cls: "ps-only", title: "Step 1 (Decomposition): Target Product", math: "\\( a \\times c = 2 \\times 2 = 4 \\)", explanation: "Multiply the 'a' and 'c' terms together to find the target product." },
+                { cls: "ps-only", title: "Step 2 (Decomposition): Find Target Numbers", math: "\\( r_1 \\times s_1 = 4 \\quad \\text{and} \\quad r_1 + s_1 = 5 \\)", explanation: "Find two numbers that multiply to 4 and add to 5. The numbers are 4 and 1." },
+                { cls: "ps-only", title: "Step 3 (Decomposition): Decompose Middle Term", math: "\\( 2r^2 + 4r + 1r + 2 = 0 \\)", explanation: "Split the middle term (5r) into 4r and 1r." },
+                { cls: "ps-only", title: "Step 4 (Decomposition): Factor by Grouping", math: "\\( 2r(r + 2) + 1(r + 2) = 0 \\)", explanation: "Pull out the Greatest Common Factor (GCF) from the first pair, and the GCF from the second pair." },
+                { cls: "cc-only", title: "Step 1 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('2r', 'r', '+1', '+2', '+1r', '+4r', '+5r'), explanation: "1. Break down the leading term (2r²) vertically.<br>2. Break down the constant term (+2) vertically.<br>3. Cross-multiply. The sum must match the middle term (+5r)." },
+                { title: "Step 5: Group into Binomial Factors", math: "\\( (r + 2)(2r + 1) = 0 \\)", explanation: "Group the factors." },
+                { title: "Step 6: Apply the Zero Product Property", math: "\\( r + 2 = 0 \\rightarrow r = -2 \\quad \\text{or} \\quad 2r + 1 = 0 \\rightarrow r = -\\frac{1}{2} \\)", explanation: "Set each part to 0. For the second part, subtract 1 to eliminate +1, then divide by 2." }
+            ], ans_box: "-2, -1/2" },
+
+            q2d: { title: "Question 2d", hasMethodToggle: true, fullStatement: "Find the roots of the equation:<br><br>\\( 3d^2 - 7d - 6 = 0 \\)", steps: [
+                { cls: "ps-only", title: "Step 1 (Decomposition): Target Product", math: "\\( a \\times c = 3 \\times (-6) = -18 \\)", explanation: "Multiply the 'a' and 'c' terms together to find the target product." },
+                { cls: "ps-only", title: "Step 2 (Decomposition): Find Target Numbers", math: "\\( r_1 \\times s_1 = -18 \\quad \\text{and} \\quad r_1 + s_1 = -7 \\)", explanation: "Find two numbers that multiply to -18 and add to -7. The numbers are -9 and 2." },
+                { cls: "ps-only", title: "Step 3 (Decomposition): Decompose Middle Term", math: "\\( 3d^2 - 9d + 2d - 6 = 0 \\)", explanation: "Split the middle term (-7d) into -9d and +2d." },
+                { cls: "ps-only", title: "Step 4 (Decomposition): Factor by Grouping", math: "\\( 3d(d - 3) + 2(d - 3) = 0 \\)", explanation: "Pull out the GCF from the first pair, and the GCF from the second pair." },
+                { cls: "cc-only", title: "Step 1 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('3d', 'd', '+2', '-3', '+2d', '-9d', '-7d'), explanation: "1. Break down the leading term (3d²) vertically.<br>2. Break down the constant term (-6) vertically.<br>3. Cross-multiply. The sum must match the middle term (-7d)." },
+                { title: "Step 5: Group into Binomial Factors", math: "\\( (d - 3)(3d + 2) = 0 \\)", explanation: "Group the factors." },
+                { title: "Step 6: Apply the Zero Product Property", math: "\\( d - 3 = 0 \\rightarrow d = 3 \\quad \\text{or} \\quad 3d + 2 = 0 \\rightarrow d = -\\frac{2}{3} \\)", explanation: "Set each piece to zero. For the second piece, subtract 2 from both sides to eliminate +2, then divide by 3." }
+            ], ans_box: "3, -2/3" },
+
+            q2e: { title: "Question 2e", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( 9k^2 - 25 = 0 \\)", steps: [
+                { title: "Step 1: Identify Difference of Squares", math: "\\( (3k)^2 - (5)^2 = 0 \\)", explanation: "Recognize that both terms are perfect squares separated by a minus sign. This is a special factoring case." },
+                { title: "Step 2: Write the factored equation", math: "\\( (3k - 5)(3k + 5) = 0 \\)", explanation: "The difference of squares always factors into (a - b)(a + b)." },
+                { title: "Step 3: Apply the Zero Product Property", math: "\\( 3k - 5 = 0 \\quad \\text{or} \\quad 3k + 5 = 0 \\)", explanation: "Split into two separate zero-equations." },
+                { title: "Step 4: Solve the first equation", math: "\\( 3k = 5 \\rightarrow k = \\frac{5}{3} \\)", explanation: "Add 5 to both sides to eliminate -5, then divide by 3." },
+                { title: "Step 5: Solve the second equation", math: "\\( 3k = -5 \\rightarrow k = -\\frac{5}{3} \\)", explanation: "Subtract 5 from both sides to eliminate +5, then divide by 3." }
+            ], ans_box: "5/3, -5/3" },
+
+            q2f: { title: "Question 2f", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( 4q^2 - 28q + 49 = 0 \\)", steps: [
+                { title: "Step 1: Identify Perfect Square Trinomial", math: "\\( (2q)^2 - 2(2q)(7) + (7)^2 = 0 \\)", explanation: "Notice that the first and last terms are perfect squares, and the middle term is exactly 2 * a * b. This implies a special factored form." },
+                { title: "Step 2: Write the factored equation", math: "\\( (2q - 7)^2 = 0 \\)", explanation: "Factor the expression into a single squared binomial." },
+                { title: "Step 3: Apply the Zero Product Property", math: "\\( 2q - 7 = 0 \\)", explanation: "Because the binomial is squared (multiplying by itself), we only have one unique root to solve." },
+                { title: "Step 4: Solve for q", math: "\\( 2q = 7 \\rightarrow q = \\frac{7}{2} \\)", explanation: "Add 7 to both sides to eliminate the -7 constant, then divide by 2 to isolate 'q'." }
+            ], ans_box: "7/2" },
+
+            q2g: { title: "Question 2g", hasMethodToggle: true, fullStatement: "Find the roots of the equation:<br><br>\\( 7s^2 - 21s + 14 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Greatest Common Factor", math: "\\( 7(s^2 - 3s + 2) = 0 \\)", explanation: "Always check for a common divisor first. We can divide all terms by 7 and pull it outside the brackets." },
+                { cls: "ps-only", title: "Step 2 (Product & Sum): Find Target Coefficients", math: "\\( r \\times s = 2 \\quad \\text{and} \\quad r + s = -3 \\)", explanation: "Find two integers that multiply to the constant term (2) and simultaneously add up to the middle coefficient (-3)." },
+                { cls: "ps-only", title: "Step 3: Evaluate Combinations", math: "\\( (-2) \\times (-1) = 2 \\quad \\text{and} \\quad (-2) + (-1) = -3 \\)", explanation: "Evaluating number pairs reveals that -2 and -1 satisfy both conditions." },
+                { cls: "cc-only", title: "Step 2 (Criss-Cross): Set Up Intersecting Vector Matrix", math: generateCCHTML('s', 's', '-2', '-1', '-2s', '-1s', '-3s'), explanation: "Factor the inner trinomial using the matrix method." },
+                { title: "Step 4: Group into Binomial Factors", math: "\\( 7(s - 2)(s - 1) = 0 \\)", explanation: "Assemble the binomial factors." },
+                { title: "Step 5: Apply the Zero Product Property", math: "\\( s - 2 = 0 \\rightarrow s = 2 \\quad \\text{or} \\quad s - 1 = 0 \\rightarrow s = 1 \\)", explanation: "The leading 7 does not affect the roots. Set each bracket to zero. Add 2 or 1 to both sides to find the roots." }
+            ], ans_box: "2, 1" },
+
+            q2h: { title: "Question 2h", hasMethodToggle: false, fullStatement: "Find the roots of the equation:<br><br>\\( 5w^2 - 45 = 0 \\)", steps: [
+                { title: "Step 1: Extract the Greatest Common Factor", math: "\\( 5(w^2 - 9) = 0 \\)", explanation: "Divide both terms by the common factor of 5." },
+                { title: "Step 2: Identify Difference of Squares", math: "\\( 5(w - 3)(w + 3) = 0 \\)", explanation: "The inner term (w² - 9) is a classic difference of squares pattern. Factor it completely." },
+                { title: "Step 3: Apply the Zero Product Property", math: "\\( w - 3 = 0 \\rightarrow w = 3 \\quad \\text{or} \\quad w + 3 = 0 \\rightarrow w = -3 \\)", explanation: "Set each bracket to zero. Add or Subtract 3 from both sides to find the valid roots." }
+            ], ans_box: "3, -3" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false, selectedMethod: 'ps' };
+        });
+
+        let activeQuestionId = "";
+        let currentMethod = 'ps';
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            document.getElementById("method-toggle-bar").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const numInput = document.getElementById("numeric-student-input");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            currentMethod = state.selectedMethod || 'ps';
+            document.getElementById("mode-ps").classList.toggle("active", currentMethod === 'ps');
+            document.getElementById("mode-cc").classList.toggle("active", currentMethod === 'cc');
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            numInput.value = state.textInputVal;
+            
+            numInput.oninput = function() {
+                state.textInputVal = numInput.value;
+            };
+
+            if (state.answered) {
+                numInput.disabled = true;
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                numInput.disabled = false;
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                questionStates[activeQuestionId].textInputVal = txtInput.value;
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            let rawVal = state.textInputVal;
+            let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+            
+            const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+            let matchingCorrect = possibleAnswers.includes(normalizedInput);
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_3",
+                lessonId: "Lesson_2",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawVal,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "Factoring Method Algebra",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                let stepClass = step.cls ? `step-block ${step.cls}` : "step-block";
+                html += `
+                <div class="${stepClass}" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            if (data.hasMethodToggle) {
+                document.getElementById("method-toggle-bar").style.display = "flex";
+            } else {
+                document.getElementById("method-toggle-bar").style.display = "none";
+            }
+
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            const allSteps = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            allSteps.forEach(step => step.style.display = 'none');
+            
+            visibleStepElements = allSteps.filter(step => {
+                if (currentMethod === 'ps' && step.classList.contains('cc-only')) return false;
+                if (currentMethod === 'cc' && step.classList.contains('ps-only')) return false;
+                return true;
+            });
+
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function changeMethod(methodKey) {
+            if (currentMethod === methodKey) return;
+            currentMethod = methodKey;
+            questionStates[activeQuestionId].selectedMethod = methodKey;
+            questionStates[activeQuestionId].currentStep = 0;
+
+            document.getElementById("mode-ps").classList.toggle("active", methodKey === 'ps');
+            document.getElementById("mode-cc").classList.toggle("active", methodKey === 'cc');
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

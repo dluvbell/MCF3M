@@ -43,64 +43,41 @@
         header p {
             margin: 10px 0 0 0;
             font-size: 1.1rem;
-            color: #94a3b8;
+            opacity: 0.9;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        .course-overview {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .course-overview h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .unit-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-        }
-
-        @media (max-width: 600px) {
-            .unit-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         .unit-card {
             background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
             border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
             padding: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .unit-card:hover {
-            border-color: var(--secondary-color);
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #94a3b8;
         }
 
         .unit-card h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
+            margin: 0 0 15px 0;
+            font-size: 1.4rem;
             color: var(--primary-color);
-            font-size: 1.3rem;
-            font-weight: 700;
-            border-bottom: 2px solid var(--bg-color);
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 10px;
         }
 
@@ -112,101 +89,71 @@
 
         .lesson-item {
             margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .lesson-item:last-child {
-            margin-bottom: 0;
         }
 
         .lesson-link {
-            color: var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             text-decoration: none;
+            color: var(--secondary-color);
             font-weight: 600;
-            font-size: 1rem;
-            display: block;
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: 6px;
-            background-color: var(--bg-color);
-            transition: all 0.2s ease;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background-color: #eff6ff;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         .lesson-link:hover {
-            background-color: #eff6ff;
+            background-color: #dbeafe;
             color: #1d4ed8;
-            padding-left: 18px;
         }
 
         .lesson-link span {
-            color: var(--text-light);
-            font-weight: 400;
-            font-size: 0.9rem;
-            float: right;
-            margin-top: 2px;
+            font-size: 0.8rem;
+            background-color: #e2e8f0;
+            color: #475569;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>MCF3M Course Dashboard</h1>
-        <p>Grade 11 Functions and Applications &bull; Ontario Secondary School Curriculum</p>
+        <h1>MCF3M Course Portal</h1>
+        <p>Functions and Applications, Grade 11</p>
     </header>
 
     <div class="container">
-        
-        <div class="course-overview">
-            <h2>Course Tracking Instructions</h2>
-            <p>Welcome to the interactive workbook portal. Select a unit bucket below to open individual self-grading lesson modules. Ensure you fill out your <strong>First Name</strong> and <strong>Last Name</strong> fields accurately at the start of each assignment sequence to track performance entries to the teacher database.</p>
-        </div>
-
-        <div class="unit-grid">
+        <div class="grid">
             
-            <div class="unit-card">
-                <h3>Unit 0 Review</h3>
-                <ul class="lesson-list">
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%200%20Review/Lesson%201.html">Lesson 1: Simplifying Polynomials <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%200%20Review/Lesson%202.html">Lesson 2: GCF & Simple Trinomials <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%200%20Review/Lesson%203.html">Lesson 3: Grouping & Complex Trinomials <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%200%20Review/Lesson%204.html">Lesson 4: Special Products Factoring <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%200%20Review/Lesson%205.html">Lesson 5: Solving Literal Equations <span>Interactive</span></a></li>
-                </ul>
-            </div>
-
             <div class="unit-card">
                 <h3>Unit 1: Introduction to Functions</h3>
                 <ul class="lesson-list">
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%201%20HW%20HTML/Unit%201%20Lesson%201.html">Lesson 1: Relations & Functions <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%201%20HW%20HTML/Unit%201%20Lesson%202.html">Lesson 2: Function Notation <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%201%20HW%20HTML/Unit%201%20Lesson%203.html">Lesson 3: Domain & Range <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%201%20HW%20HTML/Unit%201%20Lesson%204.html">Lesson 4: Chapter Review & Practice Test <span>Interactive</span></a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit_1/Lesson_1.html">Lesson 1: What is a Function? <span>Locked</span></a></li>
                 </ul>
             </div>
 
             <div class="unit-card">
-                <h3>Unit 2: Quadratic Functions</h3>
+                <h3>Unit 2: Factoring Algebraic Expressions</h3>
                 <ul class="lesson-list">
-                    <li class="lesson-item"><a class="lesson-link" href="#">Lesson 1: Introduction to Quadratics <span>Locked</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%202.html">Lesson 2: Factoring Studio <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%203.html">Lesson 3: Horizontal & Vertical Translations <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%204.html">Lesson 4: Roles of a, h & k Parameters <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%205.html">Lesson 5: Vertex Form Analysis <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="#">Lesson 6: Standard Form vs Factored Form <span>Locked</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%207.html">Lesson 7: Forms & Conversions <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%208.html">Lesson 8: Completing the Square <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%209.html">Lesson 9: Converting Between Forms <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="#">Lesson 10: Quadratic Regression <span>Locked</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%2011.html">Lesson 11: Equations from Parabolic Graphs <span>Interactive</span></a></li>
-                    <li class="lesson-item"><a class="lesson-link" href="Unit%202%20HW%20HTML/Unit%202%20Lesson%2012.html">Lesson 12: Optimization Word Problems <span>Interactive</span></a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit_2/Lesson_11.html">Lesson 11: Special Cases <span>Locked</span></a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit_2/Lesson_12.html">Lesson 12: Factoring Review <span>Locked</span></a></li>
                 </ul>
             </div>
 
             <div class="unit-card">
                 <h3>Unit 3: Solving Quadratic Equations</h3>
                 <ul class="lesson-list">
-                    <li class="lesson-item"><a class="lesson-link" href="Unit_3/Lesson_1.html">Lesson 1: The Quadratic Formula <span>Locked</span></a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit 3 HW HTML/Unit 3 Lesson 1.html">Lesson 1: Solving Quadratic Equations</a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit 3 HW HTML/Unit 3 Lesson 2.html">Lesson 2: Solving by Factoring</a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit 3 HW HTML/Unit 3 Lesson 3.html">Lesson 3: The Quadratic Formula</a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit 3 HW HTML/Unit 3 Lesson 4.html">Lesson 4: The Discriminant & Real Roots</a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit 3 HW HTML/Unit 3 Lesson 5.html">Lesson 5: Solving Area Problems</a></li>
+                    <li class="lesson-item"><a class="lesson-link" href="Unit 3 HW HTML/Unit 3 Review.html">Review: Rearranging & Square Roots</a></li>
                 </ul>
             </div>
 

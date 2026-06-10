@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 5 Lesson 4 Sinusoidal Transformations Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-left: 5px solid #eab308;
+            line-height: 1.8;
+        }
+
+        .input-group-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .input-sub-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            background: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 5 Lesson 4</h1>
+        <p>Sinusoidal Transformations Studio Homework Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q2a_1">Question 2a-1: y = sin(x) + 6 Properties</option>
+                <option value="q2a_2">Question 2a-2: y = sin(x) - 6 Properties</option>
+                <option value="q3a_1">Question 3a-1: y = sin(x - 60°) Properties</option>
+                <option value="q3a_2">Question 3a-2: y = sin(x + 60°) Properties</option>
+                <option value="q3b_1">Question 3b-1: y = sin(x - 270°) Properties</option>
+                <option value="q3b_2">Question 3b-2: y = sin(x - 90°) Properties</option>
+                <option value="q5a">Question 5a: Function Expression Strategy 1</option>
+                <option value="q5b">Question 5b: Function Expression Strategy 2</option>
+                <option value="q5c">Question 5c: Function Expression Strategy 3</option>
+                <option value="q6a">Question 6a: Reflection and Shift Expression 1</option>
+                <option value="q6b">Question 6b: Reflection and Vertical Stretch Expression 2</option>
+                <option value="q6c">Question 6c: Horizontal Transformation Expression 3</option>
+                <option value="q9a">Question 9a: f(x) = 0.4 sin x Properties</option>
+                <option value="q9b">Question 9b: f(x) = -4 sin x Properties</option>
+                <option value="q9c">Question 9c: Curve Model Reconstruction 1</option>
+                <option value="q9d">Question 9d: Curve Model Reconstruction 2</option>
+                <option value="q9e">Question 9e: Curve Model Reconstruction 3</option>
+                <option value="q9f">Question 9f: Curve Model Reconstruction 4</option>
+                <option value="q10a">Question 10a: Multi-parameter System Shift 1</option>
+                <option value="q10b">Question 10b: Multi-parameter System Shift 2</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Fill in all calculated fields below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('(')">(</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(')')">)</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('{')">{</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('}')">}</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('|')">|</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('<')">&lt;</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('>')">&gt;</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('≤')">≤</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('≥')">?</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(':')">:</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('s')">s</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('i')">i</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('n')">n</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('c')">c</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('o')">o</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('x')">x</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('y')">y</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('r')">r</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('∈')">∈</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('+')">+</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            "q2a_1": ["360", "1", "y=6", "D:{x|x∈R}", "R:{y|5≤y≤7}"],
+            "q2a_2": ["360", "1", "y=-6", "D:{x|x∈R}", "R:{y|-7≤y≤-5}"],
+            "q3a_1": ["360", "1", "60right", "D:{x|x∈R}", "R:{y|-1≤y≤1}"],
+            "q3a_2": ["360", "1", "60left", "D:{x|x∈R}", "R:{y|-1≤y≤1}"],
+            "q3b_1": ["360", "1", "270right", "D:{x|x∈R}", "R:{y|-1≤y≤1}"],
+            "q3b_2": ["360", "1", "90right", "D:{x|x∈R}", "R:{y|-1≤y≤1}"],
+            "q5a": ["f(x)=sin(x)+3"],
+            "q5b": ["f(x)=2sin(x)"],
+            "q5c": ["f(x)=sin(x-90)"],
+            "q6a": ["f(x)=-sin(x)-3.5"],
+            "q6b": ["f(x)=-3sin(x)"],
+            "q6c": ["f(x)=sin(x+150)"],
+            "q9a": ["0,180,360", "(90,0.4)", "(270,-0.4)", "y=0", "D:{x|0≤x≤360}", "R:{y|-0.4≤y≤0.4}"],
+            "q9b": ["0,180,360", "(270,4)", "(90,-4)", "y=0", "D:{x|0≤x≤360}", "R:{y|-4≤y≤4}"],
+            "q9c": ["none", "(90,-4)", "(270,-6)", "y=-5", "D:{x|0≤x≤360}", "R:{y|-6≤y≤-4}"],
+            "q9d": ["none", "(90,9)", "(270,7)", "y=8", "D:{x|0≤x≤360}", "R:{y|7≤y≤9}"],
+            "q9e": ["45,225,405", "(135,1)", "(315,-1)", "y=0", "D:{x|45≤x≤405}", "R:{y|-1≤y≤1}"],
+            "q9f": ["-90,90,270", "(0,1)", "(180,-1)", "y=0", "D:{x|-90≤x≤270}", "R:{y|-1≤y≤1}"],
+            "q10a": ["360", "1", "none", "D:{x|x∈R}", "R:{y|-31≤y≤-29}", "y=-30"],
+            "q10b": ["360", "1", "30right", "D:{x|x∈R}", "R:{y|-1≤y≤1}", "y=0"]
+        };
+
+        const problemDataPack = {
+            "q2a_1": {
+                title: "Question 2a (Part 1)",
+                inputs: ["Period Length (°)", "Amplitude Value", "Equation of the Axis (y=...)", "Domain", "Range"],
+                fullStatement: "Find the key features for the function: \\( y = \\sin x + 6 \\). (Window: \\( 0^{\\circ} \\le x \\le 360^{\\circ} \\))",
+                hints: [
+                    "Hint 1: Look at the number in front of sine. There is no number, so the vertical multiplier is 1.",
+                    "Hint 2: Look at the +6 at the end. This lifts the entire center midline straight up by 6 rows.",
+                    "Hint 3: Sinusoidal waves spread horizontally with no breaks, so Domain uses real numbers.",
+                    "Hint 4: Range is bounded between the absolute floor and ceiling values."
+                ],
+                steps: [
+                    { title: "Step 1: Calculate the Period width", math: "\\text{Period} = 360^{\\circ}", explanation: "Look inside the brackets next to x. There is no frequency multiplier, which means k = 1. A full wave takes the default 360° to repeat." },
+                    { title: "Step 2: Find the Amplitude height", math: "\\text{Amplitude} = |a| = 1", explanation: "Look directly in front of the sine word. Since there is no number written there, it is an invisible 1. The wave rises and falls 1 step from its center line." },
+                    { title: "Step 3: Locate the Axis line", math: "y = 6", explanation: "Look at the +6 added at the very back. This shifts the central row of the wave up by 6 steps, so the center axis equation is y = 6." },
+                    { title: "Step 4: Form the Domain set", math: "\\text{Domain} = D:\\{x \\mid x \\in \\mathbb{R}\\}", explanation: "This wave travels infinitely to the left and to the right without stopping. Type D:{x|x∈R} with no spaces." },
+                    { title: "Step 5: Form the Range bound set", math: "\\text{Range} = R:\\{y \\mid 5 \\le y \\le 7\\}", explanation: "Take your center line (6) and move 1 step down to find the floor (5), and 1 step up to find the ceiling (7). Type R:{y|5<=y<=7} with no spaces." }
+                ]
+            },
+            "q2a_2": {
+                title: "Question 2a (Part 2)",
+                inputs: ["Period Length (°)", "Amplitude Value", "Equation of the Axis (y=...)", "Domain", "Range"],
+                fullStatement: "Find the key features for the function: \\( y = \\sin x - 6 \\). (Window: \\( 0^{\\circ} \\le x \\le 360^{\\circ} \\))",
+                hints: ["Hint 1: Look at the -6 at the end. This pulls the center line down by 6 rows."],
+                steps: [
+                    { title: "Step 1: Calculate the Period width", math: "\\text{Period} = 360^{\\circ}", explanation: "There is no frequency multiplier next to x, so the period stays at the standard 360°." },
+                    { title: "Step 2: Find the Amplitude height", math: "\\text{Amplitude} = 1", explanation: "The number in front of sine is an invisible 1, so the height of each wave loop is 1 step." },
+                    { title: "Step 3: Locate the Axis line", math: "y = -6", explanation: "The -6 at the back shifts the central horizontal line down by 6 steps, making it y = -6." },
+                    { title: "Step 4: Form the Domain set", math: "\\text{Domain} = D:\\{x \\mid x \\in \\mathbb{R}\\}", explanation: "The wave spreads out left and right forever. Enter D:{x|x∈R} with no spaces." },
+                    { title: "Step 5: Form the Range bound set", math: "\\text{Range} = R:\\{y \\mid -7 \\le y \\le -5\\}", explanation: "Start at the center line (-6). Go 1 step down to hit the floor (-7) and 1 step up to hit the ceiling (-5). Enter R:{y|-7<=y<=-5} with no spaces." }
+                ]
+            },
+            "q3a_1": {
+                title: "Question 3a (Part 1)",
+                inputs: ["Period Length (°)", "Amplitude Value", "Phase Shift (Format: 60right)", "Domain", "Range"],
+                fullStatement: "Find the key features for the function: \\( y = \\sin(x - 60^{\\circ}) \\).",
+                hints: ["Hint 1: Look inside the brackets. (x - 60°) means the entire wave slid rightward by 60°."],
+                steps: [
+                    { title: "Step 1: Calculate Period width", math: "\\text{Period} = 360^{\\circ}", explanation: "No horizontal parameter next to x inside means standard width 360° remains." },
+                    { title: "Step 2: Find Amplitude value", math: "\\text{Amplitude} = 1", explanation: "No number in front of sine means height is standard 1 unit." },
+                    { title: "Step 3: Track Phase Shift direction", math: "\\text{Shift} = 60^{\\circ} \\text{ right}", explanation: "The minus inside the brackets means the entire wave moves rightward by 60 degrees. Type 60right." },
+                    { title: "Step 4: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid x \\in \\mathbb{R}\\}", explanation: "Wave progression is horizontally endless. Type D:{x|x∈R}." },
+                    { title: "Step 5: Form Range set", math: "\\text{Range} = R:\\{y \\mid -1 \\le y \\le 1\\}", explanation: "No vertical baseline shift means standard range limits -1 and 1 apply. Type R:{y|-1<=y<=1}." }
+                ]
+            },
+            "q3a_2": {
+                title: "Question 3a (Part 2)",
+                inputs: ["Period Length (°)", "Amplitude Value", "Phase Shift (Format: 60left)", "Domain", "Range"],
+                fullStatement: "Find the key features for the function: \\( y = \\sin(x + 60^{\\circ}) \\).",
+                hints: ["Hint 1: A plus sign inside the bracket slots tells you the wave moved left side horizontally."],
+                steps: [
+                    { title: "Step 1: Calculate Period width", math: "\\text{Period} = 360^{\\circ}", explanation: "Cycle width is unaffected by the phase parameter, matching default 360°." },
+                    { title: "Step 2: Find Amplitude value", math: "\\text{Amplitude} = 1", explanation: "Loop height factor is default 1." },
+                    { title: "Step 3: Track Phase Shift direction", math: "\\text{Shift} = 60^{\\circ} \\text{ left}", explanation: "The plus sign inside indicates horizontal sliding leftward. Type 60left." },
+                    { title: "Step 4: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid x \\in \\mathbb{R}\\}", explanation: "Infinite domain maps to standard D:{x|x∈R} layout." },
+                    { title: "Step 5: Form Range set", math: "\\text{Range} = R:\\{y \\mid -1 \\le y \\le 1\\}", explanation: "Vertical boundary rows remain standard floor -1 and maximum point 1. Type R:{y|-1<=y<=1}." }
+                ]
+            },
+            "q3b_1": {
+                title: "Question 3b (Part 1)",
+                inputs: ["Period Length (°)", "Amplitude Value", "Phase Shift (Format: 270right)", "Domain", "Range"],
+                fullStatement: "Find the key features for the function: \\( y = \\sin(x - 270^{\\circ}) \\).",
+                hints: ["Hint 1: Minus 270 inside brackets tells you the whole wave slid right side by 270°."],
+                steps: [
+                    { title: "Step 1: Calculate Period width", math: "\\text{Period} = 360^{\\circ}", explanation: "Width parameter matches standard single wave loop cycle 360°." },
+                    { title: "Step 2: Find Amplitude value", math: "\\text{Amplitude} = 1", explanation: "Wave maximum point offset height is default 1 unit." },
+                    { title: "Step 3: Track Phase Shift direction", math: "\\text{Shift} = 270^{\\circ} \\text{ right}", explanation: "Negative sign shift indicates horizontal rightward displacement. Enter 270right." },
+                    { title: "Step 4: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid x \\in \\mathbb{R}\\}", explanation: "Infinite domain maps to standard D:{x|x∈R} layout." },
+                    { title: "Step 5: Form Range set", math: "\\text{Range} = R:\\{y \\mid -1 \\le y \\le 1\\}", explanation: "Vertical path ranges from floor -1 to maximum point 1. Type R:{y|-1<=y<=1}." }
+                ]
+            },
+            "q3b_2": {
+                title: "Question 3b (Part 2)",
+                inputs: ["Period Length (°)", "Amplitude Value", "Phase Shift (Format: 90right)", "Domain", "Range"],
+                fullStatement: "Find the key features for the function: \\( y = \\sin(x - 90^{\\circ}) \\).",
+                hints: ["Hint 1: Minus 90 means horizontal translation tracks rightward by 90°."],
+                steps: [
+                    { title: "Step 1: Calculate Period width", math: "\\text{Period} = 360^{\\circ}", explanation: "Frequency parameter stays standard, so cycle length is 360°." },
+                    { title: "Step 2: Find Amplitude value", math: "\\text{Amplitude} = 1", explanation: "Vertical loops reach 1 unit away from centerline." },
+                    { title: "Step 3: Track Phase Shift direction", math: "\\text{Shift} = 90^{\\circ} \\text{ right}", explanation: "Sliding right side gives a phase shift of 90right." },
+                    { title: "Step 4: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid x \\in \\mathbb{R}\\}", explanation: "Type formal domain bracket notation D:{x|x∈R}." },
+                    { title: "Step 5: Form Range set", math: "\\text{Range} = R:\\{y \\mid -1 \\le y \\le 1\\}", explanation: "Bounds are fixed between bottom -1 and top 1. Type R:{y|-1<=y<=1}." }
+                ]
+            },
+            "q5a": {
+                title: "Question 5a",
+                inputs: ["Equation f(x) = ..."],
+                fullStatement: "Build the function equation with: Amplitude = 1, Period = 360°, Vertical shift = up 3.",
+                hints: ["Hint 1: Use skeleton model template f(x) = a sin(x) + c. Replace a with 1 and c with 3."],
+                steps: [
+                    { title: "Step 1: Assemble formula skeleton", math: "f(x) = \\sin(x) + 3", explanation: "Put 1 in front of sine and add 3 at the end row. Enter f(x)=sin(x)+3 with no spaces." }
+                ]
+            },
+            "q5b": {
+                title: "Question 5b",
+                inputs: ["Equation f(x) = ..."],
+                fullStatement: "Build the function equation with: Amplitude = 2, Period = 360°, Vertical shift = none.",
+                hints: ["Hint 1: Change vertical stretch multiplier 'a' to match amplitude height."],
+                steps: [
+                    { title: "Step 1: Place height multiplier", math: "f(x) = 2\\sin(x)", explanation: "Amplitude is 2, so place 2 directly in front of sine word. Enter f(x)=2sin(x) with no spaces." }
+                ]
+            },
+            "q5c": {
+                title: "Question 5c",
+                inputs: ["Equation f(x) = ..."],
+                fullStatement: "Build the function equation with: Amplitude = 1, Period = 360°, Phase shift = right 90°.",
+                hints: ["Hint 1: Moving rightward means we subtract degrees inside brackets: (x - 90)."],
+                steps: [
+                    { title: "Step 1: Horizontal bracket assembly", math: "f(x) = \\sin(x - 90)", explanation: "Right shift translates into a negative internal parameter offset. Enter f(x)=sin(x-90) with no spaces." }
+                ]
+            },
+            "q6a": {
+                title: "Question 6a",
+                inputs: ["Equation f(x) = ..."],
+                fullStatement: "Build the function equation: Reflected in x-axis, Amplitude = 1, Vertical translation = down 3.5.",
+                hints: ["Hint 1: Reflection in the x-axis means you must put a minus sign (-) in front of sine."],
+                steps: [
+                    { title: "Step 1: Assemble negative reflection and shift constants", math: "f(x) = -\\sin(x) - 3.5", explanation: "Put a minus in front for reflection and subtract 3.5 at the end. Enter f(x)=-sin(x)-3.5 with no spaces." }
+                ]
+            },
+            "q6b": {
+                title: "Question 6b",
+                inputs: ["Equation f(x) = ..."],
+                fullStatement: "Build the function equation: Reflected in x-axis, Amplitude = 3, Vertical translation = none.",
+                hints: ["Hint 1: Combine negative reflection flip and height factor into a single front number."],
+                steps: [
+                    { title: "Step 1: Front multiplier setup", math: "f(x) = -3\\sin(x)", explanation: "Flip combined with amplitude scale yields a leading value of -3. Enter f(x)=-3sin(x) with no spaces." }
+                ]
+            },
+            "q6c": {
+                title: "Question 6c",
+                inputs: ["Equation f(x) = ..."],
+                fullStatement: "Build the function equation: Amplitude = 1, Phase shift = left 150°.",
+                hints: ["Hint 1: Sliding left side means you add inside the brackets: (x + 150)."],
+                steps: [
+                    { title: "Step 1: Phase shift layout setup", math: "f(x) = \\sin(x + 150)", explanation: "Leftward migration maps into an internal plus sign parameter. Enter f(x)=sin(x+150) with no spaces." }
+                ]
+            },
+            "q9a": {
+                title: "Question 9a: f(x) = 0.4 sin x Properties",
+                inputs: ["x-intercepts", "Maximum Point (x,y)", "Minimum Point (x,y)", "Equation of the Axis (y=...)", "Domain", "Range"],
+                fullStatement: "Extract one complete cycle features for the function: \\( f(x) = 0.4 \\sin x \\). (Window: \\( 0^{\\circ} \\le x \\le 360^{\\circ} \\))",
+                hints: ["Hint 1: Wave height scales to 0.4 loops. Max value is 0.4 and min value is -0.4."],
+                steps: [
+                    { title: "Step 1: Find x-intercepts", math: "x = 0, 180, 360", explanation: "The wave line touches the midline row lane at exactly 0, 180, and 360 columns. Type 0,180,360." },
+                    { title: "Step 2: Track Maximum Point", math: "(90, 0.4)", explanation: "The highest loop Maximum point coordinates map onto x=90, y=0.4. Enter (90,0.4)." },
+                    { title: "Step 3: Track Minimum Point", math: "(270, -0.4)", explanation: "The lowest minimum point coordinate matches x=270, y=-0.4. Enter (270,-0.4)." },
+                    { title: "Step 4: Identify Equation of the Axis", math: "y = 0", explanation: "No vertical baseline displacement constant is added at the back, meaning equilibrium remains at y = 0." },
+                    { title: "Step 5: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid 0 \\le x \\le 360\\}", explanation: "The analysis window limits inputs inside formal bracket layout: D:{x|0≤x≤360}." },
+                    { title: "Step 6: Form Range set", math: "\\text{Range} = R:\\{y \\mid -0.4 \\le y \\le 0.4\\}", explanation: "Outputs remain trapped between bottom depth -0.4 and top Maximum point 0.4. Type R:{y|-0.4≤y≤0.4}." }
+                ]
+            },
+            "q9b": {
+                title: "Question 9b: f(x) = -4 sin x Properties",
+                inputs: ["x-intercepts", "Maximum Point (x,y)", "Minimum Point (x,y)", "Equation of the Axis (y=...)", "Domain", "Range"],
+                fullStatement: "Extract one complete cycle features for the function: \\( f(x) = -4 \\sin x \\). (Window: \\( 0^{\\circ} \\le x \\le 360^{\\circ} \\))",
+                hints: ["Hint 1: The minus flips the wave, so it dips down first and goes up second. Maximum point happens at 270°."],
+                steps: [
+                    { title: "Step 1: Find x-intercepts", math: "x = 0, 180, 360", explanation: "The reflection flip does not shift the midline intersection columns. Enter 0,180,360." },
+                    { title: "Step 2: Track Maximum Point", math: "(270, 4)", explanation: "Due to the reflection flip, the wave rises to its Maximum point at the 270° column mark. Type (270,4)." },
+                    { title: "Step 3: Track Minimum Point", math: "(90, -4)", explanation: "The inverted파형 drops into the low minimum point early at the 90° mark. Type (90,-4)." },
+                    { title: "Step 4: Identify Equation of the Axis", math: "y = 0", explanation: "The midline stays stable along the horizontal origin lane line. Enter y = 0." },
+                    { title: "Step 5: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid 0 \\le x \\le 360\\}", explanation: "Type single wave boundary cycle limits: D:{x|0≤x≤360}." },
+                    { title: "Step 6: Form Range set", math: "\\text{Range} = R:\\{y \\mid -4 \\le y \\le 4\\}", explanation: "Outputs match vertical extremes from floor -4 to Maximum point 4. Type R:{y|-4≤y≤4}." }
+                ]
+            },
+            "q9c": {
+                title: "Question 9c: Curve Model Reconstruction 1",
+                inputs: ["x-intercepts", "Maximum Point (x,y)", "Minimum Point (x,y)", "Equation of the Axis (y=...)", "Domain", "Range"],
+                fullStatement: "Extract wave parameter features for Curve: \\( f(x) = \\sin x - 5 \\).",
+                hints: ["Hint 1: Vertical shift of -5 drops the central midline balance down to row -5."],
+                steps: [
+                    { title: "Step 1: Find x-intercepts", math: "\\text{none}", explanation: "The wave Maximum point only reaches up to row level -4, so it never crosses the x-axis line at all. Type none." },
+                    { title: "Step 2: Track Maximum Point", math: "(90, -4)", explanation: "Standard Maximum point height shifts down by 5 units: 1 - 5 = -4. Enter (90,-4)." },
+                    { title: "Step 3: Track Minimum Point", math: "(270, -6)", explanation: "Standard minimum point coordinate floor shifts down by 5 units: -1 - 5 = -6. Enter (270,-6)." },
+                    { title: "Step 4: Identify Equation of the Axis", math: "y = -5", explanation: "The -5 constant row parameter positions the axis layout precisely at level y = -5." },
+                    { title: "Step 5: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid 0 \\le x \\le 360\\}", explanation: "Type standard graph boundaries mapping: D:{x|0≤x≤360}." },
+                    { title: "Step 6: Form Range set", math: "\\text{Range} = R:\\{y \\mid -6 \\le y \\le -4\\}", explanation: "Outputs are locked from lowest floor -6 to highest row -4. Type R:{y|-6≤y<=-4}." }
+                ]
+            },
+            "q9d": {
+                title: "Question 9d: Curve Model Reconstruction 2",
+                inputs: ["x-intercepts", "Maximum Point (x,y)", "Minimum Point (x,y)", "Equation of the Axis (y=...)", "Domain", "Range"],
+                fullStatement: "Extract wave parameter features for Curve: \\( f(x) = \\sin x + 8 \\).",
+                hints: ["Hint 1: Shifts upwards straight to centerline row 8."],
+                steps: [
+                    { title: "Step 1: Find x-intercepts", math: "\\text{none}", explanation: "The entire wave is lifted high above the origin lane, so it never touches y=0. Enter none." },
+                    { title: "Step 2: Track Maximum Point", math: "(90, 9)", explanation: "Maximum point height moves up: 1 + 8 = 9. Type (90,9)." },
+                    { title: "Step 3: Track Minimum Point", math: "(270, 7)", explanation: "Minimum point floor moves up: -1 + 8 = 7. Type (270,7)." },
+                    { title: "Step 4: Identify Equation of the Axis", math: "y = 8", explanation: "The constant +8 vertical translation fixes the horizontal center midline at y = 8." },
+                    { title: "Step 5: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid 0 \\le x \\le 360\\}", explanation: "Type single cycle input constraints: D:{x|0≤x≤360}." },
+                    { title: "Step 6: Form Range set", math: "\\text{Range} = R:\\{y \\mid 7 \\le y \\le 9\\}", explanation: "Vertical output span ranges from 7 to 9. Type R:{y|7≤y≤9}." }
+                ]
+            },
+            "q9e": {
+                title: "Question 9e: Curve Model Reconstruction 3",
+                inputs: ["x-intercepts", "Maximum Point (x,y)", "Minimum Point (x,y)", "Equation of the Axis (y=...)", "Domain", "Range"],
+                fullStatement: "Extract wave parameter features for Curve: \\( f(x) = \\sin(x - 45^{\\circ}) \\).",
+                hints: ["Hint 1: Wave slides rightward by 45° horizontally."],
+                steps: [
+                    { title: "Step 1: Find x-intercepts", math: "45, 225, 405", explanation: "Standard zero crossings (0, 180, 360) are slid rightward by adding 45°: 45, 225, 405. Type 45,225,405." },
+                    { title: "Step 2: Track Maximum Point", math: "(135, 1)", explanation: "The standard 90° Maximum point column adds 45° phase shift offset, moving to column 135. Type (135,1)." },
+                    { title: "Step 3: Track Minimum Point", math: "(315, -1)", explanation: "The standard 270° minimum point column adds 45° phase shift offset, moving to column 315. Type (315,-1)." },
+                    { title: "Step 4: Identify Equation of the Axis", math: "y = 0", explanation: "Horizontal slide translations do not change vertical row alignment levels, keeping axis at y = 0." },
+                    { title: "Step 5: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid 45 \\le x \\le 405\\}", explanation: "The shifted single wave boundaries trace from column 45 to 405. Type D:{x|45≤x≤405}." },
+                    { title: "Step 6: Form Range set", math: "\\text{Range} = R:\\{y \\mid -1 \\le y \\le 1\\}", explanation: "Output boundaries stay standard: floor -1 to Maximum point 1. Type R:{y|-1≤y≤1}." }
+                ]
+            },
+            "q9f": {
+                title: "Question 9f: Curve Model Reconstruction 4",
+                inputs: ["x-intercepts", "Maximum Point (x,y)", "Minimum Point (x,y)", "Equation of the Axis (y=...)", "Domain", "Range"],
+                fullStatement: "Extract wave parameter features for Curve: \\( f(x) = \\sin(x + 90^{\\circ}) \\).",
+                hints: ["Hint 1: Shifts horizontally left side by 90°."],
+                steps: [
+                    { title: "Step 1: Find x-intercepts", math: "-90, 90, 270", explanation: "Standard zero positions shift leftward by subtracting 90°: -90, 90, 270. Type -90,90,270." },
+                    { title: "Step 2: Track Maximum Point", math: "(0, 1)", explanation: "Maximum point slides left: 90 - 90 = 0. Coordinate turns at (0,1)." },
+                    { title: "Step 3: Track Minimum Point", math: "(180, -1)", explanation: "Minimum point slides left: 270 - 90 = 180. Coordinate floor hits (180,-1)." },
+                    { title: "Step 4: Identify Equation of the Axis", math: "y = 0", explanation: "Equilibrium baseline remains at original horizontal lane level y = 0." },
+                    { title: "Step 5: Form Domain set", math: "\\text{Domain} = D:\\{x \\mid -90 \\le x \\le 270\\}", explanation: "The leftward cycle bounding framework sets columns from -90 to 270. Type D:{x|-90≤x≤270}." },
+                    { title: "Step 6: Form Range set", math: "\\text{Range} = R:\\{y \\mid -1 \\le y \\le 1\\}", explanation: "Inversion and stretch parameters are absent. Type R:{y|-1≤y≤1}." }
+                ]
+            },
+            "q10a": {
+                title: "Question 10a",
+                inputs: ["Period Length (°)", "Amplitude Value", "Phase Shift", "Domain", "Range", "Equation of the Axis (y=...)"],
+                fullStatement: "Analyze function formula properties: \\( y = \\sin x - 30 \\).",
+                hints: ["Hint 1: The trailing number drops the balance center straight down to row -30."],
+                steps: [
+                    { title: "Step 1: Calculate Period length", math: "\\text{Period} = 360", explanation: "No input parameter multiplier value changes frequency width, leaving standard 360." },
+                    { title: "Step 2: Find Amplitude value", math: "\\text{Amplitude} = 1", explanation: "Front vertical scale coefficient is default value 1." },
+                    { title: "Step 3: Identify Phase Shift", math: "\\text{Shift} = \\text{none}", explanation: "No additive shift constant parameters exist next to x inside, so enter none." },
+                    { title: "Step 4: Form Domain notation", math: "\\text{Domain} = D:\\{x \\mid x \\in \\mathbb{R}\\}", explanation: "Infinite left-to-right expansion implies format notation D:{x|x∈R}." },
+                    { title: "Step 5: Form Range bound set", math: "\\text{Range} = R:\\{y \\mid -31 \\le y \\le -29\\}", explanation: "With baseline axis at -30 and loop rise height of 1, output loops span from floor -31 to ceiling -29. Type R:{y|-31≤y≤-29}." },
+                    { title: "Step 6: Locate Equation of the Axis", math: "y = -30", explanation: "The back translation shifts the central centerline down to level y = -30." }
+                ]
+            },
+            "q10b": {
+                title: "Question 10b",
+                inputs: ["Period Length (°)", "Amplitude Value", "Phase Shift (Format: 30right)", "Domain", "Range", "Equation of the Axis (y=...)"],
+                fullStatement: "Analyze function formula properties: \\( y = \\sin(x - 30^{\\circ}) \\).",
+                hints: ["Hint 1: Minus 30 inside brackets slides the wave rightwards by 30°."],
+                steps: [
+                    { title: "Step 1: Calculate Period length", math: "\\text{Period} = 360", explanation: "Internal horizontal scaling factor k measures 1, keeping period 360." },
+                    { title: "Step 2: Find Amplitude value", math: "\\text{Amplitude} = 1", explanation: "Leading height factor coefficient is standard 1." },
+                    { title: "Step 3: Identify Phase Shift", math: "\\text{Shift} = 30^{\\circ} \\text{ right}", explanation: "Minus sign horizontal shift moves right side. Enter 30right." },
+                    { title: "Step 4: Form Domain notation", math: "\\text{Domain} = D:\\{x \\mid x \\in \\mathbb{R}\\}", explanation: "Continuous domain translates directly onto template expression D:{x|x∈R}." },
+                    { title: "Step 5: Form Range bound set", math: "\\text{Range} = R:\\{y \\mid -1 \\le y \\le 1\\}", explanation: "Vertical row parameters remain default floor -1 to Maximum point 1. Type R:{y|-1<=y<=1}." },
+                    { title: "Step 6: Locate Equation of the Axis", math: "y = 0", explanation: "The central baseline equilibrium stays at origin lane line row. Enter y = 0." }
+                ]
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let activeInputTarget = null;
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+        let activeQuestionId = "";
+        let currentMethod = "sin";
+
+        Object.keys(problemDataPack).forEach(key => {
+            let inputsCount = problemDataPack[key].inputs ? problemDataPack[key].inputs.length : 1;
+            questionStates[key] = {
+                answered: false,
+                inputValuesArray: Array(inputsCount).fill(""),
+                isCorrect: false,
+                currentStep: 0,
+                solRevealed: false,
+                hintClickCount: 0
+            };
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            document.getElementById("full-question-statement-card").innerHTML = activeProblem.fullStatement;
+
+            const state = questionStates[activeQuestionId];
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div>• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+            }
+
+            let mountHTML = "";
+            let fieldLabels = activeProblem.inputs || ["Function Equation Model Input"];
+            
+            fieldLabels.forEach((labelTxt, index) => {
+                mountHTML += `
+                <div class="input-group-wrapper">
+                    <span class="input-sub-label">${labelTxt}:</span>
+                    <input type="text" class="student-answer-input sub-field-box" data-index="${index}" autocomplete="off" onfocus="setActiveInputTarget(this)">
+                </div>`;
+            });
+            inputMount.innerHTML = mountHTML;
+
+            const generatedFields = inputMount.querySelectorAll(".sub-field-box");
+            generatedFields.forEach((field, idx) => {
+                field.value = state.inputValuesArray[idx] || "";
+                field.oninput = function() {
+                    if (!state.answered) {
+                        state.inputValuesArray[idx] = field.value;
+                    }
+                };
+            });
+
+            if (generatedFields.length > 0) activeInputTarget = generatedFields[0];
+
+            if (state.answered) {
+                generatedFields.forEach(f => f.disabled = true);
+                if (state.correctFieldFlags) {
+                    renderPostAnswerHighlights(state.correctFieldFlags);
+                }
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                generatedFields.forEach(f => f.disabled = false);
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function setActiveInputTarget(element) {
+            activeInputTarget = element;
+        }
+
+        function pressStandardNumericKey(symbol) {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            let idx = parseInt(activeInputTarget.getAttribute("data-index"));
+            questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                let idx = parseInt(activeInputTarget.getAttribute("data-index"));
+                questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (data.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${data.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All hints for this workbook have been fully unlocked.");
+            }
+        }
+
+        function cleanToken(str) {
+            return str.replace(/\s+/g, '').toLowerCase()
+                      .replace(/<=/g, '≤').replace(/>=/g, '≥')
+                      .replace(/e/g, '∈')
+                      .replace(/^y=/g, '')
+                      .replace(/^f\(x\)=/g, '');
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const expectedArray = answerRegistry[activeQuestionId];
+            
+            let earnedPointsThisQuestion = 0;
+            let correctFlags = [];
+
+            for (let i = 0; i < expectedArray.length; i++) {
+                let userFieldVal = cleanToken(state.inputValuesArray[i] || "");
+                let targetExpectedVal = cleanToken(expectedArray[i] || "");
+
+                if (userFieldVal === targetExpectedVal) {
+                    earnedPointsThisQuestion++;
+                    correctFlags.push(true);
+                } else {
+                    correctFlags.push(false);
+                }
+            }
+
+            state.answered = true;
+            state.correctFieldFlags = correctFlags;
+            state.isCorrect = (earnedPointsThisQuestion === expectedArray.length);
+
+            globalAttempts++;
+            globalScore += earnedPointsThisQuestion;
+            updateHudScoreboard();
+
+            renderPostAnswerHighlights(correctFlags);
+            lockQuizInterface(state.isCorrect);
+
+            let payload = {
+                unitId: "Unit_5",      
+                lessonId: "Lesson_4",  
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: state.inputValuesArray.join(" | "),
+                isCorrect: state.isCorrect,
+                earnedScore: earnedPointsThisQuestion,
+                maxScorePossible: expectedArray.length,
+                attempts: 1,
+                methodUsed: "Sinusoidal Partial Score Extraction Engine",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function renderPostAnswerHighlights(flags) {
+            const inputFields = document.getElementById("dynamic-input-mount-point").querySelectorAll(".sub-field-box");
+            inputFields.forEach((field, idx) => {
+                field.disabled = true;
+                if (flags[idx]) {
+                    field.style.border = "2px solid var(--success-color)";
+                    field.style.backgroundColor = "#f0fdf4";
+                } else {
+                    field.style.border = "2px solid var(--error-color)";
+                    field.style.backgroundColor = "#fef2f2";
+                }
+            });
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database link transmission failure bypassed:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Perfect! All features verified successfully.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Some features contain calculated discrepancies. Review highlighted fields and unlock solution steps.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = answerRegistry[activeQuestionId].join(", ");
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Workbook Verification Reference Key Matchers</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>

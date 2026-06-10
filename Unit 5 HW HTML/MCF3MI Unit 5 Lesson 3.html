@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 5 Lesson 3 Sinusoidal Transformations Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --matrix-bg: #f8fafc;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .method-toggle-container {
+            display: none;
+            background-color: #e2e8f0;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .method-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-left: 5px solid #eab308;
+            line-height: 1.8;
+        }
+
+        .input-group-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .input-sub-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        .student-answer-input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.15s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .math-rule {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 0;
+            display: block;
+            border-left: 4px solid #eab308;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: block;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 5 Lesson 3 Sinusoidal Transformations Studio</h1>
+        <p>Interactive Homework Diagnostics & Dynamic Function Modeler</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Question Tracker Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1">Question 1: Sketching Sine Wave Dilations [Not Scored]</option>
+                <option value="q5b">Question 5b: Write Equation from Upward Wave Graph</option>
+                <option value="q6b">Question 6b: Write Equation from Downward Wave Graph</option>
+                <option value="q7">Question 7: Key Extrema Points on y = 2 sin x [Not Scored]</option>
+                <option value="q9">Question 9: One Cycle Graph Attribute Mapping [Not Scored]</option>
+                <option value="q11a">Question 11a: Coordinates of Max/Min for y = sin x</option>
+                <option value="q11b">Question 11b: Coordinates of Max/Min for y = sin x + 12</option>
+                <option value="q11c">Question 11c: Coordinates of Max/Min for y = -10 sin x</option>
+                <option value="q11d">Question 11d: Coordinates of Max/Min for y = sin(x - 60°)</option>
+                <option value="q13a">Question 13a: Equations and Monotonicity Intervals</option>
+                <option value="q14">Question 14: Physiotherapist Exercise Bicycle Application</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework tracking module element from the selector layout list above to initialize validation workspace.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <div id="dynamic-input-mount-point" style="margin-top: 10px; margin-bottom: 20px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressMathKey('s')">s</button>
+                    <button class="math-key" onclick="pressMathKey('i')">i</button>
+                    <button class="math-key" onclick="pressMathKey('n')">n</button>
+                    <button class="math-key" onclick="pressMathKey('c')">c</button>
+                    <button class="math-key" onclick="pressMathKey('o')">o</button>
+                    <button class="math-key" onclick="pressMathKey('s')">s</button>
+                    <button class="math-key" onclick="pressMathKey('(')">(</button>
+                    <button class="math-key" onclick="pressMathKey(')')">)</button>
+                    <button class="math-key" onclick="pressMathKey('+')">+</button>
+                    <button class="math-key" onclick="pressMathKey('-')">-</button>
+                    <button class="math-key" onclick="pressMathKey('≤')">?</button>
+                    <button class="math-key" onclick="pressMathKey('≥')">?</button>
+                    <button class="math-key" onclick="pressMathKey(',')">,</button>
+                    <button class="math-key" onclick="pressMathKey('x')">x</button>
+                    <button class="math-key" onclick="pressMathKey('1')">1</button>
+                    <button class="math-key" onclick="pressMathKey('2')">2</button>
+                    <button class="math-key" onclick="pressMathKey('3')">3</button>
+                    <button class="math-key" onclick="pressMathKey('4')">4</button>
+                    <button class="math-key" onclick="pressMathKey('5')">5</button>
+                    <button class="math-key" onclick="pressMathKey('6')">6</button>
+                    <button class="math-key" onclick="pressMathKey('7')">7</button>
+                    <button class="math-key" onclick="pressMathKey('8')">8</button>
+                    <button class="math-key" onclick="pressMathKey('9')">9</button>
+                    <button class="math-key" onclick="pressMathKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="method-toggle-container" id="method-toggle-bar">
+                <button class="method-btn active" id="mode-sin" onclick="changeMethod('sin')">Sine Function Model</button>
+                <button class="method-btn" id="mode-cos" onclick="changeMethod('cos')">Cosine Function Model</button>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            "q5b": [["2sinx", "2sin(x)", "+2sinx", "+2sin(x)"], ["2cos(x-90)", "2cos(x-90°)", "-2cos(x+90)"]],
+            "q6b": [["-3sinx", "-3sin(x)"], ["3cos(x+90)", "3cos(x+90°)", "-3cos(x-90)"]],
+            "q11a": [["(90,1)", "(90°,1)"], ["(270,-1)", "(270°,-1)"]],
+            "q11b": [["(90,13)", "(90°,13)"], ["(270,11)", "(270°,11)"]],
+            "q11c": [["(270,10)", "(270°,10)"], ["(90,-10)", "(90°,-10)"]],
+            "q11d": [["(150,1)", "(150°,1)"], ["(330,-1)", "(330°,-1)"]],
+            "q13a": [["10sinx", "10sin(x)"], ["0≤x≤90", "0°≤x≤90°"], ["270≤x≤360", "270°≤x≤360°"], ["90≤x≤270", "90°≤x≤270°"]],
+            "q14": [["360", "360°"], ["15", "15cm"], ["0", "0°"], ["15sinx", "15sin(x)"]]
+        };
+
+        const problemDataPack = {
+            q1: {
+                title: "Question 1", isUnscored: true,
+                fullStatement: "Sketch a graph of each function for \\( 0^{\\circ} \\le x \\le 360^{\\circ} \\). Determine the period, amplitude, domain, and range.<br><br><b>a)</b> \\( y = 6 \\sin x \\)<br><b>b)</b> \\( y = \\frac{1}{3} \\sin x \\)<br><b>c)</b> \\( y = -2 \\sin x \\)<br><b>d)</b> \\( y = -\\frac{1}{2} \\sin x \\)",
+                hints: ["The constraint bounds the viewing layout configuration window strictly within one single wave loop sequence.", "Leading constants directly manage vertical stretching or vertical compression factors."],
+                steps: [
+                    { title: "Transformation Domain Notice", math: "0^{\\circ} \\le x \\le 360^{\\circ}", explanation: "The constraint restricts your viewing frame to exactly one complete fundamental primary wave cycle path loop." },
+                    { title: "a) Metrics Matrix", math: "\\text{Period} = 360^{\\circ}, \\; \\text{Amplitude} = 6, \\; \\text{D} = \\{x \\in \\mathbb{R}\\}, \\; \\text{R} = \\{y \\in \\mathbb{R} \\mid -6 \\le y \\le 6\\}", explanation: "A vertical stretch factor scaling of 6 expands boundary envelopes out symmetrically." },
+                    { title: "b) Metrics Matrix", math: "\\text{Period} = 360^{\\circ}, \\; \\text{Amplitude} = \\frac{1}{3}, \\; \\text{D} = \\{x \\in \\mathbb{R}\\}, \\; \\text{R} = \\{y \\in \\mathbb{R} \\mid -\\frac{1}{3} \\le y \\le \\frac{1}{3}\\}", explanation: "Vertical compression shrinks wave height extremes to fractional increments." },
+                    { title: "c) Metrics Matrix", math: "\\text{Period} = 360^{\\circ}, \\; \\text{Amplitude} = 2, \\; \\text{D} = \\{x \\in \\mathbb{R}\\}, \\; \\text{R} = \\{y \\in \\mathbb{R} \\mid -2 \\le y \\le 2\\}", explanation: "Stretched vertically by 2 and vertically reflected across horizontal timeline baseline axis rows." },
+                    { title: "d) Metrics Matrix", math: "\\text{Period} = 360^{\\circ}, \\; \\text{Amplitude} = \\frac{1}{2}, \\; \\text{D} = \\{x \\in \\mathbb{R}\\}, \\; \\text{R} = \\{y \\in \\mathbb{R} \\mid -\\frac{1}{2} \\le y \\le \\frac{1}{2}\\}", explanation: "Compressed vertically by 1/2 and inverted orientation pathways." }
+                ]
+            },
+            q5b: {
+                title: "Question 5b", isUnscored: false, inputs: ["State Model Equation (Do not enter 'y=')"],
+                fullStatement: "Write an equation for the given sine function graph layout. The curve tracks cleanly through the origin \\( (0,0) \\) going upward, hitting a peak maximum of 2 at \\( 90^{\\circ} \\) and matching a floor minimum of -2 at \\( 270^{\\circ} \\).",
+                hints: ["Calculate the baseline deviation properties: Amplitude = (Max - Min) / 2.", "Sine paths launching from zero heading upward require a phase displacement of 0.", "Cosine models peak early at zero; determine the positive offset distance downstream to reach the identical crest point."],
+                steps: [
+                    { title: "Universal Parameter Evaluation", math: "\\text{Amplitude} = \\frac{\\text{Max} - \\text{Min}}{2} = \\frac{2 - (-2)}{2} = 2, \\quad \\text{Axis}: y = 0", explanation: "The basic vertical oscillation boundary maps out an absolute amplitude factor magnitude parameter of 2 units." },
+                    { title: "Sine Strategy Track", math: "y = 2 \\sin x", explanation: "Because the tracking pathway initiates precisely at the zero equilibrium line heading upward, it requires zero phase displacement operations." },
+                    { title: "Cosine Strategy Track", math: "y = 2 \\cos(x - 90^{\\circ})", explanation: "A standard cosine wave peaks immediately at the start boundary line. Since this peak occurs at 90°, we shift the framework rightwards by subtracting 90°." }
+                ]
+            },
+            q6b: {
+                title: "Question 6b", isUnscored: false, inputs: ["State Model Equation (Do not enter 'y=')"],
+                fullStatement: "Write an equation for the given sine function graph layout. The curve tracks through the origin \\( (0,0) \\) but heads downwards into a valley first, matching a low minimum of -3 at \\( 90^{\\circ} \\) and a peak high maximum of 3 at \\( 270^{\\circ} \\).",
+                hints: ["Identify the scale factor magnitude absolute boundary distance from the midline axis line row.", "An inverted launch vector passing down through the center establishes a negative amplitude multiplier structural flag.", "Trace phase shifts by checking the positive translation step width needed to line up parent cosine shapes with graph points."],
+                steps: [
+                    { title: "Universal Parameter Evaluation", math: "\\text{Amplitude} = 3, \\quad \\text{Axis}: y = 0", explanation: "The central baseline equilibrium row matches the horizontal layout path line cleanly." },
+                    { title: "Sine Strategy Track", math: "y = -3 \\sin x", explanation: "Entering the cycle inversely downwards establishes a vertical scaling reflection coefficient inversion factor flag of -3." },
+                    { title: "Cosine Strategy Track", math: "y = 3 \\cos(x + 90^{\\circ}) \\quad \\text{or} \\quad y = -3 \\cos(x - 90^{\\circ})", explanation: " Shifting a normal cosine framework leftwards translates coordinates to establish matching phase alignments." }
+                ]
+            },
+            q7: {
+                title: "Question 7", isUnscored: true,
+                fullStatement: "Draw a sketch of \\( y = 2 \\sin x \\) for one period.<br><b>a)</b> Locate all the points where \\( y = 2 \\) and give the values of \\( x \\).<br><b>b)</b> Locate all the points where \\( y = -2 \\) and give the values of \\( x \\).",
+                hints: ["Crest peaks match the maximum vertical scaling bounds.", "Valley floors map directly onto standard parent wave minimum locations."],
+                steps: [
+                    { title: "Part a) Peak Matrix Locations", math: "2 \\sin x = 2 \\implies \\sin x = 1 \\implies x = 90^{\\circ}", explanation: "Maximum amplitude values correlate to quarter cycle milestones." },
+                    { title: "Part b) Trough Matrix Locations", math: "2 \\sin x = -2 \\implies \\sin x = -1 \\implies x = 270^{\\circ}", explanation: "Minimum amplitude floor valleys correspond directly with three-quarter completion rotations." }
+                ]
+            },
+            q9: {
+                title: "Question 9", isUnscored: true,
+                fullStatement: "Graph one cycle of each function. Label the x-intercepts, maximum points, minimum points, and the equation of the horizontal axis. Write the domain and range of the cycle.<br><br><b>a)</b> \\( f(x) = 0.4 \\sin x \\)<br><b>b)</b> \\( f(x) = -4 \\sin x \\)",
+                hints: ["The numerical value inside item a) vertically compresses the curve profile limits.", "The negative tracking prefix inside item b) vertically mirrors layout orientation paths."],
+                steps: [
+                    { title: "Graph a) Character Profiles", math: "\\text{Max}: (90^{\\circ}, 0.4), \\; \\text{Min}: (270^{\circ}, -0.4), \\; \\text{Axis}: y=0", explanation: "Vertical bounds undergo compression to tighten operational coordinates down tightly." },
+                    { title: "Graph b) Character Profiles", math: "\\text{Max}: (270^{\circ}, 4), \\; \\text{Min}: (90^{\circ}, -4), \\; \\text{Axis}: y=0", explanation: "Inversion flips peak placements downstream across the 360 reference grid loop." }
+                ]
+            },
+            q11a: {
+                title: "Question 11a", isUnscored: false, inputs: ["Maximum Point Coordinate (Format: (x,y))", "Minimum Point Coordinate (Format: (x,y))"],
+                fullStatement: "For the parent template reference function \\( y = \\sin x \\), locate the exact coordinates of the maximum and minimum points across a standard positive period.",
+                hints: ["Locate the angular step input where standard parent functions hit positive 1.", "Locate the structural phase input milestone where tracking drops to negative 1."],
+                steps: [
+                    { title: "Sine Strategy Peak / Valley Mapping", math: "\\text{Max}: (90^{\\circ}, 1), \\quad \\text{Min}: (270^{\circ}, -1)", explanation: "Standard unit circle milestones define the base framework boundaries." },
+                    { title: "Cosine Strategy Equivalent Check", math: "y = \\cos(x - 90^{\\circ})", explanation: "Translating a cosine model maps peaks and valleys to equivalent coordinate alignments." }
+                ]
+            },
+            q11b: {
+                title: "Question 11b", isUnscored: false, inputs: ["Maximum Point Coordinate (Format: (x,y))", "Minimum Point Coordinate (Format: (x,y))"],
+                fullStatement: "For the transformed vertical translation function \\( y = \\sin x + 12 \\), find the exact coordinates of the maximum and minimum points.",
+                hints: ["Vertical transformations affect only output y-values, while horizontal x-coordinates stay identical to parent profiles.", "Add the constant value 12 directly to parent maximum and minimum y-axis height metrics."],
+                steps: [
+                    { title: "Sine Strategy Vertical Offset Step", math: "\\text{Max}: (90^{\\circ}, 1 + 12) = (90^{\\circ}, 13), \\quad \\text{Min}: (270^{\\circ}, -1 + 12) = (270^{\\circ}, 11)", explanation: "Adding 12 raises the horizontal axis to y = 12, shifting coordinates upward." },
+                    { title: "Cosine Strategy Vertical Offset Step", math: "y = \\cos(x - 90^{\\circ}) + 12", explanation: "The vertical shift alters outputs across both function families identically." }
+                ]
+            },
+            q11c: {
+                title: "Question 11c", isUnscored: false, inputs: ["Maximum Point Coordinate (Format: (x,y))", "Minimum Point Coordinate (Format: (x,y))"],
+                fullStatement: "For the transformed vertically scaled function \\( y = -10 \\sin x \\), calculate the explicit coordinates of maximum and minimum vertices.",
+                hints: ["Multiplying by a negative scaling factor swaps peak positions and valley points across the domain tracker.", "Multiply parent vertical boundary outputs by -10 to establish shifted vertex pairs."],
+                steps: [
+                    { title: "Sine Strategy Reflection Realignment", math: "\\text{Max}: (270^{\\circ}, 10), \\quad \\text{Min}: (90^{\\circ}, -10)", explanation: "The negative multiplier inverts the tracking path, swapping the locations of peaks and valleys." },
+                    { title: "Cosine Strategy Reflection Realignment", math: "y = 10 \\cos(x + 90^{\\circ})", explanation: "Phase configurations update parameters to reflect structural properties correctly." }
+                ]
+            },
+            q11d: {
+                title: "Question 11d", isUnscored: false, inputs: ["Maximum Point Coordinate (Format: (x,y))", "Minimum Point Coordinate (Format: (x,y))"],
+                fullStatement: "For the phase-shifted function \\( y = \\sin(x - 60^{\\circ}) \\), find the shifted coordinates of the maximum and minimum points.",
+                hints: ["Horizontal phase structures written as (x - d) shift all points rightwards by adding 'd' to the x-inputs.", "Add 60° directly to base parent angle metrics, leaving peak output height factors unchanged."],
+                steps: [
+                    { title: "Sine Strategy Phase Shift Mapping", math: "\\text{Max}: (90^{\\circ}+60^{\\circ}, 1) = (150^{\\circ}, 1), \\quad \\text{Min}: (270^{\\circ}+60^{\\circ}, -1) = (330^{\\circ}, -1)", explanation: "Subtracting 60° shifts the entire graph rightwards, adding 60° to input coordinates." },
+                    { title: "Cosine Strategy Phase Shift Mapping", math: "y = \\cos(x - 60^{\\circ} - 90^{\\circ}) = \\cos(x - 150^{\\circ})", explanation: "Combining translation parameters yields equivalent structural representations." }
+                ]
+            },
+            q13a: {
+                title: "Question 13a", isUnscored: false, inputs: ["Model Equation", "Increasing Interval Part 1 (Format: 0≤x≤90)", "Increasing Interval Part 2 (Format: 270≤x≤360)", "Decreasing Interval (Format: 90≤x≤270)"],
+                fullStatement: "Determine an equation for a sine function with an amplitude of 10 and a horizontal center axis along the x-axis. Then specify the increasing and decreasing intervals over a standard cycle rotation \\( (0^{\\circ} \\le x \\le 360^{\\circ}) \\).",
+                hints: ["An amplitude value of 10 sets the leading function coefficient parameter to 10.", "A standard positive unshifted sine wave climbs upward across phase steps 1 and 4.", "Decreasing trend intervals run continuously between the highest crest peak and the lowest valley floor."],
+                steps: [
+                    { title: "Universal Wave Properties", math: "\\text{Amplitude} = 10, \\quad \\text{Axis Row}: y=0", explanation: "Establishes baseline envelope profiles ranging between -10 and 10." },
+                    { title: "Sine Monotonicity Intervals", math: "y = 10\\sin x \\implies \\text{Inc}: 0^{\\circ} \\le x \\le 90^{\\circ} \\cup 270^{\\circ} \\le x \\le 360^{\\circ}, \\; \\text{Dec}: 90^{\\circ} \\le x \\le 270^{\\circ}", explanation: "Standard positive tracking trends run upward during phase steps 1 and 4." },
+                    { title: "Cosine Monotonicity Intervals", math: "y = 10\\cos(x - 90^{\\circ}) \\implies \\text{Interval paths stay identical}", explanation: "Transforming expressions leaves geometric monotonicity properties unaltered." }
+                ]
+            },
+            q14: {
+                title: "Question 14", isUnscored: false, inputs: ["Period Length (°)", "Pedal Amplitude (cm)", "Phase Shift Offset (°)", "Model Equation (Do not enter 'y=')"],
+                fullStatement: "<b>Chapter Problem:</b> A physiotherapist establishes a treatment plan for a patient that includes the use of an exercise bicycle. The graph shows the height of a bicycle pedal above its crank arm’s horizontal position, relative to the rotational angle, as the patient is pedalling it. Identify the cycle period, tracking amplitude height parameter, phase shift, and corresponding function model modeling layout.",
+                hints: ["Read the width span needed for one complete wave cycle to finish and reset.", "Measure the peak coordinate distance above the center baseline axis row to get the pedal amplitude.", "Check the graph's starting behavior at x = 0. Launching from zero heading upward confirms zero phase displacement on a sine model."],
+                steps: [
+                    { title: "Physical Structural Extraction", math: "\\text{Period} = 360^{\\circ}, \\quad \\text{Amplitude} = 15\\text{ cm}, \\quad \\text{Shift} = 0^{\\circ}", explanation: "A full rotation resets every 360°, while peak geometric offsets rise 15 cm above centerline rows." },
+                    { title: "Sine Solution Path", math: "y = 15 \\sin x", explanation: "Initiating at zero heading upward indicates a standard unshifted sine profile layout." },
+                    { title: "Cosine Solution Path", math: "y = 15 \\cos(x - 90^{\\circ})", explanation: "Shifting a standard cosine model aligns key components with coordinate positions." }
+                ]
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let activeInputTarget = null;
+        let currentMethod = 'sin';
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        Object.keys(problemDataPack).forEach(key => {
+            let inputsCount = problemDataPack[key].inputs ? problemDataPack[key].inputs.length : 0;
+            questionStates[key] = {
+                answered: false,
+                inputValuesArray: Array(inputsCount).fill(""),
+                isCorrect: false,
+                currentStep: 0,
+                solRevealed: false,
+                selectedMethod: 'sin',
+                hintClickCount: 0
+            };
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            document.getElementById("method-toggle-bar").style.display = "none";
+
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            document.getElementById("full-question-statement-card").innerHTML = activeProblem.fullStatement;
+
+            const state = questionStates[activeQuestionId];
+            currentMethod = state.selectedMethod;
+
+            document.getElementById("mode-sin").classList.toggle("active", currentMethod === 'sin');
+            document.getElementById("mode-cos").classList.toggle("active", currentMethod === 'cos');
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+            }
+
+            if (activeProblem.isUnscored) {
+                document.getElementById("math-keyboard").style.display = "none";
+                document.getElementById("check-ans-btn").style.display = "none";
+                document.getElementById("hint-trigger-btn").disabled = true;
+                document.getElementById("reveal-sol-btn").disabled = false;
+                
+                inputMount.innerHTML = `
+                    <div style="margin-bottom: 15px; font-weight: 700; color: var(--secondary-color); font-size: 1.1rem;">
+                        📢 check your answer on Desmos
+                    </div>
+                    <iframe src="https://www.desmos.com/calculator" width="100%" height="400px" style="border: 2px solid var(--border-color); border-radius: 12px; background: white;"></iframe>
+                `;
+            } else {
+                document.getElementById("math-keyboard").style.display = "flex";
+                document.getElementById("check-ans-btn").style.display = "inline-flex";
+                document.getElementById("hint-trigger-btn").disabled = state.answered;
+
+                let mountHTML = "";
+                activeProblem.inputs.forEach((labelTxt, index) => {
+                    mountHTML += `
+                    <div class="input-group-wrapper">
+                        <span class="input-sub-label">${labelTxt}:</span>
+                        <input type="text" class="student-answer-input sub-field-box" data-index="${index}" autocomplete="off" onfocus="setActiveInputTarget(this)">
+                    </div>`;
+                });
+                inputMount.innerHTML = mountHTML;
+
+                const generatedFields = inputMount.querySelectorAll(".sub-field-box");
+                generatedFields.forEach((field, idx) => {
+                    field.value = state.inputValuesArray[idx] || "";
+                    field.oninput = function() {
+                        if (!state.answered) {
+                            state.inputValuesArray[idx] = field.value;
+                        }
+                    };
+                });
+
+                if(generatedFields.length > 0) activeInputTarget = generatedFields[0];
+
+                if (state.answered) {
+                    lockQuizInterface(state.isCorrect);
+                    if (state.solRevealed) {
+                        revealSolutionWorkspace();
+                    }
+                } else {
+                    unlockQuizInterface();
+                }
+            }
+            renderMathElements();
+        }
+
+        function setActiveInputTarget(element) {
+            activeInputTarget = element;
+        }
+
+        function pressMathKey(symbol) {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+
+            let idx = parseInt(txtInput.getAttribute("data-index"));
+            questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                let idx = parseInt(txtInput.getAttribute("data-index"));
+                questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (data.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${data.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All hints for this workbook have been fully unlocked.");
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered || problemDataPack[activeQuestionId].isUnscored) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const datasetOptionGroup = answerRegistry[activeQuestionId];
+            
+            let earnedPointsThisQuestion = 0;
+            let correctFlags = [];
+
+            for (let i = 0; i < datasetOptionGroup.length; i++) {
+                let userFieldVal = (state.inputValuesArray[i] || "").replace(/\s+/g, '').toLowerCase()
+                                    .replace(/<=/g, '≤').replace(/>=/g, '≥').replace(/°/g, '');
+                
+                userFieldVal = userFieldVal.replace(/^y=/g, '');
+
+                let matchesAnyAllowed = false;
+                datasetOptionGroup[i].forEach(allowedTarget => {
+                    let cleanTarget = allowedTarget.replace(/\s+/g, '').toLowerCase()
+                                        .replace(/<=/g, '≤').replace(/>=/g, '≥').replace(/°/g, '');
+                    cleanTarget = cleanTarget.replace(/^y=/g, '');
+                    if(userFieldVal === cleanTarget) {
+                        matchesAnyAllowed = true;
+                    }
+                });
+
+                if (matchesAnyAllowed) {
+                    earnedPointsThisQuestion++;
+                    correctFlags.push(true);
+                } else {
+                    correctFlags.push(false);
+                }
+            }
+
+            state.answered = true;
+            state.correctFieldFlags = correctFlags;
+            state.isCorrect = (earnedPointsThisQuestion === datasetOptionGroup.length);
+
+            globalAttempts++;
+            globalScore += earnedPointsThisQuestion;
+            updateHudScoreboard();
+
+            lockQuizInterface(state.isCorrect);
+
+            let payload = {
+                unitId: "Unit_5",      
+                lessonId: "Lesson_3",  
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: state.inputValuesArray.join(" | "),
+                isCorrect: state.isCorrect,
+                attempts: 1,
+                methodUsed: currentMethod === 'sin' ? "Sine Modeler View" : "Cosine Modeler View",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(() => console.log("Payload synced with database sheet successfully."))
+            .catch(err => console.error("Database cloud link failure bypassed safely:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            const fields = document.querySelectorAll(".sub-field-box");
+            fields.forEach((f, idx) => {
+                f.disabled = true;
+                if(questionStates[activeQuestionId].correctFieldFlags) {
+                    if (questionStates[activeQuestionId].correctFieldFlags[idx]) {
+                        f.style.border = "2px solid var(--success-color)";
+                        f.style.backgroundColor = "#f0fdf4";
+                    } else {
+                        f.style.border = "2px solid var(--error-color)";
+                        f.style.backgroundColor = "#fef2f2";
+                    }
+                }
+            });
+
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Perfect! Sinusoidal metrics verified successfully.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Discrepancy detected in calculations. Review structural highlights and reveal step breakdowns.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            const fields = document.querySelectorAll(".sub-field-box");
+            fields.forEach(f => {
+                f.disabled = false;
+                f.style.border = "2px solid var(--border-color)";
+                f.style.backgroundColor = "#ffffff";
+            });
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const data = problemDataPack[activeQuestionId];
+            buildSolutionHTMLElements(data);
+
+            document.getElementById("solution-reveal-layer").style.display = "block";
+            document.getElementById("method-toggle-bar").style.display = "flex";
+
+            renderActiveMethodSteps();
+        }
+
+        function buildSolutionHTMLElements(data) {
+            const targetDiv = document.getElementById("solution-workspace-injected");
+            let html = `<h2>Solution Breakdowns for ${data.title}</h2>`;
+
+            data.steps.forEach((step, idx) => {
+                let classificationClass = "common-step";
+                if(idx === 1) classificationClass = "sin-only";
+                if(idx === 2) classificationClass = "cos-only";
+
+                html += `
+                <div class="step-block ${classificationClass}">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\(${step.math}\\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+
+            if (!data.isUnscored) {
+                let referenceDisplayKeys = answerRegistry[activeQuestionId].map(arr => arr[0]).join("  |  ");
+                html += `
+                <div class="final-answer-box">
+                    <span class="final-answer-label">Official Reference Validation Targets (Standard View)</span>
+                    <span class="final-answer-math">${referenceDisplayKeys}</span>
+                </div>`;
+            }
+
+            targetDiv.innerHTML = html;
+        }
+
+        function renderActiveMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            const allSteps = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            allSteps.forEach(step => step.style.display = 'none');
+            
+            visibleStepElements = allSteps.filter(step => {
+                if (currentMethod === 'sin' && step.classList.contains('cos-only')) return false;
+                if (currentMethod === 'cos' && step.classList.contains('sin-only')) return false;
+                return true;
+            });
+
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+            
+            renderMathElements();
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function changeMethod(methodKey) {
+            if (currentMethod === methodKey) return;
+            currentMethod = methodKey;
+            questionStates[activeQuestionId].selectedMethod = methodKey;
+            questionStates[activeQuestionId].currentStep = 0;
+
+            document.getElementById("mode-sin").classList.toggle("active", methodKey === 'sin');
+            document.getElementById("mode-cos").classList.toggle("active", methodKey === 'cos');
+            
+            renderActiveMethodSteps();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderActiveMethodSteps();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>

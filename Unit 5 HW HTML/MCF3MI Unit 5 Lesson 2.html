@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 5 Lesson 2</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-left: 5px solid #eab308;
+            line-height: 1.8;
+        }
+
+        .input-group-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .input-sub-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            background: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 5 Lesson 2</h1>
+        <p>Key Features of Sinusoidal Functions Homework Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1">Question 1: Graph A Analysis</option>
+                <option value="q2">Question 2: Graph B Analysis</option>
+                <option value="q3">Question 3: Graph C Analysis</option>
+                <option value="q4">Question 4: Graph D Analysis</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Fill in all calculated fields below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('{')">{</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('}')">}</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('|')">|</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('<')">&lt;</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('>')">&gt;</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('≤')">≤</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('≥')">≥</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(':')">:</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('D')">D</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('R')">R</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('x')">x</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('y')">y</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('∈')">∈</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let activeInputTarget = null;
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+        let activeQuestionId = "";
+
+        const answerRegistry = {
+            "q1": ["3", "-1", "1", "2", "360", "D:{x|x∈R}", "R:{y|-1≤y≤3}"],
+            "q2": ["5", "1", "3", "2", "180", "D:{x|x∈R}", "R:{y|1≤y≤5}"],
+            "q3": ["2", "-4", "-1", "3", "360", "D:{x|x∈R}", "R:{y|-4≤y≤2}"],
+            "q4": ["3", "-3", "0", "3", "120", "D:{x|x∈R}", "R:{y|-3≤y≤3}"]
+        };
+
+        const problemDataPack = {
+            q1: {
+                title: "Question 1: Graph A Analysis",
+                fullStatement: "Analyze Graph A to find its core features. (Note: x-axis 1 grid square = 15°)",
+                inputs: ["Maximum Value", "Minimum Value", "Equation of the Axis (y = ...)", "Amplitude", "Period (°)", "Domain (Format: D:{x|x∈R})", "Range (Format: R:{y|min≤y≤max})"],
+                hints: [
+                    "Hint 1: Look at the highest peak (hill) and lowest trough (valley) points on the y-axis.",
+                    "Hint 2: Find the center midline equation by adding Max and Min, then dividing by 2.",
+                    "Hint 3: Count how many grid squares 1 full wave loops. It takes 24 blocks. (24 * 15°)",
+                    "Hint 4: Use the strict requested set formatting: D:{x|x∈R} and R:{y|min≤y≤max}."
+                ],
+                steps: [
+                    { title: "Step 1: Find Highest and Lowest points", math: "\\text{Max} = 3, \\; \\text{Min} = -1", explanation: "Look at the graph. The highest crest peak touches y = 3 and the lowest floor drops to y = -1." },
+                    { title: "Step 2: Find the Center Midline (Axis)", math: "y = \\frac{3 + (-1)}{2} = 1", explanation: "Add the highest and lowest numbers together, then divide by 2. This gives the middle line y = 1." },
+                    { title: "Step 3: Measure the Wave Height (Amplitude)", math: "\\text{Amplitude} = 3 - 1 = 2", explanation: "Count the vertical steps from the middle line (y = 1) up to the top peak (y = 3). It is exactly 2 units." },
+                    { title: "Step 4: Calculate the Total Cycle Width (Period)", math: "24 \\times 15^{\\circ} = 360^{\\circ}", explanation: "One full repeating wave spans 24 blocks wide on the grid. Since 1 block is 15°, we get 24 * 15 = 360°." },
+                    { title: "Step 5: Write the Domain and Range Sets", math: "\\text{D}: \\{x|x \\in \\mathbb{R}\\}, \\; \\text{R}: \\{y|-1 \\le y \\le 3\\}", explanation: "The wave continues forever left and right (D:{x|x∈R}). Vertically, it stays locked between -1 and 3 (R:{y|-1≤y≤3})." }
+                ]
+            },
+            q2: {
+                title: "Question 2: Graph B Analysis",
+                fullStatement: "Analyze Graph B to find its core features. (Note: x-axis 1 grid square = 15°)",
+                inputs: ["Maximum Value", "Minimum Value", "Equation of the Axis (y = ...)", "Amplitude", "Period (°)", "Domain (Format: D:{x|x∈R})", "Range (Format: R:{y|min≤y≤max})"],
+                hints: [
+                    "Hint 1: Find the absolute top peak height and bottom trough floor numbers.",
+                    "Hint 2: Average the top and bottom values to locate your horizontal balance axis line.",
+                    "Hint 3: Count grid width units for 1 full cycle wave. It takes 12 blocks. (12 * 15°)",
+                    "Hint 4: Standard set notations apply with zero spaces allowed inside input boxes."
+                ],
+                steps: [
+                    { title: "Step 1: Find Highest and Lowest points", math: "\\text{Max} = 5, \\; \\text{Min} = 1", explanation: "The highest hill peak reaches up to y = 5, and the lowest valley dip bottoms out at y = 1." },
+                    { title: "Step 2: Find the Center Midline (Axis)", math: "y = \\frac{5 + 1}{2} = 3", explanation: "Average the maximum and minimum values. The central baseline sits cleanly at y = 3." },
+                    { title: "Step 3: Measure the Wave Height (Amplitude)", math: "\\text{Amplitude} = 5 - 3 = 2", explanation: "Calculate the distance from the centerline (y = 3) up to the peak height (y = 5). It is exactly 2 units." },
+                    { title: "Step 4: Calculate the Total Cycle Width (Period)", math: "12 \\times 15^{\\circ} = 180^{\\circ}", explanation: "One complete cycle takes up exactly 12 grid blocks horizontally. 12 columns multiplied by 15° gives 180°." },
+                    { title: "Step 5: Write the Domain and Range Sets", math: "\\text{D}: \\{x|x \\in \\mathbb{R}\\}, \\; \\text{R}: \\{y|1 \\le y \\le 5\\}", explanation: "Horizontal expansion yields D:{x|x∈R}. Vertically, all coordinates remain inside R:{y|1≤y≤5}." }
+                ]
+            },
+            q3: {
+                title: "Question 3: Graph C Analysis",
+                fullStatement: "Analyze Graph C to find its core features. (Note: x-axis 1 grid square = 15°)",
+                inputs: ["Maximum Value", "Minimum Value", "Equation of the Axis (y = ...)", "Amplitude", "Period (°)", "Domain (Format: D:{x|x∈R})", "Range (Format: R:{y|min≤y≤max})"],
+                hints: [
+                    "Hint 1: Peak is at positive 2 and valley drops deep into negative 4.",
+                    "Hint 2: Halfway midpoint line gives you the axis line. Deviation from center line gives amplitude.",
+                    "Hint 3: Tracing 1 full pattern loop covers 24 block units wide. (24 * 15°)",
+                    "Hint 4: Format output constraints into strict brace sets matching vertical floor boundaries."
+                ],
+                steps: [
+                    { title: "Step 1: Find Highest and Lowest points", math: "\\text{Max} = 2, \\; \\text{Min} = -4", explanation: "The high ceiling of the function hits y = 2, and the absolute low floor coordinate drops to y = -4." },
+                    { title: "Step 2: Find the Center Midline (Axis)", math: "y = \\frac{2 + (-4)}{2} = -1", explanation: "Combine and halve the extremes. The equilibrium center timeline tracks along the horizontal row y = -1." },
+                    { title: "Step 3: Measure the Wave Height (Amplitude)", math: "\\text{Amplitude} = 2 - (-1) = 3", explanation: "Measure the rise from the horizontal center row (y = -1) up to the peak (y = 2). It is a height of 3 units." },
+                    { title: "Step 4: Calculate the Total Cycle Width (Period)", math: "24 \\times 15^{\\circ} = 360^{\\circ}", explanation: "A full wave pattern cycle runs across 24 columns on the grid space. 24 multiplied by 15° gives 360°." },
+                    { title: "Step 5: Write the Domain and Range Sets", math: "\\text{D}: \\{x|x \\in \\mathbb{R}\\}, \\; \\text{R}: \\{y|-4 \\le y \\le 2\\}", explanation: "Horizontal expansion is completely unbroken (D:{x|x∈R}), while outputs occupy the interval R:{y|-4≤y≤2}." }
+                ]
+            },
+            q4: {
+                title: "Question 4: Graph D Analysis",
+                fullStatement: "Analyze Graph D to find its core features. (Note: x-axis 1 grid square = 15°)",
+                inputs: ["Maximum Value", "Minimum Value", "Equation of the Axis (y = ...)", "Amplitude", "Period (°)", "Domain (Format: D:{x|x∈R})", "Range (Format: R:{y|min≤y≤max})"],
+                hints: [
+                    "Hint 1: Perfectly balanced crest and trough steps expand between 3 and -3.",
+                    "Hint 2: The centerline lines up exactly with the horizontal origin axis lane.",
+                    "Hint 3: One repeating cycle tracks across exactly 8 grid squares. (8 * 15°)",
+                    "Hint 4: Input tracking elements must contain zero space gaps to pass evaluation checks."
+                ],
+                steps: [
+                    { title: "Step 1: Find Highest and Lowest points", math: "\\text{Max} = 3, \\; \\text{Min} = -3", explanation: "The oscillating pathway creates symmetrical boundaries between a top line of 3 and a base line of -3." },
+                    { title: "Step 2: Find the Center Midline (Axis)", math: "y = \\frac{3 + (-3)}{2} = 0", explanation: "Averaging the values returns 0. The centerline is the x-axis line itself (y = 0)." },
+                    { title: "Step 3: Measure the Wave Height (Amplitude)", math: "\\text{Amplitude} = 3 - 0 = 3", explanation: "The distance from the center row row (y = 0) up to the highest point (y = 3) measures exactly 3 units." },
+                    { title: "Step 4: Calculate the Total Cycle Width (Period)", math: "8 \\times 15^{\\circ} = 120^{\\circ}", explanation: "One full repeating crest-to-trough phase blocks wrap up perfectly within 8 horizontal column bars. 8 * 15 = 120°." },
+                    { title: "Step 5: Write the Domain and Range Sets", math: "\\text{D}: \\{x|x \\in \\mathbb{R}\\}, \\; \\text{R}: \\{y|-3 \\le y \\le 3\\}", explanation: "Domain covers all real numbers (D:{x|x∈R}). Range caps the full height interval perfectly inside R:{y|-3≤y≤3}." }
+                ]
+            }
+        };
+
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, inputValuesArray: [], isCorrect: false, currentStep: 0, solRevealed: false, hintClickCount: 0 };
+            let neededSlots = problemDataPack[k].inputs.length;
+            for(let i=0; i<neededSlots; i++) questionStates[k].inputValuesArray.push("");
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const hintDisplay = document.getElementById("hint-display-mount");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            
+            let mountHTML = "";
+            activeProblem.inputs.forEach((labelTxt, index) => {
+                mountHTML += `
+                <div class="input-group-wrapper">
+                    <span class="input-sub-label">${labelTxt}:</span>
+                    <input type="text" class="student-answer-input sub-field-box" data-index="${index}" autocomplete="off" onfocus="setActiveInputTarget(this)">
+                </div>`;
+            });
+            inputMount.innerHTML = mountHTML;
+
+            const generatedFields = inputMount.querySelectorAll(".sub-field-box");
+            generatedFields.forEach((field, idx) => {
+                field.value = state.inputValuesArray[idx] || "";
+                field.oninput = function() {
+                    if (!state.answered) {
+                        state.inputValuesArray[idx] = field.value;
+                    }
+                };
+            });
+
+            if(generatedFields.length > 0) activeInputTarget = generatedFields[0];
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div>• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+            }
+
+            if (state.answered) {
+                generatedFields.forEach(f => f.disabled = true);
+                renderPostAnswerHighlights(state.correctFieldFlags);
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                generatedFields.forEach(f => f.disabled = false);
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function setActiveInputTarget(element) {
+            activeInputTarget = element;
+        }
+
+        function pressStandardNumericKey(symbol) {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            let idx = parseInt(txtInput.getAttribute("data-index"));
+            questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                let idx = parseInt(txtInput.getAttribute("data-index"));
+                questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (data.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${data.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All hints for this workbook have been fully unlocked.");
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const expectedArray = answerRegistry[activeQuestionId];
+            
+            let earnedPointsThisQuestion = 0;
+            let correctFlags = [];
+
+            for (let i = 0; i < expectedArray.length; i++) {
+                let userFieldVal = (state.inputValuesArray[i] || "").replace(/\s+/g, '').toLowerCase()
+                                    .replace(/e/g, '∈').replace(/<=/g, '≤').replace(/>=/g, '≥');
+                let targetExpectedVal = expectedArray[i].replace(/\s+/g, '').toLowerCase()
+                                        .replace(/e/g, '∈').replace(/<=/g, '≤').replace(/>=/g, '≥');
+                
+                if (i === 2) {
+                    userFieldVal = userFieldVal.replace(/^y=/g, '');
+                    targetExpectedVal = targetExpectedVal.replace(/^y=/g, '');
+                }
+
+                if (userFieldVal === targetExpectedVal) {
+                    earnedPointsThisQuestion++;
+                    correctFlags.push(true);
+                } else {
+                    correctFlags.push(false);
+                }
+            }
+
+            state.answered = true;
+            state.correctFieldFlags = correctFlags;
+            state.isCorrect = (earnedPointsThisQuestion === expectedArray.length);
+
+            globalAttempts++;
+            globalScore += earnedPointsThisQuestion;
+            updateHudScoreboard();
+            
+            renderPostAnswerHighlights(correctFlags);
+            lockQuizInterface(state.isCorrect);
+
+            let payload = {
+                unitId: "Unit_5",
+                lessonId: "Lesson_2_Graphs",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: state.inputValuesArray.join(" | "),
+                isCorrect: state.isCorrect,
+                earnedScore: earnedPointsThisQuestion,
+                maxScorePossible: expectedArray.length,
+                attempts: 1,
+                methodUsed: "Sinusoidal Partial Score Extraction Engine",
+                totalAccumulatedScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function renderPostAnswerHighlights(flags) {
+            const inputFields = document.getElementById("dynamic-input-mount-point").querySelectorAll(".sub-field-box");
+            inputFields.forEach((field, idx) => {
+                field.disabled = true;
+                if (flags[idx]) {
+                    field.style.border = "2px solid var(--success-color)";
+                    field.style.backgroundColor = "#f0fdf4";
+                } else {
+                    field.style.border = "2px solid var(--error-color)";
+                    field.style.backgroundColor = "#fef2f2";
+                }
+            });
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database link transmission failure bypassed:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Perfect! All features verified successfully.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Some features contain calculated discrepancies. Review highlighted fields and unlock solution steps.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = answerRegistry[activeQuestionId].join(", ");
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Workbook Verification Reference Key Matchers</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>

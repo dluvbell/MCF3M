@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 5 Lesson 1</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-left: 5px solid #eab308;
+            line-height: 1.8;
+        }
+
+        .input-group-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .input-sub-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            background: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 5 Lesson 1</h1>
+        <p>Angles in Standard Position & Co-terminal Angles Homework Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1a">Question 1a: Find Coterminal Angles for 90°</option>
+                <option value="q1b">Question 1b: Find Coterminal Angles for 45°</option>
+                <option value="q1c">Question 1c: Find Coterminal Angles for 83°</option>
+                <option value="q1d">Question 1d: Find Coterminal Angles for 0°</option>
+                <option value="q1e">Question 1e: Find Coterminal Angles for 130°</option>
+                <option value="q1f">Question 1f: Find Coterminal Angles for 180°</option>
+                <option value="q1g">Question 1g: Find Coterminal Angles for 205°</option>
+                <option value="q1h">Question 1h: Find Coterminal Angles for 294°</option>
+                <option value="q1i">Question 1i: Find Coterminal Angles for 310°</option>
+                <option value="q2a">Question 2a: Verify Coterminal Pair (30° and 210°)</option>
+                <option value="q2b">Question 2b: Verify Coterminal Pair (70° and 430°)</option>
+                <option value="q2c">Question 2c: Verify Coterminal Pair (100° and 820°)</option>
+                <option value="q2d">Question 2d: Verify Coterminal Pair (380° and 680°)</option>
+                <option value="q2e">Question 2e: Verify Coterminal Pair (40° and -320°)</option>
+                <option value="q2f">Question 2f: Verify Coterminal Pair (-50° and -400°)</option>
+                <option value="q9a">Question 9a: Solve Angle for sin θ = 0.8660</option>
+                <option value="q9b">Question 9b: Solve Angle for sin θ = 0.7071</option>
+                <option value="q9c">Question 9c: Solve Angle for sin θ = 0.5</option>
+                <option value="q9d">Question 9d: Solve Angle for sin θ = 0.2588</option>
+                <option value="q9e">Question 9e: Solve Angle for sin θ = 0.9848</option>
+                <option value="q9f">Question 9f: Solve Angle for sin θ = 0.8910</option>
+                <option value="q9g">Question 9g: Solve Angle for sin θ = 0</option>
+                <option value="q10a">Question 10a: Solve Angle for sin θ = -0.8660</option>
+                <option value="q10b">Question 10b: Solve Angle for sin θ = -0.7071</option>
+                <option value="q10c">Question 10c: Solve Angle for sin θ = -0.5</option>
+                <option value="q10d">Question 10d: Solve Angle for sin θ = -0.2588</option>
+                <option value="q10e">Question 10e: Solve Angle for sin θ = -0.9848</option>
+                <option value="q10f">Question 10f: Solve Angle for sin θ = -0.8910</option>
+                <option value="q10g">Question 10g: Solve Angle for sin θ = -1</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Fill in all calculated fields below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('≤')">≤</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('≥')">?</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('=')">=</button>
+                    <button class="math-key" onclick="pressStandardNumericKey(':')">:</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('D')">D</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('R')">R</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('x')">x</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('y')">y</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('∈')">∈</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let activeInputTarget = null;
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+        let activeQuestionId = "";
+
+        const answerRegistry = {
+            "q1a": ["450", "-270"],
+            "q1b": ["405", "-315"],
+            "q1c": ["443", "-277"],
+            "q1d": ["360", "-360"],
+            "q1e": ["490", "-230"],
+            "q1f": ["540", "-180"],
+            "q1g": ["565", "-155"],
+            "q1h": ["654", "-66"],
+            "q1i": ["670", "-50"],
+            "q2a": ["No", "180"],
+            "q2b": ["Yes", "360"],
+            "q2c": ["Yes", "720"],
+            "q2d": ["No", "300"],
+            "q2e": ["Yes", "360"],
+            "q2f": ["No", "350"],
+            "q9a": ["60", "120"],
+            "q9b": ["45", "135"],
+            "q9c": ["30", "150"],
+            "q9d": ["15", "165"],
+            "q9e": ["80", "100"],
+            "q9f": ["63", "117"],
+            "q9g": ["0", "180"],
+            "q10a": ["-60", "300", "240"],
+            "q10b": ["-45", "315", "225"],
+            "q10c": ["-30", "330", "210"],
+            "q10d": ["-15", "345", "195"],
+            "q10e": ["-80", "280", "260"],
+            "q10f": ["-63", "297", "243"],
+            "q10g": ["-90", "270", "none"]
+        };
+
+        const problemDataPack = {
+            q1a: {
+                title: "Question 1a",
+                fullStatement: "Find two coterminal angles for the given angle \\( 90^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "90^{\\circ} + 360^{\\circ} = 450^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "90^{\\circ} - 360^{\\circ} = -270^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q1b: {
+                title: "Question 1b",
+                fullStatement: "Find two coterminal angles for the given angle \\( 45^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "45^{\\circ} + 360^{\\circ} = 405^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "45^{\\circ} - 360^{\\circ} = -315^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q1c: {
+                title: "Question 1c",
+                fullStatement: "Find two coterminal angles for the given angle \\( 83^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "83^{\\circ} + 360^{\\circ} = 443^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "83^{\\circ} - 360^{\\circ} = -277^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q1d: {
+                title: "Question 1d",
+                fullStatement: "Find two coterminal angles for the given angle \\( 0^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "0^{\\circ} + 360^{\\circ} = 360^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "0^{\\circ} - 360^{\\circ} = -360^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q1e: {
+                title: "Question 1e",
+                fullStatement: "Find two coterminal angles for the given angle \\( 130^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "130^{\\circ} + 360^{\\circ} = 490^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "130^{\\circ} - 360^{\\circ} = -230^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q1f: {
+                title: "Question 1f",
+                fullStatement: "Find two coterminal angles for the given angle \\( 180^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "180^{\\circ} + 360^{\\circ} = 540^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "180^{\\circ} - 360^{\\circ} = -180^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q1g: {
+                title: "Question 1g",
+                fullStatement: "Find two coterminal angles for the given angle \\( 205^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "205^{\\circ} + 360^{\\circ} = 565^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "205^{\\circ} - 360^{\\circ} = -155^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q1h: {
+                title: "Question 1h",
+                fullStatement: "Find two coterminal angles for the given angle \\( 294^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "294^{\\circ} + 360^{\\circ} = 654^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "294^{\\circ} - 360^{\\circ} = -66^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q1i: {
+                title: "Question 1i",
+                fullStatement: "Find two coterminal angles for the given angle \\( 310^{\\circ} \\). One positive and one negative.",
+                inputs: ["Positive Coterminal Angle (°)", "Negative Coterminal Angle (°)"],
+                hints: ["Hint 1: Add 360° to find a positive coterminal angle.", "Hint 2: Subtract 360° to find a negative coterminal angle."],
+                steps: [
+                    { title: "Step 1: Positive Coterminal Angle", math: "310^{\\circ} + 360^{\\circ} = 670^{\\circ}", explanation: "Adding a full circle rotation yields a matching positive terminal arm direction." },
+                    { title: "Step 2: Negative Coterminal Angle", math: "310^{\\circ} - 360^{\\circ} = -50^{\\circ}", explanation: "Subtracting a full circle rotation loops around clockwise to the identical angle position." }
+                ]
+            },
+            q2a: {
+                title: "Question 2a",
+                fullStatement: "Which pairs of angles are coterminal? Justify your answer for \\( 30^{\\circ} \\text{ and } 210^{\\circ} \\).",
+                inputs: ["Are they coterminal? (Yes/No)", "Difference between angles (°)"],
+                hints: ["Hint 1: Find the absolute difference between the two angles.", "Hint 2: If the difference is a multiple of 360°, they land on the same spot."],
+                steps: [
+                    { title: "Step 1: Compute Difference", math: "|210^{\\circ} - (30^{\\circ})| = 180^{\\circ}", explanation: "Subtracting the two numbers shows the angular separation." },
+                    { title: "Step 2: Check Multiple of 360°", math: "\\frac{180^{\\circ}}{360^{\\circ}} = 0.50", explanation: "Since the difference is not a perfect multiple of 360°, the answer is No." }
+                ]
+            },
+            q2b: {
+                title: "Question 2b",
+                fullStatement: "Which pairs of angles are coterminal? Justify your answer for \\( 70^{\\circ} \\text{ and } 430^{\\circ} \\).",
+                inputs: ["Are they coterminal? (Yes/No)", "Difference between angles (°)"],
+                hints: ["Hint 1: Find the absolute difference between the two angles.", "Hint 2: If the difference is a multiple of 360°, they land on the same spot."],
+                steps: [
+                    { title: "Step 1: Compute Difference", math: "|430^{\\circ} - (70^{\\circ})| = 360^{\\circ}", explanation: "Subtracting the two numbers shows the angular separation." },
+                    { title: "Step 2: Check Multiple of 360°", math: "\\frac{360^{\\circ}}{360^{\\circ}} = 1.00", explanation: "Since the difference is a perfect multiple of 360°, the answer is Yes." }
+                ]
+            },
+            q2c: {
+                title: "Question 2c",
+                fullStatement: "Which pairs of angles are coterminal? Justify your answer for \\( 100^{\\circ} \\text{ and } 820^{\\circ} \\).",
+                inputs: ["Are they coterminal? (Yes/No)", "Difference between angles (°)"],
+                hints: ["Hint 1: Find the absolute difference between the two angles.", "Hint 2: If the difference is a multiple of 360°, they land on the same spot."],
+                steps: [
+                    { title: "Step 1: Compute Difference", math: "|820^{\\circ} - (100^{\\circ})| = 720^{\\circ}", explanation: "Subtracting the two numbers shows the angular separation." },
+                    { title: "Step 2: Check Multiple of 360°", math: "\\frac{720^{\\circ}}{360^{\\circ}} = 2.00", explanation: "Since the difference is a perfect multiple of 360°, the answer is Yes." }
+                ]
+            },
+            q2d: {
+                title: "Question 2d",
+                fullStatement: "Which pairs of angles are coterminal? Justify your answer for \\( 380^{\\circ} \\text{ and } 680^{\\circ} \\).",
+                inputs: ["Are they coterminal? (Yes/No)", "Difference between angles (°)"],
+                hints: ["Hint 1: Find the absolute difference between the two angles.", "Hint 2: If the difference is a multiple of 360°, they land on the same spot."],
+                steps: [
+                    { title: "Step 1: Compute Difference", math: "|680^{\\circ} - (380^{\\circ})| = 300^{\\circ}", explanation: "Subtracting the two numbers shows the angular separation." },
+                    { title: "Step 2: Check Multiple of 360°", math: "\\frac{300^{\\circ}}{360^{\\circ}} = 0.83", explanation: "Since the difference is not a perfect multiple of 360°, the answer is No." }
+                ]
+            },
+            q2e: {
+                title: "Question 2e",
+                fullStatement: "Which pairs of angles are coterminal? Justify your answer for \\( 40^{\\circ} \\text{ and } -320^{\\circ} \\).",
+                inputs: ["Are they coterminal? (Yes/No)", "Difference between angles (°)"],
+                hints: ["Hint 1: Find the absolute difference between the two angles.", "Hint 2: If the difference is a multiple of 360°, they land on the same spot."],
+                steps: [
+                    { title: "Step 1: Compute Difference", math: "|40^{\\circ} - (-320^{\\circ})| = 360^{\\circ}", explanation: "Subtracting the two numbers shows the angular separation." },
+                    { title: "Step 2: Check Multiple of 360°", math: "\\frac{360^{\\circ}}{360^{\\circ}} = 1.00", explanation: "Since the difference is a perfect multiple of 360°, the answer is Yes." }
+                ]
+            },
+            q2f: {
+                title: "Question 2f",
+                fullStatement: "Which pairs of angles are coterminal? Justify your answer for \\( -50^{\\circ} \\text{ and } -400^{\\circ} \\).",
+                inputs: ["Are they coterminal? (Yes/No)", "Difference between angles (°)"],
+                hints: ["Hint 1: Find the absolute difference between the two angles.", "Hint 2: If the difference is a multiple of 360°, they land on the same spot."],
+                steps: [
+                    { title: "Step 1: Compute Difference", math: "|-50^{\\circ} - (-400^{\\circ})| = 350^{\\circ}", explanation: "Subtracting the two numbers shows the angular separation." },
+                    { title: "Step 2: Check Multiple of 360°", math: "\\frac{350^{\\circ}}{360^{\\circ}} = 0.97", explanation: "Since the difference is not a perfect multiple of 360°, the answer is No." }
+                ]
+            },
+            q9a: {
+                title: "Question 9a",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = 0.8660 \\) and \\( 0^{\\circ} \\le \\theta \\le 90^{\\circ} \\). Then, find the second quadrant angle with the same sine value.",
+                inputs: ["Angle θ (°)", "Quadrant II angle with same sine (°)"],
+                hints: ["Hint 1: Use the inverse sine button on your calculator to get the first quadrant angle.", "Hint 2: Since sine is positive in Quadrant II, use the symmetric reference angle rule: 180° - θ."],
+                steps: [
+                    { title: "Step 1: Find principal angle θ", math: "\\theta = \\sin^{-1}(0.8660) \\approx 60^{\\circ}", explanation: "The primary acute solution in Quadrant I." },
+                    { title: "Step 2: Find symmetric quadrant II angle", math: "180^{\\circ} - 60^{\\circ} = 120^{\\circ}", explanation: "Sine is symmetric across the vertical axis, so 180° - θ has the same sine value." }
+                ]
+            },
+            q9b: {
+                title: "Question 9b",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = 0.7071 \\) and \\( 0^{\\circ} \\le \\theta \\le 90^{\\circ} \\). Then, find the second quadrant angle with the same sine value.",
+                inputs: ["Angle θ (°)", "Quadrant II angle with same sine (°)"],
+                hints: ["Hint 1: Use the inverse sine button on your calculator to get the first quadrant angle.", "Hint 2: Since sine is positive in Quadrant II, use the symmetric reference angle rule: 180° - θ."],
+                steps: [
+                    { title: "Step 1: Find principal angle θ", math: "\\theta = \\sin^{-1}(0.7071) \\approx 45^{\\circ}", explanation: "The primary acute solution in Quadrant I." },
+                    { title: "Step 2: Find symmetric quadrant II angle", math: "180^{\\circ} - 45^{\\circ} = 135^{\\circ}", explanation: "Sine is symmetric across the vertical axis, so 180° - θ has the same sine value." }
+                ]
+            },
+            q9c: {
+                title: "Question 9c",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = 0.5 \\) and \\( 0^{\\circ} \\le \\theta \\le 90^{\\circ} \\). Then, find the second quadrant angle with the same sine value.",
+                inputs: ["Angle θ (°)", "Quadrant II angle with same sine (°)"],
+                hints: ["Hint 1: Use the inverse sine button on your calculator to get the first quadrant angle.", "Hint 2: Since sine is positive in Quadrant II, use the symmetric reference angle rule: 180° - θ."],
+                steps: [
+                    { title: "Step 1: Find principal angle θ", math: "\\theta = \\sin^{-1}(0.5) \\approx 30^{\\circ}", explanation: "The primary acute solution in Quadrant I." },
+                    { title: "Step 2: Find symmetric quadrant II angle", math: "180^{\\circ} - 30^{\\circ} = 150^{\\circ}", explanation: "Sine is symmetric across the vertical axis, so 180° - θ has the same sine value." }
+                ]
+            },
+            q9d: {
+                title: "Question 9d",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = 0.2588 \\) and \\( 0^{\\circ} \\le \\theta \\le 90^{\\circ} \\). Then, find the second quadrant angle with the same sine value.",
+                inputs: ["Angle θ (°)", "Quadrant II angle with same sine (°)"],
+                hints: ["Hint 1: Use the inverse sine button on your calculator to get the first quadrant angle.", "Hint 2: Since sine is positive in Quadrant II, use the symmetric reference angle rule: 180° - θ."],
+                steps: [
+                    { title: "Step 1: Find principal angle θ", math: "\\theta = \\sin^{-1}(0.2588) \\approx 15^{\\circ}", explanation: "The primary acute solution in Quadrant I." },
+                    { title: "Step 2: Find symmetric quadrant II angle", math: "180^{\\circ} - 15^{\\circ} = 165^{\\circ}", explanation: "Sine is symmetric across the vertical axis, so 180° - θ has the same sine value." }
+                ]
+            },
+            q9e: {
+                title: "Question 9e",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = 0.9848 \\) and \\( 0^{\\circ} \\le \\theta \\le 90^{\\circ} \\). Then, find the second quadrant angle with the same sine value.",
+                inputs: ["Angle θ (°)", "Quadrant II angle with same sine (°)"],
+                hints: ["Hint 1: Use the inverse sine button on your calculator to get the first quadrant angle.", "Hint 2: Since sine is positive in Quadrant II, use the symmetric reference angle rule: 180° - θ."],
+                steps: [
+                    { title: "Step 1: Find principal angle θ", math: "\\theta = \\sin^{-1}(0.9848) \\approx 80^{\\circ}", explanation: "The primary acute solution in Quadrant I." },
+                    { title: "Step 2: Find symmetric quadrant II angle", math: "180^{\\circ} - 80^{\\circ} = 100^{\\circ}", explanation: "Sine is symmetric across the vertical axis, so 180° - θ has the same sine value." }
+                ]
+            },
+            q9f: {
+                title: "Question 9f",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = 0.8910 \\) and \\( 0^{\\circ} \\le \\theta \\le 90^{\\circ} \\). Then, find the second quadrant angle with the same sine value.",
+                inputs: ["Angle θ (°)", "Quadrant II angle with same sine (°)"],
+                hints: ["Hint 1: Use the inverse sine button on your calculator to get the first quadrant angle.", "Hint 2: Since sine is positive in Quadrant II, use the symmetric reference angle rule: 180° - θ."],
+                steps: [
+                    { title: "Step 1: Find principal angle θ", math: "\\theta = \\sin^{-1}(0.8910) \\approx 63^{\\circ}", explanation: "The primary acute solution in Quadrant I." },
+                    { title: "Step 2: Find symmetric quadrant II angle", math: "180^{\\circ} - 63^{\\circ} = 117^{\\circ}", explanation: "Sine is symmetric across the vertical axis, so 180° - θ has the same sine value." }
+                ]
+            },
+            q9g: {
+                title: "Question 9g",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = 0 \\) and \\( 0^{\\circ} \\le \\theta \\le 90^{\\circ} \\). Then, find the second quadrant angle with the same sine value.",
+                inputs: ["Angle θ (°)", "Quadrant II angle with same sine (°)"],
+                hints: ["Hint 1: Use the inverse sine button on your calculator to get the first quadrant angle.", "Hint 2: Since sine is positive in Quadrant II, use the symmetric reference angle rule: 180° - θ."],
+                steps: [
+                    { title: "Step 1: Find principal angle θ", math: "\\theta = \\sin^{-1}(0) \\approx 0^{\\circ}", explanation: "The primary acute solution in Quadrant I." },
+                    { title: "Step 2: Find symmetric quadrant II angle", math: "180^{\\circ} - 0^{\\circ} = 180^{\\circ}", explanation: "Sine is symmetric across the vertical axis, so 180° - θ has the same sine value." }
+                ]
+            },
+            q10a: {
+                title: "Question 10a",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = -0.8660 \\) between \\( -90^{\\circ} \\le \\theta \\le 0^{\\circ} \\). Find a positive coterminal angle. Then find a non-coterminal angle that gives the same value.",
+                inputs: ["Angle θ (°)", "Positive Coterminal Angle (°)", "Non-coterminal angle with same sine"],
+                hints: ["Hint 1: Use inverse sine to find the negative angle between -90° and 0°.", "Hint 2: Add 360° to find the positive coterminal angle.", "Hint 3: Use 180° - θ to find another angle with identical sine value."],
+                steps: [
+                    { title: "Step 1: Negative Principal Angle θ", math: "\\theta = \\sin^{-1}(-0.8660) = -60^{\\circ}", explanation: "The calculator returns a Quadrant IV negative angle." },
+                    { title: "Step 2: Positive Coterminal Angle", math: "-60^{\\circ} + 360^{\\circ} = 300^{\\circ}", explanation: "Adding 360° wraps around to find the positive coterminal angle." },
+                    { title: "Step 3: Quadrant III Symmetric Solution", math: "180^{\\circ} - (-60^{\\circ}) = 240^{\\circ}", explanation: "Subtracting the negative angle yields a value in Quadrant III with identical sine value." }
+                ]
+            },
+            q10b: {
+                title: "Question 10b",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = -0.7071 \\) between \\( -90^{\\circ} \\le \\theta \\le 0^{\\circ} \\). Find a positive coterminal angle. Then find a non-coterminal angle that gives the same value.",
+                inputs: ["Angle θ (°)", "Positive Coterminal Angle (°)", "Non-coterminal angle with same sine"],
+                hints: ["Hint 1: Use inverse sine to find the negative angle between -90° and 0°.", "Hint 2: Add 360° to find the positive coterminal angle.", "Hint 3: Use 180° - θ to find another angle with identical sine value."],
+                steps: [
+                    { title: "Step 1: Negative Principal Angle θ", math: "\\theta = \\sin^{-1}(-0.7071) = -45^{\\circ}", explanation: "The calculator returns a Quadrant IV negative angle." },
+                    { title: "Step 2: Positive Coterminal Angle", math: "-45^{\\circ} + 360^{\\circ} = 315^{\\circ}", explanation: "Adding 360° wraps around to find the positive coterminal angle." },
+                    { title: "Step 3: Quadrant III Symmetric Solution", math: "180^{\\circ} - (-45^{\\circ}) = 225^{\\circ}", explanation: "Subtracting the negative angle yields a value in Quadrant III with identical sine value." }
+                ]
+            },
+            q10c: {
+                title: "Question 10c",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = -0.5 \\) between \\( -90^{\\circ} \\le \\theta \\le 0^{\\circ} \\). Find a positive coterminal angle. Then find a non-coterminal angle that gives the same value.",
+                inputs: ["Angle θ (°)", "Positive Coterminal Angle (°)", "Non-coterminal angle with same sine"],
+                hints: ["Hint 1: Use inverse sine to find the negative angle between -90° and 0°.", "Hint 2: Add 360° to find the positive coterminal angle.", "Hint 3: Use 180° - θ to find another angle with identical sine value."],
+                steps: [
+                    { title: "Step 1: Negative Principal Angle θ", math: "\\theta = \\sin^{-1}(-0.5) = -30^{\\circ}", explanation: "The calculator returns a Quadrant IV negative angle." },
+                    { title: "Step 2: Positive Coterminal Angle", math: "-30^{\\circ} + 360^{\\circ} = 330^{\\circ}", explanation: "Adding 360° wraps around to find the positive coterminal angle." },
+                    { title: "Step 3: Quadrant III Symmetric Solution", math: "180^{\\circ} - (-30^{\\circ}) = 210^{\\circ}", explanation: "Subtracting the negative angle yields a value in Quadrant III with identical sine value." }
+                ]
+            },
+            q10d: {
+                title: "Question 10d",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = -0.2588 \\) between \\( -90^{\\circ} \\le \\theta \\le 0^{\\circ} \\). Find a positive coterminal angle. Then find a non-coterminal angle that gives the same value.",
+                inputs: ["Angle θ (°)", "Positive Coterminal Angle (°)", "Non-coterminal angle with same sine"],
+                hints: ["Hint 1: Use inverse sine to find the negative angle between -90° and 0°.", "Hint 2: Add 360° to find the positive coterminal angle.", "Hint 3: Use 180° - θ to find another angle with identical sine value."],
+                steps: [
+                    { title: "Step 1: Negative Principal Angle θ", math: "\\theta = \\sin^{-1}(-0.2588) = -15^{\\circ}", explanation: "The calculator returns a Quadrant IV negative angle." },
+                    { title: "Step 2: Positive Coterminal Angle", math: "-15^{\\circ} + 360^{\\circ} = 345^{\\circ}", explanation: "Adding 360° wraps around to find the positive coterminal angle." },
+                    { title: "Step 3: Quadrant III Symmetric Solution", math: "180^{\\circ} - (-15^{\\circ}) = 195^{\\circ}", explanation: "Subtracting the negative angle yields a value in Quadrant III with identical sine value." }
+                ]
+            },
+            q10e: {
+                title: "Question 10e",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = -0.9848 \\) between \\( -90^{\\circ} \\le \\theta \\le 0^{\\circ} \\). Find a positive coterminal angle. Then find a non-coterminal angle that gives the same value.",
+                inputs: ["Angle θ (°)", "Positive Coterminal Angle (°)", "Non-coterminal angle with same sine"],
+                hints: ["Hint 1: Use inverse sine to find the negative angle between -90° and 0°.", "Hint 2: Add 360° to find the positive coterminal angle.", "Hint 3: Use 180° - θ to find another angle with identical sine value."],
+                steps: [
+                    { title: "Step 1: Negative Principal Angle θ", math: "\\theta = \\sin^{-1}(-0.9848) = -80^{\\circ}", explanation: "The calculator returns a Quadrant IV negative angle." },
+                    { title: "Step 2: Positive Coterminal Angle", math: "-80^{\\circ} + 360^{\\circ} = 280^{\\circ}", explanation: "Adding 360° wraps around to find the positive coterminal angle." },
+                    { title: "Step 3: Quadrant III Symmetric Solution", math: "180^{\\circ} - (-80^{\\circ}) = 260^{\\circ}", explanation: "Subtracting the negative angle yields a value in Quadrant III with identical sine value." }
+                ]
+            },
+            q10f: {
+                title: "Question 10f",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = -0.8910 \\) between \\( -90^{\\circ} \\le \\theta \\le 0^{\\circ} \\). Find a positive coterminal angle. Then find a non-coterminal angle that gives the same value.",
+                inputs: ["Angle θ (°)", "Positive Coterminal Angle (°)", "Non-coterminal angle with same sine"],
+                hints: ["Hint 1: Use inverse sine to find the negative angle between -90° and 0°.", "Hint 2: Add 360° to find the positive coterminal angle.", "Hint 3: Use 180° - θ to find another angle with identical sine value."],
+                steps: [
+                    { title: "Step 1: Negative Principal Angle θ", math: "\\theta = \\sin^{-1}(-0.8910) = -63^{\\circ}", explanation: "The calculator returns a Quadrant IV negative angle." },
+                    { title: "Step 2: Positive Coterminal Angle", math: "-63^{\\circ} + 360^{\\circ} = 297^{\\circ}", explanation: "Adding 360° wraps around to find the positive coterminal angle." },
+                    { title: "Step 3: Quadrant III Symmetric Solution", math: "180^{\\circ} - (-63^{\\circ}) = 243^{\\circ}", explanation: "Subtracting the negative angle yields a value in Quadrant III with identical sine value." }
+                ]
+            },
+            q10g: {
+                title: "Question 10g",
+                fullStatement: "Find the measure of angle \\( \\theta \\) where \\( \\sin \\theta = -1 \\) between \\( -90^{\\circ} \\le \\theta \\le 0^{\\circ} \\). Find a positive coterminal angle. Then find a non-coterminal angle that gives the same value.",
+                inputs: ["Angle θ (°)", "Positive Coterminal Angle (°)", "Non-coterminal angle with same sine"],
+                hints: ["Hint 1: Use inverse sine to find the negative angle between -90° and 0°.", "Hint 2: Add 360° to find the positive coterminal angle.", "Hint 3: Use 180° - θ to find another angle with identical sine value."],
+                steps: [
+                    { title: "Step 1: Negative Principal Angle θ", math: "\\theta = \\sin^{-1}(-1) = -90^{\\circ}", explanation: "The calculator returns a Quadrant IV negative angle." },
+                    { title: "Step 2: Positive Coterminal Angle", math: "-90^{\\circ} + 360^{\\circ} = 270^{\\circ}", explanation: "Adding 360° wraps around to find the positive coterminal angle." },
+                    { title: "Step 3: Non-coterminal Angle Check", math: "\\text{No other distinct quadrant inside 360° available for } \\sin \\theta = -1", explanation: "Since -90° is at the bottom of the unit circle, there is no separate non-coterminal quadrant with this value. Enter 'none'." }
+                ]
+            }
+        };
+
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, inputValuesArray: [], isCorrect: false, currentStep: 0, solRevealed: false, hintClickCount: 0 };
+            let neededSlots = problemDataPack[k].inputs.length;
+            for(let i=0; i<neededSlots; i++) questionStates[k].inputValuesArray.push("");
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const hintDisplay = document.getElementById("hint-display-mount");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            
+            let mountHTML = "";
+            activeProblem.inputs.forEach((labelTxt, index) => {
+                mountHTML += `
+                <div class="input-group-wrapper">
+                    <span class="input-sub-label">${labelTxt}:</span>
+                    <input type="text" class="student-answer-input sub-field-box" data-index="${index}" autocomplete="off" onfocus="setActiveInputTarget(this)">
+                </div>`;
+            });
+            inputMount.innerHTML = mountHTML;
+
+            const generatedFields = inputMount.querySelectorAll(".sub-field-box");
+            generatedFields.forEach((field, idx) => {
+                field.value = state.inputValuesArray[idx] || "";
+                field.oninput = function() {
+                    if (!state.answered) {
+                        state.inputValuesArray[idx] = field.value;
+                    }
+                };
+            });
+
+            if(generatedFields.length > 0) activeInputTarget = generatedFields[0];
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div>• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+            }
+
+            if (state.answered) {
+                generatedFields.forEach(f => f.disabled = true);
+                renderPostAnswerHighlights(state.correctFieldFlags);
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                generatedFields.forEach(f => f.disabled = false);
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function setActiveInputTarget(element) {
+            activeInputTarget = element;
+        }
+
+        function pressStandardNumericKey(symbol) {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            let idx = parseInt(txtInput.getAttribute("data-index"));
+            questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                let idx = parseInt(txtInput.getAttribute("data-index"));
+                questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (data.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${data.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All hints for this workbook have been fully unlocked.");
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const expectedArray = answerRegistry[activeQuestionId];
+            
+            let earnedPointsThisQuestion = 0;
+            let correctFlags = [];
+
+            for (let i = 0; i < expectedArray.length; i++) {
+                let userFieldVal = (state.inputValuesArray[i] || "").replace(/\s+/g, '').toLowerCase();
+                let targetExpectedVal = expectedArray[i].replace(/\s+/g, '').toLowerCase();
+                
+                if (userFieldVal === targetExpectedVal) {
+                    earnedPointsThisQuestion++;
+                    correctFlags.push(true);
+                } else {
+                    correctFlags.push(false);
+                }
+            }
+
+            state.answered = true;
+            state.correctFieldFlags = correctFlags;
+            state.isCorrect = (earnedPointsThisQuestion === expectedArray.length);
+
+            globalAttempts++;
+            globalScore += earnedPointsThisQuestion;
+            updateHudScoreboard();
+            
+            renderPostAnswerHighlights(correctFlags);
+            lockQuizInterface(state.isCorrect);
+
+            let payload = {
+                unitId: "Unit_5",
+                lessonId: "Lesson_1_Angles",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: state.inputValuesArray.join(" | "),
+                isCorrect: state.isCorrect,
+                earnedScore: earnedPointsThisQuestion,
+                maxScorePossible: expectedArray.length,
+                attempts: 1,
+                methodUsed: "Sinusoidal Partial Score Extraction Engine",
+                totalAccumulatedScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function renderPostAnswerHighlights(flags) {
+            const inputFields = document.getElementById("dynamic-input-mount-point").querySelectorAll(".sub-field-box");
+            inputFields.forEach((field, idx) => {
+                field.disabled = true;
+                if (flags[idx]) {
+                    field.style.border = "2px solid var(--success-color)";
+                    field.style.backgroundColor = "#f0fdf4";
+                } else {
+                    field.style.border = "2px solid var(--error-color)";
+                    field.style.backgroundColor = "#fef2f2";
+                }
+            });
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database link transmission failure bypassed:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Perfect! All features verified successfully.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Some features contain calculated discrepancies. Review highlighted fields and unlock solution steps.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = answerRegistry[activeQuestionId].join(", ");
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Workbook Verification Reference Key Matchers</span>
+                <span class="final-answer-math">${finalAnsText}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>

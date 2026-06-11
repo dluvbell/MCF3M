@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 4 Lesson 3</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 4 Lesson 3</h1>
+        <p>Solving Right Triangle Problems Algebraically</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q3a_b">Question 3a: Find side b (in ΔABC)</option>
+                <option value="q3a_c">Question 3a: Find side c (in ΔABC)</option>
+                <option value="q3b_q">Question 3b: Find side q (in ΔPQR)</option>
+                <option value="q3b_r">Question 3b: Find side r (in ΔPQR)</option>
+                <option value="q3c_d">Question 3c: Find side d (in ΔDEF)</option>
+                <option value="q3c_f">Question 3c: Find side f (in ΔDEF)</option>
+                <option value="q3d_w">Question 3d: Find side w (in ΔWXY)</option>
+                <option value="q3d_y">Question 3d: Find side y (in ΔWXY)</option>
+                <option value="q4b">Question 4b: Ski Hill Drop in Altitude</option>
+                <option value="q6a">Question 6a: Select Ratio for Steel Cable</option>
+                <option value="q6b">Question 6b: Calculate Steel Cable Length</option>
+                <option value="q7a">Question 7a: Select Ratio for Tree Height</option>
+                <option value="q7b">Question 7b: Calculate Height of Tree</option>
+                <option value="q12a">Question 12a: Airplane Horizontal Distance</option>
+                <option value="q12b">Question 12b: Airplane Direct Distance</option>
+                <option value="q17">Question 17: Height of the Cliff</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Type your numeric answer below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;">
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="e.g., 9.6, 70, B, C, etc." autocomplete="off">
+                </div>
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('A')">A</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('B')">B</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('C')">C</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('D')">D</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            q3a_b: ["9.6"], q3a_c: ["11.5"], q3b_q: ["5.0", "5"], q3b_r: ["8.7"],
+            q3c_d: ["3.1"], q3c_f: ["8.9"], q3d_w: ["2.0", "2"], q3d_y: ["3.9"],
+            q4b: ["70"], q6a: ["B", "b"], q6b: ["5.5"], q7a: ["C", "c"], q7b: ["11.3"],
+            q12a: ["9409"], q12b: ["9620"], q17: ["90.6"]
+        };
+
+        const problemDataPack = {
+            q3a_b: { title: "Question 3a (side b)", fullStatement: "In \\( \\triangle ABC \\), \\( \\angle A = 90^{\\circ} \\), \\( \\angle B = 40^{\\circ} \\), and \\( a = 15 \\text{ cm} \\). Find the length of unknown side \\( b \\) to the nearest tenth.", steps: [
+                { title: "Step 1: How do we label the properties of this triangle without a visual image?", math: "a = 15, \\; \\angle B = 40^{\\circ}", explanation: "Since Angle A is 90 degrees, its corresponding lowercase side 'a' must be the Hypotenuse (15). Look at Angle B (40°): the side with the matching lowercase letter 'b' is always completely across from it (Opposite side)." },
+                { title: "Step 2: Which SOH-CAH-TOA ratio links the Hypotenuse and the Opposite side?", math: "\\sin 40^{\\circ} = \\frac{b}{15}", explanation: "The SOH memory tool stands for Sine = Opposite / Hypotenuse. Setting up the equation gives: sin 40° = b / 15." },
+                { title: "Step 3: How do we get side b alone when it is divided by 15?", math: "b = 15 \\times \\sin 40^{\\circ}", explanation: "To undo the division by 15, multiply both sides by 15. This shifts the 15 to the left side as a multiplication product." },
+                { title: "Step 4: Compute the final rounded measure using a calculator", math: "b = 15 \\times 0.6428 \\approx 9.6", explanation: "Multiply 15 by 0.64278... to get 9.641... Rounding to the nearest tenth yields 9.6 cm." }
+            ], ans_box: "9.6" },
+
+            q3a_c: { title: "Question 3a (side c)", fullStatement: "In \\( \\triangle ABC \\), \\( \\angle A = 90^{\\circ} \\), \\( \\angle B = 40^{\\circ} \\), and \\( a = 15 \\text{ cm} \\). Find the length of unknown side \\( c \\) to the nearest tenth.", steps: [
+                { title: "Step 1: Map out the side roles relative to Angle B", math: "a = 15, \\; \\angle B = 40^{\\circ}", explanation: "Side a is the Hypotenuse. Lowercase side 'c' is across from Angle C, which means it is next to Angle B, making it the Adjacent side." },
+                { title: "Step 2: Select the correct trigonometric relationship formula", math: "\\cos 40^{\\circ} = \\frac{c}{15}", explanation: "The CAH memory aid stands for Cosine = Adjacent / Hypotenuse. This matches our properties perfectly." },
+                { title: "Step 3: Isolate side c by moving the denominator", math: "c = 15 \\times \\cos 40^{\\circ}", explanation: "Multiply both sides by 15 to move the denominator out of the fraction layout." },
+                { title: "Step 4: Compute the final rounded measure", math: "c = 15 \\times 0.7660 \\approx 11.5", explanation: "Evaluating gives 11.490... Because the second decimal digit is 9, round up to 11.5 cm." }
+            ], ans_box: "11.5" },
+
+            q3b_q: { title: "Question 3b (side q)", fullStatement: "In \\( \\triangle PQR \\), \\( \\angle P = 90^{\\circ} \\), \\( \\angle R = 60^{\\circ} \\), and \\( p = 10 \\text{ cm} \\). Find the length of unknown side \\( q \\) to the nearest tenth.", steps: [
+                { title: "Step 1: Identify given side roles relative to Angle R", math: "p = 10, \\; \\angle R = 60^{\\circ}", explanation: "Angle P is 90 degrees, so side p (10) is the Hypotenuse. Side q is across from Angle Q, which makes it the Adjacent side relative to Angle R." },
+                { title: "Step 2: Choose the corresponding formula from SOH-CAH-TOA", math: "\\cos 60^{\\circ} = \\frac{q}{10}", explanation: "Adjacent and Hypotenuse are bound by the Cosine formula relationship (CAH)." },
+                { title: "Step 3: Isolate side q by clearing the fraction base", math: "q = 10 \\times \\cos 60^{\\circ}", explanation: "Multiply both sides by 10 to completely isolate the variable q." },
+                { title: "Step 4: Calculate the final integer value cleanly", math: "q = 10 \\times 0.5 = 5.0", explanation: "The cosine of 60 degrees is exactly 0.5. Multiplying by 10 gives 5.0 cm." }
+            ], ans_box: "5.0" },
+
+            q3b_r: { title: "Question 3b (side r)", fullStatement: "In \\( \\triangle PQR \\), \\( \\angle P = 90^{\\circ} \\), \\( \\angle R = 60^{\\circ} \\), and \\( p = 10 \\text{ cm} \\). Find the length of unknown side \\( r \\) to the nearest tenth.", steps: [
+                { title: "Step 1: Identify given side roles relative to Angle R", math: "p = 10, \\; \\angle R = 60^{\\circ}", explanation: "Side p is the Hypotenuse. Side r is directly across from Angle R, making it the Opposite side." },
+                { title: "Step 2: Select the matching primary trig ratio equation", math: "\\sin 60^{\\circ} = \\frac{r}{10}", explanation: "Opposite and Hypotenuse are bound by the Sine formula relationship (SOH)." },
+                { title: "Step 3: Isolate side r by moving the denominator", math: "r = 10 \\times \\sin 60^{\\circ}", explanation: "Multiply both sides by 10 to bring the variable to one side." },
+                { title: "Step 4: Complete the decimal conversion and round", math: "r = 10 \\times 0.8660 \\approx 8.7", explanation: "Evaluating gives 8.660... Rounding up to the nearest tenth gives 8.7 cm." }
+            ], ans_box: "8.7" },
+
+            q3c_d: { title: "Question 3c (side d)", fullStatement: "In \\( \\triangle DEF \\), \\( \\angle F = 90^{\\circ} \\), \\( \\angle E = 70^{\\circ} \\), and \\( e = 8.4 \\text{ cm} \\). Find the length of unknown side \\( d \\) to the nearest tenth.", steps: [
+                { title: "Step 1: Map the given variables relative to Angle E", math: "e = 8.4, \\; \\angle E = 70^{\\circ}", explanation: "Angle F is 90 degrees, so side f is the hypotenuse. Side e (8.4) is Opposite to Angle E, and side d is Adjacent to Angle E." },
+                { title: "Step 2: Set up the algebraic equation using SOH-CAH-TOA", math: "\\tan 70^{\\circ} = \\frac{8.4}{d}", explanation: "Opposite and Adjacent sides mean we must use the Tangent ratio (TOA). This puts our unknown variable d in the denominator." },
+                { title: "Step 3: How do we isolate a variable when it is trapped in the denominator?", math: "d = \\frac{8.4}{\\tan 70^{\\circ}}", explanation: "To solve when the variable is at the bottom, multiply both sides by d, then divide both sides by tan 70°. In short, the variable and the trig function swap positions." },
+                { title: "Step 4: Compute the quotient to find the dimension value", math: "d = \\frac{8.4}{2.7475} \\approx 3.1", explanation: "Divide 8.4 by 2.74747... to get 3.057... The second decimal place is 5, so round up to 3.1 cm." }
+            ], ans_box: "3.1" },
+
+            q3c_f: { title: "Question 3c (side f)", fullStatement: "In \\( \\triangle DEF \\), \\( \\angle F = 90^{\\circ} \\), \\( \\angle E = 70^{\\circ} \\), and \\( e = 8.4 \\text{ cm} \\). Find the length of unknown side \\( f \\) to the nearest tenth.", steps: [
+                { title: "Step 1: Map the given variables relative to Angle E", math: "e = 8.4, \\; \\angle E = 70^{\\circ}", explanation: "Side f is the Hypotenuse since it is across from the 90-degree angle. Side e is the Opposite side." },
+                { title: "Step 2: Set up the matching trigonometric equation", math: "\\sin 70^{\\circ} = \\frac{8.4}{f}", explanation: "Opposite and Hypotenuse mean we use the Sine ratio (SOH). The variable f starts in the denominator." },
+                { title: "Step 3: Swap positions to isolate the denominator element", math: "f = \\frac{8.4}{\\sin 70^{\\circ}}", explanation: "Swap the position of f and sin 70° to isolate the variable at the top." },
+                { title: "Step 4: Evaluate the quotient accurately", math: "f = \\frac{8.4}{0.9397} \\approx 8.9", explanation: "Divide 8.4 by 0.93969... to get 8.939... Rounding to the nearest tenth gives 8.9 cm." }
+            ], ans_box: "8.9" },
+
+            q3d_w: { title: "Question 3d (side w)", fullStatement: "In \\( \\triangle WXY \\), \\( \\angle Y = 90^{\\circ} \\), \\( \\angle W = 30.5^{\\circ} \\), and \\( x = 3.4 \\text{ m} \\). Find the length of unknown side \\( w \\) to the nearest tenth.", steps: [
+                { title: "Step 1: Label the side properties relative to Angle W", math: "x = 3.4, \\; \\angle W = 30.5^{\\circ}", explanation: "Angle Y is 90 degrees, so side y is the hypotenuse. Side w is across from Angle W (Opposite), and side x (3.4) is touching Angle W (Adjacent)." },
+                { title: "Step 2: Set up the correct trigonometric formula", math: "\\tan 30.5^{\\circ} = \\frac{w}{3.4}", explanation: "Opposite and Adjacent sides mean we use the Tangent ratio (TOA). The unknown variable w is on top." },
+                { title: "Step 3: Isolate side w by moving the fraction denominator", math: "w = 3.4 \\times \\tan 30.5^{\\circ}", explanation: "Multiply both sides by 3.4 to isolate the variable w." },
+                { title: "Step 4: Compute the product value cleanly", math: "w = 3.4 \\times 0.5890 \\approx 2.0", explanation: "Evaluating gives 2.0027... Rounding to the nearest tenth gives exactly 2.0 m." }
+            ], ans_box: "2.0" },
+
+            q3d_y: { title: "Question 3d (side y)", fullStatement: "In \\( \\triangle WXY \\), \\( \\angle Y = 90^{\\circ} \\), \\( \\angle W = 30.5^{\\circ} \\), and \\( x = 3.4 \\text{ m} \\). Find the length of unknown side \\( y \\) to the nearest tenth.", steps: [
+                { title: "Step 1: Label the side properties relative to Angle W", math: "x = 3.4, \\; \\angle W = 30.5^{\\circ}", explanation: "Side y is the Hypotenuse, and side x (3.4) is the Adjacent side." },
+                { title: "Step 2: Set up the matching trigonometric formula", math: "\\cos 30.5^{\\circ} = \\frac{3.4}{y}", explanation: "Adjacent and Hypotenuse mean we use the Cosine ratio (CAH). The variable y starts in the denominator." },
+                { title: "Step 3: Swap positions to isolate the variable y", math: "y = \\frac{3.4}{\\cos 30.5^{\\circ}}", explanation: "Swap the positions of y and cos 30.5° to isolate the variable." },
+                { title: "Step 4: Complete the quotient calculation and round", math: "y = \\frac{3.4}{0.8616} \\approx 3.9", explanation: "Divide 3.4 by 0.86162... to get 3.946... Rounding to the nearest tenth gives 3.9 m." }
+            ], ans_box: "3.9" },
+
+            q4b: { title: "Question 4b", fullStatement: "The angle of depression from the top of a ski hill to the bottom is 24.6°. The length of the hill slope was measured at 168 m. What is the drop in altitude of the ski hill, to the nearest metre?", steps: [
+                { title: "Step 1: How does an angle of depression map onto our triangle?", math: "\\theta = 24.6^{\\circ}, \\; c = 168", explanation: "An angle of depression is measured looking down from a horizontal line. By alternate interior angles, this is exactly equal to the angle of elevation looking up from the bottom (24.6°). The slope length is the Hypotenuse (168), and the vertical drop is the Opposite side h." },
+                { title: "Step 2: Match the properties to a SOH-CAH-TOA ratio", math: "\\sin 24.6^{\\circ} = \\frac{h}{168}", explanation: "Opposite and Hypotenuse mean we use the Sine ratio (SOH)." },
+                { title: "Step 3: Isolate the altitude variable h", math: "h = 168 \\times \\sin 24.6^{\\circ}", explanation: "Multiply both sides by 168 to clear the fraction layout." },
+                { title: "Step 4: Compute and round to the nearest whole integer", math: "h = 168 \\times 0.4163 \\approx 70", explanation: "Evaluating gives 69.936... Since the first decimal digit is 9, round up to the nearest whole metre, giving 70 m." }
+            ], ans_box: "70" },
+
+            q6a: { title: "Question 6a", fullStatement: "A steel cable is attached to two posts that are 5.4 m apart, at an angle of inclination of 10°. Which trigonometric ratio can you use to calculate the total length of the cable?<br><br>A) Sine<br>B) Cosine<br>C) Tangent<br>D) None of the above<br><br>Type the correct letter:", steps: [
+                { title: "Step 1: Analyze the sides given in the word problem text", math: "5.4, \\; c", explanation: "The distance along the ground between the posts is 5.4 m (Adjacent side). The cable itself stretches diagonally, making it the Hypotenuse c." },
+                { title: "Step 2: Find the matching ratio definition from SOH-CAH-TOA", math: "\\cos 10^{\\circ} = \\frac{5.4}{c}", explanation: "Adjacent and Hypotenuse are the components of the Cosine ratio (CAH). Therefore, option B is the correct answer." }
+            ], ans_box: "B" },
+
+            q6b: { title: "Question 6b", fullStatement: "Using the parameters from Question 6, calculate the length of the steel cable to the nearest tenth of a metre.", steps: [
+                { title: "Step 1: Re-establish the equation structure", math: "\\cos 10^{\\circ} = \\frac{5.4}{c}", explanation: "Use the Cosine equation formula set up in the previous step." },
+                { title: "Step 2: Isolate the variable c from the denominator position", math: "c = \\frac{5.4}{\\cos 10^{\\circ}}", explanation: "Swap the positions of c and cos 10° to bring the variable to the top side." },
+                { title: "Step 3: Compute the quotient with calculator accuracy", math: "c = \\frac{5.4}{0.9848} \\approx 5.5", explanation: "Divide 5.4 by 0.98480... to get 5.483... Rounding to the nearest tenth gives 5.5 m." }
+            ], ans_box: "5.5" },
+
+            q7a: { title: "Question 7a", fullStatement: "The angle of elevation from Eric to the top of a tree is 68.3°. He is standing 4.5 m from the base of the tree. Which trigonometric ratio can you use to calculate the total height of the tree?<br><br>A) Sine<br>B) Cosine<br>C) Tangent<br>D) None of the above<br><br>Type the correct letter:", steps: [
+                { title: "Step 1: Analyze the sides given in the word problem text", math: "4.5, \\; h", explanation: "The ground distance from the tree base is 4.5 m (Adjacent side). The vertical tree height is directly across from the angle (Opposite side h)." },
+                { title: "Step 2: Find the matching ratio definition from SOH-CAH-TOA", math: "\\tan 68.3^{\\circ} = \\frac{h}{4.5}", explanation: "Opposite and Adjacent are the components of the Tangent ratio (TOA). Therefore, option C is the correct answer." }
+            ], ans_box: "C" },
+
+            q7b: { title: "Question 7b", fullStatement: "Ignoring Eric's height, calculate how tall the tree is to the nearest tenth of a metre.", steps: [
+                { title: "Step 1: Re-establish the equation structure", math: "\\tan 68.3^{\\circ} = \\frac{h}{4.5}", explanation: "Use the Tangent equation formula set up in the previous step." },
+                { title: "Step 2: Isolate the height variable h", math: "h = 4.5 \\times \\tan 68.3^{\\circ}", explanation: "Multiply both sides by 4.5 to isolate h on one side." },
+                { title: "Step 3: Compute the product accurately", math: "h = 4.5 \\times 2.5129 \\approx 11.3", explanation: "Evaluating gives 11.308... Rounding to the nearest tenth gives 11.3 m." }
+            ], ans_box: "11.3" },
+
+            q12a: { title: "Question 12a", fullStatement: "An airplane is flying at an altitude of 2000 m. The angle of depression from the airplane to a landmark on the ground is 12°. What is the airplane's horizontal distance to the landmark, to the nearest metre?", steps: [
+                { title: "Step 1: Understand the geometry of the problem", math: "2000, \\; 12^{\\circ}", explanation: "The vertical altitude is 2000 m (Opposite side). The horizontal distance along the ground is the Adjacent side d. The angle of depression matches the interior angle of elevation (12°)." },
+                { title: "Step 2: Set up the correct algebraic equation", math: "\\tan 12^{\\circ} = \\frac{2000}{d}", explanation: "Opposite and Adjacent mean we use the Tangent ratio (TOA). The variable d starts in the denominator." },
+                { title: "Step 3: Swap positions to isolate variable d", math: "d = \\frac{2000}{\\tan 12^{\\circ}}", explanation: "Swap d and tan 12° to isolate the variable at the top." },
+                { title: "Step 4: Compute the quotient to the nearest whole integer", math: "d = \\frac{2000}{0.2126} \\approx 9409", explanation: "Divide 2000 by 0.21255... to get 9409.13... Rounding to the nearest whole metre gives 9409 m." }
+            ], ans_box: "9409" },
+
+            q12b: { title: "Question 12b", fullStatement: "Using parameters from Question 12, what is the airplane's direct distance to the landmark, to the nearest metre?", steps: [
+                { title: "Step 1: Identify side roles for the direct line measurement", math: "2000, \\; c", explanation: "The 'direct' line-of-sight distance is the straight diagonal from the plane to the landmark, which is the Hypotenuse c. The altitude remains the Opposite side (2000)." },
+                { title: "Step 2: Set up the matching trigonometric formula", math: "\\sin 12^{\\circ} = \\frac{2000}{c}", explanation: "Opposite and Hypotenuse mean we use the Sine ratio (SOH). The variable c starts in the denominator." },
+                { title: "Step 3: Swap positions to isolate variable c", math: "c = \\frac{2000}{\\sin 12^{\\circ}}", explanation: "Swap c and sin 12° to isolate the variable." },
+                { title: "Step 4: Compute the quotient to the nearest whole integer", math: "c = \\frac{2000}{0.2079} \\approx 9620", explanation: "Divide 2000 by 0.20791... to get 9619.51... Rounding up to the nearest whole number gives 9620 m." }
+            ], ans_box: "9620" },
+
+            q17: { title: "Question 17", fullStatement: "Refer to the question PDF file for the diagram context.<br><br>Calculate the total height of the cliff to the nearest tenth of a metre.", steps: [
+                { title: "Step 1: Why must we solve the lower triangle first?", math: "b = 18.4 \\times \\tan 58^{\\circ}", explanation: "The cliff's height is part of a triangle where we have no side lengths given. However, both triangles share a baseline distance along the river. We find this shared base 'b' first using the lower triangle (tan 58° = b / 18.4)." },
+                { title: "Step 2: Evaluate the shared horizontal baseline distance", math: "b = 18.4 \\times 1.6003 = 29.447", explanation: "Multiply 18.4 by the tangent of 58 degrees. Keep extra decimal places for accuracy in the next step." },
+                { title: "Step 3: Link this baseline distance to the vertical cliff height h", math: "h = 29.447 \\times \\tan 72^{\\circ}", explanation: "Now look at the upper triangle: the cliff height h is Opposite to the 72-degree angle, and our base b is Adjacent. Therefore, h = b × tan 72°." },
+                { title: "Step 4: Compute the final height outcome and round", math: "h = 29.447 \\times 3.0777 \\approx 90.6", explanation: "Multiply the values to get 90.629... Rounding to the nearest tenth gives 90.6 m." }
+            ], ans_box: "90.6" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const numInput = document.getElementById("numeric-student-input");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            numInput.value = state.textInputVal;
+            
+            numInput.oninput = function() {
+                state.textInputVal = numInput.value;
+            };
+
+            if (state.answered) {
+                numInput.disabled = true;
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                numInput.disabled = false;
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                questionStates[activeQuestionId].textInputVal = txtInput.value;
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            let rawVal = state.textInputVal;
+            let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+            
+            const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+            let matchingCorrect = possibleAnswers.includes(normalizedInput);
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_4",
+                lessonId: "Lesson_3",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawVal,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "SOH-CAH-TOA Advanced Scaffolding",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">\\( ${finalAnsText} \\)</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

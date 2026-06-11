@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 4 Lesson 6</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-left: 5px solid #eab308;
+            line-height: 1.8;
+        }
+
+        .input-group-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .input-sub-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .student-answer-input:focus {
+            border-color: var(--secondary-color);
+            background-color: #fff;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 4 Lesson 6</h1>
+        <p>The Cosine Law Framework</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q3a">Question 3a: Solve for side DB, angle D, angle B</option>
+                <option value="q3b">Question 3b: Solve for angle R, S, T</option>
+                <option value="q3c">Question 3c: Solve for side GH, angle G, angle H</option>
+                <option value="q3d">Question 3d: Solve for angle A, B, C</option>
+                <option value="q4a">Question 4a: Solve ABC (side c, angle A, angle B)</option>
+                <option value="q4b">Question 4b: Solve PQR (angle P, angle Q, angle R)</option>
+                <option value="q4c">Question 4c: Solve XYZ (angle X, angle Y, angle Z)</option>
+                <option value="q4d">Question 4d: Solve JKL (side j, angle K, angle L)</option>
+                <option value="q7">Question 7: Length of the Pond (AC)</option>
+                <option value="q8">Question 8: Length of Mountain Tunnel</option>
+                <option value="q10">Question 10: Sailing Course Design Validity Matcher</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Fill in all calculated fields below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('Y')">Y</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('e')">e</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('s')">s</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('N')">N</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('o')">o</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let activeInputTarget = null;
+
+        const answerRegistry = {
+            q3a: ["17.0", "63.6", "52.4"],
+            q3b: ["67.7", "51.2", "61.1"],
+            q3c: ["52.8", "50.3", "59.7"],
+            q3d: ["53.1", "59.7", "67.2"],
+            q4a: ["19.6", "50.1", "59.9"],
+            q4b: ["61.2", "46.4", "72.4"],
+            q4c: ["18.2", "73.3", "88.5"],
+            q4d: ["18.3", "77.0", "56.8"],
+            q7: ["14.4"],
+            q8: ["268"],
+            q10: ["No"]
+        };
+
+        const problemDataPack = {
+            q3a: { title: "Question 3a", fullStatement: "Refer to the drawing in the homework.<br><br>Solve the triangle entirely for the listed variables.", inputs: ["side DB", "angle D", "angle B"], hints: [
+                "Hint 1: Oblique triangle. No Known Pair exists (SAS layout). Apply Cosine Law to isolate side DB first: c² = a² + b² - 2ab cos C",
+                "Hint 2: Once side DB is unlocked, you have a Known Pair! Switch to the simpler Sine Law to isolate the remaining angles."
+            ], steps: [
+                { title: "Step 1: How do we set up our Cosine Law fraction template for side c?", math: "c^2 = 15^2 + 17^2 - 2(15)(17)\\cos 64^{\\circ}", explanation: "Since we know two sides and the corner between them (SAS), we don't have a complete pair. We use the Cosine Law to find the missing opposite side c." },
+                { title: "Step 2: How do we expand the numbers and solve the exponents?", math: "c^2 = 225 + 289 - 510 \\times 0.4384", explanation: "Square 15 and 17 to get 225 and 289, then multiply 2 * 15 * 17 to get 510. Look up cos 64° on your calculator." },
+                { title: "Step 3: How do we combine these values into a single base number?", math: "c^2 = 290.42", explanation: "Add 225 and 289 together, then subtract the multiplication result from that total." },
+                { title: "Step 4: How do we untie the square to find the final side length?", math: "c = \\sqrt{290.42} \\approx 17.0", explanation: "Take the square root of 290.42 to clear the power of two. Rounding to the nearest tenth gives 17.0 cm." },
+                { title: "Step 5: How do we pair up Angle D using our new Known Pair?", math: "\\frac{\\sin D}{15} = \\frac{\\sin 64^{\\circ}}{17.0}", explanation: "Now that side c is found, we have a complete side-and-angle pair! We can use the simpler Sine Law to find Angle D." },
+                { title: "Step 6: How do we isolate sin D and move the denominator?", math: "\\sin D = \\frac{15 \\times \\sin 64^{\\circ}}{17.0}", explanation: "Multiply both sides by 15 to pull it out of the fraction base and shift it over to the right side." },
+                { title: "Step 7: How do we solve the fraction product decimal?", math: "\\sin D \\approx 0.7931", explanation: "Multiply 15 by the sine of 64°, then divide the product by 17.0 to find our decimal ratio." },
+                { title: "Step 8: How do we find the actual degree measure of Angle D?", math: "D = \\sin^{-1}(0.7931) \\approx 63.6^{\\circ}", explanation: "Use the inverse sine function (sin⁻¹) on your calculator to discover the angle, rounding to one decimal place." },
+                { title: "Step 9: How do we deduce the final Angle B using the interior total?", math: "B = 180^{\\circ} - 64^{\\circ} - 63.6^{\\circ}", explanation: "Every triangle's inside corners add up to 180°. Subtract our two known angles from 180°." },
+                { title: "Step 10: Complete the subtraction to isolate Angle B", math: "B = 52.4^{\\circ}", explanation: "Subtracting both measures leaves us with exactly 52.4° for Angle B." }
+            ]},
+
+            q3b: { title: "Question 3b", fullStatement: "Refer to the drawing in the homework.<br><br>Solve the triangle for all interior angles.", inputs: ["angle R", "angle S", "angle T"], hints: [
+                "Hint 1: SSS triangle context. No Known Pair exists. Apply Cosine Law angle layout to find Angle R first: cos R = (s² + t² - p²)/(2st)",
+                "Hint 2: With Angle R active, you have a Known Pair! Use the Sine Law to solve for the second angle easily."
+            ], steps: [
+                { title: "Step 1: How do we set up our Cosine Law formula for Angle R?", math: "\\cos R = \\frac{16^2 + 18^2 - 19^2}{2(16)(18)}", explanation: "Since we only know three sides (SSS), we don't have an angle to build a pair. We use the flipped Cosine Law angle template." },
+                { title: "Step 2: How do we expand the squared side lengths?", math: "\\cos R = \\frac{256 + 324 - 361}{576}", explanation: "Square each side length individually, and multiply the values in the denominator layout." },
+                { title: "Step 3: How do we simplify the top fraction numbers?", math: "\\cos R = \\frac{219}{576}", explanation: "Add 256 and 324, then subtract 361 to secure our clean fraction numerator." },
+                { title: "Step 4: How do we turn this fraction into a ratio decimal?", math: "\\cos R \\approx 0.3802", explanation: "Divide 219 by 576 to extract our intermediate tracking decimal parameter." },
+                { title: "Step 5: How do we find the exact degree value of Angle R?", math: "R = \\cos^{-1}(0.3802) \\approx 67.7^{\\circ}", explanation: "Apply the inverse cosine function (cos⁻¹) to find the angle, rounding to the nearest tenth." },
+                { title: "Step 6: How do we set up the Sine Law for the next Angle S?", math: "\\frac{\\sin S}{16} = \\frac{\\sin 67.7^{\\circ}}{19}", explanation: "Angle R gives us a fresh Known Pair! Let's match unknown Angle S with its opposite side 16." },
+                { title: "Step 7: How do we isolate sin S by cross-multiplying?", math: "\\sin S = \\frac{16 \\times \\sin 67.7^{\\circ}}{19}", explanation: "Multiply both sides by 16 to move it out of the fraction denominator slot." },
+                { title: "Step 8: How do we calculate the decimal ratio for Angle S?", math: "\\sin S \\approx 0.7791", explanation: "Multiply 16 by sin 67.7°, then divide by 19 using your calculation console." },
+                { title: "Step 9: How do we isolate Angle S from the sine wrapper?", math: "S = \\sin^{-1}(0.7791) \\approx 51.2^{\\circ}", explanation: "Take the inverse sine function (sin⁻¹) to calculate the second angle degree measure." },
+                { title: "Step 10: How do we find the final Angle T using our 180° shortcut?", math: "T = 180^{\\circ} - 67.7^{\\circ} - 51.2^{\\circ}", explanation: "Subtract our two calculated angles from the triangle constant total boundary of 180°." },
+                { title: "Step 11: Subtract the values precisely to clear the vertex", math: "T = 61.1^{\\circ}", explanation: "Subtracting both measures leaves us with exactly 61.1° for the final corner." }
+            ]},
+
+            q3c: { title: "Question 3c", fullStatement: "Refer to the drawing in the homework.<br><br>Solve the triangle properties completely.", inputs: ["side GH", "angle G", "angle H"], hints: [
+                "Hint 1: Oblique SAS context. No Known Pair is visible. Start with Cosine Law to find side j (GH): j² = g² + h² - 2gh cos J",
+                "Hint 2: Convert to Sine Law tracking methods once side GH provides a valid Known Pair balance."
+            ], steps: [
+                { title: "Step 1: How do we apply the Cosine Law template for side j?", math: "j^2 = 45^2 + 47^2 - 2(45)(47)\\cos 70^{\\circ}", explanation: "We have two sides and the included corner angle (SAS). We set up the side calculation blueprint." },
+                { title: "Step 2: How do we expand the squares and calculate products?", math: "j^2 = 2025 + 2209 - 4230 \\times 0.3420", explanation: "Square 45 and 47, then multiply 2 * 45 * 47 to get 4230. Find cos 70° on your scratchpad." },
+                { title: "Step 3: How do we simplify the arithmetic expression blocks?", math: "j^2 = 4234 - 1446.66", explanation: "Add the first two squares, then subtract the multiplied cosine product segment." },
+                { title: "Step 4: Compute the simplified value of j squared", math: "j^2 = 2787.34", explanation: "Subtract the values cleanly to secure our squared base term." },
+                { title: "Step 5: How do we eliminate the square index to find side GH?", math: "j = \\sqrt{2787.34} \\approx 52.8", explanation: "Take the square root to clear the power of two. Rounding to the nearest tenth gives 52.8 m." },
+                { title: "Step 6: How do we pair up Angle G using our complete pair?", math: "\\frac{\\sin G}{45} = \\frac{\\sin 70^{\\circ}}{52.8}", explanation: "With side j active, we have a complete pair! Set up a Sine Law ratio for unknown Angle G." },
+                { title: "Step 7: How do we get sin G completely by itself?", math: "\\sin G = \\frac{45 \\times \\sin 70^{\\circ}}{52.8}", explanation: "Multiply both sides by 45 to shift it up into the right-hand numerator line path." },
+                { title: "Step 8: Compute the intermediate decimal quotient target", math: "\\sin G \\approx 0.8009", explanation: "Execute the multiplication and division steps precisely on your calculator." },
+                { title: "Step 9: How do we untie Angle G using inverse sine?", math: "G = \\sin^{-1}(0.8009) \\approx 50.3^{\\circ}", explanation: "Apply the inverse sine transformation function to locate our degree measure." },
+                { title: "Step 10: How do we find the final Angle H using the 180° interior sum rule?", math: "H = 180^{\\circ} - 70^{\\circ} - 50.3^{\\circ} = 59.7^{\\circ}", explanation: "Subtract the given 70° angle and our calculated 50.3° angle from the triangle constant 180°." }
+            ]},
+
+            q3d: { title: "Question 3d", fullStatement: "Refer to the drawing in the homework.<br><br>Solve the triangle for **Angle A**, **Angle B**, and **Angle C** in order.", inputs: ["Angle A", "Angle B", "Angle C"], hints: [
+                "Hint 1: SSS triangle context. No Known Pair exists. Apply Cosine Law angle form to isolate Angle A first: cos A = (b² + c² - a²)/(2bc)",
+                "Hint 2: Swap into the Sine Law framework once your first calculated angle unlocks a Known Pair relationship."
+            ], steps: [
+                { title: "Step 1: How do we build our angle template formula for Angle A?", math: "\\cos A = \\frac{47^2 + 53^2 - 45^2}{2(47)(53)}", explanation: "Since we only know three side lengths (SSS), we use the inverted Cosine Law format to uncover Angle A." },
+                { title: "Step 2: How do we expand the side exponents cleanly?", math: "\\cos A = \\frac{2209 + 2809 - 2025}{4982}", explanation: "Square each side length individually, and multiply out the fraction base denominator value." },
+                { title: "Step 3: How do we simplify the numerator integers?", math: "\\cos A = \\frac{2993}{4982}", explanation: "Execute the addition and subtraction lines on top to find our unified number." },
+                { title: "Step 4: Convert the fraction ratio to a decimal parameter", math: "\\cos A \\approx 0.6008", explanation: "Divide the top integer by the bottom integer to locate the cosine value." },
+                { title: "Step 5: How do we isolate Angle A using inverse cosine?", math: "A = \\cos^{-1}(0.6008) \\approx 53.1^{\\circ}", explanation: "Apply the inverse cosine function (cos⁻¹) to extract the angle cleanly to one decimal place." },
+                { title: "Step 6: How do we apply the Sine Law to search for Angle B?", math: "\\frac{\\sin B}{47} = \\frac{\\sin 53.1^{\\circ}}{45}", explanation: "Angle A unlocks our master Known Pair! Proportionalize unknown Angle B with opposite side 47." },
+                { title: "Step 7: How do we isolate sin B by cross-multiplying?", math: "\\sin B = \\frac{47 \\times \\sin 53.1^{\\circ}}{45}", explanation: "Multiply both sides by 47 to shift it over to the right side numerator path." },
+                { title: "Step 8: Compute the intermediate decimal quotient target", math: "\\sin B \\approx 0.8352", explanation: "Run the product division on your console device to locate the sine value." },
+                { title: "Step 9: How do we extract Angle B using our calculator?", math: "B = \\sin^{-1}(0.8352) \\approx 59.7^{\\circ}", explanation: "Apply inverse sine configurations to secure the second vertex degree measure." },
+                { title: "Step 10: How do we deduce Angle C via total triangle constants?", math: "C = 180^{\\circ} - 53.1^{\\circ} - 59.7^{\\circ} = 67.2^{\\circ}", explanation: "Subtract both active angle metrics from the triangle interior boundary constant total of 180°." }
+            ]},
+
+            q4a: { title: "Question 4a", fullStatement: "In \\( \\triangle ABC \\), \\( BC = 16 \\text{ cm} \\), \\( AC = 18 \\text{ cm} \\), and \\( \\angle C = 70^{\\circ} \\). Solve the system.", inputs: ["side c", "angle A", "angle B"], hints: [
+                "Hint 1: Non-right triangle with SAS given. No Known Pair is visible. Use Cosine Law to isolate side c: c² = a² + b² - 2ab cos C",
+                "Hint 2: Switch to Sine Law immediately after side c establishes a complete Known Pair relationship."
+            ], steps: [
+                { title: "Step 1: How do we initialize the Cosine Law structure for side c?", math: "c^2 = 16^2 + 18^2 - 2(16)(18)\\cos 70^{\\circ}", explanation: "We are given two adjacent sides and their shared included angle (SAS). This requires our basic side formula blueprint." },
+                { title: "Step 2: How do we expand exponents and multiply coefficients?", math: "c^2 = 256 + 324 - 576 \\times 0.3420", explanation: "Square 16 and 18, then multiply out the tracking product parameters carefully." },
+                { title: "Step 3: How do we simplify the arithmetic expression pieces?", math: "c^2 = 580 - 197.0", explanation: "Add the first two squared constants and calculate the trailing multiplied trig product." },
+                { title: "Step 4: Calculate the simplified value of c squared", math: "c^2 = 383.0", explanation: "Perform the subtraction cleanly inside your scratchpad workspace." },
+                { title: "Step 5: How do we isolate c by clearing the power?", math: "c = \\sqrt{383.0} \\approx 19.6", explanation: "Take the square root to find our first target side length parameter of 19.6 cm." },
+                { title: "Step 7: How do we transition into Sine Law for Angle A?", math: "\\frac{\\sin A}{16} = \\frac{\\sin 70^{\\circ}}{19.6}", explanation: "Side c gives us a complete Known Pair ratio link! Match unknown Angle A with side 16." },
+                { title: "Step 8: Isolate sin A by shifting the denominator value", math: "\\sin A = \\frac{16 \\times \\sin 70^{\\circ}}{19.6}", explanation: "Cross-multiply 16 up to the right side numerator layout position." },
+                { title: "Step 9: Compute the intermediate decimal quotient target", math: "\\sin A \\approx 0.7671", explanation: "Multiply numerator parameters and divide by 19.6 cleanly." },
+                { title: "Step 10: How do we find the exact degree value of Angle A?", math: "A = \\sin^{-1}(0.7671) \\approx 50.1^{\\circ}", explanation: "Apply the inverse sine transformation function to locate the first vertex measure." },
+                { title: "Step 12: How do we discover the final Angle B using the 180° shortcut?", math: "B = 180^{\\circ} - 70^{\\circ} - 50.1^{\\circ} = 59.9^{\\circ}", explanation: "Subtract both active angle metrics from the triangle constant total boundary of 180°." }
+            ]},
+
+            q4b: { title: "Question 4b", fullStatement: "In \\( \\triangle PQR \\), \\( PQ = 25 \\text{ mm} \\), \\( PR = 19 \\text{ mm} \\), and \\( QR = 23 \\text{ mm} \\). Solve the system.", inputs: ["angle P", "angle Q", "angle R"], hints: [
+                "Hint 1: SSS context. No Known Pair exists. Apply Cosine Law angle format to determine Angle P first.",
+                "Hint 2: Once Angle P lights up a Known Pair, apply the standard Sine Law mapping to clear the rest."
+            ], steps: [
+                { title: "Step 1: How do we build our angle template formula for Angle P?", math: "\\cos P = \\frac{19^2 + 25^2 - 23^2}{2(19)(25)}", explanation: "Since we only know three sides (SSS), we use our inverted Cosine Law template layout to target Angle P." },
+                { title: "Step 2: How do we expand the squared integer metrics?", math: "\\cos P = \\frac{361 + 625 - 529}{950}", explanation: "Square each side length individually, and expand the bottom denominator multiplication text." },
+                { title: "Step 3: How do we simplify the top fraction numbers?", math: "\\cos P = \\frac{457}{950}", explanation: "Execute the addition and subtraction lines on top to find our unified number." },
+                { title: "Step 4: Convert the fraction ratio to an intermediate decimal form", math: "\\cos P \\approx 0.4811", explanation: "Divide the top integer by 950 to isolate our tracking decimal ratio parameter." },
+                { title: "Step 5: How do we find the exact degree value of Angle P?", math: "P = \\cos^{-1}(0.4811) \\approx 61.2^{\\circ}", explanation: "Apply the inverse cosine function (cos⁻¹) to extract the angle value to one decimal position." },
+                { title: "Step 6: How do we set up the Sine Law for the next Angle Q?", math: "\\frac{\\sin Q}{19} = \\frac{\\sin 61.2^{\\circ}}{23}", explanation: "Angle P gives us a complete Known Pair link! Let's match unknown Angle Q with opposite side 19." },
+                { title: "Step 7: Isolate sin Q by shifting the denominator across", math: "\\sin Q = \\frac{19 \\times \\sin 61.2^{\\circ}}{23}", explanation: "Cross-multiply 19 up to the right side numerator layout position." },
+                { title: "Step 8: Compute the intermediate decimal quotient target", math: "\\sin Q \\approx 0.7239", explanation: "Execute the multiplication and division steps precisely on your calculator console." },
+                { title: "Step 9: How do we extract Angle Q using our calculator?", math: "Q = \\sin^{-1}(0.7239) \\approx 46.4^{\\circ}", explanation: "Apply inverse sine configurations to secure the second vertex degree measure." },
+                { title: "Step 10: How do we discover the final Angle R using the 180° shortcut?", math: "R = 180^{\\circ} - 61.2^{\\circ} - 46.4^{\\circ} = 72.4^{\\circ}", explanation: "Subtract both active angle metrics from the triangle constant total boundary of 180°." }
+            ]},
+
+            q4c: { title: "Question 4c", fullStatement: "In \\( \\triangle XYZ \\), \\( XY = 40.6 \\text{ m} \\), \\( XZ = 38.9 \\text{ m} \\), and \\( YZ = 12.7 \\text{ m} \\). Solve the system.", inputs: ["angle X", "angle Y", "angle Z"], hints: [
+                "Hint 1: SSS context. No Known Pair exists. Apply Cosine Law angle layout to find Angle X first.",
+                "Hint 2: Convert to Sine Law tracking models to unlock the remaining angles easily."
+            ], steps: [
+                { title: "Step 1: How do we apply the Cosine Law structure for Angle X?", math: "\\cos X = \\frac{38.9^2 + 40.6^2 - 12.7^2}{2(38.9)(40.6)}", explanation: "Since we only know three sides (SSS), we use our inverted Cosine Law template layout to target Angle X." },
+                { title: "Step 2: How do we expand the squared tracking elements?", math: "\\cos X = \\frac{1513.21 + 1648.36 - 161.29}{3158.68}", explanation: "Square each side length individually, and expand the bottom denominator multiplication text." },
+                { title: "Step 3: How do we simplify the top fraction numbers?", math: "\\cos X = \\frac{3000.28}{3158.68}", explanation: "Execute the addition and subtraction lines on top to find our unified number." },
+                { title: "Step 4: Convert the fraction ratio to an intermediate decimal form", math: "\\cos X \\approx 0.9499", explanation: "Divide the top integer by the bottom integer to locate the cosine value." },
+                { title: "Step 5: How do we find the exact degree value of Angle X?", math: "X = \\cos^{-1}(0.9499) \\approx 18.2^{\\circ}", explanation: "Apply the inverse cosine function (cos⁻¹) to extract the angle value cleanly to one decimal place." },
+                { title: "Step 6: How do we transition into the Sine Law format for Angle Y?", math: "\\frac{\\sin Y}{38.9} = \\frac{\\sin 18.2^{\\circ}}{12.7}", explanation: "Angle X unlocks our master Known Pair! Proportionalize unknown Angle Y with opposite side 38.9." },
+                { title: "Step 7: Isolate sin Y by shifting the denominator across", math: "\\sin Y = \\frac{38.9 \\times \\sin 18.2^{\\circ}}{12.7}", explanation: "Cross-multiply 38.9 up to the right side numerator layout position." },
+                { title: "Step 8: Compute the intermediate decimal quotient target", math: "\\sin Y \\approx 0.9566", explanation: "Multiply variables and execute division using standard tracking rules." },
+                { title: "Step 9: How do we extract Angle Y using our calculator?", math: "Y = \\sin^{-1}(0.9566) \\approx 73.3^{\\circ}", explanation: "Apply inverse sine configurations to secure the second vertex degree measure." },
+                { title: "Step 10: How do we discover the final Angle Z using the 180° shortcut?", math: "Z = 180^{\\circ} - 18.2^{\\circ} - 73.3^{\\circ} = 88.5^{\\circ}", explanation: "Subtract both active angle metrics from the triangle constant total boundary of 180°." }
+            ]},
+
+            q4d: { title: "Question 4d", fullStatement: "In \\( \\triangle JKL \\), \\( JK = 21.2 \\text{ cm} \\), \\( JL = 24.7 \\text{ cm} \\), and \\( \\angle J = 46.2^{\\circ} \\). Solve the system.", inputs: ["side j", "angle K", "angle L"], hints: [
+                "Hint 1: Oblique SAS context. No Known Pair is present. Apply Cosine Law to isolate side j first: j² = k² + l² - 2kl cos J",
+                "Hint 2: Use your fresh side measurement to set up a Known Pair ratio link via Sine Law next."
+            ], steps: [
+                { title: "Step 1: How do we initialize the Cosine Law structure for side j?", math: "j^2 = 24.7^2 + 21.2^2 - 2(24.7)(21.2)\\cos 46.2^{\\circ}", explanation: "We have two sides and the included corner angle (SAS). We set up the side calculation blueprint." },
+                { title: "Step 2: How do we expand exponents and multiply coefficients?", math: "j^2 = 610.09 + 449.44 - 1047.28 \\times 0.6921", explanation: "Square 24.7 and 21.2, then compute multiplication parameters inside the tracking container." },
+                { title: "Step 3: How do we simplify the arithmetic expression pieces?", math: "j^2 = 1059.53 - 724.82", explanation: "Add the first two squared constants and calculate the trailing multiplied trig product." },
+                { title: "Step 4: Calculate the simplified value of j squared", math: "j^2 = 334.71", explanation: "Perform the subtraction cleanly inside your scratchpad workspace." },
+                { title: "Step 5: How do we isolate j by clearing the power?", math: "j = \\sqrt{334.71} \\approx 18.3", explanation: "Take the square root to find our first target side length parameter of 18.3 cm." },
+                { title: "Step 7: How do we transition into Sine Law for Angle K?", math: "\\frac{\\sin K}{24.7} = \\frac{\\sin 46.2^{\\circ}}{18.3}", explanation: "Side j gives us a complete Known Pair ratio link! Match unknown Angle K with side 24.7." },
+                { title: "Step 8: Isolate sin K by shifting the denominator value", math: "\\sin K = \\frac{24.7 \\times \\sin 46.2^{\\circ}}{18.3}", explanation: "Cross-multiply 24.7 up to the right side numerator layout position." },
+                { title: "Step 9: Compute the intermediate decimal quotient target", math: "\\sin K \\approx 0.9742", explanation: "Multiply variables and execute division using standard tracking rules." },
+                { title: "Step 10: How do we find the exact degree value of Angle K?", math: "K = \\sin^{-1}(0.9742) \\approx 77.0^{\\circ}", explanation: "Apply the inverse sine transformation function to locate the first vertex measure." },
+                { title: "Step 12: How do we discover the final Angle L using the 180° shortcut?", math: "L = 180^{\\circ} - 46.2^{\\circ} - 77.0^{\\circ} = 56.8^{\\circ}", explanation: "Subtract both active angle metrics from the triangle constant total boundary of 180°." }
+            ]},
+
+            q7: { title: "Question 7", fullStatement: "Refer to the drawing in the HW.<br><br>Calculate the length of the pond (side AC) to the nearest tenth of a metre.", inputs: ["Length of the Pond"], hints: [
+                "Hint 1: Oblique SAS context. No Known Pair is visible. Apply Cosine Law directly to isolate the straight line dimension AC: b² = a² + c² - 2ac cos B"
+            ], steps: [
+                { title: "Step 1: How do we initialize the Cosine Law blueprint for side AC?", math: "b^2 = 19.4^2 + 23.1^2 - 2(19.4)(23.1)\\cos 38.5^{\\circ}", explanation: "We are given two adjacent sides (19.4 m and 23.1 m) and their shared corner angle (38.5°). This matches the standard SAS structure." },
+                { title: "Step 2: How do we expand the squares and resolve products?", math: "b^2 = 376.36 + 533.61 - 896.28 \\times 0.7826", explanation: "Square 19.4 m and 23.1 m on your console device, and lookup the decimal cosine value parameter." },
+                { title: "Step 3: How do we simplify the arithmetic segments?", math: "b^2 = 909.97 - 701.43", explanation: "Add the first two squares and calculate the trailing multiplied trig equation block product." },
+                { title: "Step 4: Compute the simplified value of b squared", math: "b^2 = 208.54", explanation: "Combine products cleanly on your calculator scratchpad." },
+                { title: "Step 5: How do we clear the power of two to find side AC?", math: "b = \\sqrt{208.54} \\approx 14.4", explanation: "Take the square root to clear the power index, rounding cleanly to the nearest tenth to yield 14.4 m." }
+            ]},
+
+            q8: { title: "Question 8", fullStatement: "Refer to the drawing in the HW.<br><br>Determine the total length of the mountain tunnel to the nearest metre.", inputs: ["Length of the Tunnel"], hints: [
+                "Hint 1: Oblique SAS context. No Known Pair is given. Apply Cosine Law directly to isolate the tunnel line path length directly."
+            ], steps: [
+                { title: "Step 1: How do we apply the Cosine Law structure for our tunnel side path?", math: "t^2 = 185^2 + 204^2 - 2(185)(204)\\cos 87^{\\circ}", explanation: "Plug adjacent variables (185 m and 204 m) and their 87° included angle into our workspace." },
+                { title: "Step 2: How do we expand the squared integer components?", math: "t^2 = 34225 + 41616 - 75480 \\times 0.0523", explanation: "Square both side weights cleanly, and expand the trailing trig multiplication parameters." },
+                { title: "Step 3: How do we simplify into a single numeric tracking value?", math: "t^2 = 75841 - 3947.6", explanation: "Perform addition and subtraction operations cleanly inside your scratchpad workspace." },
+                { title: "Step 4: Calculate the simplified value of t squared", math: "t^2 = 71893.4", explanation: "Perform the final subtraction operation safely inside the workspace container." },
+                { title: "Step 5: How do we resolve the final length to the nearest whole metre?", math: "t = \\sqrt{71893.4} \\approx 268", explanation: "Take the square root to clear the power index. Rounding to the nearest whole metre yields 268 m." }
+            ]},
+
+            q10: { title: "Question 10", fullStatement: "Refer to the drawing in the HW.<br><br>The instructors want each course angle to stay under 70°. Will this triangular design be appropriate? Type Yes or No.", inputs: ["Appropriate? (Yes/No)"], hints: [
+                "Hint 1: Oblique SSS triangle context. No Known Pair exists. Apply Cosine Law to find the largest angle (opposite the longest side 550 m) to check if it violates the 70° limit constraint."
+            ], steps: [
+                { title: "Step 1: Why must we test the angle opposite the 550 m side first?", math: "\\cos \\theta = \\frac{460^2 + 490^2 - 550^2}{2(460)(490)}", explanation: "Since the largest angle is always completely opposite the longest side length, testing the 550 m path tells us if any angle violates the 70° boundary." },
+                { title: "Step 2: How do we expand these large side metrics?", math: "\\cos \\theta = \\frac{211600 + 240100 - 302500}{450800}", explanation: "Square the side lengths across both levels cleanly using your calculation device." },
+                { title: "Step 3: How do we simplify the fraction numerator values?", math: "\\cos \\theta = \\frac{149200}{450800}", explanation: "Solve the numerator addition and subtraction steps inside your scratchpad layout." },
+                { title: "Step 4: Convert the fraction ratio to a decimal parameter", math: "\\cos \\theta \\approx 0.3310", explanation: "Divide the integers to extract our intermediate decimal quotient target." },
+                { title: "Step 5: How do we find the exact degree measure of this angle?", math: "\\theta = \\cos^{-1}(0.3310) \\approx 70.7^{\\circ}", explanation: "Apply the inverse cosine function (cos⁻¹) to unlock the maximum course vertex angle." },
+                { title: "Step 6: How do we compare this angle against our 70-degree constraint?", math: "70.7^{\\circ} > 70^{\\circ}", explanation: "Because 70.7° is greater than the instructor limit of 70°, this specific course design is NOT appropriate. Type No." }
+            ]}
+        };
+
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, inputValuesArray: [], isCorrect: false, currentStep: 0, solRevealed: false, hintClickCount: 0 };
+            let neededSlots = problemDataPack[k].inputs.length;
+            for(let i=0; i<neededSlots; i++) questionStates[k].inputValuesArray.push("");
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const hintDisplay = document.getElementById("hint-display-mount");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            
+            let mountHTML = "";
+            activeProblem.inputs.forEach((labelTxt, index) => {
+                mountHTML += `
+                <div class="input-group-wrapper">
+                    <span class="input-sub-label">${labelTxt}:</span>
+                    <input type="text" class="student-answer-input sub-field-box" data-index="${index}" autocomplete="off" onfocus="setActiveInputTarget(this)">
+                </div>`;
+            });
+            inputMount.innerHTML = mountHTML;
+
+            const generatedFields = inputMount.querySelectorAll(".sub-field-box");
+            generatedFields.forEach((field, idx) => {
+                field.value = state.inputValuesArray[idx] || "";
+                field.oninput = function() {
+                    state.inputValuesArray[idx] = field.value;
+                };
+            });
+
+            if(generatedFields.length > 0) activeInputTarget = generatedFields[0];
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 4px;">• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+                hintDisplay.innerHTML = "";
+            }
+
+            if (state.answered) {
+                generatedFields.forEach(f => f.disabled = true);
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                generatedFields.forEach(f => f.disabled = false);
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function setActiveInputTarget(element) {
+            activeInputTarget = element;
+        }
+
+        function pressStandardNumericKey(symbol) {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            let idx = parseInt(txtInput.getAttribute("data-index"));
+            questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                let idx = parseInt(txtInput.getAttribute("data-index"));
+                questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (data.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${data.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All tactical formula filter hints for this session have been unlocked safely.");
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const expectedArray = answerRegistry[activeQuestionId];
+            let allMatch = true;
+
+            for (let i = 0; i < expectedArray.length; i++) {
+                let userFieldVal = (state.inputValuesArray[i] || "").replace(/\s+/g, '').toLowerCase();
+                let targetExpectedVal = expectedArray[i].replace(/\s+/g, '').toLowerCase();
+                if (userFieldVal !== targetExpectedVal) {
+                    allMatch = false;
+                    break;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = allMatch;
+
+            globalAttempts++;
+            if (allMatch) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(allMatch);
+
+            let payload = {
+                unitId: "Unit_4",
+                lessonId: "Lesson_6",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: state.inputValuesArray.join(" | "),
+                isCorrect: allMatch,
+                attempts: 1,
+                methodUsed: "Dynamic Multi-Field Cosine Law Architecture",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database link transmission failure bypassed:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".sub-field-box").forEach(f => f.disabled = true);
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct values verified! Metrics compiled into core storage layers.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Discrepancy detected inside computed indices. Check formula paths.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".sub-field-box").forEach(f => f.disabled = false);
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = answerRegistry[activeQuestionId].join(", ");
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Workbook Sequence Key Matchers</span>
+                <span class="final-answer-math">\\( ${finalAnsText} \\)</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>

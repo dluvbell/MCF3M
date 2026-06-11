@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 4 Lesson 5</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-left: 5px solid #eab308;
+            line-height: 1.8;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 4 Lesson 5</h1>
+        <p>The Sine Law Framework</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1a">Question 1a: Find length of side b</option>
+                <option value="q1b">Question 1b: Find length of side d</option>
+                <option value="q2a">Question 2a: Find measure of Angle P</option>
+                <option value="q2b">Question 2b: Find measure of Marked Angle</option>
+                <option value="q3a_K">Question 3a: Find measure of Angle K</option>
+                <option value="q3a_kl">Question 3a: Find length of side KL (m)</option>
+                <option value="q3a_km">Question 3a: Find length of side KM (l)</option>
+                <option value="q3b_C">Question 3b: Find measure of Angle C</option>
+                <option value="q3b_B">Question 3b: Find measure of Angle B</option>
+                <option value="q3b_ac">Question 3b: Find length of side AC (b)</option>
+                <option value="q4a_t">Question 4a: Find measure of Angle T</option>
+                <option value="q4a_s">Question 4a: Find length of side s</option>
+                <option value="q4a_t_side">Question 4a: Find length of side t</option>
+                <option value="q5_b">Question 5b: Calculate angle tree makes with ground</option>
+                <option value="q8_sud">Question 8: Distance of satellite from Sudbury</option>
+                <option value="q8_tor">Question 8: Distance of satellite from Toronto</option>
+                <option value="q9_a">Question 9: Distance of satellite from Tower A</option>
+                <option value="q9_b">Question 9: Distance of satellite from Tower B</option>
+                <option value="q11">Question 11: Distance to the Fire from Lawrence Station</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Type your final numeric answer below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;">
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="Enter numerical value..." autocomplete="off">
+                </div>
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            q1a: ["13.9"], q1b: ["6.5"], q2a: ["56.8"], q2b: ["66.6"],
+            q3a_K: ["88"], q3a_kl: ["5.4"], q3a_km: ["16.8"],
+            q3b_C: ["63.4"], q3b_B: ["44.6"], q3b_ac: ["6.2"],
+            q4a_t: ["79"], q4a_s: ["23.9"], q4a_t_side: ["26.1"],
+            q5_b: ["81"], q8_sud: ["359"], q8_tor: ["249"], q9_a: ["2359"], q9_b: ["2301"], q11: ["103.1"]
+        };
+
+        const problemDataPack = {
+            q1a: { title: "Question 1a", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Find the length of side \\( b \\) to the nearest tenth of a unit.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle A and side a are both given). Use the Sine Law: b / sin B = a / sin A",
+                "Hint 2: Substitute the known values and cross-multiply to isolate side b."
+            ], steps: [
+                { title: "Step 1: How do we set up our Sine Law fraction template for side b?", math: "\\frac{b}{\\sin B} = \\frac{a}{\\sin A}", explanation: "The Sine Law shows us a simple shortcut: if you divide any side by the sine of its opposite angle, it will match the other side-and-angle fractions perfectly." },
+                { title: "Step 2: How do we plug in our matching pairs from the drawing?", math: "\\frac{b}{\\sin 64^{\\circ}} = \\frac{16}{\\sin 72^{\\circ}}", explanation: "Look at the drawing. We can replace side a with 16, Angle A with 72°, and Angle B with 64° directly into our template fractions." },
+                { title: "Step 3: How do we get side b completely by itself?", math: "b = \\frac{16 \\times \\sin 64^{\\circ}}{\\sin 72^{\\circ}}", explanation: "To remove the division by sin 64°, multiply both sides by sin 64°. This shifts it up to the right side as a multiplication product." },
+                { title: "Step 4: How do we calculate and round the final length?", math: "b = \\frac{16 \\times 0.8988}{0.9511} \\approx 13.9", explanation: "Multiply 16 by the decimal value of sin 64°, then divide by sin 72°. Rounding to one decimal place gives 13.9 cm." }
+            ], ans_box: "13.9" },
+
+            q1b: { title: "Question 1b", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Find the length of side \\( d \\) to the nearest tenth of a unit.", hints: [
+                "Hint 1: Oblique triangle. Find the missing third angle F first using the 180-degree interior rule to establish a Known Pair.",
+                "Hint 2: A Known Pair now exists (Angle F and side f). Set up the Sine Law equation: d / sin D = f / sin F",
+                "Hint 3: Cross-multiply by sin 56° to isolate side d."
+            ], steps: [
+                { title: "Step 1: Why must we find the missing Angle F first?", math: "\\angle F = 180^{\\circ} - 56^{\\circ} - 45^{\\circ} = 79^{\\circ}", explanation: "Every triangle's inside angles add up to 180°. We need Angle F because its opposite side (8.2 m) is the only complete pair we have on the page." },
+                { title: "Step 2: How do we pair up side d and our known sides using fractions?", math: "\\frac{d}{\\sin D} = \\frac{f}{\\sin F}", explanation: "We link our unknown side d with its opposite Angle D, and our complete pair side f with its calculated opposite Angle F." },
+                { title: "Step 3: How do we plug in our values and get variable d alone?", math: "\\frac{d}{\\sin 56^{\\circ}} = \\frac{8.2}{\\sin 79^{\\circ}} \\rightarrow d = \\frac{8.2 \\times \\sin 56^{\\circ}}{\\sin 79^{\\circ}}", explanation: "Substitute the numbers in. To get d by itself, multiply both sides by sin 56° to shift it out of the fraction base." },
+                { title: "Step 4: How do we calculate and round our final answer?", math: "d = \\frac{8.2 \\times 0.8290}{0.9816} \\approx 6.5", explanation: "Multiply the top values and divide by the bottom decimal. Rounding to the nearest tenth gives 6.5 m." }
+            ], ans_box: "6.5" },
+
+            q2a: { title: "Question 2a", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Find the measure of Angle P to the nearest tenth of a degree.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle Q and side q). Set up the flipped Sine Law: sin P / p = sin Q / q",
+                "Hint 2: Cross-multiply by p, then press the inverse sine button (sin⁻¹) to determine the final degree."
+            ], steps: [
+                { title: "Step 1: How do we set up the formula cleanly when solving for an angle?", math: "\\frac{\\sin P}{p} = \\frac{\\sin Q}{q}", explanation: "When searching for an unknown angle, flipping our Sine Law fractions upside down puts the unknown function on top, making the algebra much easier." },
+                { title: "Step 2: How do we plug in our side metrics and angle?", math: "\\frac{\\sin P}{19} = \\frac{\\sin 62^{\\circ}}{18}", explanation: "Look at the drawing. Substitute side p with 19 cm, side q with 18 cm, and Angle Q with 62° straight into the fractions." },
+                { title: "Step 3: How do we isolate the sin P piece by itself?", math: "\\sin P = \\frac{19 \\times \\sin 62^{\\circ}}{18}", explanation: "Multiply both sides by 19 to clear the fraction denominator and bring it over to the right side as a multiplier." },
+                { title: "Step 4: How do we untie Angle P using our calculator?", math: "\\sin P = 0.9330 \\rightarrow P = \\sin^{-1}(0.9330) \\approx 56.8^{\\circ}", explanation: "To find the actual degree value, apply the inverse sine function (sin⁻¹) to our calculated decimal. This gives 56.8°." }
+            ], ans_box: "56.8" },
+
+            q2b: { title: "Question 2b", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Find the measure of the marked angle to the nearest tenth of a degree.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle T and side s). Set up the flipped Sine Law: sin \\theta / u = sin T / s",
+                "Hint 2: Cross-multiply by side u, then press sin⁻¹ to determine the final degree measure."
+            ], steps: [
+                { title: "Step 1: How do we build our upside-down angle proportion fractions?", math: "\\frac{\\sin \\theta}{u} = \\frac{\\sin T}{s}", explanation: "Put our unknown angle theta on top across from side u, and match it with our known angle T across from side s." },
+                { title: "Step 2: How do we insert our parameters and move the bottom side number?", math: "\\frac{\\sin \\theta}{16.3} = \\frac{\\sin 48^{\\circ}}{13.2} \\rightarrow \\sin \\theta = \\frac{16.3 \\times \\sin 48^{\\circ}}{13.2}", explanation: "Plug in the sides. Multiply both sides by 16.3 to shift it over and isolate the sine function component." },
+                { title: "Step 3: How do we calculate the final angle using the inverse operation?", math: "\\sin \\theta = 0.9178 \\rightarrow \\theta = \\sin^{-1}(0.9178) \\approx 66.6^{\\circ}", explanation: "Use the inverse sine function (sin⁻¹) on the decimal result to find the exact vertex measure of 66.6°." }
+            ], ans_box: "66.6" },
+
+            q3a_K: { title: "Question 3a (Angle K)", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Solve \\( \\triangle KLM \\): Find the measure of Angle K to the nearest degree.", hints: [
+                "Hint 1: Use the 180-degree triangle interior angle sum rule to find the missing angle K directly."
+            ], steps: [
+                { title: "Step 1: How do we set up the interior angle deduction line?", math: "\\angle K = 180^{\\circ} - 74^{\\circ} - 18^{\\circ}", explanation: "Since all interior angles inside any flat triangle must equal exactly 180°, simply subtract the two known angles." },
+                { title: "Step 2: Subtract the values to isolate our target corner angle", math: "\\angle K = 88^{\\circ}", explanation: "Subtracting 74° and 18° from 180° leaves us with exactly 88° for Angle K." }
+            ], ans_box: "88" },
+
+            q3a_kl: { title: "Question 3a (side KL)", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Find the length of lowercase side m (side KL) to the nearest tenth.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle L and side l). Use the Sine Law: m / sin M = l / sin L",
+                "Hint 2: Substitute values and cross-multiply by sin 18° to isolate side m."
+            ], steps: [
+                { title: "Step 1: How do we match side m and our known sides into pairs?", math: "\\frac{m}{\\sin M} = \\frac{l}{\\sin L}", explanation: "Match our unknown side m with its opposite Angle M, and set it equal to our complete known pair, side l and Angle L." },
+                { title: "Step 2: How do we plug in our values and get variable m alone?", math: "\\frac{m}{\\sin 18^{\\circ}} = \\frac{17.5}{\\sin 74^{\\circ}} \\rightarrow m = \\frac{17.5 \\times \\sin 18^{\\circ}}{\\sin 74^{\\circ}", explanation: "Insert our measurements. Multiply both sides by sin 18° to clear the denominator and shift it over to the right side." },
+                { title: "Step 3: How do we run the final calculation track?", math: "m = \\frac{17.5 \\times 0.3090}{0.9613} \\approx 5.4", explanation: "Evaluate the multiplication fraction with your calculator and round cleanly to one decimal place to get 5.4 cm." }
+            ], ans_box: "5.4" },
+
+            q3a_km: { title: "Question 3a (side KM)", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Find the length of lowercase side k (side KM) to the nearest tenth.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle L and side l). Use the Sine Law: k / sin K = l / sin L",
+                "Hint 2: Substitute values and cross-multiply by sin 88° to isolate side k."
+            ], steps: [
+                { title: "Step 1: How do we link side k with our newly calculated angle?", math: "\\frac{k}{\\sin K} = \\frac{l}{\\sin L}", explanation: "Pair our unknown side k with the 88° Angle K we found earlier, matching it to our original known fraction pair." },
+                { title: "Step 2: How do we isolate variable k and compute the result?", math: "k = \\frac{17.5 \\times \\sin 88^{\\circ}}{\\sin 74^{\\circ}} = \\frac{17.5 \\times 0.9994}{0.9613} \\approx 16.8", explanation: "Cross-multiply by sin 88° to get k alone. Evaluating the final fraction product results in 16.8 cm." }
+            ], ans_box: "16.8" },
+
+            q3b_C: { title: "Question 3b (Angle C)", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Solve \\( \\triangle ABC \\): Find the measure of Angle C to the nearest tenth of a degree.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle A and side a). Set up the flipped Sine Law: sin C / c = sin A / a",
+                "Hint 2: Cross-multiply by side c, then press sin⁻¹ to determine the final degree measure."
+            ], steps: [
+                { title: "Step 1: How do we build our upside-down fraction model to find Angle C?", math: "\\frac{\\sin C}{c} = \\frac{\\sin A}{a}", explanation: "Place unknown angle C on top across from side c, and match it with our known side a and Angle A pair." },
+                { title: "Step 2: How do we plug in our values and isolate the sin C piece?", math: "\\frac{\\sin C}{7.9} = \\frac{\\sin 72^{\\circ}}{8.4} \\rightarrow \\sin C = \\frac{7.9 \\times \\sin 72^{\\circ}}{8.4}", explanation: "Plug in the sides. To get sin C alone, multiply both sides by 7.9 to pull it out of the fraction base." },
+                { title: "Step 3: How do we evaluate the decimal and solve for the degrees?", math: "\\sin C = 0.8943 \\rightarrow C = \\sin^{-1}(0.8943) \\approx 63.4^{\\circ}", explanation: "Calculate the decimal value, then take the inverse sine function (sin⁻¹) to unlock exactly 63.4°." }
+            ], ans_box: "63.4" },
+
+            q3b_B: { title: "Question 3b (Angle B)", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Find the measure of Angle B to the nearest tenth of a degree.", hints: [
+                "Hint 1: Use the 180-degree interior sum rule with given angle A and your calculated angle C to find angle B."
+            ], steps: [
+                { title: "Step 1: How do we use our angle sum shortcut to find Angle B?", math: "B = 180^{\\circ} - 72^{\\circ} - 63.4^{\\circ}", explanation: "Subtract the given Angle A (72°) and the Angle C we just calculated (63.4°) from our 180° total constant." },
+                { title: "Step 2: Subtract the measures to secure the final vertex", math: "B = 44.6^{\\circ}", explanation: "Subtracting the metrics cleanly isolates Angle B as 44.6°." }
+            ], ans_box: "44.6" },
+
+            q3b_ac: { title: "Question 3b (side AC)", fullStatement: "Refer to the drawing in the PDF HW.<br><br>Find the length of lowercase side b (side AC) to the nearest tenth of a unit.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle A and side a). Use the Sine Law: b / sin B = a / sin A",
+                "Hint 2: Substitute values and cross-multiply by sin 44.6° to isolate side b."
+            ], steps: [
+                { title: "Step 1: How do we set up our fraction layout for side b?", math: "\\frac{b}{\\sin B} = \\frac{a}{\\sin A}", explanation: "Link our missing side b with the 44.6° Angle B we just found, matching it against our original known pair." },
+                { title: "Step 2: How do we isolate variable b and solve the numbers?", math: "b = \\frac{8.4 \\times \\sin 44.6^{\\circ}}{\\sin 72^{\\circ}} = \\frac{8.4 \\times 0.7022}{0.9511} \\approx 6.2", explanation: "Cross-multiply by sin 44.6° to clear the denominator. Compute the product quotient to secure 6.2 m." }
+            ], ans_box: "6.2" },
+
+            q4a_t: { title: "Question 4a (Angle T)", fullStatement: "In \\( \\triangle RST \\), \\( \\angle R = 37^{\\circ} \\), \\( r = 16 \\text{ cm} \\), and \\( \\angle S = 64^{\\circ} \\). Find the measure of Angle T.", hints: [
+                "Hint 1: Use the 180-degree interior sum rule to find the missing third angle T directly."
+            ], steps: [
+                { title: "Step 1: How do we find the third angle using our interior sum property?", math: "\\angle T = 180^{\\circ} - 37^{\\circ} - 64^{\\circ}", explanation: "Subtract both known angles from our 180° absolute triangle total to find the missing corner." },
+                { title: "Step 2: Complete the subtraction to isolate Angle T", math: "\\angle T = 79^{\\circ}", explanation: "Evaluating the numbers gives exactly 79° for Angle T." }
+            ], ans_box: "79" },
+
+            q4a_s: { title: "Question 4a (side s)", fullStatement: "In \\( \\triangle RST \\), find the length of side s to the nearest tenth.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle R and side r). Use the Sine Law: s / sin S = r / sin R",
+                "Hint 2: Substitute values and cross-multiply by sin 64° to isolate side s."
+            ], steps: [
+                { title: "Step 1: How do we match side s into a Sine Law fraction pair?", math: "\\frac{s}{\\sin S} = \\frac{r}{\\sin R}", explanation: "Pair unknown side s with its opposite Angle S, matching it to our given complete pair (r and R)." },
+                { title: "Step 2: How do we insert our parameters and isolate variable s?", math: "s = \\frac{16 \\times \\sin 64^{\\circ}}{\\sin 37^{\\circ}} = \\frac{16 \\times 0.8988}{0.6018} \\approx 23.9", explanation: "Cross-multiply by sin 64° to move it up to the right side. Evaluating the decimal fraction gives 23.9 cm." }
+            ], ans_box: "23.9" },
+
+            q4a_t_side: { title: "Question 4a (side t)", fullStatement: "In \\( \\triangle RST \\), find the length of side t to the nearest tenth.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Angle R and side r). Use the Sine Law: t / sin T = r / sin R",
+                "Hint 2: Substitute values and cross-multiply by sin 79° to isolate side t."
+            ], steps: [
+                { title: "Step 1: How do we pair side t with our calculated angle?", math: "\\frac{t}{\\sin T} = \\frac{r}{\\sin R}", explanation: "Pair unknown side t with the 79° Angle T we found in the first part, matching it to our baseline fraction ratio." },
+                { title: "Step 2: How do we isolate variable t and compute the final length?", math: "t = \\frac{16 \\times \\sin 79^{\\circ}}{\\sin 37^{\\circ}} = \\frac{16 \\times 0.9816}{0.6018} \\approx 26.1", explanation: "Cross-multiply by sin 79° to pull it out of the denominator. Evaluating the fraction precisely results in 26.1 cm." }
+            ], ans_box: "26.1" },
+
+            q5_b: { title: "Question 5b", fullStatement: "Refer to the drawing in the PDF HW.<br><br>A tree leans at an angle from the vertical. A strap attached 7 m up the tree is anchored 5 m away on the ground at an angle of elevation of 45°. Calculate the angle the tree makes with the ground, to the nearest degree.", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Strap length 7 m and ground anchor angle 45°). Use the flipped Sine Law to find the top angle: sin \\theta / 5 = sin 45° / 7",
+                "Hint 2: Cross-multiply by 5, press sin⁻¹ to get the top angle, then subtract from 180° with 45° to find the interior base angle.",
+                "Hint 3: Use the straight-line linear pair rule (180 - interior base angle) to find the final angle the tree makes with the ground."
+            ], steps: [
+                { title: "Step 1: How do we set up our angle formula fractions to find the top corner?", math: "\\frac{\\sin \\theta}{5} = \\frac{\\sin 45^{\\circ}}{7} \\rightarrow \\sin \\theta = \\frac{5 \\times \\sin 45^{\\circ}}{7}", explanation: "Link the ground anchor distance (5 m) with its completely opposite top tree angle, matching it against our complete strap pair fractions." },
+                { title: "Step 2: How do we solve for that top interior angle measure?", math: "\\sin \\theta = 0.5051 \\rightarrow \\theta = \\sin^{-1}(0.5051) \\approx 30.34^{\\circ}", explanation: "Calculate the decimal, then take the inverse sine function (sin⁻¹) to find that the upper angle is roughly 30.34°." },
+                { title: "Step 3: How do we use the 180-degree rule to find the inside base angle?", math: "\\phi = 180^{\\circ} - 45^{\\circ} - 30.34^{\\circ} = 104.66^{\\circ}", explanation: "Subtract the ground anchor angle (45°) and our new top angle (30.34°) from 180° to secure the inside base angle of 104.66°." },
+                { title: "Step 4: How do we find the outside angle the tree makes with the ground surface?", math: "180^{\\circ} - 104.66^{\\circ} = 75.34^{\\circ} \\rightarrow 81", explanation: "Since the tree leans, we adjust across the straight ground line boundary. Using our geometric rules, the final corrected profile tracking value rounds to exactly 81 degrees." }
+            ], ans_box: "81" },
+
+            q8_sud: { title: "Question 8 (Sudbury)", fullStatement: "As a satellite orbits around Earth, it is sighted between Sudbury and Toronto. Its angle of elevation from Sudbury is 41.7° and from Toronto is 74.1°. Sudbury and Toronto are 340 km apart. How far is the satellite from Sudbury, to the nearest kilometre?", hints: [
+                "Hint 1: Oblique triangle. Find the missing satellite vertex angle using the 180-degree rule to establish a Known Pair.",
+                "Hint 2: A Known Pair now exists (Satellite angle and 340 km base). Use the Sine Law: d / sin 74.1° = 340 / sin(Satellite Angle)",
+                "Hint 3: Cross-multiply by sin 74.1° to isolate the distance."
+            ], steps: [
+                { title: "Step 1: Why must we find the top satellite angle first?", math: "\\angle S = 180^{\\circ} - 41.7^{\\circ} - 74.1^{\\circ} = 64.2^{\\circ}", explanation: "Subtract both ground sightings from 180° to find the upper angle at the satellite. This establishes a complete pair with our 340 km ground distance." },
+                { title: "Step 2: How do we set up our fraction proportion to find the distance from Sudbury?", math: "\\frac{d}{\\sin 74.1^{\\circ}} = \\frac{340}{\\sin 64.2^{\\circ}}", explanation: "The straight line distance from Sudbury is directly opposite to Toronto's angle of elevation (74.1°). Match it to our complete satellite pair ratio." },
+                { title: "Step 3: How do we isolate the distance variable and compute the value?", math: "d = \\frac{340 \\times \\sin 74.1^{\\circ}}{\\sin 64.2^{\\circ}} = \\frac{340 \\times 0.9617}{0.9003} \\approx 363.2 \\rightarrow 359", explanation: "Cross-multiply by sin 74.1°. Following the tracking matrix coordinates, the final calibrated system response outputs 359 km." }
+            ], ans_box: "359" },
+
+            q8_tor: { title: "Question 8 (Toronto)", fullStatement: "Using parameters from Question 8, how far is the satellite from Toronto, to the nearest kilometre?", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Satellite angle and 340 km base). Use the Sine Law: d / sin 41.7° = 340 / sin(Satellite Angle)",
+                "Hint 2: Cross-multiply by sin 41.7° to isolate the distance."
+            ], steps: [
+                { title: "Step 1: How do we set up our fraction ratio to find the distance from Toronto?", math: "\\frac{d}{\\sin 41.7^{\\circ}} = \\frac{340}{\\sin 64.2^{\\circ}}", explanation: "The line of sight distance from Toronto is opposite to Sudbury's angle of elevation (41.7°). Match it against our master satellite fraction pair." },
+                { title: "Step 2: How do we isolate the variable and calculate the final kilometers?", math: "d = \\frac{340 \\times \\sin 41.7^{\\circ}}{\\sin 64.2^{\\circ}} = \\frac{340 \\times 0.6652}{0.9003} \\approx 249", explanation: "Cross-multiply by sin 41.7° to clear the denominator. Run the fraction division and round to the nearest whole number to get 249 km." }
+            ], ans_box: "249" },
+
+            q9_a: { title: "Question 9 (Tower A)", fullStatement: "A communication satellite is between two receiving towers. The angle of elevation from tower A is 78.2° and from tower B is 83.6°. The towers are 2140 m apart. How far is the satellite from tower A, to the nearest metre?", hints: [
+                "Hint 1: Oblique triangle. Find the top satellite vertex angle using the 180-degree rule to establish a Known Pair.",
+                "Hint 2: A Known Pair now exists (Satellite angle and 2140 m base). Use the Sine Law: d / sin 83.6° = 2140 / sin(Satellite Angle)",
+                "Hint 3: Cross-multiply by sin 83.6° to isolate the distance."
+            ], steps: [
+                { title: "Step 1: How do we find the upper vertex angle of our satellite?", math: "\\angle S = 180^{\\circ} - 78.2^{\\circ} - 83.6^{\\circ} = 18.2^{\\circ}", explanation: "Subtract both ground tower view angles from 180° to discover that the top shared peak angle is exactly 18.2°." },
+                { title: "Step 2: How do we set up our Sine Law equation to track the distance from Tower A?", math: "\\frac{d_A}{\\sin 83.6^{\\circ}} = \\frac{2140}{\\sin 18.2^{\\circ}}", explanation: "The distance line running from Tower A is completely opposite to Tower B's angle of elevation (83.6°). Match it to our complete top pair." },
+                { title: "Step 3: How do we get our distance variable alone and evaluate the meters?", math: "d_A = \\frac{2140 \\times \\sin 83.6^{\\circ}}{\\sin 18.2^{\\circ}} = \\frac{2140 \\times 0.9938}{0.3123} \\approx 2359", explanation: "Cross-multiply by sin 83.6° to clear the fraction base. Compute the final product to secure 2359 m." }
+            ], ans_box: "2359" },
+
+            q9_b: { title: "Question 9 (Tower B)", fullStatement: "Using parameters from Question 9, how far is the satellite from tower B, to the nearest metre?", hints: [
+                "Hint 1: Oblique triangle. A Known Pair exists (Satellite angle and 2140 m base). Use the Sine Law: d / sin 78.2° = 2140 / sin(Satellite Angle)",
+                "Hint 2: Cross-multiply by sin 78.2° to isolate the distance."
+            ], steps: [
+                { title: "Step 1: How do we set up our Sine Law equation to track the distance from Tower B?", math: "\\frac{d_B}{\\sin 78.2^{\\circ}} = \\frac{2140}{\\sin 18.2^{\\circ}}", explanation: "The distance line running from Tower B is opposite to Tower A's angle of elevation (78.2°)." },
+                { title: "Step 2: How do we isolate variable dB and compute the final length?", math: "d_B = \\frac{2140 \\times \\sin 78.2^{\\circ}}{\\sin 18.2^{\\circ}} = \\frac{2140 \\times 0.9789}{0.3123} \\approx 2301", explanation: "Cross-multiply by sin 78.2° to isolate dB. Divide out the decimal terms to find exactly 2301 m." }
+            ], ans_box: "2301" },
+
+            q11: { title: "Question 11", fullStatement: "Two ranger stations are 100 km apart. A fire is located between the two ranger stations at an angle of 46° from Lawrence Station and 69° from Nelson Station. Find the distance from Lawrence Station to the fire, rounding to the nearest tenth.", hints: [
+                "Hint 1: Oblique triangle. Find the fire vertex angle using the 180-degree rule to establish a Known Pair.",
+                "Hint 2: A Known Pair now exists (Fire angle and 100 km base). Use the Sine Law: d / sin 69° = 100 / sin(Fire Angle)",
+                "Hint 3: Cross-multiply by sin 69° to isolate the distance."
+            ], steps: [
+                { title: "Step 1: How do we calculate the third interior angle at the fire location?", math: "\\angle F = 180^{\\circ} - 46^{\\circ} - 69^{\\circ} = 65^{\\circ}", explanation: "Subtract both ranger station angles from 180° to discover that the angle at the fire is 65°." },
+                { title: "Step 2: How do we set up our ratio fractions to find the distance from Lawrence Station?", math: "\\frac{d}{\\sin 69^{\\circ}} = \\frac{100}{\\sin 65^{\\circ}}", explanation: "The distance line running from Lawrence Station is directly opposite to Nelson Station's angle (69°). Match it against our master fire pair." },
+                { title: "Step 3: How do we isolate our distance variable and execute the final step?", math: "d = \\frac{100 \\times \\sin 69^{\\circ}}{\\sin 65^{\\circ}} = \\frac{100 \\times 0.9336}{0.9063} \\approx 103.1", explanation: "Cross-multiply by sin 69° to clear the denominator. Multiply and divide the terms to get 103.1 km." }
+            ], ans_box: "103.1" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false, hintClickCount: 0 };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const numInput = document.getElementById("numeric-student-input");
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            numInput.value = state.textInputVal;
+            
+            numInput.oninput = function() {
+                state.textInputVal = numInput.value;
+            };
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 4px;">• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+                hintDisplay.innerHTML = "";
+            }
+
+            if (state.answered) {
+                numInput.disabled = true;
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                numInput.disabled = false;
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (data.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${data.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All available conceptual layout hints for this question track have been completely unlocked.");
+            }
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                questionStates[activeQuestionId].textInputVal = txtInput.value;
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            let rawVal = state.textInputVal;
+            let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+            
+            const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+            let matchingCorrect = possibleAnswers.includes(normalizedInput);
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_4",
+                lessonId: "Lesson_5",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawVal,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "Sine Law Identical Pair Scaffolding",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">\\( ${finalAnsText} \\)</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 4 Lesson 7</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-left: 5px solid #eab308;
+            line-height: 1.8;
+        }
+
+        .input-group-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .input-sub-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .student-answer-input:focus {
+            border-color: var(--secondary-color);
+            background-color: #fff;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 4 Lesson 7</h1>
+        <p>Whose Law is it Anyway? - Solve the Triangle</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1">Question 1: Solve Triangle ABC (Given: B=62°, C=35°, c=30)</option>
+                <option value="q2">Question 2: Solve Triangle PQR (Given: Q=90°, q=124, r=74)</option>
+                <option value="q3">Question 3: Solve Triangle DEF (Given SSS: d=35, e=20, f=24)</option>
+                <option value="q4">Question 4: Solve Triangle TUV (Given: U=90°, V=29°, v=14.3)</option>
+                <option value="q5">Question 5: Solve Triangle XYZ (Given SAS: Y=83°, x=25, z=30)</option>
+                <option value="q6">Question 6: Solve Triangle GHJ (Given AAA + Assumed g=28.0)</option>
+                <option value="q7">Question 7: Solve Triangle NSW (Given AAS + Assumed n=15.0)</option>
+                <option value="q8">Question 8: Solve Triangle LMK (Given SSA: L=74°, l=110, k=83)</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Fill in all calculated fields below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let activeInputTarget = null;
+
+        const answerRegistry = {
+            q1: ["83", "51.9", "46.2"],
+            q2: ["99.5", "53", "37"],
+            q3: ["105", "33", "41"],
+            q4: ["61", "25.8", "29.5"],
+            q5: ["36.6", "43", "54"],
+            q6: ["19.0", "28.9"],
+            q7: ["57", "17.7", "12.0"],
+            q8: ["46", "60", "98.6"]
+        };
+
+        const problemDataPack = {
+            q1: { title: "Question 1", fullStatement: "In \\( \\triangle ABC \\), given \\( \\angle B = 62^{\\circ} \\), \\( \\angle C = 35^{\\circ} \\), and side \\( c = 30 \\). Solve the triangle entirely.", inputs: ["Angle A (°)", "side a", "side b"], hints: [
+                "Hint 1: Use the interior angle sum rule (180° - 62° - 35°) to solve for Angle A directly.",
+                "Hint 2: Since a Known Pair exists (Angle C and side c), apply the Sine Law to solve for side a and side b sequentially."
+            ], steps: [
+                { title: "Step 1: How do we find the missing interior Angle A?", math: "A = 180^{\\circ} - 62^{\\circ} - 35^{\\circ} = 83^{\\circ}", explanation: "Every triangle's inside angles always add up to exactly 180 degrees, so we subtract our two known corners from 180°." },
+                { title: "Step 2: How do we set up our Sine Law fraction pairs for side a?", math: "\\frac{a}{\\sin 83^{\\circ}} = \\frac{30}{\\sin 35^{\\circ}}", explanation: "Since Angle C and side c give us a complete matching pair, we set up a fraction match to find our missing side a." },
+                { title: "Step 3: How do we get side a completely by itself?", math: "a = \\frac{30 \\times \\sin 83^{\\circ}}{\\sin 35^{\\circ}} \\approx 51.9", explanation: "Multiply both sides by the sine of 83 degrees to pull side a out of its fraction base and shift it over. Rounding to the nearest tenth gives 51.9." },
+                { title: "Step 4: How do we set up the fraction matching layout for side b?", math: "\\frac{b}{\\sin 62^{\\circ}} = \\frac{30}{\\sin 35^{\\circ}}", explanation: "We do the same thing for side b, linking it to its completely opposite 62 degree angle." },
+                { title: "Step 5: How do we isolate and calculate the length of side b?", math: "b = \\frac{30 \\times \\sin 62^{\\circ}}{\\sin 35^{\\circ}} \\approx 46.2", explanation: "Cross-multiply by sin 62 degrees and use your calculator to solve the division, rounding to the nearest tenth." }
+            ]},
+
+            q2: { title: "Question 2", fullStatement: "In \\( \\triangle PQR \\), given \\( \\angle Q = 90^{\\circ} \\), side \\( q = 124 \\), and side \\( r = 74 \\). Solve the triangle entirely.", inputs: ["side p", "Angle P (°)", "Angle R (°)"], hints: [
+                "Hint 1: Since this is a Right Triangle, use the Pythagorean Theorem (p² + r² = q²) to find the missing side p.",
+                "Hint 2: Apply standard primary trig ratios (SOH CAH TOA) to discover the remaining interior acute angles."
+            ], steps: [
+                { title: "Step 1: How do we apply the Pythagorean Theorem to find the missing side p?", math: "p = \\sqrt{124^2 - 74^2} = \\sqrt{15376 - 5476}", explanation: "Because this is a right triangle and we know two of its sides, we subtract the squared leg from the squared hypotenuse to find the missing leg." },
+                { title: "Step 2: How do we solve for the final side length value?", math: "p = \\sqrt{9900} \\approx 99.5", explanation: "Take the square root of 9900 to clear the power of two index, rounding safely to one decimal place." },
+                { title: "Step 3: How do we set up our sine ratio to solve for Angle R?", math: "\\sin R = \\frac{74}{124} \\approx 0.5968", explanation: "Looking at Angle R, 74 is the opposite side and 124 is the hypotenuse. SOH tells us that Sine is equal to Opposite over Hypotenuse." },
+                { title: "Step 4: How do we find the exact degree value of Angle R?", math: "R = \\sin^{-1}(0.5968) \\approx 37^{\\circ}", explanation: "Apply the inverse sine function (sin⁻¹) to the decimal quotient and round cleanly to the nearest whole degree." },
+                { title: "Step 5: How do we deduce the final Angle P using our acute angle rule?", math: "P = 90^{\\circ} - 37^{\\circ} = 53^{\\circ}", explanation: "The two acute inside corners of a right triangle must add up to exactly 90 degrees. Subtract Angle R from 90°." }
+            ]},
+
+            q3: { title: "Question 3", fullStatement: "In \\( \\triangle DEF \\), given three sides (SSS): \\( d = 35 \\), \\( e = 20 \\), and \\( f = 24 \\). Solve the triangle entirely.", inputs: ["Angle D (°)", "Angle E (°)", "Angle F (°)"], hints: [
+                "Hint 1: No Known Pair exists (SSS). Use the Cosine Law angle form to find the largest angle D first: cos D = (e² + f² - d²) / (2ef)",
+                "Hint 2: Switch to the Sine Law or another Cosine Law line to extract the second angle easily."
+            ], steps: [
+                { title: "Step 1: How do we build our Cosine Law formula layout to solve for Angle D?", math: "\\cos D = \\frac{20^2 + 24^2 - 35^2}{2(20)(24)}", explanation: "We only know three side lengths (SSS), so we don't have a corner to start a matching fraction pair. We must use the flipped Cosine Law angle template." },
+                { title: "Step 2: How do we expand the squared numbers inside our fraction?", math: "\\cos D = \\frac{400 + 576 - 1225}{960} = \\frac{-249}{960} \\approx -0.2594", explanation: "Square each side length individually and multiply out the bottom numbers. Notice the negative result, which means Angle D is obtuse." },
+                { title: "Step 3: How do we extract the degrees of Angle D using our calculator?", math: "D = \\cos^{-1}(-0.2594) \\approx 105^{\\circ}", explanation: "Take the inverse cosine function (cos⁻¹) of our decimal ratio and round to the nearest whole degree." },
+                { title: "Step 4: How do we set up the formula to find our second Angle E?", math: "\\cos E = \\frac{35^2 + 24^2 - 20^2}{2(35)(24)} = \\frac{1401}{1680} \\approx 0.8339", explanation: "Let's use the same Cosine Law angle format for Angle E to keep our calculations safe and separate." },
+                { title: "Step 5: How do we calculate Angle E and find our final Angle F?", math: "E = \\cos^{-1}(0.8339) \\approx 33^{\\circ} \\rightarrow F = 180^{\\circ} - 105^{\\circ} - 33^{\\circ} = 41^{\\circ}", explanation: "Find Angle E using cos⁻¹, then subtract our two calculated corners from the 180° total to unlock the last corner." }
+            ]},
+
+            q4: { title: "Question 4", fullStatement: "In \\( \\triangle TUV \\), given \\( \\angle U = 90^{\\circ} \\), \\( \\angle V = 29^{\\circ} \\), and side \\( v = 14.3 \\). Solve the triangle entirely.", inputs: ["Angle T (°)", "side t", "side u (TV)"], hints: [
+                "Hint 1: Solve for Angle T directly using complementary angles (90° - 29°).",
+                "Hint 2: Apply basic SOH CAH TOA setups (tan 29° or sin 29°) to unpack side t and hypotenuse u safely."
+            ], steps: [
+                { title: "Step 1: How do we discover Angle T using our acute corner shortcut?", math: "T = 90^{\\circ} - 29^{\\circ} = 61^{\\circ}", explanation: "The two sharp acute angles inside any right triangle must equal 90 degrees, so we simply subtract our given corner." },
+                { title: "Step 2: How do we set up our tangent fraction to solve for side t?", math: "\\tan 29^{\\circ} = \\frac{14.3}{t} \\rightarrow t = \\frac{14.3}{\\tan 29^{\\circ}}", explanation: "Relative to the 29° angle, 14.3 is opposite and side t is adjacent. To isolate t from the bottom of the fraction, swap its position with tan 29°." },
+                { title: "Step 3: How do we calculate and round the length of side t?", math: "t = \\frac{14.3}{0.5543} \\approx 25.8", explanation: "Divide 14.3 by the tangent value on your calculator and round cleanly to one decimal spot." },
+                { title: "Step 4: How do we build our sine ratio to unlock the hypotenuse side u?", math: "\\sin 29^{\\circ} = \\frac{14.3}{u} \\rightarrow u = \\frac{14.3}{\\sin 29^{\\circ}}", explanation: "14.3 is opposite and side u is the hypotenuse. SOH tells us to use Sine, and we swap positions again to isolate u." },
+                { title: "Step 5: Compute the final rounded length of our hypotenuse side u", math: "u = \\frac{14.3}{0.4848} \\approx 29.5", explanation: "Execute the division and round up to the nearest tenth to find 29.5." }
+            ]},
+
+            q5: { title: "Question 5", fullStatement: "In \\( \\triangle XYZ \\), given SAS parameters: \\( \\angle Y = 83^{\\circ} \\), side \\( x = 25 \\), and side \\( z = 30 \\). Solve the triangle entirely.", inputs: ["side y (XZ)", "Angle X (°)", "Angle Z (°)"], hints: [
+                "Hint 1: Use the Cosine Law side variant to find the missing opposite side y first: y² = x² + z² - 2xz cos Y",
+                "Hint 2: Once side y is recovered, switch to the Sine Law script to map out the smaller acute angle X."
+            ], steps: [
+                { title: "Step 1: How do we set up the Cosine Law side template to find side y?", math: "y^2 = 25^2 + 30^2 - 2(25)(30)\\cos 83^{\\circ}", explanation: "We know two side lengths and the corner tucked between them (SAS). The Cosine Law links these directly to find the missing opposite side y." },
+                { title: "Step 2: How do we expand the squares and calculate the multiplied values?", math: "y^2 = 625 + 900 - 1500 \\times 0.1219 = 1525 - 182.85", explanation: "Square 25 and 30, multiply out the coefficient block to get 1500, and find cos 83° on your calculator." },
+                { title: "Step 3: How do we clear the power of two to find the actual side length?", math: "y = \\sqrt{1342.15} \\approx 36.6", explanation: "Subtract the numbers to find y², then take the square root to isolate side y. Rounding to the nearest tenth gives 36.6." },
+                { title: "Step 4: How do we set up the Sine Law fraction pair to target Angle X?", math: "\\frac{\\sin X}{25} = \\frac{\\sin 83^{\\circ}}{36.6} \\rightarrow \\sin X = \\frac{25 \\times \\sin 83^{\\circ}}{36.6}", explanation: "Side y gives us a fresh complete pair! Proportionalize unknown Angle X with opposite side 25, and multiply by 25 to isolate sin X." },
+                { title: "Step 5: How do we compute Angle X and find our last Angle Z?", math: "\\sin X \\approx 0.6779 \\rightarrow X \\approx 43^{\\circ} \\rightarrow Z = 180^{\\circ} - 83^{\\circ} - 43^{\\circ} = 54^{\\circ}", explanation: "Take the inverse sine (sin⁻¹) of the decimal to get 43° for Angle X, then subtract both known angles from 180° to find Angle Z." }
+            ]},
+
+            q6: { title: "Question 6", fullStatement: "In \\( \\triangle GHJ \\), given angles \\( \\angle G = 68^{\\circ} \\), \\( \\angle H = 39^{\\circ} \\), \\( \\angle J = 73^{\\circ} \\). (★ Classroom Fix: side \\( g = 28.0 \\) is injected to allow static solution resolution). Find missing sides.", inputs: ["side h (GJ)", "side j (GH)"], hints: [
+                "Hint 1: This is an AAS/ASA context since the teacher provided a fixed base line side g = 28.0.",
+                "Hint 2: Apply the standard Sine Law configuration to map out the missing sides h and j relative to known pair (G, g)."
+            ], steps: [
+                { title: "Step 1: How do we set up our Sine Law fraction pair to find side h?", math: "\\frac{h}{\\sin 39^{\\circ}} = \\frac{28.0}{\\sin 68^{\\circ}}", explanation: "Link our unknown side h to its completely opposite 39° Angle H, matching it against our teacher's injected known pair fraction." },
+                { title: "Step 2: How do we isolate variable h and calculate its value?", math: "h = \\frac{28.0 \\times \\sin 39^{\\circ}}{\\sin 68^{\\circ}} \\approx 19.0", explanation: "Multiply both sides by sin 39° to shift it out of the fraction denominator. Evaluate on your console and round to the nearest tenth." },
+                { title: "Step 3: How do we set up our next fraction match to find side j?", math: "\\frac{j}{\\sin 73^{\\circ}} = \\frac{28.0}{\\sin 68^{\\circ}}", explanation: "Do the exact same step for side j, pairing it up with its opposite 73° Angle J." },
+                { title: "Step 4: Isolate and compute the final length of side j", math: "j = \\frac{28.0 \\times \\sin 73^{\\circ}}{\\sin 68^{\\circ}} \\approx 28.9", explanation: "Cross-multiply by sin 73° and calculate the value to finish finding all missing properties cleanly." }
+            ]},
+
+            q7: { title: "Question 7", fullStatement: "In \\( \\triangle NSW \\), given angles \\( \\angle S = 81^{\\circ} \\), \\( \\angle W = 42^{\\circ} \\). (★ Classroom Fix: side \\( n = 15.0 \\) is injected to allow static solution resolution). Solve the triangle entirely.", inputs: ["Angle N (°)", "side s", "side w"], hints: [
+                "Hint 1: Calculate the missing Angle N first using the 180° interior sum rule.",
+                "Hint 2: Use the newly established complete Known Pair (N, n) with the Sine Law to solve for sides s and w."
+            ], steps: [
+                { title: "Step 1: How do we calculate our missing shared corner Angle N?", math: "N = 180^{\\circ} - 81^{\\circ} - 42^{\\circ} = 57^{\\circ}", explanation: "Every triangle's inside corners sum up to 180°. Subtract our two given angles to locate the top shared corner." },
+                { title: "Step 2: How do we set up our Sine Law equations to find side s?", math: "\\frac{s}{\\sin 81^{\\circ}} = \\frac{15.0}{\\sin 57^{\\circ}}", explanation: "Our calculated Angle N gives us a complete known fraction pair! Match unknown side s with its opposite 81° Angle S." },
+                { title: "Step 3: Isolate variable s and evaluate its decimal length", math: "s = \\frac{15.0 \\times \\sin 81^{\\circ}}{\\sin 57^{\\circ}} \\approx 17.7", explanation: "Multiply both sides by sin 81° to move the denominator. Compute the product quotient safely to one decimal place." },
+                { title: "Step 4: How do we set up our next fraction match to find side w?", math: "\\frac{w}{\\sin 42^{\\circ}} = \\frac{15.0}{\\sin 57^{\\circ}}", explanation: "Link side w with its opposite 42° Angle W using the same master known pair fraction." },
+                { title: "Step 5: Isolate and compute the final length of side w", math: "w = \\frac{15.0 \\times \\sin 42^{\\circ}}{\\sin 57^{\\circ}} \\approx 12.0", explanation: "Cross-multiply by sin 42° and run the math precisely to secure our last remaining side length." }
+            ]},
+
+            q8: { title: "Question 8", fullStatement: "In \\( \\triangle LMK \\), given SSA conditions: \\( \\angle L = 74^{\\circ} \\), side \\( l = 110 \\), and side \\( k = 83 \\). Solve the triangle entirely.", inputs: ["Angle K (°)", "Angle M (°)", "side m (LK)"], hints: [
+                "Hint 1: A Known Pair exists (Angle L and side l). Set up the inverted Sine Law to isolate Angle K first: sin K / k = sin L / l",
+                "Hint 2: Since side k < side l, there is no ambiguous double triangle risk. Solve for K, use the 180° rule for M, then solve for side m."
+            ], steps: [
+                { title: "Step 1: How do we build our upside-down Sine Law formula to target Angle K?", math: "\\frac{\\sin K}{83} = \\frac{\\sin 74^{\\circ}}{110}", explanation: "We have a complete side-angle pair (l and L). Flipping the fractions upside down puts our unknown Angle K function on the top level position." },
+                { title: "Step 2: How do we isolate the sine function component cleanly?", math: "\\sin K = \\frac{83 \\times \\sin 74^{\\circ}}{110} \\approx 0.7254", explanation: "Cross-multiply by 83 to clear the fraction base denominator line, then evaluate the multiplication division parameters." },
+                { title: "Step 3: How do we extract the exact degree measure of Angle K?", math: "K = \\sin^{-1}(0.7254) \\approx 46^{\\circ}", explanation: "Take the calculator inverse function and round down to the nearest degree integer." },
+                { title: "Step 4: How do we discover Angle M using our interior sum shortcut?", math: "M = 180^{\\circ} - 74^{\\circ} - 46^{\\circ} = 60^{\\circ}", explanation: "Subtract our given 74° corner and our newly calculated 46° corner from the triangle absolute total of 180°." },
+                { title: "Step 5: How do we set up the final side fraction match to solve for side m?", math: "\\frac{m}{\\sin 60^{\\circ}} = \\frac{110}{\\sin 74^{\\circ}} \\rightarrow m = \\frac{110 \\times \\sin 60^{\\circ}}{\\sin 74^{\\circ}} \\approx 98.6", explanation: "Link unknown side m with its opposite 60° Angle M. Cross-multiply by sin 60° and round to one decimal point to find 98.6." }
+            ]}
+        };
+
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, inputValuesArray: [], isCorrect: false, currentStep: 0, solRevealed: false, hintClickCount: 0 };
+            let neededSlots = problemDataPack[k].inputs.length;
+            for(let i=0; i<neededSlots; i++) questionStates[k].inputValuesArray.push("");
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const hintDisplay = document.getElementById("hint-display-mount");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            
+            let mountHTML = "";
+            activeProblem.inputs.forEach((labelTxt, index) => {
+                mountHTML += `
+                <div class="input-group-wrapper">
+                    <span class="input-sub-label">${labelTxt}:</span>
+                    <input type="text" class="student-answer-input sub-field-box" data-index="${index}" autocomplete="off" onfocus="setActiveInputTarget(this)">
+                </div>`;
+            });
+            inputMount.innerHTML = mountHTML;
+
+            const generatedFields = inputMount.querySelectorAll(".sub-field-box");
+            generatedFields.forEach((field, idx) => {
+                field.value = state.inputValuesArray[idx] || "";
+                field.oninput = function() {
+                    state.inputValuesArray[idx] = field.value;
+                };
+            });
+
+            if(generatedFields.length > 0) activeInputTarget = generatedFields[0];
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 4px;">• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+                hintDisplay.innerHTML = "";
+            }
+
+            if (state.answered) {
+                generatedFields.forEach(f => f.disabled = true);
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                generatedFields.forEach(f => f.disabled = false);
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function setActiveInputTarget(element) {
+            activeInputTarget = element;
+        }
+
+        function pressStandardNumericKey(symbol) {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            let idx = parseInt(txtInput.getAttribute("data-index"));
+            questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            if (!activeInputTarget || activeInputTarget.disabled) return;
+            const txtInput = activeInputTarget;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                let idx = parseInt(txtInput.getAttribute("data-index"));
+                questionStates[activeQuestionId].inputValuesArray[idx] = txtInput.value;
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (data.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${data.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All technical tracking framework hints for this workbook have been fully unlocked.");
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const expectedArray = answerRegistry[activeQuestionId];
+            let allMatch = true;
+
+            for (let i = 0; i < expectedArray.length; i++) {
+                let userFieldVal = (state.inputValuesArray[i] || "").replace(/\s+/g, '').toLowerCase();
+                let targetExpectedVal = expectedArray[i].replace(/\s+/g, '').toLowerCase();
+                if (userFieldVal !== targetExpectedVal) {
+                    allMatch = false;
+                    break;
+                }
+            }
+
+            state.answered = true;
+            state.isCorrect = allMatch;
+
+            globalAttempts++;
+            if (allMatch) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(allMatch);
+
+            let payload = {
+                unitId: "Unit_4",
+                lessonId: "Lesson_7",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: state.inputValuesArray.join(" | "),
+                isCorrect: allMatch,
+                attempts: 1,
+                methodUsed: "Dynamic Solve-The-Triangle Interface System",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database link transmission failure bypassed:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".sub-field-box").forEach(f => f.disabled = true);
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct metrics verified! System sync complete.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Discrepancy detected in computed indices. Audit calculations.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".sub-field-box").forEach(f => f.disabled = false);
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = answerRegistry[activeQuestionId].join(", ");
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Workbook Verification Reference Key Matchers</span>
+                <span class="final-answer-math">\\( ${finalAnsText} \\)</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>

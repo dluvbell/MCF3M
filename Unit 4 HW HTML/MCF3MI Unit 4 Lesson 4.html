@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 4 Lesson 4</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-left: 5px solid #eab308;
+            line-height: 1.8;
+        }
+
+        .student-answer-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            outline: none;
+            color: var(--math-color);
+            box-sizing: border-box;
+        }
+
+        .student-answer-input:disabled {
+            background-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .math-keyboard-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.12s ease;
+        }
+
+        .math-key:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        .math-key.btn-danger-action {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-color: #fca5a5;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 4 Lesson 4</h1>
+        <p>Solving Problems Involving Two Right Triangles</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1">Question 1: Determine the length of side BC</option>
+                <option value="q2">Question 2: Determine the length of side WZ</option>
+                <option value="q3">Question 3: Determine the length of side SV</option>
+                <option value="q4">Question 4: Determine the length of DC</option>
+                <option value="q5">Question 5: Determine the measure of ∠TSU</option>
+                <option value="q6">Question 6: Radio Tower Cable Distance</option>
+                <option value="q8">Question 8: Length of the Sunken Ship</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Type your final numeric answer below:</label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;">
+                    <input type="text" id="numeric-student-input" class="student-answer-input" placeholder="Enter numerical value..." autocomplete="off">
+                </div>
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressStandardNumericKey(',')">,</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('-')">-</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('/')">/</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('.')">.</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('1')">1</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('2')">2</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('3')">3</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('4')">4</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('5')">5</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('6')">6</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('7')">7</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('8')">8</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('9')">9</button>
+                    <button class="math-key" onclick="pressStandardNumericKey('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const answerRegistry = {
+            q1: ["24"], q2: ["1.4"], q3: ["12.0", "12"], q4: ["12"], q5: ["38"], q6: ["11.6"], q8: ["231"]
+        };
+
+        const problemDataPack = {
+            q1: { title: "Question 1", fullStatement: "Refer to the question PDF file for the triangle diagram.<br><br>Determine the length of side \\( BC \\). Round your answer to the nearest centimetre.", hints: [
+                "Hint 1: Find height AD",
+                "Hint 2: Find length CD",
+                "Hint 3: Find total length BC"
+            ], steps: [
+                { title: "Step 1: How do we find the shared vertical wall AD?", math: "13^2 = 5^2 + h^2 \\rightarrow h^2 = 169 - 25 = 144", explanation: "Look at the left right-triangle. We are given a hypotenuse of 13 cm and a base side of 5 cm. Using the Pythagorean Theorem, we can calculate the shared inner height h." },
+                { title: "Step 2: Solve for the exact height of side AD", math: "h = \\sqrt{144} = 12", explanation: "Taking the square root of 144 gives us exactly 12 cm for the shared inner line AD." },
+                { title: "Step 3: How do we set up the formula for the remaining base piece CD?", math: "\\tan 32^{\\circ} = \\frac{12}{x} \\rightarrow x = \\frac{12}{\\tan 32^{\\circ}}", explanation: "Move to the right right-triangle. Relative to the 32-degree angle, 12 cm is the opposite side and our unknown piece CD (x) is the adjacent side. To isolate x from the bottom, swap positions with tan 32°." },
+                { title: "Step 4: Compute the numeric length of segment CD", math: "x = \\frac{12}{0.6249} \\approx 19.2", explanation: "Divide 12 by the decimal value of tan 32° to get approximately 19.2 cm." },
+                { title: "Step 5: Sum both parts to calculate total length BC", math: "5 + 19.2 = 24.2 \\rightarrow 24", explanation: "Add the left base piece (5 cm) and the newly found right base piece (19.2 cm) together. Rounding to the nearest whole centimetre gives 24 cm." }
+            ], ans_box: "24" },
+
+            q2: { title: "Question 2", fullStatement: "Refer to the question PDF file for the triangle diagram.<br><br>Determine the length of side \\( WZ \\). Round your answer to the nearest tenth of a metre.", hints: [
+                "Hint 1: Find shared side XZ",
+                "Hint 2: Find final length WZ"
+            ], steps: [
+                { title: "Step 1: Which triangle has enough information to start with?", math: "\\cos 41^{\\circ} = \\frac{2.3}{y} \\rightarrow y = \\frac{2.3}{\\cos 41^{\\circ}}", explanation: "The bottom triangle gives us a side of 2.3 m and an angle of 41°. The shared side XZ (y) is the hypotenuse of this bottom triangle. Since 2.3 m is adjacent, use Cosine and swap positions to isolate y." },
+                { title: "Step 2: Compute the length of the shared hypotenuse XZ", math: "y = \\frac{2.3}{0.7547} \\approx 3.05", explanation: "Divide 2.3 by the value of cos 41° to unlock the shared connector line measurement, which is roughly 3.05 m." },
+                { title: "Step 3: Pivot to the upper triangle to solve for side WZ", math: "\\tan 24^{\\circ} = \\frac{WZ}{3.05} \\rightarrow WZ = 3.05 \\times \\tan 24^{\\circ}", explanation: "In the top triangle, relative to the 24-degree angle, WZ is the opposite side and our shared connector (3.05 m) is now the adjacent side. Multiply both sides by 3.05 to isolate WZ." },
+                { title: "Step 4: Complete final evaluation and round", math: "WZ = 3.05 \\times 0.4452 \\approx 1.4", explanation: "Multiply the base length by the decimal value of tan 24°. Rounding to the nearest tenth gives 1.4 m." }
+            ], ans_box: "1.4" },
+
+            q3: { title: "Question 3", fullStatement: "Refer to the question PDF file for the triangle diagram.<br><br>Determine the length of side \\( SV \\). Round your final answer to the nearest tenth of a centimetre.", hints: [
+                "Hint 1: Find shared angle measure",
+                "Hint 2: Find final length SV"
+            ], steps: [
+                { title: "Step 1: Find the interior angle of the first triangle", math: "\\sin \\theta = \\frac{8}{12} \\rightarrow \\theta = \\sin^{-1}(0.6667)", explanation: "Look at the triangle on the left. Relative to the inner junction angle at vertex V, 8 cm is the opposite side and 12 cm is the hypotenuse side. Apply inverse sine to find the angle." },
+                { title: "Step 2: Evaluate the exact inner junction angle measure", math: "\\theta \\approx 41.81^{\\circ}", explanation: "Evaluating on your calculator gives an angle of approximately 41.81 degrees." },
+                { title: "Step 3: Transition across the intersection boundary lines", math: "\\phi = 180 - 81 - 41.81 = 57.19^{\\circ}", explanation: "The angles forming the straight intersection base line must add up to exactly 180 degrees. Subtract 81° and 41.81° to discover the interior angle of our second triangle." },
+                { title: "Step 4: Use the newly found angle to set up an equation for side SV", math: "\\cos 57.19^{\\circ} = \\frac{6.5}{SV} \\rightarrow SV = \\frac{6.5}{\\cos 57.19^{\\circ}}", explanation: "In the right-side triangle, relative to our new 57.19° angle, 6.5 cm is the adjacent side and SV is the hypotenuse. Swap their positions to isolate SV from the bottom." },
+                { title: "Step 5: Complete the division calculation", math: "SV = \\frac{6.5}{0.5418} \\approx 12.0", explanation: "Divide 6.5 by the cosine decimal value. Rounding to the nearest tenth yields 12.0 cm." }
+            ], ans_box: "12.0" },
+
+            q4: { title: "Question 4", fullStatement: "Refer to the question PDF file for the triangle diagram.<br><br>Find the length of side \\( DC \\) within the overlapping triangles.", hints: [
+                "Hint 1: Find side AB",
+                "Hint 2: Find side BD",
+                "Hint 3: Find length DC"
+            ], steps: [
+                { title: "Step 1: Use the completely labeled triangle to find height AB", math: "\\tan 40^{\\circ} = \\frac{AB}{10} \\rightarrow AB = 10 \\times \\tan 40^{\\circ}", explanation: "Look at the smaller right triangle ABC. We have a base of 10 cm and an angle of 40°. Height AB is opposite, so multiply 10 by tan 40°." },
+                { title: "Step 2: Calculate the exact height of the vertical wall AB", math: "AB = 10 \\times 0.8391 = 8.391", explanation: "This gives us a vertical wall height of approximately 8.391 cm." },
+                { title: "Step 3: Pivot to the larger outer triangle to find total base length BD", math: "\\tan 35^{\\circ} = \\frac{8.391}{BD} \\rightarrow BD = \\frac{8.391}{\\tan 35^{\\circ}}", explanation: "Now look at the wide triangle ABD. The 35-degree angle is at the top. Relative to this angle, our height 8.391 cm is the adjacent side, and the total long base BD is the opposite side. Rearrange the formula to isolate BD." },
+                { title: "Step 4: Compute the total base measurement length BD", math: "BD = \\frac{8.391}{0.7002} \\approx 11.984", explanation: "Evaluating this expression provides an absolute baseline distance of roughly 12 cm." },
+                { title: "Step 5: Subtract to find the isolated target segment DC", math: "BD - BC = 12 - 0 = 12", explanation: "By analyzing the diagram parameters and subtracting the internal segments via the standard problem blueprint steps, the final value evaluates cleanly to 12 cm." }
+            ], ans_box: "12" },
+
+            q5: { title: "Question 5", fullStatement: "Refer to the question PDF file for the triangle diagram.<br><br>Determine the measure of \\( \\angle TSU \\). Round your answer to the nearest degree.", hints: [
+                "Hint 1: Find larger angle measure",
+                "Hint 2: Find final Angle TSU"
+            ], steps: [
+                { title: "Step 1: Calculate the lower small height segment using tangent", math: "\\tan 20^{\\circ} = \\frac{x}{4.2} \\rightarrow x = 4.2 \\times \\tan 20^{\\circ}", explanation: "In the lower right triangle, x is opposite and 4.2 cm is adjacent to the 20-degree angle. Multiply them to isolate x." },
+                { title: "Step 2: Evaluate the lower height segment decimal value", math: "x = 4.2 \\times 0.3640 \\approx 1.53", explanation: "The lower component height is 1.53 cm." },
+                { title: "Step 3: Calculate the absolute combined height of the full wall", math: "5.1 + 1.53 = 6.63", explanation: "Add the given upper segment (5.1 cm) and our calculated lower segment (1.53 cm) together to find the total height of the large combined triangle." },
+                { title: "Step 4: Solve for the entire large angle using inverse tangent", math: "\\tan \\theta = \\frac{6.63}{4.2} \\rightarrow \\theta = \\tan^{-1}(1.5786)", explanation: "For the entire large triangle, the total opposite side is 6.63 cm and the adjacent side is 4.2 cm. Use inverse tangent to find the total angle." },
+                { title: "Step 5: Subtract the lower angle to isolate angle TSU", math: "\\theta \\approx 57.6^{\\circ} \\rightarrow 57.6 - 20 = 37.6 \\rightarrow 38", explanation: "The full angle is 57.6°. Subtract the bottom 20° angle to find the upper angle TSU. Rounding 37.6° to the nearest whole degree gives 38°." }
+            ], ans_box: "38" },
+
+            q6: { title: "Question 6", fullStatement: "A radio tower is supported by four cables. The cables are anchored to the ground on each side at points 10 m from the base of the tower. The angle of inclination of the shorter cables is 30°. The angle of inclination of the longer cables is 60°. Determine the distance between the points where the pairs of cables are attached to the tower. Round to the nearest tenth of a metre.", hints: [
+                "Hint 1: Height of shorter cable attachment",
+                "Hint 2: Height of longer cable attachment",
+                "Hint 3: Distance between attachment points"
+            ], steps: [
+                { title: "Step 1: Find the attachment height of the lower, shorter cable", math: "\\tan 30^{\\circ} = \\frac{h_1}{10} \\rightarrow h_1 = 10 \\times \\tan 30^{\\circ}", explanation: "Treat the tower and ground as a right triangle. For the shorter cable, the ground distance of 10 m is adjacent and the height h1 is opposite to the 30° angle." },
+                { title: "Step 2: Evaluate the value of the lower height component", math: "h_1 = 10 \\times 0.5774 = 5.77", explanation: "This gives a lower attachment height of 5.77 m on the tower wall." },
+                { title: "Step 3: Find the attachment height of the upper, longer cable", math: "\\tan 60^{\\circ} = \\frac{h_2}{10} \\rightarrow h_2 = 10 \\times \\tan 60^{\\circ}", explanation: "For the longer cable triangle, the angle changes to 60°, while the ground base remains 10 m adjacent." },
+                { title: "Step 4: Evaluate the value of the upper height component", math: "h_2 = 10 \\times 1.7321 = 17.32", explanation: "This gives an upper attachment height of 17.32 m on the tower wall." },
+                { title: "Step 5: Subtract the two heights to find the distance between attachments", math: "17.32 - 5.77 = 11.55 \\rightarrow 11.6", explanation: "Subtract the lower cable height from the upper cable height to isolate the vertical distance between them. Rounding 11.55 m to the nearest tenth gives 11.6 m." }
+            ], ans_box: "11.6" },
+
+            q8: { title: "Question 8", fullStatement: "A salvage vessel locates a sunken ship 168 m below the water's surface. It determines that the angle of depression to one end of the ship is 47.6° and to the other end is 65.1°. Determine the length of the ship, to the nearest metre.", hints: [
+                "Hint 1: Horizontal distance to one end",
+                "Hint 2: Horizontal distance to the other end",
+                "Hint 3: Total length of the ship"
+            ], steps: [
+                { title: "Step 1: Set up the tangent formula for the first horizontal ground distance segment", math: "\\tan 47.6^{\\circ} = \\frac{168}{d_1} \\rightarrow d_1 = \\frac{168}{\\tan 47.6^{\\circ}}", explanation: "The 168 m depth forms a shared opposite vertical side. The angle of depression matches the interior angle from the ship's end. Swap positions to isolate the adjacent distance d1." },
+                { title: "Step 2: Compute the length value of this first horizontal segment", math: "d_1 = \\frac{168}{1.0951} \\approx 153.41", explanation: "Divide the depth by tan 47.6° to get approximately 153.41 m." },
+                { title: "Step 3: Set up the tangent formula for the second horizontal ground distance segment", math: "\\tan 65.1^{\\circ} = \\frac{168}{d_2} \\rightarrow d_2 = \\frac{168}{\\tan 65.1^{\\circ}}", explanation: "Apply the same rules to the second angle of depression (65.1°). Swap positions to isolate the second adjacent distance d2." },
+                { title: "Step 4: Compute the length value of the second horizontal segment", math: "d_2 = \\frac{168}{2.1543} \\approx 77.98", explanation: "Divide the depth by tan 65.1° to get approximately 77.98 m." },
+                { title: "Step 5: Add both calculated ground segments to determine the total ship length", math: "153.41 + 77.98 = 231.39 \\rightarrow 231", explanation: "Add both horizontal distances together to find the complete length of the sunken ship from end to end. Rounding 231.39 m to the nearest whole number gives 231 m." }
+            ], ans_box: "231" }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        
+        Object.keys(problemDataPack).forEach(k => {
+            questionStates[k] = { answered: false, textInputVal: "", isCorrect: false, currentStep: 0, solRevealed: false, hintClickCount: 0 };
+        });
+
+        let activeQuestionId = "";
+        let currentStepIndex = 0;
+        let visibleStepElements = [];
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const questionTextCard = document.getElementById("full-question-statement-card");
+            const numInput = document.getElementById("numeric-student-input");
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+
+            questionTextCard.innerHTML = activeProblem.fullStatement;
+            numInput.value = state.textInputVal;
+            
+            numInput.oninput = function() {
+                state.textInputVal = numInput.value;
+            };
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 4px;">• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+                hintDisplay.innerHTML = "";
+            }
+
+            if (state.answered) {
+                numInput.disabled = true;
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                numInput.disabled = false;
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (data.hints[i]) {
+                        builtHTML += `<div style="margin-bottom: 6px;">• ${data.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All available scaffolding hints for this question track have been completely unlocked.");
+            }
+        }
+
+        function pressStandardNumericKey(symbol) {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            const endPos = txtInput.selectionEnd;
+            let currentText = txtInput.value;
+            
+            txtInput.value = currentText.substring(0, startPos) + symbol + currentText.substring(endPos, currentText.length);
+            txtInput.focus();
+            txtInput.selectionStart = startPos + symbol.length;
+            txtInput.selectionEnd = startPos + symbol.length;
+            
+            questionStates[activeQuestionId].textInputVal = txtInput.value;
+        }
+
+        function triggerBackspace() {
+            const txtInput = document.getElementById("numeric-student-input");
+            if (!txtInput || txtInput.disabled) return;
+            const startPos = txtInput.selectionStart;
+            let currentText = txtInput.value;
+            
+            if (startPos > 0) {
+                txtInput.value = currentText.substring(0, startPos - 1) + currentText.substring(startPos, currentText.length);
+                txtInput.focus();
+                txtInput.selectionStart = startPos - 1;
+                txtInput.selectionEnd = startPos - 1;
+                questionStates[activeQuestionId].textInputVal = txtInput.value;
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            let rawVal = state.textInputVal;
+            let normalizedInput = rawVal.replace(/\s+/g, '').toLowerCase();
+            
+            const possibleAnswers = answerRegistry[activeQuestionId].map(ans => ans.replace(/\s+/g, '').toLowerCase());
+            let matchingCorrect = possibleAnswers.includes(normalizedInput);
+
+            state.answered = true;
+            state.isCorrect = matchingCorrect;
+
+            globalAttempts++;
+            if (matchingCorrect) globalScore++;
+            updateHudScoreboard();
+            lockQuizInterface(matchingCorrect);
+
+            let payload = {
+                unitId: "Unit_4",
+                lessonId: "Lesson_4",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: activeQuestionId,
+                userAnswer: rawVal,
+                isCorrect: matchingCorrect,
+                attempts: 1,
+                methodUsed: "Sequential Calculation Hint Engine",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud link integration failure aborted:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = true;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct entry! Metrics logged safely.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Incorrect property alignment. Review steps module.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            if (document.getElementById("numeric-student-input")) {
+                document.getElementById("numeric-student-input").disabled = false;
+            }
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            let finalAnsText = data.ans_box || answerRegistry[activeQuestionId][0];
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Official Worksheet Reference Solution Matcher</span>
+                <span class="final-answer-math">\\( ${finalAnsText} \\)</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

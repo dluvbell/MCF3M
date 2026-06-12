@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3MI Unit 6 Lesson 3 Rational Exponents Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span { color: #60a5fa; }
+        .container { max-width: 850px; margin: 40px auto; padding: 0 20px; }
+        
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        label { display: block; font-weight: 700; color: var(--primary-color); font-size: 1.1rem; margin-bottom: 12px; }
+        select {
+            width: 100%; padding: 16px; font-size: 1.1rem; font-family: inherit;
+            border-radius: 8px; border: 2px solid var(--border-color); background-color: white;
+            color: var(--primary-color); outline: none; cursor: pointer;
+        }
+
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .profile-grid input {
+            width: 100%; padding: 12px; font-size: 1rem; border-radius: 6px;
+            border: 1px solid var(--border-color); box-sizing: border-box; outline: none;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg); padding: 40px; border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 1px solid var(--border-color); min-height: 200px;
+        }
+
+        .placeholder-text { color: #64748b; text-align: center; font-style: italic; padding: 60px 0; font-size: 1.1rem; }
+        .quiz-interface-box { background-color: var(--explanation-bg); border: 1px solid var(--border-color); padding: 25px; border-radius: 10px; margin-bottom: 30px; }
+        
+        .question-statement-card {
+            background: #ffffff; border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px; font-size: 1.1rem; font-weight: 600; color: var(--primary-color);
+            margin-bottom: 20px; border-radius: 0 6px 6px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg); color: var(--rule-text); border-radius: 8px;
+            padding: 15px 20px; margin-top: 15px; margin-bottom: 20px; font-weight: 700;
+            font-size: 1.1rem; border-left: 5px solid #eab308; line-height: 1.8;
+        }
+
+        .input-row-block { display: flex; align-items: center; margin-bottom: 20px; padding: 14px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; flex-wrap: wrap; gap: 10px; }
+        .row-label { font-weight: 700; font-size: 1.05rem; color: var(--primary-color); min-width: 180px; }
+        
+        /* 상하방 분수 컴포넌트 */
+        .math-fraction-composite { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin-right: 10px; padding: 4px 0; }
+        .comp-num, .comp-den { width: 70px; padding: 8px; font-size: 1.15rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 6px; outline: none; }
+        .custom-frac-line { width: 80px; height: 3px; background-color: var(--primary-color); margin: 6px 0; border-radius: 2px; }
+
+        /* 분수 지수 하이브리드 컴포넌트 */
+        .math-fraction-exponent-composite { display: inline-flex; align-items: flex-end; position: relative; padding-top: 18px; margin-right: 10px; }
+        .comp-base-large { width: 75px; padding: 10px; font-size: 1.15rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 6px; outline: none; }
+        .sub-fraction-exp-box { display: inline-flex; flex-direction: column; align-items: center; position: relative; bottom: 16px; margin-left: 4px; }
+        .comp-exp-num, .comp-exp-den { width: 45px; padding: 4px; font-size: 0.8rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 4px; outline: none; background: #fffdf2; }
+        .custom-frac-line-tiny { width: 50px; height: 2px; background-color: var(--primary-color); margin: 3px 0; }
+
+        .standard-text-input { width: 100%; max-width: 140px; padding: 12px; font-size: 1.15rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 6px; outline: none; color: var(--math-color); }
+        .long-essay-input { width: 100%; min-height: 100px; padding: 14px; font-size: 1.05rem; font-weight: 600; border: 2px solid var(--border-color); border-radius: 8px; outline: none; resize: vertical; line-height: 1.6; }
+
+        .comp-base-large:focus, .comp-exp-num:focus, .comp-exp-den:focus, .comp-num:focus, .comp-den:focus, .standard-text-input:focus, .long-essay-input:focus { border-color: var(--secondary-color); background: #f8fafc; }
+        .comp-base-large:disabled, .comp-exp-num:disabled, .comp-exp-den:disabled, .comp-num:disabled, .comp-den:disabled, .standard-text-input:disabled, .long-essay-input:disabled { background-color: #cbd5e1; color: #475569; cursor: not-allowed; }
+
+        .math-keyboard-toolbar { display: flex; gap: 6px; margin-top: 15px; margin-bottom: 20px; flex-wrap: wrap; background: #e2e8f0; padding: 12px; border-radius: 8px; }
+        .math-key { background-color: white; border: 1px solid var(--border-color); padding: 12px 18px; font-size: 1.15rem; font-weight: 700; border-radius: 6px; cursor: pointer; color: var(--primary-color); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .math-key.btn-action { background-color: #dbeafe; color: var(--secondary-color); border-color: #bfdbfe; }
+        .math-key.btn-danger-action { background-color: #fee2e2; color: var(--error-color); border-color: #fca5a5; }
+
+        .feedback-msg-area { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: none; padding: 10px 15px; border-radius: 6px; }
+        .feedback-success { background-color: #dcfce7; color: var(--success-color); border-left: 5px solid var(--success-color); }
+        .feedback-error { background-color: #fee2e2; color: var(--error-color); border-left: 5px solid var(--error-color); }
+
+        .quiz-action-bar { display: flex; gap: 12px; flex-wrap: wrap; }
+        .solution-reveal-window { display: none; border-top: 3px double var(--border-color); margin-top: 30px; padding-top: 30px; }
+        .step-block { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
+        .step-title { font-weight: 800; color: var(--secondary-color); display: block; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .step-math-line { font-size: 1.3rem; font-weight: 700; background-color: var(--explanation-bg); padding: 10px 20px; border-radius: 8px; display: block; margin: 6px 0; color: var(--math-color); width: max-content; min-width: 250px; }
+        .step-explanation { display: block; font-size: 1.05rem; color: #334155; margin-top: 8px; }
+
+        .control-panel { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border-color); gap: 15px; }
+        .btn { padding: 14px 24px; font-size: 1.05rem; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; }
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn:disabled { background-color: var(--disabled-color); color: #f1f5f9; cursor: not-allowed; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3MI Unit 6 Lesson 3</h1>
+        <p>Rational Exponents Studio Diagnostic Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1">Question 1: Integer Base Radical Roots Evaluation</option>
+                <option value="q2">Question 2: Fractional Base Root Multiplications</option>
+                <option value="q3">Question 3: Rational Multi-Power Formulations</option>
+                <option value="q4">Question 4: Comprehensive Fractional Radical Evaluations</option>
+                <option value="q5">Question 5: Inverse Negative Fractional Matrix Exponents</option>
+                <option value="q6">Question 6: Calculator Approximation Real Values</option>
+                <option value="q7">Question 7: Radical Expression to Single Power Layouts</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Fill in all calculated fields below:</label>
+                <div id="dynamic-input-mount-point"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressKeyLiteral('(')">(</button>
+                    <button class="math-key" onclick="pressKeyLiteral(')')">)</button>
+                    <button class="math-key" onclick="pressKeyLiteral('/')">/</button>
+                    <button class="math-key" onclick="pressKeyLiteral('+')">+</button>
+                    <button class="math-key" onclick="pressKeyLiteral('-')">-</button>
+                    <button class="math-key" onclick="pressKeyLiteral('.')">.</button>
+                    <button class="math-key" onclick="pressKeyLiteral('1')">1</button>
+                    <button class="math-key" onclick="pressKeyLiteral('2')">2</button>
+                    <button class="math-key" onclick="pressKeyLiteral('3')">3</button>
+                    <button class="math-key" onclick="pressKeyLiteral('4')">4</button>
+                    <button class="math-key" onclick="pressKeyLiteral('5')">5</button>
+                    <button class="math-key" onclick="pressKeyLiteral('6')">6</button>
+                    <button class="math-key" onclick="pressKeyLiteral('7')">7</button>
+                    <button class="math-key" onclick="pressKeyLiteral('8')">8</button>
+                    <button class="math-key" onclick="pressKeyLiteral('9')">9</button>
+                    <button class="math-key" onclick="pressKeyLiteral('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                    <button class="math-key btn-action" onclick="shiftFocusToNext()">Next ➡️</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        // 구조화된 다차원 데이터 채점 레지스트리
+        const answerRegistry = {
+            "q1": [
+                { type: "integer", val: ["8"] }, { type: "integer", val: ["11"] }, { type: "integer", val: ["-5"] },
+                { type: "integer", val: ["6"] }, { type: "decimal", val: ["0.2", ".2"] }, { type: "decimal", val: ["-0.3", "-.3"] },
+                { type: "integer", val: ["12"] }, { type: "integer", val: ["3"] }, { type: "integer", val: ["3"] }
+            ],
+            "q2": [
+                { type: "fraction", num: ["1"], den: ["2"] }, { type: "fraction", num: ["2"], den: ["3"] },
+                { type: "fraction", num: ["2"], den: ["3"] }, { type: "fraction", num: ["-2"], den: ["3"] },
+                { type: "decimal", val: ["0.3", ".3"] }, { type: "decimal", val: ["0.4", ".4"] }
+            ],
+            "q3": [
+                { type: "integer", val: ["16"] }, { type: "integer", val: ["625"] }, { type: "integer", val: ["64"] },
+                { type: "integer", val: ["16"] }, { type: "decimal", val: ["0.001", ".001"] }, { type: "decimal", val: ["0.027", ".027"] }
+            ],
+            "q4": [
+                { type: "fraction", num: ["8"], den: ["27"] }, { type: "fraction", num: ["9"], den: ["16"] },
+                { type: "fraction", num: ["4"], den: ["9"] }, { type: "fraction", num: ["16"], den: ["25"] },
+                { type: "decimal", val: ["0.0016", ".0016"] }, { type: "fraction-or-decimal", num: ["1"], den: ["4"], dec: ["0.25", ".25"] }
+            ],
+            "q5": [
+                { type: "integer", val: ["4"] }, { type: "fraction", num: ["8"], den: ["27"] },
+                { type: "fraction", num: ["4"], den: ["9"] }, { type: "fraction", num: ["9"], den: ["4"] }
+            ],
+            "q6": [
+                { type: "approximate", val: 5.385 }, { type: "approximate", val: 13.454 },
+                { type: "approximate", val: -0.437 }, { type: "approximate", val: 0.315 }
+            ],
+            "q7": [
+                { type: "fraction-exponent", base: ["29"], exp_num: ["1"], exp_den: ["4"] },
+                { type: "fraction-exponent", base: ["29"], exp_num: ["3"], exp_den: ["4"] }
+            ]
+        };
+
+        const problemDataPack = {
+            "q1": {
+                title: "Question 1: Integer Base Radical Roots Evaluation",
+                fullStatement: "Evaluate each power without a calculator. Express each answer as an exact fraction or integer.",
+                labels: ["a) 64^{\\frac{1}{2}}", "b) 121^{\\frac{1}{2}}", "c) (-125)^{\\frac{1}{3}}", "d) 216^{\\frac{1}{3}}", "e) 0.04^{\\frac{1}{2}}", "f) (-0.027)^{\\frac{1}{3}}", "g) \\sqrt{144}", "h) \\sqrt[4]{81}", "i) \\sqrt[5]{243}"],
+                hints: ["Hint 1: An exponent of \\( \\frac{1}{2} \\) is equivalent to a square root \\( \\sqrt{x} \\).", "Hint 2: An exponent of \\( \\frac{1}{3} \\) means a cube root \\( \\sqrt[3]{x} \\). Negative signs are preserved under odd roots."],
+                steps: [
+                    { title: "Step 1: Simplify Square Roots (a, b & g)", lines: ["64^{\\frac{1}{2}} = \\sqrt{64} = 8", "121^{\\frac{1}{2}} = \\sqrt{121} = 11", "\\sqrt{144} = 12"], explanation: "Find the positive numbers that multiply by themselves to equal the base." },
+                    { title: "Step 2: Simplify Cube Roots (c, d & f)", lines: ["(-125)^{\\frac{1}{3}} = \\sqrt[3]{-125} = -5", "216^{\\frac{1}{3}} = 6", "(-0.027)^{\\frac{1}{3}} = -0.3"], explanation: "Preserve the negative signs under odd root indices safely." }
+                ]
+            },
+            "q2": {
+                title: "Question 2: Fractional Base Root Multiplications",
+                fullStatement: "Evaluate each power without a calculator. Express each answer as an exact fraction or decimal.",
+                labels: ["a) (\\frac{1}{4})^{\\frac{1}{2}}", "b) (\\frac{16}{81})^{\\frac{1}{4}}", "c) \\sqrt[3]{\\frac{8}{27}}", "d) (-\\frac{32}{243})^{\\frac{1}{5}}", "e) \\sqrt[5]{0.00243}", "f) (0.064)^{\\frac{1}{3}}"],
+                hints: ["Hint 1: Distribute the radical root operation to the numerator and denominator independently.", "Hint 2: Convert small floating decimals to fraction bases first if needed."],
+                steps: [
+                    { title: "Step 1: Distribute Fraction Roots (a, b & c)", lines: ["(\\frac{1}{4})^{\\frac{1}{2}} = \\frac{\\sqrt{1}}{\\sqrt{4}} = \\frac{1}{2}", "(\\frac{16}{81})^{\\frac{1}{4}} = \\frac{\\sqrt[4]{16}}{\\sqrt[4]{81}} = \\frac{2}{3}"], explanation: "Apply root laws to the top and bottom layers separate from each other." },
+                    { title: "Step 2: Resolve Complex Sign Elements (d)", lines: ["(-\\frac{32}{243})^{\\frac{1}{5}} = \\frac{\\sqrt[5]{-32}}{\\sqrt[5]{243}} = -\\frac{2}{3}"], explanation: "Compute prime factors systematically across the fraction line." }
+                ]
+            },
+            "q3": {
+                title: "Question 3: Rational Multi-Power Formulations",
+                fullStatement: "Evaluate each power without a calculator. Express answers as exact integers or decimals.",
+                labels: ["a) 64^{\\frac{2}{3}}", "b) (-125)^{\\frac{4}{3}}", "c) 16^{\\frac{3}{2}}", "d) 32^{\\frac{4}{5}}", "e) 0.0001^{\\frac{3}{4}}", "f) 0.09^{\\frac{3}{2}}"],
+                hints: ["Hint 1: Apply the root operation from the denominator before raising to the power in the numerator.", "Hint 2: \\( a^{\\frac{m}{n}} = (\\sqrt[n]{a})^m \\)."],
+                steps: [
+                    { title: "Step 1: Apply Denominator Root Step First", lines: ["64^{\\frac{2}{3}} = (\\sqrt[3]{64})^2", "(\\sqrt[3]{64})^2 = 4^2"], explanation: "Take the root first to shrink the base number down to a manageable size." },
+                    { title: "Step 2: Complete the Exponent Product", lines: ["4^2 = 16", "(-125)^{\\frac{4}{3}} = (-5)^4 = 625", "16^{\\frac{3}{2}} = 4^3 = 64"], explanation: "Raise the intermediate value to the final remaining power." }
+                ]
+            },
+            "q4": {
+                title: "Question 4: Comprehensive Fractional Radical Evaluations",
+                fullStatement: "Evaluate each complex rational power configuration without using a calculator.",
+                labels: ["a) (\\frac{4}{9})^{\\frac{3}{2}}", "b) (\\frac{27}{64})^{\\frac{2}{3}}", "c) (-\\frac{32}{243})^{\\frac{2}{5}}", "d) (\\frac{64}{125})^{\\frac{2}{3}}", "e) 0.00032^{\\frac{4}{5}}", "f) (0.125)^{\\frac{2}{3}}"],
+                hints: ["Hint 1: Take the root from the denominator first, then apply the numerator exponent.", "Hint 2: Even powers turn negative internal bases into positive outputs."],
+                steps: [
+                    { title: "Step 1: Isolate Roots for Parts a & b", lines: ["(\\frac{4}{9})^{\\frac{3}{2}} = (\\frac{\\sqrt{4}}{\\sqrt{9}})^3", "(\\frac{2}{3})^3 = \\frac{8}{27}"], explanation: "Solve the root first, then cube the fraction parameters cleanly." },
+                    { title: "Step 2: Check Negative Inner Base Operations (c)", lines: ["(-\\frac{32}{243})^{\\frac{2}{5}} = (\\sqrt[5]{-\\frac{32}{243}})^2", "(-\\frac{2}{3})^2 = \\frac{4}{9}"], explanation: "Squaring a negative intermediate value results in a positive fraction." }
+                ]
+            },
+            "q5": {
+                title: "Question 5: Inverse Negative Fractional Matrix Exponents",
+                fullStatement: "Evaluate without using a calculator. Flip base setups to clear negative exponent flags.",
+                labels: ["a) (\\frac{1}{16})^{-\\frac{1}{2}}", "b) (\\frac{9}{4})^{-\\frac{3}{2}}", "c) (-\\frac{27}{8})^{-\\frac{2}{3}}", "d) (\\frac{32}{243})^{-\\frac{2}{5}}"],
+                hints: ["Hint 1: Flip the numerator and denominator upside down to change the negative exponent into a positive power."],
+                steps: [
+                    { title: "Step 1: Flip Bases to Clear Negative Signs", lines: ["(\\frac{1}{16})^{-\\frac{1}{2}} = 16^{\\frac{1}{2}}", "(\\frac{9}{4})^{-\\frac{3}{2}} = (\\frac{4}{9})^{\\frac{3}{2}}"], explanation: "Apply the reciprocal rule to clear negative exponent signs early." },
+                    { title: "Step 2: Evaluate the Positive Power Remainder", lines: ["16^{\\frac{1}{2}} = \\sqrt{16} = 4", "(\\frac{4}{9})^{\\frac{3}{2}} = (\\frac{2}{3})^3 = \\frac{8}{27}"], explanation: "Complete the remaining root and exponent steps normally." }
+                ]
+            },
+            "q6": {
+                title: "Question 6: Calculator Approximation Real Values",
+                fullStatement: "Use a calculator to evaluate each of the following. Round answers strictly to 3 decimal places.",
+                labels: ["a) 29^{\\frac{1}{2}}", "b) 32^{\\frac{3}{4}}", "c) (-12)^{-\\frac{1}{3}}", "d) 18^{-\\frac{2}{5}}"],
+                hints: ["Hint 1: Use the exponent key [x^y] or [^] on your calculator.", "Hint 2: Remember to place fractional exponents inside parentheses on your calculator input line."],
+                steps: [
+                    { title: "Step 1: Input Equations into Calculator Hardware", lines: ["29^{(1/2)} \\approx 5.38516...", "32^{(3/4)} \\approx 13.4543..."], explanation: "Enter parameters carefully to prevent syntax order errors." },
+                    { title: "Step 2: Round Values to 3 Decimal Places", lines: ["a) \\rightarrow 5.385", "b) \\rightarrow 13.454", "c) \\rightarrow -0.437", "d) \\rightarrow 0.315"], explanation: "Check the 4th decimal digit to determine whether to round up or down." }
+                ]
+            },
+            "q7": {
+                title: "Question 7: Radical Expression to Single Power Layouts",
+                fullStatement: "Write each expression as a power. Do not evaluate.",
+                labels: ["a) \\sqrt[4]{29}", "b) (\\sqrt[4]{29})^{3}"],
+                hints: ["Hint 1: The index of a radical root becomes the denominator of a fractional exponent.", "Hint 2: \\( \\sqrt[n]{a^m} = a^{\\frac{m}{n}} \\)."],
+                steps: [
+                    { title: "Step 1: Translate Index to Denominator (7a)", lines: ["\\sqrt[4]{29} = 29^{\\frac{1}{4}}"], explanation: "A 4th root transitions into a denominator value of 4." },
+                    { title: "Step 2: Combine Outer Power Numerators (7b)", lines: ["(\\sqrt[4]{29})^3 = (29^{\\frac{1}{4}})^3", "(29^{\\frac{1}{4}})^3 = 29^{\\frac{3}{4}}"], explanation: "Place the outer exponent into the numerator slot of the fractional exponent." }
+                ]
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+        let activeQuestionId = "";
+
+        Object.keys(problemDataPack).forEach(key => {
+            questionStates[key] = {
+                answered: false,
+                isCorrect: false,
+                currentStep: 0,
+                solRevealed: false,
+                hintClickCount: 0
+            };
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            document.getElementById("full-question-statement-card").innerHTML = activeProblem.fullStatement;
+
+            const state = questionStates[activeQuestionId];
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div>• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+            }
+
+            let mountHTML = "";
+            const expectedRegistryList = answerRegistry[activeQuestionId];
+
+            activeProblem.labels.forEach((lbl, idx) => {
+                const schema = expectedRegistryList[idx] || expectedRegistryList[0];
+                mountHTML += `<div class="input-row-block"><span class="row-label">\\(${lbl}\\)</span>`;
+
+                if (schema.type === "fraction") {
+                    mountHTML += `
+                    <div class="math-fraction-composite">
+                        <input type="text" class="comp-num custom-sub-input" data-row="${idx}" data-field="num" placeholder="Num" autocomplete="off">
+                        <div class="custom-frac-line"></div>
+                        <input type="text" class="comp-den custom-sub-input" data-row="${idx}" data-field="den" placeholder="Den" autocomplete="off">
+                    </div>`;
+                } else if (schema.type === "fraction-exponent") {
+                    mountHTML += `
+                    <div class="math-fraction-exponent-composite">
+                        <input type="text" class="comp-base-large custom-sub-input" data-row="${idx}" data-field="base" placeholder="Base" autocomplete="off">
+                        <div class="sub-fraction-exp-box">
+                            <input type="text" class="comp-exp-num custom-sub-input" data-row="${idx}" data-field="exp_num" placeholder="num" autocomplete="off">
+                            <div class="custom-frac-line-tiny"></div>
+                            <input type="text" class="comp-exp-den custom-sub-input" data-row="${idx}" data-field="exp_den" placeholder="den" autocomplete="off">
+                        </div>
+                    </div>`;
+                } else if (schema.type === "fraction-or-decimal") {
+                    mountHTML += `
+                    <div class="math-fraction-composite">
+                        <input type="text" class="comp-num custom-sub-input" data-row="${idx}" data-field="num" placeholder="Num" autocomplete="off">
+                        <div class="custom-frac-line"></div>
+                        <input type="text" class="comp-den custom-sub-input" data-row="${idx}" data-field="den" placeholder="Den" autocomplete="off">
+                    </div>
+                    <span class="math-sign-literal"> OR </span>
+                    <input type="text" class="standard-text-input custom-sub-input" data-row="${idx}" data-field="dec" placeholder="Decimal" autocomplete="off">`;
+                } else if (schema.type === "long-essay") {
+                    mountHTML += `<textarea class="long-essay-input custom-sub-input" data-row="${idx}" data-field="essay" placeholder="Write your mathematical explanation paragraph here..."></textarea>`;
+                } else {
+                    mountHTML += `<input type="text" class="standard-text-input custom-sub-input" data-row="${idx}" data-field="val" placeholder="Value" autocomplete="off">`;
+                }
+
+                mountHTML += `</div>`;
+            });
+            inputMount.innerHTML = mountHTML;
+
+            const subFields = inputMount.querySelectorAll(".custom-sub-input");
+            subFields.forEach(field => {
+                const r = field.getAttribute("data-row");
+                const f = field.getAttribute("data-field");
+                const stateKey = `r${r}_f${f}`;
+                if (state[stateKey] !== undefined) {
+                    field.value = state[stateKey];
+                }
+                field.oninput = function() {
+                    if (!state.answered) {
+                        state[stateKey] = field.value;
+                    }
+                };
+            });
+
+            if (subFields.length > 0) subFields[0].focus();
+
+            if (state.answered) {
+                subFields.forEach(f => f.disabled = true);
+                if (state.fieldCorrectionFlags) {
+                    renderPostAnswerHighlights(state.fieldCorrectionFlags);
+                }
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                subFields.forEach(f => f.disabled = false);
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressKeyLiteral(symbol) {
+            const activeEl = document.activeElement;
+            if (!activeEl || !activeEl.classList.contains("custom-sub-input") || activeEl.disabled) return;
+            
+            const startPos = activeEl.selectionStart;
+            const endPos = activeEl.selectionEnd;
+            let text = activeEl.value;
+            
+            activeEl.value = text.substring(0, startPos) + symbol + text.substring(endPos, text.length);
+            activeEl.focus();
+            activeEl.selectionStart = startPos + symbol.length;
+            activeEl.selectionEnd = startPos + symbol.length;
+            
+            const r = activeEl.getAttribute("data-row");
+            const f = activeEl.getAttribute("data-field");
+            questionStates[activeQuestionId][`r${r}_f${f}`] = activeEl.value;
+        }
+
+        function triggerBackspace() {
+            const activeEl = document.activeElement;
+            if (!activeEl || !activeEl.classList.contains("custom-sub-input") || activeEl.disabled) return;
+            
+            const startPos = activeEl.selectionStart;
+            let text = activeEl.value;
+            
+            if (startPos > 0) {
+                activeEl.value = text.substring(0, startPos - 1) + text.substring(startPos, text.length);
+                activeEl.focus();
+                activeEl.selectionStart = startPos - 1;
+                activeEl.selectionEnd = startPos - 1;
+                
+                const r = activeEl.getAttribute("data-row");
+                const f = activeEl.getAttribute("data-field");
+                questionStates[activeQuestionId][`r${r}_f${f}`] = activeEl.value;
+            }
+        }
+
+        function shiftFocusToNext() {
+            const subFields = Array.from(document.getElementById("dynamic-input-mount-point").querySelectorAll(".custom-sub-input"));
+            const currentIdx = subFields.indexOf(document.activeElement);
+            if (currentIdx !== -1 && currentIdx < subFields.length - 1) {
+                subFields[currentIdx + 1].focus();
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    builtHTML += `<div style='margin-bottom:6px;'>• ${data.hints[i]}</div>`;
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All incremental hints for this module have been fully unlocked.");
+            }
+        }
+
+        function cleanToken(str) {
+            if(!str) return "";
+            return str.replace(/\s+/g, '').toLowerCase();
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const fName = document.getElementById("first-name").value.trim();
+            const lName = document.getElementById("last-name").value.trim();
+
+            if (fName === "" || lName === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const expectedRegistryList = answerRegistry[activeQuestionId];
+            const rows = document.getElementById("dynamic-input-mount-point").querySelectorAll(".input-row-block");
+            
+            let totalEarnedPoints = 0;
+            let totalMaxPoints = rows.length;
+            let fieldCorrectionFlags = []; 
+
+            rows.forEach((row, idx) => {
+                const schema = expectedRegistryList[idx] || expectedRegistryList[0];
+                let rowCorrect = false;
+
+                const getVal = (f) => cleanToken(state[`r${idx}_f${f}`] || "");
+
+                if (schema.type === "fraction") {
+                    let nUser = getVal("num"), dUser = getVal("den");
+                    if (schema.num.map(cleanToken).includes(nUser) && schema.den.map(cleanToken).includes(dUser)) rowCorrect = true;
+                } else if (schema.type === "fraction-exponent") {
+                    let bUser = getVal("base"), enUser = getVal("exp_num"), edUser = getVal("exp_den");
+                    if (schema.base.map(cleanToken).includes(bUser) && schema.exp_num.map(cleanToken).includes(enUser) && schema.exp_den.map(cleanToken).includes(edUser)) rowCorrect = true;
+                } else if (schema.type === "fraction-or-decimal") {
+                    let nUser = getVal("num"), dUser = getVal("den"), decUser = getVal("dec");
+                    let matchFrac = schema.num.map(cleanToken).includes(nUser) && schema.den.map(cleanToken).includes(dUser);
+                    let matchDec = schema.dec.map(cleanToken).includes(decUser);
+                    if (matchFrac || matchDec) rowCorrect = true;
+                } else if (schema.type === "approximate") {
+                    let userVal = parseFloat(getVal("val"));
+                    if (!isNaN(userVal) && Math.abs(userVal - schema.val) <= 0.002) rowCorrect = true;
+                } else if (schema.type === "long-essay") {
+                    let text = getVal("essay");
+                    let allMatched = true;
+                    schema.tokens.forEach(tok => {
+                        if (!text.includes(tok)) allMatched = false;
+                    });
+                    if (allMatched && text.length > 15) rowCorrect = true;
+                } else {
+                    if (schema.val.map(cleanToken).includes(getVal("val"))) rowCorrect = true;
+                }
+
+                if (rowCorrect) {
+                    totalEarnedPoints++;
+                    fieldCorrectionFlags.push(true);
+                } else {
+                    fieldCorrectionFlags.push(false);
+                }
+            });
+
+            state.answered = true;
+            state.fieldCorrectionFlags = fieldCorrectionFlags;
+            state.isCorrect = (totalEarnedPoints === totalMaxPoints);
+
+            globalAttempts++;
+            globalScore += totalEarnedPoints;
+            updateHudScoreboard();
+
+            renderPostAnswerHighlights(fieldCorrectionFlags);
+            lockQuizInterface(state.isCorrect);
+
+            let payload = {
+                unitId: "Unit_6", lessonId: "Lesson_3",
+                firstName: fName, lastName: lName, questionId: activeQuestionId,
+                isCorrect: state.isCorrect, earnedScore: totalEarnedPoints, maxScorePossible: totalMaxPoints,
+                attempts: 1, totalScore: globalScore
+            };
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function renderPostAnswerHighlights(flags) {
+            const rows = document.getElementById("dynamic-input-mount-point").querySelectorAll(".input-row-block");
+            rows.forEach((row, idx) => {
+                const subInputs = row.querySelectorAll(".custom-sub-input");
+                subInputs.forEach(input => {
+                    input.disabled = true;
+                    if (flags[idx]) {
+                        input.style.border = "2px solid var(--success-color)";
+                        input.style.backgroundColor = "#f0fdf4";
+                    } else {
+                        input.style.border = "2px solid var(--error-color)";
+                        input.style.backgroundColor = "#fef2f2";
+                    }
+                });
+            });
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST", mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Cloud framework transmission sync bypassed failure:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Perfect! All radical exponent attributes verified successfully.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Calculated discrepancies detected. Review individual parameter items and step solutions.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `<div class="step-block" style="display:none;"><span class="step-title">${step.title}</span>`;
+                
+                step.lines.forEach(line => {
+                    html += `<div class="step-math-line">\\(${line}\\)</div>`;
+                });
+                
+                html += `<span class="step-explanation">${step.explanation}</span></div>`;
+            });
+            
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>

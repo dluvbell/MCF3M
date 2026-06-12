@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3MI Unit 6 Lesson 2 Negative Exponents Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span { color: #60a5fa; }
+        .container { max-width: 850px; margin: 40px auto; padding: 0 20px; }
+        
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        label { display: block; font-weight: 700; color: var(--primary-color); font-size: 1.1rem; margin-bottom: 12px; }
+        select {
+            width: 100%; padding: 16px; font-size: 1.1rem; font-family: inherit;
+            border-radius: 8px; border: 2px solid var(--border-color); background-color: white;
+            color: var(--primary-color); outline: none; cursor: pointer;
+        }
+
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .profile-grid input {
+            width: 100%; padding: 12px; font-size: 1rem; border-radius: 6px;
+            border: 1px solid var(--border-color); box-sizing: border-box; outline: none;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg); padding: 40px; border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 1px solid var(--border-color); min-height: 200px;
+        }
+
+        .placeholder-text { color: #64748b; text-align: center; font-style: italic; padding: 60px 0; font-size: 1.1rem; }
+        .quiz-interface-box { background-color: var(--explanation-bg); border: 1px solid var(--border-color); padding: 25px; border-radius: 10px; margin-bottom: 30px; }
+        
+        .question-statement-card {
+            background: #ffffff; border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px; font-size: 1.1rem; font-weight: 600; color: var(--primary-color);
+            margin-bottom: 20px; border-radius: 0 6px 6px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg); color: var(--rule-text); border-radius: 8px;
+            padding: 15px 20px; margin-top: 15px; margin-bottom: 20px; font-weight: 700;
+            font-size: 1.1rem; border-left: 5px solid #eab308; line-height: 1.8;
+        }
+
+        .input-row-block { display: flex; align-items: center; margin-bottom: 20px; padding: 14px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; flex-wrap: wrap; gap: 10px; }
+        .row-label { font-weight: 700; font-size: 1.05rem; color: var(--primary-color); min-width: 180px; }
+        
+        /* 단일 거듭제곱 입력 컴포넌트 */
+        .math-input-composite { display: inline-flex; align-items: flex-end; position: relative; margin-right: 10px; padding-top: 15px; }
+        .comp-base { width: 80px; padding: 10px; font-size: 1.15rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 6px; outline: none; }
+        .comp-exp { width: 55px; padding: 6px; font-size: 0.9rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 5px; position: relative; bottom: 18px; margin-left: 3px; outline: none; background: #fffdf2; }
+        
+        /* 분수-지수 공존형 중첩 컴포넌트 디자인 */
+        .math-fraction-power-composite { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin-right: 10px; padding: 6px 0; }
+        .power-sub-row { display: inline-flex; align-items: flex-end; position: relative; }
+        .comp-base-small { width: 75px; padding: 8px; font-size: 1.1rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 6px; outline: none; }
+        .comp-exp-small { width: 45px; padding: 5px; font-size: 0.85rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 4px; position: relative; bottom: 14px; margin-left: 2px; outline: none; background: #fffdf2; }
+        .frac-line-small { width: 140px; height: 3px; background-color: var(--primary-color); margin: 6px 0; border-radius: 2px; }
+
+        .standard-text-input { width: 100%; max-width: 140px; padding: 12px; font-size: 1.15rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 6px; outline: none; color: var(--math-color); }
+        .math-sign-literal { font-size: 1.1rem; font-weight: 700; padding: 0 8px; align-self: center; color: #475569; }
+
+        .comp-base:focus, .comp-exp:focus, .comp-base-small:focus, .comp-exp-small:focus, .standard-text-input:focus { border-color: var(--secondary-color); background: #f8fafc; }
+        .comp-base:disabled, .comp-exp:disabled, .comp-base-small:disabled, .comp-exp-small:disabled, .standard-text-input:disabled { background-color: #cbd5e1; color: #475569; cursor: not-allowed; }
+
+        .math-keyboard-toolbar { display: flex; gap: 6px; margin-top: 15px; margin-bottom: 20px; flex-wrap: wrap; background: #e2e8f0; padding: 12px; border-radius: 8px; }
+        .math-key { background-color: white; border: 1px solid var(--border-color); padding: 12px 18px; font-size: 1.15rem; font-weight: 700; border-radius: 6px; cursor: pointer; color: var(--primary-color); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .math-key.btn-action { background-color: #dbeafe; color: var(--secondary-color); border-color: #bfdbfe; }
+        .math-key.btn-danger-action { background-color: #fee2e2; color: var(--error-color); border-color: #fca5a5; }
+
+        .feedback-msg-area { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: none; padding: 10px 15px; border-radius: 6px; }
+        .feedback-success { background-color: #dcfce7; color: var(--success-color); border-left: 5px solid var(--success-color); }
+        .feedback-error { background-color: #fee2e2; color: var(--error-color); border-left: 5px solid var(--error-color); }
+
+        .quiz-action-bar { display: flex; gap: 12px; flex-wrap: wrap; }
+        .solution-reveal-window { display: none; border-top: 3px double var(--border-color); margin-top: 30px; padding-top: 30px; }
+        .step-block { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
+        .step-title { font-weight: 800; color: var(--secondary-color); display: block; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .step-math-line { font-size: 1.3rem; font-weight: 700; background-color: var(--explanation-bg); padding: 10px 20px; border-radius: 8px; display: block; margin: 6px 0; color: var(--math-color); width: max-content; min-width: 250px; }
+        .step-explanation { display: block; font-size: 1.05rem; color: #334155; margin-top: 8px; }
+
+        .control-panel { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border-color); gap: 15px; }
+        .btn { padding: 14px 24px; font-size: 1.05rem; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; }
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn:disabled { background-color: var(--disabled-color); color: #f1f5f9; cursor: not-allowed; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3MI Unit 6 Lesson 2</h1>
+        <p>Negative Exponents Studio Diagnostic Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1">Question 1: Exact Reciprocal Fractions (No Calculator)</option>
+                <option value="q2">Question 2: Calculator-Aided Value Formulations</option>
+                <option value="q3">Question 3: Structural Negative Power Conversion</option>
+                <option value="q4">Question 4: Complex Operational Additions</option>
+                <option value="q5">Question 5: Fraction Inversion Scaling</option>
+                <option value="q6">Question 6: Alternative Double Positive Base Matching</option>
+                <option value="q7">Question 7: Combined Base Laws Consolidation</option>
+                <option value="q8">Question 8: Comprehensive Operational Reduction Laws</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Fill in all calculated fields below:</label>
+                <div id="dynamic-input-mount-point"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressKeyLiteral('(')">(</button>
+                    <button class="math-key" onclick="pressKeyLiteral(')')">)</button>
+                    <button class="math-key" onclick="pressKeyLiteral('/')">/</button>
+                    <button class="math-key" onclick="pressKeyLiteral('+')">+</button>
+                    <button class="math-key" onclick="pressKeyLiteral('-')">-</button>
+                    <button class="math-key" onclick="pressKeyLiteral(',')">,</button>
+                    <button class="math-key" onclick="pressKeyLiteral('1')">1</button>
+                    <button class="math-key" onclick="pressKeyLiteral('2')">2</button>
+                    <button class="math-key" onclick="pressKeyLiteral('3')">3</button>
+                    <button class="math-key" onclick="pressKeyLiteral('4')">4</button>
+                    <button class="math-key" onclick="pressKeyLiteral('5')">5</button>
+                    <button class="math-key" onclick="pressKeyLiteral('6')">6</button>
+                    <button class="math-key" onclick="pressKeyLiteral('7')">7</button>
+                    <button class="math-key" onclick="pressKeyLiteral('8')">8</button>
+                    <button class="math-key" onclick="pressKeyLiteral('9')">9</button>
+                    <button class="math-key" onclick="pressKeyLiteral('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                    <button class="math-key btn-action" onclick="shiftFocusToNext()">Next ➡️</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        // 명확한 채점 규칙 데이터베이스
+        const answerRegistry = {
+            "q1": [
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["121"], de: ["", "1"] }, { nb: ["1"], ne: ["", "1"], db: ["11"], de: ["2"] }] },
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["15"], de: ["", "1"] }] },
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["256"], de: ["", "1"] }, { nb: ["1"], ne: ["", "1"], db: ["4"], de: ["4"] }] },
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["243"], de: ["", "1"] }, { nb: ["1"], ne: ["", "1"], db: ["3"], de: ["5"] }] },
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["256"], de: ["", "1"] }, { nb: ["1"], ne: ["", "1"], db: ["2"], de: ["8"] }] },
+                { type: "integer", val: ["1"] }
+            ],
+            "q2": [
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["4096"], de: ["", "1"] }, { nb: ["1"], ne: ["", "1"], db: ["16"], de: ["3"] }] },
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["4096"], de: ["", "1"] }, { nb: ["1"], ne: ["", "1"], db: ["8"], de: ["4"] }] },
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["3125"], de: ["", "1"] }, { nb: ["1"], ne: ["", "1"], db: ["5"], de: ["5"] }] },
+                { type: "fraction-power", options: [{ nb: ["1"], ne: ["", "1"], db: ["343"], de: ["", "1"] }, { nb: ["1"], ne: ["", "1"], db: ["7"], de: ["3"] }] }
+            ],
+            "q3": [
+                { type: "power", base: ["7"], exp: ["-2"] },
+                { type: "power", base: ["5"], exp: ["-3"] },
+                { type: "power", base: ["10"], exp: ["-4"] },
+                { type: "power", base: ["10"], exp: ["-7"] }
+            ],
+            "q4": [
+                { type: "fraction-power", options: [{ nb: ["17"], ne: ["", "1"], db: ["4"], de: ["", "1"] }] },
+                { type: "fraction-power", options: [{ nb: ["2"], ne: ["", "1"], db: ["3"], de: ["", "1"] }] },
+                { type: "integer", val: ["2"] },
+                { type: "fraction-power", options: [{ nb: ["6"], ne: ["", "1"], db: ["25"], de: ["", "1"] }] }
+            ],
+            "q5": [
+                { type: "integer", val: ["16"] }, 
+                { type: "fraction-power", options: [{ nb: ["27"], ne: ["", "1"], db: ["8"], de: ["", "1"] }, { nb: ["3"], ne: ["3"], db: ["2"], de: ["3"] }] },
+                { type: "integer", val: ["100000000"] },
+                { type: "integer", val: ["3125"] }
+            ],
+            "q6": [
+                { type: "dual-power", b1: ["2", "4"], e1: ["-4", "-2"], b2: ["4", "2"], e2: ["-2", "-4"] },
+                { type: "dual-power", b1: ["3", "9"], e1: ["-4", "-2"], b2: ["9", "3"], e2: ["-2", "-4"] }
+            ],
+            "q7": [
+                { type: "power", base: ["7", "1"], exp: ["0", "1", ""] },
+                { type: "power", base: ["3"], exp: ["-2"] },
+                { type: "power", base: ["(-4)", "-4"], exp: ["-3"] },
+                { type: "power", base: ["12", "1"], exp: ["0", "1", ""] }
+            ],
+            "q8": [
+                { type: "power", base: ["2", "1/2", "(1/2)"], exp: ["2", "-2"] },
+                { type: "power", base: ["4"], exp: ["-2"] },
+                { type: "fraction-base-power", num: ["-3", "3"], den: ["4"], exp: ["10"] },
+                { type: "power", base: ["(-9)", "-9"], exp: ["-2"] }
+            ]
+        };
+
+        // 학업 부진 학생을 위해 직관적인 행동 지침 어휘로 전면 개정된 문제 정보 팩
+        const problemDataPack = {
+            "q1": {
+                title: "Question 1: Reciprocal Fractions (No Calculator)",
+                fullStatement: "Evaluate each power without a calculator. Express each answer as an exact fraction or integer.",
+                labels: ["a) (11)^{-2}", "b) (15)^{-1}", "c) (4)^{-4}", "d) (3)^{-5}", "e) (2)^{-8}", "f) (1)^{-12}"],
+                hints: ["Hint 1: A negative exponent means you flip the number into a fraction: a^{-n} = \\frac{1}{a^n}.", "Hint 2: After flipping, calculate the normal power at the bottom to get your final fraction."],
+                steps: [
+                    { title: "Step 1: Convert Negative Sign to Reciprocal", lines: ["11^{-2} = \\frac{1}{11^2}", "15^{-1} = \\frac{1}{15^1}"], explanation: "Put the number at the bottom of a fraction to change the negative exponent into a standard positive power." },
+                    { title: "Step 2: Expand Exponential Denominators", lines: ["\\frac{1}{11^2} = \\frac{1}{121}", "\\frac{1}{4^4} = \\frac{1}{256}", "1^{-12} = 1"], explanation: "Calculate the value of the power at the bottom to finish your fraction answer." }
+                ]
+            },
+            "q2": {
+                title: "Question 2: Calculator-Aided Value Formulations",
+                fullStatement: "Evaluate each power using a calculator. Express each answer as an exact fraction.",
+                labels: ["a) (16)^{-3}", "b) (8)^{-4}", "c) (5)^{-5}", "d) (7)^{-3}"],
+                hints: ["Hint 1: Write the number as a fraction with 1 on top to clear the negative sign, then calculate the bottom part."],
+                steps: [
+                    { title: "Step 1: Restructure Exponential Layout Base", lines: ["16^{-3} = \\frac{1}{16^3}", "8^{-4} = \\frac{1}{8^4}"], explanation: "Move the expression to the bottom of a fraction so the exponent becomes positive." },
+                    { title: "Step 2: Compute Multi-Digit Power Factors", lines: ["\\frac{1}{16^3} = \\frac{1}{4096}", "\\frac{1}{5^5} = \\frac{1}{3125}"], explanation: "Multiply out the big number at the bottom using your calculator to get the final exact fraction." }
+                ]
+            },
+            "q3": {
+                title: "Question 3: Structural Negative Power Conversion",
+                fullStatement: "Express each fraction or decimal as a power with a negative exponent. For the base, use the smallest positive integer possible.",
+                labels: ["a) \\frac{1}{49}", "b) \\frac{1}{125}", "c) \\frac{1}{10\\,000}", "d) 0.000\\,000\\,1"],
+                hints: ["Hint 1: Write the bottom number as a small base with a positive power first (like 49 = 7^2).", "Hint 2: Bring the power up from the fraction by simply adding a negative sign to its exponent."],
+                steps: [
+                    { title: "Step 1: Find Prime or Fractional Base Factors", lines: ["49 = 7^2", "125 = 5^3", "10\\,000 = 10^4", "0.000\\,000\\,1 = \\frac{1}{10^7}"], explanation: "Change the bottom number into a smaller base with a positive exponent first." },
+                    { title: "Step 2: Translate to Equivalent Negative Line Form", lines: ["\\frac{1}{7^2} = 7^{-2}", "\\frac{1}{10^4} = 10^{-4}", "\\frac{1}{10^7} = 10^{-7}"], explanation: "Move the power up to the main line by giving the exponent a negative sign." }
+                ]
+            },
+            "q4": {
+                title: "Question 4: Complex Operational Additions",
+                fullStatement: "Evaluate. Simplify answers as much as possible while leaving them as exact fractions or integers.",
+                labels: ["a) 2^{2}+2^{-2}", "b) 3^{0}-3^{-1}", "c) 4^{0}+(-4)^{0}", "d) 5^{-2}+5^{-1}"],
+                hints: ["Hint 1: Calculate each term separately first. Remember that any number with an exponent of 0 is exactly 1.", "Hint 2: Change negative powers into fractions, then find a common denominator to add them."],
+                steps: [
+                    { title: "Step 1: Evaluate Exponential Terms to Rationals", lines: ["2^2 = 4", "2^{-2} = \\frac{1}{4}", "3^{-1} = \\frac{1}{3}"], explanation: "Turn each separate part into a normal integer or a standard fraction first." },
+                    { title: "Step 2: Implement Common Denominator Additions", lines: ["4 + \\frac{1}{4} = \\frac{16}{4} + \\frac{1}{4}", "\\frac{16}{4} + \\frac{1}{4} = \\frac{17}{4}", "1 - \\frac{1}{3} = \\frac{2}{3}"], explanation: "Match the bottom numbers (common denominator) to add or subtract the fractions cleanly." }
+                ]
+            },
+            "q5": {
+                title: "Question 5: Fraction Inversion Scaling",
+                fullStatement: "Evaluate. Where fractions are used, leave answers in clean fraction form.",
+                labels: ["a) (\\frac{1}{4})^{-1}", "b) (\\frac{2}{3})^{-3}", "c) (0.01)^{-4}", "d) (0.2)^{-5}"],
+                hints: ["Hint 1: Flip the fraction inside the brackets upside down to turn the negative exponent into a positive one.", "Hint 2: Change decimals like 0.01 into fractions like 1/100 first to make flipping easy."],
+                steps: [
+                    { title: "Step 1: Swap Internal Numerators and Denominators", lines: ["(\\frac{1}{4})^{-1} = 4^1", "(\\frac{2}{3})^{-3} = (\\frac{3}{2})^3", "0.01 = \\frac{1}{100}", "(\\frac{1}{100})^{-4} = 100^4"], explanation: "Flip the inside fraction upside down to change the outside exponent from negative to positive." },
+                    { title: "Step 2: Expand Exponential Target Sets", lines: ["(\\frac{3}{2})^3 = \\frac{27}{8}", "100^4 = 100\\,000\\,000", "0.2 = \\frac{1}{5}", "(\\frac{1}{5})^{-5} = 5^5", "5^5 = 3125"], explanation: "Calculate the final powers for both the top and bottom numbers of your flipped fraction." }
+                ]
+            },
+            "q6": {
+                title: "Question 6: Alternative Double Positive Base Matching",
+                fullStatement: "Use two different positive bases to express each fraction as a power with a negative exponent.",
+                labels: ["a) \\frac{1}{16}", "b) \\frac{1}{81}"],
+                hints: ["Hint 1: A number like 16 can be written in two different ways: 4^2 or 2^4.", "Hint 2: Give both answers a negative exponent to show they represent a fraction."],
+                steps: [
+                    { title: "Step 1: Uncover Dual Power Sub-Bases", lines: ["16 = 4^2", "16 = 2^4", "81 = 9^2", "81 = 3^4"], explanation: "Find two different base numbers and powers that equal the main number." },
+                    { title: "Step 2: Restructure Both Base Sets to Negative Form", lines: ["\\frac{1}{16} = 4^{-2}", "\\frac{1}{16} = 2^{-4}"], explanation: "Turn both options into powers with negative exponents to represent the fraction form." }
+                ]
+            },
+            "q7": {
+                title: "Question 7: Combined Base Laws Consolidation",
+                fullStatement: "Use the exponent rules to express each of the following as a single power.",
+                labels: ["a) \\frac{7^{3}\\times7^{-1}}{7^{2}}", "b) \\frac{3^{4}}{(3^{2})^{3}}", "c) \\frac{(-4)^{-2}\\times(-4)^{5}}{[(-4)^{3}]^{2}}", "d) (12^{0})^{3}"],
+                hints: ["Hint 1: First, combine matching bases on the top row by adding their exponents.", "Hint 2: Next, combine brackets by multiplying exponents. Finally, subtract the bottom exponent from the top."],
+                steps: [
+                    { title: "Step 1: Simplify Top Factors and Power Links", lines: ["7^3 \\times 7^{-1} = 7^{3 + (-1)}", "7^{3 + (-1)} = 7^2", "(3^2)^3 = 3^{2 \\times 3}", "3^{2 \\times 3} = 3^6"], explanation: "Simplify the top parts first by adding exponents, and simplify any brackets by multiplying exponents." },
+                    { title: "Step 2: Run Quotient Exponent Deductions", lines: ["\\frac{7^2}{7^2} = 7^{2-2}", "7^{2-2} = 7^0", "\\frac{3^4}{3^6} = 3^{4-6}", "3^{4-6} = 3^{-2}"], explanation: "Finish the problem by subtracting the bottom exponent from the top exponent." }
+                ]
+            },
+            "q8": {
+                title: "Question 8: Comprehensive Operational Reduction Laws",
+                fullStatement: "Use the exponent rules to express each of the following as a single power.",
+                labels: [
+                    "a) \\frac{(\\frac{1}{2})^{3}}{(\\frac{1}{2})^{5}}",
+                    "b) \\frac{4^{4}}{(4^{2})^{3}}",
+                    "c) \\left[(-\\frac{3}{4})^{2}\\right]^{5}",
+                    "d) \\frac{(-9)^{-2} \\times (-9)^{6}}{[(-9)^{3}]^{2}}"
+                ],
+                hints: ["Hint 1: Use your step-by-step exponent rules: add for multiplication, subtract for fraction lines, and multiply for brackets."],
+                steps: [
+                    { title: "Step 1: Process Fractional Quotient Parameters", lines: ["(\\frac{1}{2})^{3} \\div (\\frac{1}{2})^{5} = (\\frac{1}{2})^{3-5}", "(\\frac{1}{2})^{3-5} = (\\frac{1}{2})^{-2}", "(\\frac{1}{2})^{-2} = 2^2"], explanation: "When dividing identical bases, keep the base the same and subtract the bottom exponent from the top exponent." },
+                    { title: "Step 2: Apply Quotient and Power Rules to b & c", lines: ["4^{4} \\div 4^{6} = 4^{4-6}", "4^{4-6} = 4^{-2}", "\\left[(-\\frac{3}{4})^{2}\\right]^{5} = (-\\frac{3}{4})^{2 \\times 5}", "(-\\frac{3}{4})^{2 \\times 5} = (-\\frac{3}{4})^{10}"], explanation: "Subtract the bottom exponent for division in part b, and multiply the inside/outside exponents for part c." },
+                    { title: "Step 3: Resolve Compound Operations for part d", lines: ["\\frac{(-9)^{-2+6}}{(-9)^6} = \\frac{(-9)^4}{(-9)^6}", "(-9)^{4-6} = (-9)^{-2}"], explanation: "Combine the top exponents first by adding them together, then subtract the bottom exponent to finish." }
+                ]
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+        let activeQuestionId = "";
+
+        Object.keys(problemDataPack).forEach(key => {
+            questionStates[key] = {
+                answered: false,
+                isCorrect: false,
+                currentStep: 0,
+                solRevealed: false,
+                hintClickCount: 0
+            };
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            document.getElementById("full-question-statement-card").innerHTML = activeProblem.fullStatement;
+
+            const state = questionStates[activeQuestionId];
+
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div>• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+            }
+
+            // 분수 내 지수공존(fraction-power) 구조체 최적화 마운트 루틴
+            let mountHTML = "";
+            const expectedRegistryList = answerRegistry[activeQuestionId];
+
+            activeProblem.labels.forEach((lbl, idx) => {
+                const schema = expectedRegistryList[idx] || expectedRegistryList[0];
+                mountHTML += `<div class="input-row-block"><span class="row-label">\\(${lbl}\\)</span>`;
+
+                if (schema.type === "fraction-power") {
+                    mountHTML += `
+                    <div class="math-fraction-power-composite">
+                        <div class="power-sub-row">
+                            <input type="text" class="comp-base-small custom-sub-input" data-row="${idx}" data-field="num_base" placeholder="Num Base" autocomplete="off">
+                            <sup><input type="text" class="comp-exp-small custom-sub-input" data-row="${idx}" data-field="num_exp" placeholder="exp" autocomplete="off"></sup>
+                        </div>
+                        <div class="frac-line-small"></div>
+                        <div class="power-sub-row">
+                            <input type="text" class="comp-base-small custom-sub-input" data-row="${idx}" data-field="den_base" placeholder="Den Base" autocomplete="off">
+                            <sup><input type="text" class="comp-exp-small custom-sub-input" data-row="${idx}" data-field="den_exp" placeholder="exp" autocomplete="off"></sup>
+                        </div>
+                    </div>`;
+                } else if (schema.type === "fraction-base-power") {
+                    mountHTML += `
+                    <div class="math-input-composite" style="align-items: center; padding-top: 0;">
+                        <span class="math-sign-literal" style="font-size: 2rem; font-weight: 300; margin-right: 2px;">(</span>
+                        <div style="margin-right:2px; padding:0; display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle;">
+                            <input type="text" class="custom-sub-input" data-row="${idx}" data-field="base_num" placeholder="Num" autocomplete="off" style="width:55px; padding:6px; font-size:1.1rem; text-align:center; border:2px solid var(--border-color); border-radius:6px; outline:none;">
+                            <div style="width:65px; height:2px; background-color:var(--primary-color); margin:4px 0;"></div>
+                            <input type="text" class="custom-sub-input" data-row="${idx}" data-field="base_den" placeholder="Den" autocomplete="off" style="width:55px; padding:6px; font-size:1.1rem; text-align:center; border:2px solid var(--border-color); border-radius:6px; outline:none;">
+                        </div>
+                        <span class="math-sign-literal" style="font-size: 2rem; font-weight: 300; margin-left: 2px;">)</span>
+                        <sup style="top: -1.5em; align-self: flex-start;"><input type="text" class="custom-sub-input" data-row="${idx}" data-field="exp" placeholder="exp" autocomplete="off" style="width:45px; padding:5px; font-size:0.85rem; text-align:center; background:#fffdf2; border:2px solid var(--border-color); border-radius:4px; outline:none;"></sup>
+                    </div>`;
+                } else if (schema.type === "power") {
+                    mountHTML += `
+                    <div class="math-input-composite">
+                        <input type="text" class="comp-base custom-sub-input" data-row="${idx}" data-field="base" placeholder="Base" autocomplete="off">
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="exp" placeholder="exp" autocomplete="off"></sup>
+                    </div>`;
+                } else if (schema.type === "dual-power") {
+                    mountHTML += `
+                    <div class="math-input-composite">
+                        <input type="text" class="comp-base custom-sub-input" data-row="${idx}" data-field="b1" placeholder="Base 1" autocomplete="off">
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e1" placeholder="exp 1" autocomplete="off"></sup>
+                    </div>
+                    <span class="math-sign-literal"> and </span>
+                    <div class="math-input-composite">
+                        <input type="text" class="comp-base custom-sub-input" data-row="${idx}" data-field="b2" placeholder="Base 2" autocomplete="off">
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e2" placeholder="exp 2" autocomplete="off"></sup>
+                    </div>`;
+                } else {
+                    mountHTML += `<input type="text" class="standard-text-input custom-sub-input" data-row="${idx}" data-field="val" placeholder="Value" autocomplete="off">`;
+                }
+
+                mountHTML += `</div>`;
+            });
+            inputMount.innerHTML = mountHTML;
+
+            // 포커싱 및 상태 데이터 바인딩 복원
+            const subFields = inputMount.querySelectorAll(".custom-sub-input");
+            subFields.forEach(field => {
+                const r = field.getAttribute("data-row");
+                const f = field.getAttribute("data-field");
+                const stateKey = `r${r}_f${f}`;
+                if (state[stateKey] !== undefined) {
+                    field.value = state[stateKey];
+                }
+                field.oninput = function() {
+                    if (!state.answered) {
+                        state[stateKey] = field.value;
+                    }
+                };
+            });
+
+            if (subFields.length > 0) subFields[0].focus();
+
+            if (state.answered) {
+                subFields.forEach(f => f.disabled = true);
+                if (state.fieldCorrectionFlags) {
+                    renderPostAnswerHighlights(state.fieldCorrectionFlags);
+                }
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                subFields.forEach(f => f.disabled = false);
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressKeyLiteral(symbol) {
+            const activeEl = document.activeElement;
+            if (!activeEl || !activeEl.classList.contains("custom-sub-input") || activeEl.disabled) return;
+            
+            const startPos = activeEl.selectionStart;
+            const endPos = activeEl.selectionEnd;
+            let text = activeEl.value;
+            
+            activeEl.value = text.substring(0, startPos) + symbol + text.substring(endPos, text.length);
+            activeEl.focus();
+            activeEl.selectionStart = startPos + symbol.length;
+            activeEl.selectionEnd = startPos + symbol.length;
+            
+            const r = activeEl.getAttribute("data-row");
+            const f = activeEl.getAttribute("data-field");
+            questionStates[activeQuestionId][`r${r}_f${f}`] = activeEl.value;
+        }
+
+        function triggerBackspace() {
+            const activeEl = document.activeElement;
+            if (!activeEl || !activeEl.classList.contains("custom-sub-input") || activeEl.disabled) return;
+            
+            const startPos = activeEl.selectionStart;
+            let text = activeEl.value;
+            
+            if (startPos > 0) {
+                activeEl.value = text.substring(0, startPos - 1) + text.substring(startPos, text.length);
+                activeEl.focus();
+                activeEl.selectionStart = startPos - 1;
+                activeEl.selectionEnd = startPos - 1;
+                
+                const r = activeEl.getAttribute("data-row");
+                const f = activeEl.getAttribute("data-field");
+                questionStates[activeQuestionId][`r${r}_f${f}`] = activeEl.value;
+            }
+        }
+
+        function shiftFocusToNext() {
+            const subFields = Array.from(document.getElementById("dynamic-input-mount-point").querySelectorAll(".custom-sub-input"));
+            const currentIdx = subFields.indexOf(document.activeElement);
+            if (currentIdx !== -1 && currentIdx < subFields.length - 1) {
+                subFields[currentIdx + 1].focus();
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    builtHTML += `<div style='margin-bottom:6px;'>• ${data.hints[i]}</div>`;
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All incremental hints for this module have been fully unlocked.");
+            }
+        }
+
+        function cleanToken(str) {
+            if(!str) return "";
+            return str.replace(/\s+/g, '').toLowerCase().replace(/,/g, '');
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const fName = document.getElementById("first-name").value.trim();
+            const lName = document.getElementById("last-name").value.trim();
+
+            if (fName === "" || lName === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const expectedRegistryList = answerRegistry[activeQuestionId];
+            const rows = document.getElementById("dynamic-input-mount-point").querySelectorAll(".input-row-block");
+            
+            let totalEarnedPoints = 0;
+            let totalMaxPoints = rows.length;
+            let fieldCorrectionFlags = []; 
+
+            rows.forEach((row, idx) => {
+                const schema = expectedRegistryList[idx] || expectedRegistryList[0];
+                let rowCorrect = false;
+
+                const getVal = (f) => cleanToken(state[`r${idx}_f${f}`] || "");
+
+                if (schema.type === "fraction-power") {
+                    let nbUser = getVal("num_base"), neUser = getVal("num_exp");
+                    let dbUser = getVal("den_base"), deUser = getVal("den_exp");
+                    
+                    let matched = false;
+                    schema.options.forEach(opt => {
+                        let nbMatch = opt.nb.map(cleanToken).includes(nbUser);
+                        let neMatch = opt.ne.map(cleanToken).includes(neUser) || (neUser === "" && opt.ne.includes("1"));
+                        let dbMatch = opt.db.map(cleanToken).includes(dbUser);
+                        let deMatch = opt.de.map(cleanToken).includes(deUser) || (deUser === "" && opt.de.includes("1"));
+                        if (nbMatch && neMatch && dbMatch && deMatch) matched = true;
+                    });
+                    if (matched) rowCorrect = true;
+                } else if (schema.type === "fraction-base-power") {
+                    let nUser = getVal("base_num"), dUser = getVal("base_den"), eUser = getVal("exp");
+                    if (schema.num.map(cleanToken).includes(nUser) && schema.den.map(cleanToken).includes(dUser) && schema.exp.map(cleanToken).includes(eUser)) {
+                        rowCorrect = true;
+                    }
+                } else if (schema.type === "power") {
+                    let bUser = getVal("base"), eUser = getVal("exp");
+                    if (schema.base.map(cleanToken).includes(bUser) && schema.exp.map(cleanToken).includes(eUser)) rowCorrect = true;
+                } else if (schema.type === "dual-power") {
+                    let b1User = getVal("b1"), e1User = getVal("e1");
+                    let b2User = getVal("b2"), e2User = getVal("e2");
+                    
+                    let configA = (schema.b1.map(cleanToken).includes(b1User) && schema.e1.map(cleanToken).includes(e1User) &&
+                                   schema.b2.map(cleanToken).includes(b2User) && schema.e2.map(cleanToken).includes(e2User));
+                    let configB = (schema.b2.map(cleanToken).includes(b1User) && schema.e2.map(cleanToken).includes(e1User) &&
+                                   schema.b1.map(cleanToken).includes(b2User) && schema.e1.map(cleanToken).includes(e2User));
+                    if (configA || configB) rowCorrect = true;
+                } else {
+                    if (schema.val.map(cleanToken).includes(getVal("val"))) rowCorrect = true;
+                }
+
+                if (rowCorrect) {
+                    totalEarnedPoints++;
+                    fieldCorrectionFlags.push(true);
+                } else {
+                    fieldCorrectionFlags.push(false);
+                }
+            });
+
+            state.answered = true;
+            state.fieldCorrectionFlags = fieldCorrectionFlags;
+            state.isCorrect = (totalEarnedPoints === totalMaxPoints);
+
+            globalAttempts++;
+            globalScore += totalEarnedPoints;
+            updateHudScoreboard();
+
+            renderPostAnswerHighlights(fieldCorrectionFlags);
+            lockQuizInterface(state.isCorrect);
+
+            let payload = {
+                unitId: "Unit_6", lessonId: "Lesson_2",
+                firstName: fName, lastName: lName, questionId: activeQuestionId,
+                isCorrect: state.isCorrect, earnedScore: totalEarnedPoints, maxScorePossible: totalMaxPoints,
+                attempts: 1, totalScore: globalScore
+            };
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function renderPostAnswerHighlights(flags) {
+            const rows = document.getElementById("dynamic-input-mount-point").querySelectorAll(".input-row-block");
+            rows.forEach((row, idx) => {
+                const subInputs = row.querySelectorAll(".custom-sub-input");
+                subInputs.forEach(input => {
+                    input.disabled = true;
+                    if (flags[idx]) {
+                        input.style.border = "2px solid var(--success-color)";
+                        input.style.backgroundColor = "#f0fdf4";
+                    } else {
+                        input.style.border = "2px solid var(--error-color)";
+                        input.style.backgroundColor = "#fef2f2";
+                    }
+                });
+            });
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST", mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Cloud tracking sync bypassed failure:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Perfect! Exponent reciprocal properties verified successfully.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Calculated discrepancies detected. Review individual sub-fields and solution steps.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `<div class="step-block" style="display:none;"><span class="step-title">${step.title}</span>`;
+                
+                step.lines.forEach(line => {
+                    html += `<div class="step-math-line">\\(${line}\\)</div>`;
+                });
+                
+                html += `<span class="step-explanation">${step.explanation}</span></div>`;
+            });
+            
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>

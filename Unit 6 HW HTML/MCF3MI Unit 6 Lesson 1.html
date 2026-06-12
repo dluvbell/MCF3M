@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3MI Unit 6 Lesson 1 Exponent Rules Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span { color: #60a5fa; }
+        .container { max-width: 850px; margin: 40px auto; padding: 0 20px; }
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        label { display: block; font-weight: 700; color: var(--primary-color); font-size: 1.1rem; margin-bottom: 12px; }
+        select {
+            width: 100%; padding: 16px; font-size: 1.1rem; font-family: inherit;
+            border-radius: 8px; border: 2px solid var(--border-color); background-color: white;
+            color: var(--primary-color); outline: none; cursor: pointer;
+        }
+
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .profile-grid input {
+            width: 100%; padding: 12px; font-size: 1rem; border-radius: 6px;
+            border: 1px solid var(--border-color); box-sizing: border-box; outline: none;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg); padding: 40px; border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 1px solid var(--border-color); min-height: 200px;
+        }
+
+        .placeholder-text { color: #64748b; text-align: center; font-style: italic; padding: 60px 0; font-size: 1.1rem; }
+        .quiz-interface-box { background-color: var(--explanation-bg); border: 1px solid var(--border-color); padding: 25px; border-radius: 10px; margin-bottom: 30px; }
+        .question-statement-card {
+            background: #ffffff; border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px; font-size: 1.1rem; font-weight: 600; color: var(--primary-color);
+            margin-bottom: 20px; border-radius: 0 6px 6px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-container-card {
+            background-color: var(--rule-bg); color: var(--rule-text); border-radius: 8px;
+            padding: 15px 20px; margin-top: 15px; margin-bottom: 20px; font-weight: 700;
+            font-size: 1.1rem; border-left: 5px solid #eab308; line-height: 1.8;
+        }
+
+        .input-row-block { display: flex; align-items: center; margin-bottom: 20px; padding: 10px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; flex-wrap: wrap; gap: 10px; }
+        .row-label { font-weight: 700; font-size: 1rem; color: var(--primary-color); min-width: 220px; }
+        .math-input-composite { display: inline-flex; align-items: flex-end; position: relative; margin-right: 15px; padding-top: 15px; }
+        
+        .comp-base { width: 75px; padding: 10px; font-size: 1.15rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 6px; outline: none; }
+        .comp-exp { width: 50px; padding: 6px; font-size: 0.9rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 5px; position: relative; bottom: 18px; margin-left: 3px; outline: none; background: #fffdf2; }
+        .comp-coeff { width: 65px; padding: 10px; font-size: 1.15rem; font-weight: 700; text-align: center; border: 2px solid var(--border-color); border-radius: 6px; outline: none; margin-right: 5px; }
+        
+        .comp-base:focus, .comp-exp:focus, .comp-coeff:focus, .standard-text-input:focus { border-color: var(--secondary-color); background: #f8fafc; }
+        .comp-base:disabled, .comp-exp:disabled, .comp-coeff:disabled, .standard-text-input:disabled { background-color: #cbd5e1; color: #475569; cursor: not-allowed; }
+        .math-sign-literal { font-size: 1.3rem; font-weight: 800; padding: 0 6px; align-self: center; color: #475569; }
+        .standard-text-input { width: 100%; max-width: 300px; padding: 12px; font-size: 1.1rem; font-weight: 600; border: 2px solid var(--border-color); border-radius: 6px; outline: none; }
+
+        .math-keyboard-toolbar { display: flex; gap: 6px; margin-top: 15px; margin-bottom: 20px; flex-wrap: wrap; background: #e2e8f0; padding: 12px; border-radius: 8px; }
+        .math-key { background-color: white; border: 1px solid var(--border-color); padding: 12px 18px; font-size: 1.15rem; font-weight: 700; border-radius: 6px; cursor: pointer; color: var(--primary-color); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .math-key.btn-action { background-color: #dbeafe; color: var(--secondary-color); border-color: #bfdbfe; }
+        .math-key.btn-danger-action { background-color: #fee2e2; color: var(--error-color); border-color: #fca5a5; }
+
+        .feedback-msg-area { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: none; padding: 10px 15px; border-radius: 6px; }
+        .feedback-success { background-color: #dcfce7; color: var(--success-color); border-left: 5px solid var(--success-color); }
+        .feedback-error { background-color: #fee2e2; color: var(--error-color); border-left: 5px solid var(--error-color); }
+
+        .quiz-action-bar { display: flex; gap: 12px; flex-wrap: wrap; }
+        .solution-reveal-window { display: none; border-top: 3px double var(--border-color); margin-top: 30px; padding-top: 30px; }
+        .step-block { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
+        .step-title { font-weight: 800; color: var(--secondary-color); display: block; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .step-math { font-size: 1.3rem; font-weight: 700; background-color: var(--explanation-bg); padding: 14px 20px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; margin: 8px 0; color: var(--math-color); }
+        .step-explanation { display: block; font-size: 1.05rem; color: #334155; margin-top: 6px; }
+
+        .final-answer-box { background-color: var(--highlight-bg); border-left: 6px solid var(--secondary-color); padding: 20px 25px; border-radius: 0 8px 8px 0; margin-top: 30px; }
+        .final-answer-label { font-weight: 800; color: var(--secondary-color); display: block; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .final-answer-math { font-size: 1.3rem; font-weight: 800; color: var(--primary-color); margin-top: 6px; display: block; }
+
+        .control-panel { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border-color); gap: 15px; }
+        .btn { padding: 14px 24px; font-size: 1.05rem; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; }
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn:disabled { background-color: var(--disabled-color); color: #f1f5f9; cursor: not-allowed; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3MI Unit 6 Lesson 1</h1>
+        <p>Exponent Rules Studio Homework Workbook</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Homework Questions Selector Menu:</label>
+            <select id="question-select" onchange="displaySolution()">
+                <option value="">-- Click to Select a Question --</option>
+                <option value="q1">Question 1: Product Rule Mastery</option>
+                <option value="q2">Question 2: Quotient Rule Mastery</option>
+                <option value="q3">Question 3: Power of a Power Operations</option>
+                <option value="q4">Question 4: Extended Product Simplifications</option>
+                <option value="q5">Question 5: Base Combinations & Fractions</option>
+                <option value="q6">Question 6: Nested Negative/Fractional Bases</option>
+                <option value="q7">Question 7: Algebraic Monomial Simplification</option>
+                <option value="q8">Question 8: Evaluation Pathway Strategies</option>
+                <option value="q9">Question 9: Triple Base-2 Target Decompositions</option>
+                <option value="q11">Question 11: Richter Scale Logarithmic Applications</option>
+                <option value="q13">Question 13: Exponential Diophantine Equations</option>
+                <option value="q14">Question 14: Computer Binary Architecture Sums</option>
+            </select>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a homework question tracking sub-element from the list above to initialize the workbook module.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="full-question-statement-card" class="question-statement-card"></div>
+                
+                <div class="quiz-action-bar" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" id="hint-trigger-btn" onclick="revealIncrementalHint()">Request Next Hint</button>
+                </div>
+                <div id="hint-display-mount" class="hint-container-card" style="display: none;"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;">Fill in all calculated fields below:</label>
+                <div id="dynamic-input-mount-point"></div>
+
+                <div class="math-keyboard-toolbar" id="math-keyboard">
+                    <button class="math-key" onclick="pressKeyLiteral('(')">(</button>
+                    <button class="math-key" onclick="pressKeyLiteral(')')">)</button>
+                    <button class="math-key" onclick="pressKeyLiteral('/')">/</button>
+                    <button class="math-key" onclick="pressKeyLiteral('+')">+</button>
+                    <button class="math-key" onclick="pressKeyLiteral('-')">-</button>
+                    <button class="math-key" onclick="pressKeyLiteral(',')">,</button>
+                    <button class="math-key" onclick="pressKeyLiteral('π')">π</button>
+                    <button class="math-key" onclick="pressKeyLiteral('s')">s</button>
+                    <button class="math-key" onclick="pressKeyLiteral('r')">r</button>
+                    <button class="math-key" onclick="pressKeyLiteral('x')">x</button>
+                    <button class="math-key" onclick="pressKeyLiteral('y')">y</button>
+                    <button class="math-key" onclick="pressKeyLiteral('1')">1</button>
+                    <button class="math-key" onclick="pressKeyLiteral('2')">2</button>
+                    <button class="math-key" onclick="pressKeyLiteral('3')">3</button>
+                    <button class="math-key" onclick="pressKeyLiteral('4')">4</button>
+                    <button class="math-key" onclick="pressKeyLiteral('5')">5</button>
+                    <button class="math-key" onclick="pressKeyLiteral('6')">6</button>
+                    <button class="math-key" onclick="pressKeyLiteral('7')">7</button>
+                    <button class="math-key" onclick="pressKeyLiteral('8')">8</button>
+                    <button class="math-key" onclick="pressKeyLiteral('9')">9</button>
+                    <button class="math-key" onclick="pressKeyLiteral('0')">0</button>
+                    <button class="math-key btn-danger-action" onclick="triggerBackspace()">Del</button>
+                    <button class="math-key btn-action" onclick="shiftFocusToNext()">Next ➡️</button>
+                </div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        // 구조화된 템플릿별 정답 레지스트리 데이터베이스
+        const answerRegistry = {
+            "q1": [
+                { type: "power", base: ["14"], exp: ["10"] },
+                { type: "power", base: ["9"], exp: ["9"] },
+                { type: "power", base: ["(-3)", "-3"], exp: ["7"] },
+                { type: "power", base: ["(1/2)", "1/2", "0.5"], exp: ["14"] }
+            ],
+            "q2": [
+                { type: "power", base: ["6"], exp: ["3"] },
+                { type: "power", base: ["11"], exp: ["3"] },
+                { type: "power", base: ["7"], exp: ["4"] },
+                { type: "power", base: ["(-2)", "-2"], exp: ["2"] }
+            ],
+            "q3": [
+                { type: "power", base: ["3"], exp: ["18"] },
+                { type: "power", base: ["6"], exp: ["14"] },
+                { type: "power", base: ["10"], exp: ["10"] },
+                { type: "power", base: ["(-5)", "-5", "5"], exp: ["8"] }
+            ],
+            "q4": [
+                { type: "power", base: ["4"], exp: ["13"] },
+                { type: "power", base: ["7"], exp: ["9"] }
+            ],
+            "q5": [
+                { type: "power", base: ["8"], exp: ["2"] },
+                { type: "power", base: ["4"], exp: ["1"] },
+                { type: "power", base: ["(-3)", "-3"], exp: ["3"] },
+                { type: "power", base: ["9"], exp: ["12"] }
+            ],
+            "q6": [
+                { type: "power", base: ["(1/2)", "1/2", "0.5"], exp: ["2"] },
+                { type: "power", base: ["0.5", "(0.5)"], exp: ["8"] },
+                { type: "power", base: ["(-3/4)", "-3/4"], exp: ["15"] },
+                { type: "power", base: ["(-7)", "-7", "7"], exp: ["6"] }
+            ],
+            "q7": [
+                { type: "algebraic-s", base: ["s"], exp: ["12"] },
+                { type: "algebraic-double-raw", b1: ["π", "pi"], e1: ["3"], b2: ["r"], e2: ["6"] },
+                { type: "algebraic-mono", coeff: ["6"], b1: ["x"], e1: ["3"], b2: ["y"], e2: ["7"] },
+                { type: "algebraic-mono", coeff: ["5"], b1: ["x"], e1: ["6"], b2: ["y"], e2: ["1", ""] },
+                { type: "algebraic-mono", coeff: ["2"], b1: ["x"], e1: ["7"], b2: ["y"], e2: ["2"] }
+            ],
+            "q8": [
+                { type: "text", val: ["25"] },
+                { type: "text", val: ["25"] },
+                { type: "text", val: ["b", "strategy b"] }
+            ],
+            "q9": [
+                { type: "double-exp-sum", base: "2", targetSum: 12 },
+                { type: "double-exp-diff", base: "2", targetDiff: 12 },
+                { type: "double-exp-prod", base: "2", targetProd: 12 }
+            ],
+            "q11": [
+                { type: "text", val: ["1000", "10^3"] },
+                { type: "text", val: ["10000", "10^4"] }
+            ],
+            "q13": [
+                { type: "text", val: ["2"] }, { type: "text", val: ["3"] },
+                { type: "text", val: ["4"] }, { type: "text", val: ["6"] }
+            ],
+            "q14": [
+                { type: "triple-exp-bin", e1: ["5"], e2: ["3"], e3: ["1"] },
+                { type: "double-exp-bin", e1: ["7"], e2: ["6"] },
+                { type: "text", val: ["680"] }
+            ]
+        };
+
+        // 직관적이고 쉬운 행동 중심형 설명문(학습부진용)으로 업데이트된 문제 팩 데이터 구조
+        const problemDataPack = {
+            "q1": {
+                title: "Question 1 (Product Rule Mastery)",
+                type: "composite-render",
+                fullStatement: "Express each of the following as a single power using product rule principles: \\( a^m \\times a^n = a^{m+n} \\).",
+                labels: ["a) \\( 14^3 \\times 14^7 \\)", "b) \\( 9^5 \\times 9^4 \\)", "c) \\( (-3)^5(-3)^2 \\)", "d) \\( (\\frac{1}{2})^6 \\times (\\frac{1}{2})^8 \\)"],
+                hints: ["Hint 1: Keep the base the same and simply add the top exponents together.", "Hint 2: Keep the brackets, negative signs, and fractions exactly as they are."],
+                steps: [
+                    { title: "Step 1: Process items a & b", math: "14^{3+7}=14^{10}, \\quad 9^{5+4}=9^9", explanation: "Keep the base exactly the same and simply add the top exponents together." },
+                    { title: "Step 2: Process items c & d", math: "(-3)^{5+2}=(-3)^7, \\quad (\\tfrac{1}{2})^{6+8}=(\\tfrac{1}{2})^{14}", explanation: "Keep the brackets, negative signs, and fractions exactly as they are. Just add the exponents together." }
+                ]
+            },
+            "q2": {
+                title: "Question 2 (Quotient Rule Mastery)",
+                type: "composite-render",
+                fullStatement: "Express each of the following as a single power using quotient rule principles: \\( a^m \\div a^n = a^{m-n} \\).",
+                labels: ["a) \\( 6^{12} \\div 6^9 \\)", "b) \\( 11^{10} \\div 11^7 \\)", "c) \\( \\frac{7^7}{7^3} \\)", "d) \\( \\frac{(-2)^5}{(-2)^3} \\)"],
+                hints: ["Hint 1: Keep the base the same and subtract the bottom exponent from the top exponent."],
+                steps: [
+                    { title: "Step 1: Simplify items a & b", math: "6^{12-9}=6^3, \\quad 11^{10-7}=11^3", explanation: "When dividing, keep the base the same and subtract the second exponent from the first exponent." },
+                    { title: "Step 2: Simplify items c & d", math: "7^{7-3}=7^4, \\quad (-2)^{5-3}=(-2)^2", explanation: "For fractions or negative bases in brackets, keep the base the same and subtract the bottom exponent from the top exponent." }
+                ]
+            },
+            "q3": {
+                title: "Question 3 (Power of a Power Operations)",
+                type: "composite-render",
+                fullStatement: "Simplify each term down into a single power using power of a power structures: \\( (a^m)^n = a^{m \\times n} \\).",
+                labels: ["a) \\( (3^3)^6 \\)", "b) \\( (6^2)^7 \\)", "c) \\( (10^5)^2 \\)", "d) \\( (-5^2)^4 \\)"],
+                hints: ["Hint 1: When a power is inside and outside brackets, multiply the exponents together."],
+                steps: [
+                    { title: "Step 1: Evaluate multi-stage indexes", math: "3^{3 \\times 6}=3^{18}, \\quad 6^{2 \\times 7}=6^{14}", explanation: "When a power is raised to another power, simply multiply the inside and outside exponents together." },
+                    { title: "Step 2: Process even outer blocks", math: "10^{5 \\times 2}=10^{10}, \\quad (-5)^{2 \\times 4}=(-5)^8", explanation: "Keep the base exactly the same and multiply the two exponents together." }
+                ]
+            },
+            "q4": {
+                title: "Question 4 (Extended Product Simplifications)",
+                type: "composite-render",
+                fullStatement: "Express each formulation as a single base power calculation.",
+                labels: ["a) \\( 4^8 \\times 4^5 \\)", "b) \\( 7^2 \\times 7^7 \\)"],
+                hints: ["Hint 1: Keep the base the same and add the exponents together."],
+                steps: [
+                    { title: "Step 1: Solve extended factors", math: "4^{8+5}=4^{13}, \\quad 7^{2+7}=7^9", explanation: "Since the matching bases are multiplied, simply add the exponents together." }
+                ]
+            },
+            "q5": {
+                title: "Question 5 (Base Combinations & Fractions)",
+                type: "composite-render",
+                fullStatement: "Simplify composite mathematical expressions by combining operations step by step.",
+                labels: ["a) \\( \\frac{8^3 \\times 8}{8^2} \\)", "b) \\( \\frac{4^7}{(4^2)^3} \\)", "c) \\( \\frac{(-3)^4 \\times (-3)^5}{[(-3)^3]^2} \\)", "d) \\( (9^4)^3 \\)"],
+                hints: ["Hint 1: Simplify the top part first by adding exponents, then subtract the bottom exponent."],
+                steps: [
+                    { title: "Step 1: Consolidate 5a & 5b", math: "\\tfrac{8^4}{8^2}=8^2, \\quad \\tfrac{4^7}{4^6}=4^1", explanation: "Simplify the top or bracket parts first (add exponents or multiply powers), then subtract the bottom exponent." },
+                    { title: "Step 2: Consolidate 5c & 5d", math: "\\tfrac{(-3)^9}{(-3)^6}=(-3)^3, \\quad 9^{4 \\times 3}=9^{12}", explanation: "Do the multiplication rules first (add exponents), then do the division rule (subtract exponents)." }
+                ]
+            },
+            "q6": {
+                title: "Question 6 (Nested Negative/Fractional Bases)",
+                type: "composite-render",
+                fullStatement: "Simplify expressions containing decimal layers and fractional components.",
+                labels: ["a) \\( \\frac{(\\frac{1}{2})^5}{(\\frac{1}{2})^3} \\)", "b) \\( \\frac{(0.5)^{15}}{(0.5)^3 \\times (0.5)^4} \\)", "c) \\( [(-\\frac{3}{4})^3]^5 \\)", "d) \\( (-7)(-7)^5 \\)"],
+                hints: ["Hint 1: Treat fractions and decimals just like normal numbers. Use the exact same exponent rules."],
+                steps: [
+                    { title: "Step 1: Simplify 6a & 6b", math: "(\\tfrac{1}{2})^{5-3}=(\\tfrac{1}{2})^2, \\quad \\tfrac{0.5^{15}}{0.5^7}=0.5^8", explanation: "Treat fractions and decimals just like normal numbers. Keep the base the same and subtract the bottom exponent from the top exponent." },
+                    { title: "Step 2: Simplify 6c & 6d", math: "(-\\tfrac{3}{4})^{3 \\times 5}=(-\\tfrac{3}{4})^{15}, \\quad (-7)^{1+5}=(-7)^6", explanation: "Do not change the negative bases inside the brackets. Just multiply the exponents for powers, or add them for multiplication." }
+                ]
+            },
+            "q7": {
+                title: "Question 7 (Algebraic Monomial Simplification)",
+                type: "composite-render",
+                fullStatement: "Simplify each algebraic expression by processing literal elements and whole scalar constants.",
+                labels: ["a) \\( (s^3)^4 \\)", "b) \\( (\\pi r^2)^3 \\)", "c) \\( (2x^2y^3)(3xy^4) \\)", "d) \\( \\frac{45x^7y^4}{9xy^3} \\)", "e) \\( \\frac{(4x^4y^5)^2}{8xy^8} \\)"],
+                hints: ["Hint 1: Share the outside exponent with every single item inside the brackets.", "Hint 2: Multiply or divide normal numbers first, then match letters to add or subtract their exponents."],
+                steps: [
+                    { title: "Step 1: Evaluate 7a & 7b variable grids", math: "s^{12}, \\quad \\pi^3 r^6", explanation: "Give the outside exponent to every single item inside the brackets by multiplying it with their current exponents." },
+                    { title: "Step 2: Evaluate 7c scalar product", math: "(2 \\times 3)x^{2+1}y^{3+4} = 6x^3y^7", explanation: "Multiply the normal numbers together first. Then, add the exponents for the matching letters (x with x, and y with y)." },
+                    { title: "Step 3: Simplify 7d & 7e system fractions", math: "7d: 5x^6y, \\quad 7e: \\tfrac{16x^8y^{10}}{8xy^8} = 2x^7y^2", explanation: "Divide the normal numbers first. Then, subtract the bottom exponents from the top exponents for each matching letter." }
+                ]
+            },
+            "q8": {
+                title: "Question 8 (Evaluation Pathway Strategies)",
+                type: "composite-render",
+                fullStatement: "Analyze alternative evaluation strategies for the expression: \\( \\frac{5^4 \\times 5^7}{5^6 \\times 5^3} \\).",
+                labels: ["a) Evaluate each power first via calculator", "b) Simplify indices first using exponent rules", "c) Which method do you prefer? (Type 'a' or 'b')"],
+                hints: ["Hint 1: Exponent rules make math much faster and avoid dealing with massive numbers."],
+                steps: [
+                    { title: "Step 1: Compute via Calculator Raw Method", math: "\\tfrac{48828125}{1953125} = 25", explanation: "This way forces you to calculate massive numbers first, which is easy to mess up on a calculator." },
+                    { title: "Step 2: Compute via Exponent Structural Reduction", math: "\\tfrac{5^{11}}{5^9} = 5^2 = 25", explanation: "This way is much easier! Simplify the exponents first to get a small number like 5^2, then find the final answer." }
+                ]
+            },
+            "q9": {
+                title: "Question 9 (Triple Base-2 Target Decompositions)",
+                type: "composite-render",
+                fullStatement: "Express the power \\( 2^{12} \\) using three alternative base configurations.",
+                labels: ["a) Product of two powers: \\( 2^{[ ]} \\times 2^{[ ]} \\)", "b) Quotient of two powers: \\( \\frac{2^{[ ]}}{2^{[ ]}} \\)", "c) Power of a power: \\( (2^{[ ]})^{[ ]} \\)"],
+                hints: ["Hint 1: Think of standard number patterns that add up to 12, subtract to 12, or multiply to 12."],
+                steps: [
+                    { title: "Step 1: Establish product index tracking", math: "a + b = 12", explanation: "Find any two exponent numbers that add up exactly to 12 (like 3 and 9, or 4 and 8)." },
+                    { title: "Step 2: Establish quotient layer parameters", math: "a - b = 12", explanation: "Find any two exponent numbers where the top number minus the bottom number equals 12 (like 15 and 3)." },
+                    { title: "Step 3: Establish power scaling layouts", math: "a \\times b = 12", explanation: "Find any two exponent numbers that multiply together to equal 12 (like 2 and 6, or 3 and 4)." }
+                ]
+            },
+            "q11": {
+                title: "Question 11 (Richter Scale Logarithmic Applications)",
+                type: "composite-render",
+                fullStatement: "The Richter scale calculates earthquake magnitudes using a base of 10. Compare relational scaling measurements.",
+                labels: ["a) Compare magnitude 6.0 vs 3.0 shocks", "b) Compare Cascadia (9.0) vs Ontario (5.0) events"],
+                hints: ["Hint 1: Subtract the earthquake levels first to find your exponent, then place it on a base of 10."],
+                steps: [
+                    { title: "Step 1: Compute 11a scale properties", math: "10^{6-3} = 10^3 = 1000", explanation: "Subtract the levels (6 - 3 = 3) to find the exponent. 10 to the power of 3 means it is 1,000 times stronger." },
+                    { title: "Step 2: Compute 11b structural metrics", math: "10^{9-5} = 10^4 = 10000", explanation: "Subtract the levels (9 - 5 = 4) to find the exponent. 10 to the power of 4 means it is 10,000 times stronger." }
+                ]
+            },
+            "q13": {
+                title: "Question 13 (Exponential Diophantine Equations)",
+                type: "composite-render",
+                fullStatement: "Find positive integer pairs for \\( x \\) and \\( y \\) that satisfy the base equation: \\( 8^x = 4^y \\).",
+                labels: ["a) Primary matching set: x =", "   Primary matching set: y =", "b) Secondary matching set: x =", "   Secondary matching set: y ="],
+                hints: ["Hint 1: Rewrite both 8 and 4 using a base of 2 so they match."],
+                steps: [
+                    { title: "Step 1: Align base elements", math: "(2^3)^x = (2^2)^y \\implies 2^{3x} = 2^{2y}", explanation: "Change both 8 and 4 so they both use a matching base of 2. This makes them easy to compare." },
+                    { title: "Step 2: Match parameters to discover system combinations", math: "3x = 2y \\implies x:y = 2:3", explanation: "Since the bases are now the same, just make the top exponents equal to each other (3x = 2y) and find whole numbers that work." }
+                ]
+            },
+            "q14": {
+                title: "Question 14 (Binary Structural Frameworks)",
+                type: "composite-render",
+                fullStatement: "Computers use the binary system, structuring values using integer power sets of 2.",
+                labels: ["a) Express 42 as a sum of powers of 2: \\( 2^{[ ]} + 2^{[ ]} + 2^{[ ]} \\)", "b) Express 192 as a sum of powers of 2: \\( 2^{[ ]} + 2^{[ ]} \\)", "c) Evaluate compound string: \\( 2^9 + 2^7 + 2^5 + 2^3 \\)"],
+                hints: ["Hint 1: Break the target number down into the largest powers of 2 (like 128, 64, 32, 16, 8, 4, 2) that can fit inside it."],
+                steps: [
+                    { title: "Step 1: Extract 42 binary layers", math: "42 = 32 + 8 + 2 = 2^5 + 2^3 + 2^1", explanation: "Break the number down into the biggest pieces of 2-powers (32, 8, and 2) that add up to 42." },
+                    { title: "Step 2: Extract 192 binary layers", math: "192 = 128 + 64 = 2^7 + 2^6", explanation: "Find the largest powers of 2 (128 and 64) that add up exactly to 192." },
+                    { title: "Step 3: Evaluate sequence 14c", math: "512 + 128 + 32 + 8 = 680", explanation: "Turn each power of 2 into a normal number first, then add them all together." }
+                ]
+            }
+        };
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let questionStates = {};
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+        let activeQuestionId = "";
+
+        // 상태 레지스트리 자동화 초기화
+        Object.keys(problemDataPack).forEach(key => {
+            questionStates[key] = {
+                answered: false,
+                isCorrect: false,
+                currentStep: 0,
+                solRevealed: false,
+                hintClickCount: 0
+            };
+        });
+
+        function displaySolution() {
+            const selectMenu = document.getElementById("question-select");
+            activeQuestionId = selectMenu.value;
+
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const inputMount = document.getElementById("dynamic-input-mount-point");
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (activeQuestionId === "") {
+                placeholder.style.display = "block";
+                quizStation.style.display = "none";
+                return;
+            }
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            const activeProblem = problemDataPack[activeQuestionId];
+            document.getElementById("full-question-statement-card").innerHTML = activeProblem.fullStatement;
+
+            const state = questionStates[activeQuestionId];
+
+            // 힌트 패널 복구
+            if (state.hintClickCount > 0) {
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    if (activeProblem.hints && activeProblem.hints[i]) {
+                        builtHTML += `<div>• ${activeProblem.hints[i]}</div>`;
+                    }
+                }
+                hintDisplay.innerHTML = builtHTML;
+            } else {
+                hintDisplay.style.display = "none";
+            }
+
+            // 위첨자 포맷 매핑 엔진 기반 동적 입력 컴포넌트 마운트
+            let mountHTML = "";
+            const expectedRegistryList = answerRegistry[activeQuestionId];
+
+            activeProblem.labels.forEach((lbl, idx) => {
+                const schema = expectedRegistryList[idx] || expectedRegistryList[0];
+                mountHTML += `<div class="input-row-block"><span class="row-label">${lbl}:</span>`;
+
+                if (schema.type === "power") {
+                    mountHTML += `
+                    <div class="math-input-composite">
+                        <input type="text" class="comp-base custom-sub-input" data-row="${idx}" data-field="base" placeholder="Base" autocomplete="off">
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="exp" placeholder="exp" autocomplete="off"></sup>
+                    </div>`;
+                } else if (schema.type === "algebraic-s") {
+                    mountHTML += `
+                    <div class="math-input-composite">
+                        <input type="text" class="comp-base custom-sub-input" data-row="${idx}" data-field="base" placeholder="s" autocomplete="off">
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="exp" placeholder="exp" autocomplete="off"></sup>
+                    </div>`;
+                } else if (schema.type === "algebraic-double-raw") {
+                    mountHTML += `
+                    <div class="math-input-composite">
+                        <input type="text" class="comp-base custom-sub-input" data-row="${idx}" data-field="b1" placeholder="π" autocomplete="off">
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e1" placeholder="exp" autocomplete="off"></sup>
+                    </div>
+                    <div class="math-input-composite">
+                        <input type="text" class="comp-base custom-sub-input" data-row="${idx}" data-field="b2" placeholder="r" autocomplete="off">
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e2" placeholder="exp" autocomplete="off"></sup>
+                    </div>`;
+                } else if (schema.type === "algebraic-mono") {
+                    mountHTML += `
+                    <input type="text" class="comp-coeff custom-sub-input" data-row="${idx}" data-field="coeff" placeholder="coeff" autocomplete="off">
+                    <div class="math-input-composite">
+                        <span class="math-sign-literal">x</span>
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e1" placeholder="exp" autocomplete="off"></sup>
+                    </div>
+                    <div class="math-input-composite">
+                        <span class="math-sign-literal">y</span>
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e2" placeholder="exp" autocomplete="off"></sup>
+                    </div>`;
+                } else if (schema.type === "double-exp-sum" || schema.type === "double-exp-diff" || schema.type === "double-exp-prod") {
+                    let sign = schema.type === "double-exp-sum" ? "×" : schema.type === "double-exp-diff" ? "/" : "^";
+                    if(schema.type === "double-exp-prod") {
+                        mountHTML += `
+                        <span class="math-sign-literal">( ${schema.base} </span>
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e1" placeholder="exp" autocomplete="off"></sup>
+                        <span class="math-sign-literal"> )</span>
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e2" placeholder="exp" autocomplete="off"></sup>`;
+                    } else {
+                        mountHTML += `
+                        <span class="math-sign-literal">${schema.base}</span>
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e1" placeholder="exp" autocomplete="off"></sup>
+                        <span class="math-sign-literal"> ${sign} ${schema.base} </span>
+                        <sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e2" placeholder="exp" autocomplete="off"></sup>`;
+                    }
+                } else if (schema.type === "triple-exp-bin") {
+                    mountHTML += `
+                    <span class="math-sign-literal">2</span><sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e1" placeholder="exp" autocomplete="off"></sup>
+                    <span class="math-sign-literal">+ 2</span><sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e2" placeholder="exp" autocomplete="off"></sup>
+                    <span class="math-sign-literal">+ 2</span><sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e3" placeholder="exp" autocomplete="off"></sup>`;
+                } else if (schema.type === "double-exp-bin") {
+                    mountHTML += `
+                    <span class="math-sign-literal">2</span><sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e1" placeholder="exp" autocomplete="off"></sup>
+                    <span class="math-sign-literal">+ 2</span><sup><input type="text" class="comp-exp custom-sub-input" data-row="${idx}" data-field="e2" placeholder="exp" autocomplete="off"></sup>`;
+                } else {
+                    mountHTML += `<input type="text" class="standard-text-input custom-sub-input" data-row="${idx}" data-field="val" placeholder="Your Answer..." autocomplete="off">`;
+                }
+
+                mountHTML += `</div>`;
+            });
+            inputMount.innerHTML = mountHTML;
+
+            // 상태 데이터 복원 로직
+            const subFields = inputMount.querySelectorAll(".custom-sub-input");
+            subFields.forEach(field => {
+                const r = field.getAttribute("data-row");
+                const f = field.getAttribute("data-field");
+                const stateKey = `r${r}_f${f}`;
+                if (state[stateKey] !== undefined) {
+                    field.value = state[stateKey];
+                }
+                field.oninput = function() {
+                    if (!state.answered) {
+                        state[stateKey] = field.value;
+                    }
+                };
+            });
+
+            if (subFields.length > 0) subFields[0].focus();
+
+            if (state.answered) {
+                subFields.forEach(f => f.disabled = true);
+                if (state.fieldCorrectionFlags) {
+                    renderPostAnswerHighlights(state.fieldCorrectionFlags);
+                }
+                lockQuizInterface(state.isCorrect);
+                if (state.solRevealed) revealSolutionWorkspace();
+            } else {
+                subFields.forEach(f => f.disabled = false);
+                unlockQuizInterface();
+            }
+            
+            renderMathElements();
+        }
+
+        function pressKeyLiteral(symbol) {
+            const activeEl = document.activeElement;
+            if (!activeEl || !activeEl.classList.contains("custom-sub-input") || activeEl.disabled) return;
+            
+            const startPos = activeEl.selectionStart;
+            const endPos = activeEl.selectionEnd;
+            let text = activeEl.value;
+            
+            activeEl.value = text.substring(0, startPos) + symbol + text.substring(endPos, text.length);
+            activeEl.focus();
+            activeEl.selectionStart = startPos + symbol.length;
+            activeEl.selectionEnd = startPos + symbol.length;
+            
+            const r = activeEl.getAttribute("data-row");
+            const f = activeEl.getAttribute("data-field");
+            questionStates[activeQuestionId][`r${r}_f${f}`] = activeEl.value;
+        }
+
+        function triggerBackspace() {
+            const activeEl = document.activeElement;
+            if (!activeEl || !activeEl.classList.contains("custom-sub-input") || activeEl.disabled) return;
+            
+            const startPos = activeEl.selectionStart;
+            let text = activeEl.value;
+            
+            if (startPos > 0) {
+                activeEl.value = text.substring(0, startPos - 1) + text.substring(startPos, text.length);
+                activeEl.focus();
+                activeEl.selectionStart = startPos - 1;
+                activeEl.selectionEnd = startPos - 1;
+                
+                const r = activeEl.getAttribute("data-row");
+                const f = activeEl.getAttribute("data-field");
+                questionStates[activeQuestionId][`r${r}_f${f}`] = activeEl.value;
+            }
+        }
+
+        function shiftFocusToNext() {
+            const subFields = Array.from(document.getElementById("dynamic-input-mount-point").querySelectorAll(".custom-sub-input"));
+            const currentIdx = subFields.indexOf(document.activeElement);
+            if (currentIdx !== -1 && currentIdx < subFields.length - 1) {
+                subFields[currentIdx + 1].focus();
+            }
+        }
+
+        function revealIncrementalHint() {
+            if (!activeQuestionId) return;
+            const data = problemDataPack[activeQuestionId];
+            const state = questionStates[activeQuestionId];
+            const hintDisplay = document.getElementById("hint-display-mount");
+
+            if (data.hints && state.hintClickCount < data.hints.length) {
+                state.hintClickCount++;
+                hintDisplay.style.display = "block";
+                let builtHTML = "";
+                for (let i = 0; i < state.hintClickCount; i++) {
+                    builtHTML += `<div style='margin-bottom:6px;'>• ${data.hints[i]}</div>`;
+                }
+                hintDisplay.innerHTML = builtHTML;
+                renderMathElements();
+            } else {
+                alert("All incremental hints for this module have been fully unlocked.");
+            }
+        }
+
+        function cleanToken(str) {
+            if(!str) return "";
+            return str.replace(/\s+/g, '').toLowerCase()
+                      .replace(/\\/g, '').replace(/pi/g, 'π');
+        }
+
+        function evaluateStudentAnswer() {
+            if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
+
+            const fName = document.getElementById("first-name").value.trim();
+            const lName = document.getElementById("last-name").value.trim();
+
+            if (fName === "" || lName === "") {
+                alert("Identity verification required. Please enter your First Name and Last Name.");
+                return;
+            }
+
+            const state = questionStates[activeQuestionId];
+            const expectedRegistryList = answerRegistry[activeQuestionId];
+            const rows = document.getElementById("dynamic-input-mount-point").querySelectorAll(".input-row-block");
+            
+            let totalEarnedPoints = 0;
+            let totalMaxPoints = rows.length;
+            let fieldCorrectionFlags = []; 
+
+            rows.forEach((row, idx) => {
+                const schema = expectedRegistryList[idx] || expectedRegistryList[0];
+                let rowCorrect = false;
+
+                const getVal = (f) => cleanToken(state[`r${idx}_f${f}`] || "");
+
+                if (schema.type === "power") {
+                    let bUser = getVal("base"), eUser = getVal("exp");
+                    let bMatch = schema.base.map(cleanToken).includes(bUser);
+                    let eMatch = schema.exp.map(cleanToken).includes(eUser);
+                    if(bMatch && eMatch) rowCorrect = true;
+                } else if (schema.type === "algebraic-s") {
+                    let bUser = getVal("base"), eUser = getVal("exp");
+                    if(schema.base.map(cleanToken).includes(bUser) && schema.exp.map(cleanToken).includes(eUser)) rowCorrect = true;
+                } else if (schema.type === "algebraic-double-raw") {
+                    if(schema.b1.map(cleanToken).includes(getVal("b1")) && schema.e1.map(cleanToken).includes(getVal("e1")) &&
+                       schema.b2.map(cleanToken).includes(getVal("b2")) && schema.e2.map(cleanToken).includes(getVal("e2"))) rowCorrect = true;
+                } else if (schema.type === "algebraic-mono") {
+                    if(schema.coeff.map(cleanToken).includes(getVal("coeff")) &&
+                       schema.e1.map(cleanToken).includes(getVal("e1")) &&
+                       schema.e2.map(cleanToken).includes(getVal("e2"))) rowCorrect = true;
+                } else if (schema.type === "double-exp-sum" || schema.type === "double-exp-diff" || schema.type === "double-exp-prod") {
+                    let e1 = parseInt(getVal("e1")), e2 = parseInt(getVal("e2"));
+                    if (!isNaN(e1) && !isNaN(e2)) {
+                        if(schema.type === "double-exp-sum" && (e1 + e2 === schema.targetSum)) rowCorrect = true;
+                        if(schema.type === "double-exp-diff" && (e1 - e2 === schema.targetDiff)) rowCorrect = true;
+                        if(schema.type === "double-exp-prod" && (e1 * e2 === schema.targetProd)) rowCorrect = true;
+                    }
+                } else if (schema.type === "triple-exp-bin") {
+                    let arr = [getVal("e1"), getVal("e2"), getVal("e3")].sort().join(",");
+                    let target = [...schema.e1, ...schema.e2, ...schema.e3].sort().join(",");
+                    if (arr === target) rowCorrect = true;
+                } else if (schema.type === "double-exp-bin") {
+                    let arr = [getVal("e1"), getVal("e2")].sort().join(",");
+                    let target = [...schema.e1, ...schema.e2].sort().join(",");
+                    if (arr === target) rowCorrect = true;
+                } else {
+                    if (schema.val.map(cleanToken).includes(getVal("val"))) rowCorrect = true;
+                }
+
+                if (rowCorrect) {
+                    totalEarnedPoints++;
+                    fieldCorrectionFlags.push(true);
+                } else {
+                    fieldCorrectionFlags.push(false);
+                }
+            });
+
+            state.answered = true;
+            state.fieldCorrectionFlags = fieldCorrectionFlags;
+            state.isCorrect = (totalEarnedPoints === totalMaxPoints);
+
+            globalAttempts++;
+            globalScore += totalEarnedPoints;
+            updateHudScoreboard();
+
+            renderPostAnswerHighlights(fieldCorrectionFlags);
+            lockQuizInterface(state.isCorrect);
+
+            let payload = {
+                unitId: "Unit_6", lessonId: "Lesson_1",
+                firstName: fName, lastName: lName, questionId: activeQuestionId,
+                isCorrect: state.isCorrect, earnedScore: totalEarnedPoints, maxScorePossible: totalMaxPoints,
+                attempts: 1, totalScore: globalScore
+            };
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function renderPostAnswerHighlights(flags) {
+            const rows = document.getElementById("dynamic-input-mount-point").querySelectorAll(".input-row-block");
+            rows.forEach((row, idx) => {
+                const subInputs = row.querySelectorAll(".custom-sub-input");
+                subInputs.forEach(input => {
+                    input.disabled = true;
+                    if (flags[idx]) {
+                        input.style.border = "2px solid var(--success-color)";
+                        input.style.backgroundColor = "#f0fdf4";
+                    } else {
+                        input.style.border = "2px solid var(--error-color)";
+                        input.style.backgroundColor = "#fef2f2";
+                    }
+                });
+            });
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST", mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Cloud link transmission log bypassed:", err));
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = true);
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+            document.getElementById("hint-trigger-btn").disabled = true;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Perfect! All mathematical features verified successfully.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Discrepancies detected in exponent parameters. Check steps to fix calculation errors.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.querySelectorAll(".math-key").forEach(k => k.disabled = false);
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("hint-trigger-btn").disabled = false;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            questionStates[activeQuestionId].solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            const data = problemDataPack[activeQuestionId];
+            
+            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            data.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\( ${step.math} \\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block'));
+            
+            currentStepIndex = questionStates[activeQuestionId].currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                questionStates[activeQuestionId].currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            renderMathElements();
+        }
+
+        function restartSolution() {
+            questionStates[activeQuestionId].currentStep = 0;
+            renderMethodSteps();
+            renderMathElements();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        window.onload = renderMathElements;
+    </script>
+</body>
+</html>
